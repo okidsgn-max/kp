@@ -243,7 +243,7 @@
             top: 63%;
             left: 3%;
             color: white;
-            font-size: 2vw;
+            font-size: 38px;
             font-weight: bold;
             width: 80%;
         }
@@ -253,7 +253,7 @@
             top: 69%;
             left: 3%;
             color: #D9D9D9;
-            font-size: 1vw;
+            font-size: 20px;
             width: 80%;
             font-weight: 500;
         }
@@ -264,12 +264,12 @@
             left: 3%;
             width: 60%;
             color: white;
-            font-size: 1vw;
+            font-size: 20px;
             border-collapse: collapse;
         }
         
         .price-table th, .price-table td {
-            padding: 0.5vw;
+            padding: 10px;
             text-align: left;
             border: 1px solid #303030;
         }
@@ -288,10 +288,10 @@
         
         .preview-phone {
             position: absolute;
-            bottom: 13%;
-            left: 11%;
+            bottom: 13.5%;
+            left: 11.5%;
             color: white;
-            font-size: 10px;
+            font-size: 20px;
             font-weight: 600;
         }
         
@@ -327,7 +327,7 @@
             bottom: 0%;
             left: 35%;
             width: 100px;
-            height: 100px;         
+            height: 100px;
         }
         
         .preview-video img {
@@ -488,10 +488,10 @@
             top: 40%;
             left: 3%;
             color: white;
-            font-size: 12px;
+            font-size: 28px;
             font-weight: 500;
-            width: 50%;
-            line-height: 1;
+            width: 40%;
+            line-height: 1.6;
         }
 
         .instruction-text a {
@@ -499,45 +499,7 @@
             text-decoration: none;
             font-weight: 600;
         }
-        
-        /* Прелоадер */
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            color: white;
-            font-size: 24px;
-            display: none;
-        }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #00b398;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .progress-text {
-            margin-top: 10px;
-            font-size: 16px;
-        }
-    
+            
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -616,12 +578,6 @@
     </style>
 </head>
 <body>
-    <div class="preloader" id="preloader">
-        <div class="spinner"></div>
-        <div>Идет сохранение PDF...</div>
-        <div class="progress-text" id="progressText">Подготовка слайдов</div>
-    </div>
-    
     <div class="menu-container">
         <div class="menu-header-container">
             <img class="menu-logo" src="zvukb2b.png" alt="Logo">
@@ -868,7 +824,9 @@
         </div>
         
         <div class="action-buttons">
+           
             <button onclick="saveAsPDF()">в PDF</button>
+        
         </div>
     </div>
     
@@ -896,6 +854,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     
+    
     <script>
         // Инициализация jsPDF
         const { jsPDF } = window.jspdf;
@@ -910,34 +869,34 @@
         // Ссылки для баннеров
         const bannerLinks = {
             'images/bkids.png': 'https://zvuk-b2b.com/music_for_kids',
-            'images/veranda.png': 'https://zvuk-b2b.com/rest',           
-            'images/sbbarbershop.png': 'https://zvuk-b2b.com',
-            'images/sbcafe.png': 'https://zvuk-b2b.com',
-            'images/sbfitnes.png': 'https://zvuk-b2b.com',
-            'images/sbpizza.png': 'https://zvuk-b2b.com',
-            'images/sbspa.png': 'https://zvuk-b2b.com',
-            'images/sbretail.png': 'https://zvuk-b2b.com',
-            'images/sbmall.png': 'https://zvuk-b2b.com',
-            'images/sbsushi.png': 'https://zvuk-b2b.com',
-            'images/play.png': 'https://zvuk-b2b.com/player',
-            'images/action.png': 'https://zvuk-b2b.com',
-            'images/creative-audio.png': 'https://zvuk-b2b.com/blog/1price',
-            'images/georgia-audio.png': 'https://zvuk-b2b.com/gastrobar#menu1',
-            'images/barber-audio.png': 'https://zvuk-b2b.com/barbershop',
-            'images/parterprogram.png': 'https://zvuk-b2b.com/partners',
-            'images/app.png': 'https://zvuk-b2b.com/blog/1price',
-            'images/premium.png': 'https://zvuk-b2b.com/premium/',
-            'images/bprofile.png': 'https://zvuk-b2b.com/bprofile',
-            'images/videokp.png': 'https://zvuk-b2b.com/video',
-            'images/videowave.png': 'https://zvuk-b2b.com/video',
-            'images/demovideo.png': 'https://zvuk-b2b.com/video',
-            'images/coffeoneprice.png': 'https://zvuk-b2b.com/blog/1price',
-            'images/letual.png': 'https://zvuk-b2b.com/blog/letu',
-            'images/createbanner.png': 'https://zvuk-b2b.com/audio_ads',
-            'images/bprofile phone.png': 'https://zvuk-b2b.com/partners',
-            'images/premiumbanner.png': 'https://zvuk-b2b.com/premium/',
-            'images/bprofilescreen.png': 'https://zvuk-b2b.com/bprofile',
-            'images/atmvieo.png': 'https://zvuk-b2b.com/video'
+    'images/veranda.png': 'https://zvuk-b2b.com/rest',           
+    'images/sbbarbershop.png': 'https://zvuk-b2b.com',
+    'images/sbcafe.png': 'https://zvuk-b2b.com',
+    'images/sbfitnes.png': 'https://zvuk-b2b.com',
+    'images/sbpizza.png': 'https://zvuk-b2b.com',
+    'images/sbspa.png': 'https://zvuk-b2b.com',
+    'images/sbretail.png': 'https://zvuk-b2b.com',
+    'images/sbmall.png': 'https://zvuk-b2b.com',
+    'images/sbsushi.png': 'https://zvuk-b2b.com',
+    'images/play.png': 'https://zvuk-b2b.com/player',
+    'images/action.png': 'https://zvuk-b2b.com',
+    'images/creative-audio.png': 'https://zvuk-b2b.com/blog/1price',
+    'images/georgia-audio.png': 'https://zvuk-b2b.com/gastrobar#menu1',
+    'images/barber-audio.png': 'https://zvuk-b2b.com/barbershop',
+    'images/parterprogram.png': 'https://zvuk-b2b.com/partners',
+    'images/app.png': 'https://zvuk-b2b.com/blog/1price',
+    'images/premium.png': 'https://zvuk-b2b.com/premium/',
+    'images/bprofile.png': 'https://zvuk-b2b.com/bprofile',
+    'images/videokp.png': 'https://zvuk-b2b.com/video',
+    'images/videowave.png': 'https://zvuk-b2b.com/video',
+    'images/demovideo.png': 'https://zvuk-b2b.com/video',
+    'images/coffeoneprice.png': 'https://zvuk-b2b.com/blog/1price',
+    'images/letual.png': 'https://zvuk-b2b.com/blog/letu',
+    'images/createbanner.png': 'https://zvuk-b2b.com/audio_ads',
+    'images/bprofile phone.png': 'https://zvuk-b2b.com/partners',
+    'images/premiumbanner.png': 'https://zvuk-b2b.com/premium/',
+    'images/bprofilescreen.png': 'https://zvuk-b2b.com/bprofile',
+    'images/atmvieo.png': 'https://zvuk-b2b.com/video'
         };
         
         // Ссылки для менеджеров
@@ -1108,7 +1067,7 @@
                     managerImg.src = managerImgPath;
                     
                     const managerLink = document.createElement('a');
-                    managerLink.href = managerLinks[managerImgPath];
+                    managerLink.href = managerLinks[managerValue]; // Always use base manager link
                     managerLink.target = '_blank';
                     managerLink.style.position = 'absolute';
                     managerLink.style.bottom = '8%';
@@ -1186,17 +1145,11 @@
                     bgImg.src = 'images/instruct.png';
                     slideContainer.appendChild(bgImg);
 
-                    // Get manager link dynamically from the second section
                     const managerValueForLink = document.getElementById('manager').value;
-                    const phoneTypeForLink = document.querySelector('input[name="phoneType"]:checked').value;
-                    const managerImgPathForLink = phoneTypeForLink === 'personal' ?
-                        managerValueForLink.replace('.png', '-ph.png') :
-                        managerValueForLink;
-                    const managerRegLink = managerLinks[managerImgPathForLink];
+                    const managerRegLink = managerLinks[managerValueForLink];
 
                     const instructionTextDiv = document.createElement('div');
                     instructionTextDiv.className = 'instruction-text';
-                    // Add IDs for PDF linking
                     instructionTextDiv.innerHTML = `
                         1. Зарегистрироваться <a href="${managerRegLink}" target="_blank" id="instructionLinkManager">по ссылке</a>.<br><br>
                         2. Установить приложение на <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" id="instructionLinkComputer">компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" id="instructionLinkSmartphone">смартфон</a>.<br><br>
@@ -1210,7 +1163,6 @@
                     bgImg.src = 'images/app.png';
                     slideContainer.appendChild(bgImg);
                     
-                    // Добавляем картинку coffeoneprice.png (200x200px)
                     const coffeeImg = document.createElement('img');
                     coffeeImg.src = 'images/coffeoneprice.png';
                     coffeeImg.style.position = 'absolute';
@@ -1222,11 +1174,6 @@
                     const coffeeLink = document.createElement('a');
                     coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeeLink.target = '_blank';
-                    coffeeLink.style.position = 'absolute';
-                    coffeeLink.style.bottom = '4%';
-                    coffeeLink.style.left = '3%';
-                    coffeeLink.style.width = '130px';
-                    coffeeLink.style.height = '130px';
                     coffeeLink.appendChild(coffeeImg);
                     slideContainer.appendChild(coffeeLink);
                     
@@ -1239,7 +1186,7 @@
                     break;
                     
                 case 'creative':
-                    bgImg.src = 'images/createbanner.png'; // Изменено на единичный баннер
+                    bgImg.src = 'images/createbanner.png';
                     slideContainer.appendChild(bgImg);
                     
                     const creativeLink = document.createElement('a');
@@ -1248,17 +1195,12 @@
                     creativeLink.style.position = 'absolute';
                     creativeLink.style.top = '0';
                     creativeLink.style.left = '0';
-                    creativeLink.style.width = '60%';
-                    creativeLink.style.height = '60%';
+                    creativeLink.style.width = '100%';
+                    creativeLink.style.height = '100%';
                     slideContainer.appendChild(creativeLink);
                     
                     const coffeImg = document.createElement('img');
                     coffeImg.src = 'images/coffeoneprice.png';
-                    coffeImg.style.position = 'absolute';
-                    coffeImg.style.bottom = '0%';
-                    coffeImg.style.left = '3%';
-                    coffeImg.style.width = '60%';
-                    coffeImg.style.height = 'auto';
                     
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1273,11 +1215,6 @@
                     
                     const letualImg = document.createElement('img');
                     letualImg.src = 'images/letual.png';
-                    letualImg.style.position = 'absolute';
-                    letualImg.style.bottom = '3%';
-                    letualImg.style.right = '114%';
-                    letualImg.style.width = '20%';
-                    letualImg.style.height = 'auto';
                     
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
@@ -1309,15 +1246,9 @@
                     bgImg.src = 'images/parterprogram.png';
                     slideContainer.appendChild(bgImg);
                     
-                    // Добавляем картинку bprofile phone.png (300x300px)
                     const partnerPhoneImg = document.createElement('img');
                     partnerPhoneImg.src = 'images/bprofile phone.png';
-                    partnerPhoneImg.style.position = 'absolute';
-                    partnerPhoneImg.style.bottom = '50%';
-                    partnerPhoneImg.style.left = '8%';
-                    partnerPhoneImg.style.width = '100px';
-                    partnerPhoneImg.style.height = '100px';
-                    
+
                     const partnerPhoneLink = document.createElement('a');
                     partnerPhoneLink.href = 'https://zvuk-b2b.com/partners';
                     partnerPhoneLink.target = '_blank';
@@ -1338,7 +1269,7 @@
                     break;
                     
                 case 'premium':
-                    bgImg.src = 'images/premiumbanner.png'; // Изменено на единичный баннер
+                    bgImg.src = 'images/premiumbanner.png';
                     slideContainer.appendChild(bgImg);
                     
                     const premiumPriceDiv = document.createElement('div');
@@ -1363,15 +1294,9 @@
                     bgImg.src = 'images/bprofile.png';
                     slideContainer.appendChild(bgImg);
                     
-                    // Добавляем картинку bprofilescreen.png (200x200px)
                     const bprofileScreenImg = document.createElement('img');
                     bprofileScreenImg.src = 'images/bprofilescreen.png';
-                    bprofileScreenImg.style.position = 'absolute';
-                    bprofileScreenImg.style.bottom = '69%';
-                    bprofileScreenImg.style.left = '18%';
-                    bprofileScreenImg.style.width = '60px';
-                    bprofileScreenImg.style.height = '60px';
-                    
+
                     const bprofileScreenLink = document.createElement('a');
                     bprofileScreenLink.href = 'https://zvuk-b2b.com/bprofile';
                     bprofileScreenLink.target = '_blank';
@@ -1392,7 +1317,7 @@
                     break;
                     
                 case 'videokp':
-                    bgImg.src = 'images/atmvieo.png'; // Изменено на единичный баннер
+                    bgImg.src = 'images/atmvieo.png';
                     slideContainer.appendChild(bgImg);
                     
                     const videoPriceDiv = document.createElement('div');
@@ -1405,11 +1330,8 @@
                     videoCommentDiv.textContent = document.getElementById('videokpComment').value;
                     slideContainer.appendChild(videoCommentDiv);
                     
-                    const videoDiv = document.createElement('div');
-                    videoDiv.className = 'preview-video';
                     const videoImg = document.createElement('img');
                     videoImg.src = 'images/demovideo.png';
-                    videoDiv.appendChild(videoImg);
                     
                     const videoLink = document.createElement('a');
                     videoLink.href = 'https://zvuk-b2b.com/video';
@@ -1420,7 +1342,7 @@
                     videoLink.style.transform = 'translateX(-50%)';
                     videoLink.style.width = '100px';
                     videoLink.style.height = '100px';
-                    videoLink.appendChild(videoDiv);
+                    videoLink.appendChild(videoImg);
                     slideContainer.appendChild(videoLink);
                     
                     const videokpLink = document.createElement('a');
@@ -1479,7 +1401,7 @@
                     newSlide = { type: 'app', image: 'images/app.png' };
                     break;
                 case 'creative':
-                    newSlide = { type: 'creative', image: 'images/createbanner.png' }; // Изменено на единичный баннер
+                    newSlide = { type: 'creative', image: 'images/createbanner.png' };
                     break;
                 case 'playlist':
                     newSlide = { type: 'playlist', image: document.getElementById('playlist').value };
@@ -1490,7 +1412,7 @@
                 case 'premium':
                     newSlide = { 
                         type: 'premium', 
-                        image: 'images/premiumbanner.png', // Изменено на единичный баннер
+                        image: 'images/premiumbanner.png',
                         price: document.getElementById('premiumPrice').value,
                         comment: document.getElementById('premiumComment').value
                     };
@@ -1501,7 +1423,7 @@
                 case 'videokp':
                     newSlide = { 
                         type: 'videokp', 
-                        image: 'images/atmvieo.png', // Изменено на единичный баннер
+                        image: 'images/atmvieo.png',
                         price: document.getElementById('videokpPrice').value,
                         comment: document.getElementById('videokpComment').value
                     };
@@ -1628,11 +1550,7 @@
             return `zvuk-b2b-${managerName}-kp`;
         }
         
-        function saveAsPDF() {
-            const preloader = document.getElementById('preloader');
-            const progressText = document.getElementById('progressText');
-            preloader.style.display = 'flex';
-            
+        async function saveAsPDF() {
             const fileName = getFileName() + '.pdf';
             const pdf = new jsPDF({
                 orientation: 'landscape',
@@ -1643,23 +1561,16 @@
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '0px';
             tempContainer.style.width = '1920px';
             tempContainer.style.height = '1080px';
             document.body.appendChild(tempContainer);
-
-            const renderSlide = (index) => {
-                progressText.textContent = `Слайд ${index + 1} из ${slides.length}`;
+            
+            for (let i = 0; i < slides.length; i++) {
+                const slide = slides[i];
+                const originalSlideIndex = currentSlideIndex; 
+                showSlide(i + 1); 
                 
-                if (index >= slides.length) {
-                    document.body.removeChild(tempContainer);
-                    preloader.style.display = 'none';
-                    pdf.save(fileName);
-                    return;
-                }
-
-                currentSlideIndex = index;
-                updateCurrentSlide();
-
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
                 slideContent.style.width = '1920px';
                 slideContent.style.height = '1080px';
@@ -1668,34 +1579,32 @@
                 
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
+                
+                await new Promise(resolve => setTimeout(resolve, 50));
 
-                setTimeout(() => {
-                    html2canvas(tempContainer, {
-                        scale: 1,
-                        logging: false,
-                        useCORS: true,
-                        width: 1920,
-                        height: 1080,
-                        letterRendering: true
-                    }).then(canvas => {
-                        const imgData = canvas.toDataURL('image/jpeg', 0.9);
-                        
-                        if (index > 0) pdf.addPage([1920, 1080], 'landscape');
-                        pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
-                        
-                        addTextLayer(pdf, slides[index]);
-                        addLinksToPDF(pdf, slides[index], slideContent, index);
-                        
-                        setTimeout(() => renderSlide(index + 1), 200);
-                    }).catch(error => {
-                        console.error('Ошибка при создании PDF:', error);
-                        preloader.style.display = 'none';
-                        alert('Произошла ошибка при создании PDF. Пожалуйста, попробуйте еще раз.');
-                    });
-                }, 100);
-            };
+                const canvas = await html2canvas(tempContainer, {
+                    scale: 1,
+                    logging: false,
+                    useCORS: true,
+                    width: 1920,
+                    height: 1080,
+                    letterRendering: true
+                });
 
-            renderSlide(0);
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                
+                if (i > 0) {
+                    pdf.addPage([1920, 1080], 'landscape');
+                }
+                
+                pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
+                addLinksToPDF(pdf, slide, slideContent, i);
+                
+                showSlide(originalSlideIndex + 1);
+            }
+            
+            document.body.removeChild(tempContainer);
+            pdf.save(fileName);
         }
 
         function addLinksToPDF(pdf, slide, slideContent, pageIndex) {
@@ -1704,192 +1613,76 @@
             const addLinkSafe = (element, url) => {
                 if (!element || !url) return;
 
-                try {
-                    const rect = element.getBoundingClientRect();
-                    const parentRect = slideContent.getBoundingClientRect();
-                    const x = rect.left - parentRect.left;
-                    const y = rect.top - parentRect.top;
-                    const width = rect.width;
-                    const height = rect.height;
+                const rect = element.getBoundingClientRect();
+                const parentRect = slideContent.getBoundingClientRect();
+                
+                const x = rect.left - parentRect.left;
+                const y = rect.top - parentRect.top;
+                const width = rect.width;
+                const height = rect.height;
 
-                    if (width > 0 && height > 0 && x >= 0 && y >= 0 && (x + width) <= 1920 && (y + height) <= 1080) {
-                        pdf.link(x, y, width, height, { url });
-                    }
-                } catch (e) {
-                    console.warn('Не удалось добавить ссылку:', e);
+                if (width > 0 && height > 0) {
+                    pdf.link(x, y, width, height, { url });
                 }
             };
-            
-            // Обработка ссылок для каждого типа слайда
-            switch(slide.type) {
-                case 'general':
-                    const bannerValue = document.getElementById('banner').value;
-                    const bannerLink = bannerLinks[bannerValue];
-                    const bannerElement = slideContent.querySelector('.preview-banner');
-                    if (bannerElement && bannerLink) {
-                        addLinkSafe(bannerElement.parentElement, bannerLink);
-                    }
-                    break;
-                    
-                case 'pricing':
-                    // Баннер
-                    const priceBannerValue = document.getElementById('priceBanner').value;
-                    const priceBannerLink = bannerLinks[priceBannerValue];
-                    const priceBannerElement = slideContent.querySelector('.preview-banner');
-                    if (priceBannerElement && priceBannerLink) {
-                        addLinkSafe(priceBannerElement.parentElement, priceBannerLink);
-                    }
-                    
-                    // Менеджер
-                    const managerValue = document.getElementById('manager').value;
-                    const phoneType = document.querySelector('input[name="phoneType"]:checked').value;
-                    const managerImgPath = phoneType === 'personal' ? 
-                        managerValue.replace('.png', '-ph.png') : 
-                        managerValue;
-                    const managerLink = managerLinks[managerImgPath];
-                    const managerElement = slideContent.querySelector('.preview-manager');
-                    if (managerElement && managerLink) {
-                        addLinkSafe(managerElement.parentElement, managerLink);
-                    }
-                    
-                    // QR-код
-                    if (phoneType === 'personal') {
-                        const phone = document.getElementById('personalPhone').value;
-                        if (phone) {
-                            const qrElement = slideContent.querySelector('.preview-qr');
-                            if (qrElement) {
-                                addLinkSafe(qrElement.parentElement, `tel:${phone}`);
-                            }
-                        }
-                    }
-                    break;
-                    
-                case 'instruction':
-                    const linkManager = slideContent.querySelector('#instructionLinkManager');
-                    const linkComputer = slideContent.querySelector('#instructionLinkComputer');
-                    const linkSmartphone = slideContent.querySelector('#instructionLinkSmartphone');
-                    
-                    if(linkManager) addLinkSafe(linkManager, linkManager.href);
-                    if(linkComputer) addLinkSafe(linkComputer, linkComputer.href);
-                    if(linkSmartphone) addLinkSafe(linkSmartphone, linkSmartphone.href);
-                    break;
-                    
-                case 'app':
-                    const appLinkElement = slideContent.querySelector('.preview-link');
-                    if (appLinkElement) addLinkSafe(appLinkElement, appLinkElement.href);
-                    
-                    const coffeeImg = slideContent.querySelector('img[src="images/coffeoneprice.png"]');
-                    if (coffeeImg) addLinkSafe(coffeeImg.parentElement, 'https://zvuk-b2b.com/blog/1price');
-                    break;
-                    
-                case 'creative':
-                    const creativeLinkElement = slideContent.querySelector('a[href="https://zvuk-b2b.com/audio_ads"]');
-                    if (creativeLinkElement) addLinkSafe(creativeLinkElement, creativeLinkElement.href);
-                    
-                    const coffeeImgCreative = slideContent.querySelector('img[src="images/coffeoneprice.png"]');
-                    if (coffeeImgCreative) addLinkSafe(coffeeImgCreative.parentElement, 'https://zvuk-b2b.com/blog/1price');
-                    
-                    const letualImg = slideContent.querySelector('img[src="images/letual.png"]');
-                    if (letualImg) addLinkSafe(letualImg.parentElement, 'https://zvuk-b2b.com/blog/letu');
-                    break;
-                    
-                case 'playlist':
-                    const playlistLinkElement = slideContent.querySelector('.preview-link');
-                    if (playlistLinkElement) addLinkSafe(playlistLinkElement, playlistLinkElement.href);
-                    break;
-                    
-                case 'partner':
-                    const partnerLinkElement = slideContent.querySelector('.preview-link');
-                    if (partnerLinkElement) addLinkSafe(partnerLinkElement, partnerLinkElement.href);
-                    
-                    const partnerPhoneImg = slideContent.querySelector('img[src="images/bprofile phone.png"]');
-                    if (partnerPhoneImg) addLinkSafe(partnerPhoneImg.parentElement, 'https://zvuk-b2b.com/partners');
-                    break;
-                    
-                case 'premium':
-                    // Весь слайд - ссылка
-                    pdf.link(0, 0, 1920, 1080, { url: 'https://zvuk-b2b.com/premium/' });
-                    break;
-                    
-                case 'bprofile':
-                    const bprofileLinkElement = slideContent.querySelector('.preview-link');
-                    if (bprofileLinkElement) addLinkSafe(bprofileLinkElement, bprofileLinkElement.href);
-                    
-                    const bprofileScreenImg = slideContent.querySelector('img[src="images/bprofilescreen.png"]');
-                    if (bprofileScreenImg) addLinkSafe(bprofileScreenImg.parentElement, 'https://zvuk-b2b.com/bprofile');
-                    break;
-                    
-                case 'videokp':
-                    const videokpLinkElement = slideContent.querySelector('.preview-link');
-                    if (videokpLinkElement) addLinkSafe(videokpLinkElement, videokpLinkElement.href);
-                    
-                    const videoDiv = slideContent.querySelector('.preview-video');
-                    if (videoDiv) addLinkSafe(videoDiv.parentElement, 'https://zvuk-b2b.com/video');
-                    break;
-                    
-                case 'videocontent':
-                    const videocontentLinkElement = slideContent.querySelector('.preview-link');
-                    if (videocontentLinkElement) addLinkSafe(videocontentLinkElement, videocontentLinkElement.href);
-                    break;
-            }
-        }
 
-        function addTextLayer(pdf, slide) {
-            // This function adds vector text on top of the rasterized image.
-            pdf.setFont('helvetica', 'normal');
+            // General, Pricing Banners
+            if (slide.type === 'general' || slide.type === 'pricing') {
+                 const bannerElement = slideContent.querySelector('.preview-banner');
+                 if (bannerElement) {
+                     addLinkSafe(bannerElement.parentElement, bannerElement.parentElement.href);
+                 }
+            }
+
+            // Pricing Manager
+            if (slide.type === 'pricing') {
+                const managerElement = slideContent.querySelector('.preview-manager');
+                if (managerElement) {
+                     addLinkSafe(managerElement.parentElement, managerElement.parentElement.href);
+                }
+                const qrElement = slideContent.querySelector('.preview-qr');
+                if (qrElement) {
+                    addLinkSafe(qrElement.parentElement, qrElement.parentElement.href)
+                }
+            }
             
-            switch(slide.type) {
-                case 'pricing':
-                    if (document.querySelector('input[name="priceColumns"]:checked').value === '1') {
-                        const price = document.getElementById('price1Value').value;
-                        pdf.setTextColor(255, 255, 255);
-                        pdf.setFontSize(38); // Adjusted for 1920px width
-                        pdf.text(formatPrice(price) + ' ₽/мес.', 58, 730);
-                        
-                        const comment = document.getElementById('comment').value;
-                        if (comment) {
-                            pdf.setTextColor(217, 217, 217);
-                            pdf.setFontSize(19); // Adjusted
-                            pdf.text(comment, 58, 775);
-                        }
-                    }
-                    if (document.querySelector('input[name="phoneType"]:checked').value === 'personal') {
-                        const phone = document.getElementById('personalPhone').value;
-                        if(phone){
-                             pdf.setTextColor(255, 255, 255);
-                             pdf.setFontSize(16); // Adjusted
-                             pdf.text(phone, 211, 930);
-                        }
-                    }
-                    break;
-                    
-                case 'premium':
-                    const price = document.getElementById('premiumPrice').value;
-                    pdf.setTextColor(255, 255, 255);
-                    pdf.setFontSize(38);
-                    pdf.text(formatPrice(price) + ' ₽/мес.', 58, 730);
-                    
-                    const comment = document.getElementById('premiumComment').value;
-                    if (comment) {
-                        pdf.setTextColor(217, 217, 217);
-                        pdf.setFontSize(19);
-                        pdf.text(comment, 58, 775);
-                    }
-                    break;
-                    
-                case 'videokp':
-                    const videoPrice = document.getElementById('videokpPrice').value;
-                    pdf.setTextColor(255, 255, 255);
-                    pdf.setFontSize(38);
-                    pdf.text(formatPrice(videoPrice) + ' ₽/мес.', 58, 730);
-                    
-                    const videoComment = document.getElementById('videokpComment').value;
-                    if (videoComment) {
-                        pdf.setTextColor(217, 217, 217);
-                        pdf.setFontSize(19);
-                        pdf.text(videoComment, 58, 775);
-                    }
-                    break;
+            // Instruction Links
+            if (slide.type === 'instruction') {
+                addLinkSafe(slideContent.querySelector('#instructionLinkManager'), slideContent.querySelector('#instructionLinkManager').href);
+                addLinkSafe(slideContent.querySelector('#instructionLinkComputer'), slideContent.querySelector('#instructionLinkComputer').href);
+                addLinkSafe(slideContent.querySelector('#instructionLinkSmartphone'), slideContent.querySelector('#instructionLinkSmartphone').href);
+            }
+
+            // Playlist Link
+            if (slide.type === 'playlist') {
+                const playlistLinkEl = slideContent.querySelector('.preview-link');
+                if (playlistLinkEl) addLinkSafe(playlistLinkEl, playlistLinkEl.href);
+            }
+           
+            // Specific Image/Area Links
+            const specialLinks = [
+                { type: 'app', selector: 'a[href="https://zvuk-b2b.com/blog/1price"]', url: 'https://zvuk-b2b.com/blog/1price' },
+                { type: 'creative', selector: 'a[href="https://zvuk-b2b.com/audio_ads"]', url: 'https://zvuk-b2b.com/audio_ads'},
+                { type: 'creative', selector: 'a[href="https://zvuk-b2b.com/blog/1price"]', url: 'https://zvuk-b2b.com/blog/1price'},
+                { type: 'creative', selector: 'a[href="https://zvuk-b2b.com/blog/letu"]', url: 'https://zvuk-b2b.com/blog/letu'},
+                { type: 'partner', selector: 'a[href="https://zvuk-b2b.com/partners"]', url: 'https://zvuk-b2b.com/partners' },
+                { type: 'bprofile', selector: 'a[href="https://zvuk-b2b.com/bprofile"]', url: 'https://zvuk-b2b.com/bprofile' },
+                { type: 'videokp', selector: 'a[href="https://zvuk-b2b.com/video"]', url: 'https://zvuk-b2b.com/video' },
+                { type: 'videocontent', selector: '.preview-link', url: 'https://zvuk-b2b.com/video' }
+            ];
+
+            specialLinks.forEach(item => {
+                if (slide.type === item.type) {
+                    const elements = slideContent.querySelectorAll(item.selector);
+                    elements.forEach(element => {
+                        addLinkSafe(element, item.url);
+                    });
+                }
+            });
+
+            // Premium slide - full slide link
+            if (slide.type === 'premium') {
+                pdf.link(0, 0, 1920, 1080, { url: 'https://zvuk-b2b.com/premium/' });
             }
         }
         
