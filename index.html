@@ -5,27 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Генератор коммерческого предложения</title>
     <style>
-        @font-face {
-            font-family: 'SB Sans';
-            src: url('SBSansInterface-Regular.woff2') format('woff2');
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'SB Sans';
-            src: url('SBSansInterface-Medium.woff2') format('woff2');
-            font-weight: 500;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'SB Sans';
-            src: url('SBSansInterface-SemiBold.woff2') format('woff2');
-            font-weight: 600;
-            font-style: normal;
-        }
-
         :root {
             --button-color: #00b398;
             --button-hover: #008f79;
@@ -1098,19 +1077,18 @@
                     priceBannerLink.appendChild(priceBannerImg);
                     slideContainer.appendChild(priceBannerLink);
                     
-                    const managerSelectValue = document.getElementById('manager').value;
+                    const managerValue = document.getElementById('manager').value;
                     const phoneType = document.querySelector('input[name="phoneType"]:checked').value;
-                    const managerBaseName = managerSelectValue.replace('images/', '');
-                    const managerImageSrc = phoneType === 'personal' ? 
-                        `images/${managerBaseName.replace('.png', '-ph.png')}` : 
-                        managerSelectValue;
+                    const managerImgPath = phoneType === 'personal' ? 
+                        managerValue.replace('.png', '-ph.png') : 
+                        managerValue;
                     
                     const managerImg = document.createElement('img');
                     managerImg.className = 'preview-manager';
-                    managerImg.src = managerImageSrc;
+                    managerImg.src = managerImgPath;
                     
                     const managerLink = document.createElement('a');
-                    managerLink.href = managerLinks[managerSelectValue];
+                    managerLink.href = managerLinks[managerValue];
                     managerLink.target = '_blank';
                     managerLink.style.position = 'absolute';
                     managerLink.style.bottom = '8%';
@@ -1727,15 +1705,13 @@
                      addLinkSafe(bannerElement.parentElement, bannerElement.parentElement.href);
                  }
             }
-            
-            // Pricing Manager link
+
+            // Pricing Manager
             if (slide.type === 'pricing') {
                 const managerElement = slideContent.querySelector('.preview-manager');
-                const managerLinkElement = managerElement.parentElement;
-                if (managerLinkElement) {
-                    addLinkSafe(managerLinkElement, managerLinkElement.href);
+                if (managerElement && managerElement.parentElement) {
+                     addLinkSafe(managerElement.parentElement, managerElement.parentElement.href);
                 }
-
                 const qrElement = slideContent.querySelector('.preview-qr');
                 if (qrElement && qrElement.parentElement) {
                     addLinkSafe(qrElement.parentElement, qrElement.parentElement.href)
@@ -1771,7 +1747,7 @@
                 if (slide.type === item.type) {
                     const elements = slideContent.querySelectorAll(item.selector);
                     elements.forEach(element => {
-                        addLinkSafe(element, element.href);
+                        addLinkSafe(element, item.url);
                     });
                 }
             });
