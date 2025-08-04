@@ -17,12 +17,6 @@
             --preview-width: 70vw;
             --qr-size: 60px;
             --control-icon-size: 30px;
-            --instruction-text-size: 18px;
-            --preview-price-size: 24px;
-            --preview-comment-size: 20px;
-            --preview-phone-size: 20px;
-            --price-table-size: 20px;
-            --link-image-size: 100px;
         }
         
         body {
@@ -34,39 +28,7 @@
             height: 100vh;
             overflow: hidden;
         }
-
-        /* Режимы для превью и PDF */
-        body.preview-mode .instruction-text { font-size: var(--instruction-text-size); }
-        body.preview-mode .preview-price { font-size: var(--preview-price-size); }
-        body.preview-mode .preview-comment { font-size: var(--preview-comment-size); }
-        body.preview-mode .preview-phone { font-size: var(--preview-phone-size); }
-        body.preview-mode .price-table { font-size: var(--price-table-size); }
-        body.preview-mode .preview-video { width: var(--link-image-size); height: var(--link-image-size); }
-        body.preview-mode .preview-logos { width: 50%; max-height: 15%; }
-        body.preview-mode .preview-qr { width: var(--qr-size); height: var(--qr-size); }
-
-        body.pdf-mode {
-            background-color: white;
-            color: black;
-            font-size: 24px;
-        }
-        body.pdf-mode .preview-page {
-            box-shadow: none;
-            width: 100%;
-            height: 100%;
-        }
-        body.pdf-mode .instruction-text { font-size: calc(var(--instruction-text-size) * 1.5); }
-        body.pdf-mode .preview-price { font-size: calc(var(--preview-price-size) * 1.5); }
-        body.pdf-mode .preview-comment { font-size: calc(var(--preview-comment-size) * 1.5); }
-        body.pdf-mode .preview-phone { font-size: calc(var(--preview-phone-size) * 1.5); }
-        body.pdf-mode .price-table { font-size: calc(var(--price-table-size) * 1.5); }
-        body.pdf-mode .preview-video { width: calc(var(--link-image-size) * 1.5); height: calc(var(--link-image-size) * 1.5); }
-        body.pdf-mode .preview-logos { width: 75%; max-height: 20%; }
-        body.pdf-mode .preview-qr { width: calc(var(--qr-size) * 1.5); height: calc(var(--qr-size) * 1.5); }
-        body.pdf-mode .menu-container, body.pdf-mode .action-buttons, body.pdf-mode .preview-controls, body.pdf-mode .slide-controls-container {
-            display: none;
-        }
-
+        
         .menu-container {
             width: var(--sidebar-width);
             background-color: white;
@@ -95,7 +57,7 @@
         .menu-title {
             color: #3d435c;
             font-weight: 600;
-            font-size: 24px;
+            font-size: 24x;
             font-family: 'SBSansText', sans-serif;
         }
         
@@ -278,31 +240,31 @@
         
         .preview-price {
             position: absolute;
-            top: 63%;
+            top: 65%;
             left: 3%;
             color: white;
-            font-size: var(--preview-price-size);
+            font-size: 22px;
             font-weight: bold;
-            width: 80%;
+            width: 50%;
         }
         
         .preview-comment {
             position: absolute;
-            top: 69%;
+            top: 60%;
             left: 3%;
             color: #D9D9D9;
-            font-size: var(--preview-comment-size);
-            width: 80%;
-            font-weight: 500;
+            font-size: 12px;
+            width:100%;
+            t: 500;
         }
         
         .price-table {
             position: absolute;
             top: 55%;
             left: 3%;
-            width: 60%;
+            width:60%;
             color: white;
-            font-size: var(--price-table-size);
+            font-size: 12px;
             border-collapse: collapse;
         }
         
@@ -316,33 +278,21 @@
             background-color: rgba(0,0,0,0.3);
         }
         
-        .preview-manager-container {
+        .preview-manager {
             position: absolute;
             bottom: 8%;
             left: 0%;
             width: 100%;
-        }
-
-        .preview-manager {
-            width: 100%;
             object-fit: contain;
         }
         
-        .preview-manager-link {
-            position: absolute;
-            bottom: 8%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
         .preview-phone {
             position: absolute;
-            bottom: 13.5%;
-            left: 11.5%;
+            bottom: 16%;
+            left: 32%;
             color: white;
-            font-size: var(--preview-phone-size);
-            font-weight: 600;
+            font-size: 7px;
+            font-weight: 500;
         }
         
         .preview-qr {
@@ -376,10 +326,10 @@
             position: absolute;
             bottom: 0%;
             left: 35%;
-            width: var(--link-image-size);
-            height: var(--link-image-size);
+            width: 100px;
+            height: 100px;
         }
-
+        
         .preview-video img {
             width: 100%;
             height: 100%;
@@ -538,10 +488,10 @@
             top: 40%;
             left: 3%;
             color: white;
-            font-size: var(--instruction-text-size);
+            font-size: 12px;
             font-weight: 500;
-            width: 40%;
-            line-height: 1.6;
+            width: 60%;
+            line-height: 1;
         }
 
         .instruction-text a {
@@ -549,86 +499,8 @@
             text-decoration: none;
             font-weight: 500;
         }
-        
-        /* Popup Modal Styles */
-        .popup-modal {
-            display: none;
-            position: fixed;
-            z-index: 200;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.4);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .popup-modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            font-family: 'SB Sans', sans-serif;
-            font-size: 18px;
-            color: #3d435c;
-        }
             
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                overflow: auto;
-                height: auto;
-            }
-
-            .menu-container {
-                width: 100vw;
-                height: 45vh;
-                box-shadow: none;
-                padding: 10px;
-                overflow-y: auto;
-            }
-
-            .preview-container {
-                width: 100vw;
-                height: 55vh;
-                padding: 0;
-                overflow: hidden;
-            }
-
-            .preview-wrapper {
-                height: 100%;
-            }
-
-            .preview-page {
-                height: 100% !important;
-                width: 100% !important;
-                max-width: 100%;
-                max-height: 100%;
-            }
-
-            .preview-page.zoomed {
-                position: absolute;
-                top: 0;
-                left: 0;
-                transform: scale(1.2);
-                width: 100%;
-                height: 100%;
-            }
-
-            .action-buttons {
-                position: fixed;
-                bottom: 10px;
-                left: 10px;
-                right: 10px;
-                flex-direction: row;
-                gap: 10px;
-                background: transparent;
-                padding: 10px;
-                border-radius: 8px;
-                z-index: 100;
-            }
-        }
+      
         /* Специальные стили для Safari */
         @media not all and (min-resolution:.001dpcm) { 
             @supports (-webkit-appearance:none) {
@@ -650,12 +522,9 @@
             }
         }
     </style>
-    <!-- JavaScript для генерации PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-<body class="preview-mode">
-    <div class="menu-container">
+<body>
+     <div class="menu-container">
         <div class="menu-header-container">
             <img class="menu-logo" src="zvukb2b.png" alt="Logo">
             <div class="menu-title">Коммерческое предложение</div>
@@ -671,7 +540,7 @@
                     <label class="menu-label">Баннер:</label>
                     <select id="banner">
                         <option value="images/bkids.png">Детский тариф</option>
-                        <option value="images/veranda.png">Веранда</option>
+                        <option value="images/veranda.png">Веранда</option>                  
                         <option value="images/sbbarbershop.png">Статистика барбершоп</option>
                         <option value="images/sbcafe.png">Статистика кафе</option>
                         <option value="images/sbfitnes.png">Статистика фитнес</option>
@@ -683,6 +552,7 @@
                         <option value="images/play.png">Плеер</option>
                         <option value="images/action.png">Акция</option>
                     </select>
+                    
                     <label class="menu-label">Логотипы клиентов:</label>
                     <select id="logos">
                         <option value="images/mainlogos.png">Главные клиенты</option>
@@ -695,6 +565,7 @@
                     </select>
                 </div>
             </div>
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'pricing')">
                     <span class="menu-section-header">2. КП</span>
@@ -703,14 +574,15 @@
                 <div class="menu-content">
                     <label class="menu-label">Сотрудник:</label>
                     <select id="manager">
-                        <option value="images/mankova.png" data-link="https://app.zvuk-b2b.com/register?promocode=mankova">Манькова Яна</option>
-                        <option value="images/ivanova.png" data-link="https://app.zvuk-b2b.com/register?promocode=ivanova">Мария Иванова</option>
-                        <option value="images/temur.png" data-link="https://app.zvuk-b2b.com/register?promocode=temur">Темур Сидиков</option>
-                        <option value="images/german.png" data-link="https://app.zvuk-b2b.com/register?promocode=german">Герман Пилипцев</option>
-                        <option value="images/hlebnikova.png" data-link="https://app.zvuk-b2b.com/register?promocode=hlebnikova">Дарья Хлебникова</option>
-                        <option value="images/zemciova.png" data-link="https://app.zvuk-b2b.com/register?promocode=zemciova">Екатерина Земцова</option>
-                        <option value="images/nikulina.png" data-link="https://app.zvuk-b2b.com/register?promocode=nikulina">Анна Никулина</option>
+                        <option value="images/mankova.png">Манькова Яна</option>
+                        <option value="images/ivanova.png">Мария Иванова</option>
+                        <option value="images/temur.png">Темур Сидиков</option>
+                        <option value="images/german.png">Герман Пилипцев</option>
+                        <option value="images/hlebnikova.png">Дарья Хлебникова</option>
+                        <option value="images/zemciova.png">Екатерина Земцова</option>
+                        <option value="images/nikulina.png">Анна Никулина</option>
                     </select>
+                    
                     <div class="phone-type">
                         <label>
                             <input type="radio" name="phoneType" value="service" checked>
@@ -721,10 +593,12 @@
                             <span>Личный</span>
                         </label>
                     </div>
+                    
                     <div id="personalPhoneContainer" class="hidden">
                         <label class="menu-label">Номер телефона:</label>
                         <input type="text" id="personalPhone" placeholder="Введите номер телефона">
                     </div>
+                    
                     <div class="radio-group">
                         <label class="menu-label">Стоимость услуг:</label>
                         <div class="radio-option">
@@ -736,10 +610,12 @@
                             <label for="price3">3 колонки</label>
                         </div>
                     </div>
+                    
                     <div id="price1Container">
                         <label class="menu-label">Стоимость, ₽/мес:</label>
                         <input type="number" id="price1Value" value="1390">
                     </div>
+                    
                     <div id="price3Container" class="hidden">
                         <div class="price-columns">
                             <div class="price-column">
@@ -756,12 +632,14 @@
                             </div>
                         </div>
                     </div>
+                    
                     <label class="menu-label">Комментарий:</label>
                     <input type="text" id="comment" placeholder="Введите комментарий">
+                    
                     <label class="menu-label">Баннер:</label>
                     <select id="priceBanner">
                         <option value="images/bkids.png">Детский тариф</option>
-                        <option value="images/veranda.png">Веранда</option>
+                        <option value="images/veranda.png">Веранда</option>                  
                         <option value="images/sbbarbershop.png">Статистика барбершоп</option>
                         <option value="images/sbcafe.png">Статистика кафе</option>
                         <option value="images/sbfitnes.png">Статистика фитнес</option>
@@ -775,6 +653,7 @@
                     </select>
                 </div>
             </div>
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'instruction')">
                     <span class="menu-section-header">3. Инструкция по подключению</span>
@@ -783,6 +662,7 @@
                 <div class="menu-content">
                 </div>
             </div>
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'app')">
                     <span class="menu-section-header">4. Мобильное приложение</span>
@@ -793,6 +673,7 @@
                     <button class="remove-slide-btn" onclick="removeSlide('app')">Удалить слайд</button>
                 </div>
             </div>
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'creative')">
                     <span class="menu-section-header">5. Креативные аудиоролики</span>
@@ -803,6 +684,7 @@
                     <button class="remove-slide-btn" onclick="removeSlide('creative')">Удалить слайд</button>
                 </div>
             </div>
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'playlist')">
                     <span class="menu-section-header">6. Тематические плейлисты</span>
@@ -818,738 +700,939 @@
                     <button class="remove-slide-btn" onclick="removeSlide('playlist')">Удалить слайд</button>
                 </div>
             </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'partner')">
+                    <span class="menu-section-header">7. Партнерская программа</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <button class="add-slide-btn" onclick="addSlide('partner')">Добавить слайд</button>
+                    <button class="remove-slide-btn" onclick="removeSlide('partner')">Удалить слайд</button>
+                </div>
+            </div>
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'premium')">
-                    <span class="menu-section-header">7. Премиум услуги</span>
+                    <span class="menu-section-header">8. Премиум</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
                     <label class="menu-label">Стоимость, ₽/мес:</label>
-                    <input type="number" id="premiumPrice" value="3990">
+                    <input type="number" id="premiumPrice" value="1990">
+                    
                     <label class="menu-label">Комментарий:</label>
                     <input type="text" id="premiumComment" placeholder="Введите комментарий">
+                    
                     <button class="add-slide-btn" onclick="addSlide('premium')">Добавить слайд</button>
                     <button class="remove-slide-btn" onclick="removeSlide('premium')">Удалить слайд</button>
                 </div>
             </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'bprofile')">
+                    <span class="menu-section-header">9. Бизнес-профиль</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <button class="add-slide-btn" onclick="addSlide('bprofile')">Добавить слайд</button>
+                    <button class="remove-slide-btn" onclick="removeSlide('bprofile')">Удалить слайд</button>
+                </div>
+            </div>
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'videokp')">
-                    <span class="menu-section-header">8. Видео-КП</span>
+                    <span class="menu-section-header">10. Видео КП</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
                     <label class="menu-label">Стоимость, ₽/мес:</label>
-                    <input type="number" id="videokpPrice" value="5000">
+                    <input type="number" id="videokpPrice" value="1990">
+                    
                     <label class="menu-label">Комментарий:</label>
                     <input type="text" id="videokpComment" placeholder="Введите комментарий">
+                    
                     <button class="add-slide-btn" onclick="addSlide('videokp')">Добавить слайд</button>
                     <button class="remove-slide-btn" onclick="removeSlide('videokp')">Удалить слайд</button>
                 </div>
             </div>
+            
             <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'instructiontext')">
-                    <span class="menu-section-header">9. Инструкция по подключению</span>
+                <div class="menu-header" onclick="toggleMenu(this, 'videocontent')">
+                    <span class="menu-section-header">11. Видеоконтент</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Заголовок:</label>
-                    <input type="text" id="instructionTitle" value="Как стать клиентом за 3 шага?">
-                    <label class="menu-label">Текст инструкции:</label>
-                    <textarea id="instructionTextarea" rows="4">1. Зарегистрируйтесь по ссылке или QR-коду ниже.
-2. Пройдите идентификацию по паспорту или через Госуслуги.
-3. Готово! Наши менеджеры свяжутся с вами для решения любых вопросов.</textarea>
-                    <button class="add-slide-btn" onclick="addSlide('instructiontext')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('instructiontext')">Удалить слайд</button>
-                </div>
-            </div>
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'links')">
-                    <span class="menu-section-header">10. Ссылки-картинки</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <label class="menu-label">Картинка-ссылка 1:</label>
-                    <select id="linkImage1">
-                        <option value="coffeoneprice.png" data-link="https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness">Coffeone</option>
-                        <option value="letual.png" data-link="https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness">Лэтуаль</option>
-                        <option value="karusel.png" data-link="https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness">Карусель</option>
-                    </select>
-                    <label class="menu-label">Картинка-ссылка 2:</label>
-                    <select id="linkImage2">
-                        <option value="coffeoneprice.png" data-link="https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness">Coffeone</option>
-                        <option value="letual.png" data-link="https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness">Лэтуаль</option>
-                        <option value="karusel.png" data-link="https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness">Карусель</option>
-                    </select>
-                    <button class="add-slide-btn" onclick="addSlide('links')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('links')">Удалить слайд</button>
+                    <button class="add-slide-btn" onclick="addSlide('videocontent')">Добавить слайд</button>
+                    <button class="remove-slide-btn" onclick="removeSlide('videocontent')">Удалить слайд</button>
                 </div>
             </div>
         </div>
         
         <div class="action-buttons">
-            <button onclick="saveToPdf()">Сохранить в PDF</button>
+           
+            <button onclick="saveAsPDF()">в PDF</button>
+        
         </div>
     </div>
     
     <div class="preview-container">
-        <div class="preview-wrapper" id="previewWrapper">
-        </div>
-        <div class="slide-controls-container">
-            <div class="slide-controls">
-                <div class="control-icon" onclick="prevSlide()"><img src="images/prev.svg" alt="Предыдущий слайд"></div>
-                <div id="slideNumbers"></div>
-                <div class="control-icon" onclick="nextSlide()"><img src="images/next.svg" alt="Следующий слайд"></div>
+        <div class="preview-wrapper">
+            <div id="slideContainer">
+                <div class="preview-page" id="currentSlide" onclick="toggleZoom()"></div>
+            </div>
+            
+            <div class="slide-controls-container">
+                <div class="slide-controls">
+                    <div class="control-icon" onclick="toggleZoom()">
+                        <img src="zoom.svg" alt="Zoom">
+                    </div>
+                    <div id="slideNumbers"></div>
+                    <div class="control-icon" onclick="removeCurrentSlide()">
+                        <img src="delete.svg" alt="Delete">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Popup для сохранения PDF -->
-    <div id="pdf-save-popup" class="popup-modal">
-        <div class="popup-modal-content">
-            <p>Подождите, пожалуйста, ваш PDF сохраняется...</p>
-        </div>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
     
     <script>
-        // Глобальный массив для хранения данных слайдов
-        let slides = [];
-        let currentSlideIndex = 0;
-        let draggingElement = null;
-        let dragStartIndex = -1;
+        // Инициализация jsPDF
+        const { jsPDF } = window.jspdf;
+        
+        // Массив для хранения слайдов
+        const slides = [
+            { type: 'general', banner: 'images/bkids.png', logos: 'images/alllogo.png' },
+            { type: 'pricing', format: '1', price: '1390', comment: '', banner: 'images/bkids.png', manager: 'images/mankova.png', phoneType: 'service', phone: '' },
+            { type: 'instruction' }
+        ];
+        
+        // Ссылки для баннеров
+        const bannerLinks = {
+            'images/bkids.png': 'https://zvuk-b2b.com/music_for_kids',
+    'images/veranda.png': 'https://zvuk-b2b.com/rest',           
+    'images/sbbarbershop.png': 'https://zvuk-b2b.com',
+    'images/sbcafe.png': 'https://zvuk-b2b.com',
+    'images/sbfitnes.png': 'https://zvuk-b2b.com',
+    'images/sbpizza.png': 'https://zvuk-b2b.com',
+    'images/sbspa.png': 'https://zvuk-b2b.com',
+    'images/sbretail.png': 'https://zvuk-b2b.com',
+    'images/sbmall.png': 'https://zvuk-b2b.com',
+    'images/sbsushi.png': 'https://zvuk-b2b.com',
+    'images/play.png': 'https://zvuk-b2b.com/player',
+    'images/action.png': 'https://zvuk-b2b.com',
+    'images/creative-audio.png': 'https://zvuk-b2b.com/blog/1price',
+    'images/georgia-audio.png': 'https://zvuk-b2b.com/gastrobar#menu1',
+    'images/barber-audio.png': 'https://zvuk-b2b.com/barbershop',
+    'images/parterprogram.png': 'https://zvuk-b2b.com/partners',
+    'images/app.png': 'https://zvuk-b2b.com/blog/1price',
+    'images/premium.png': 'https://zvuk-b2b.com/premium/',
+    'images/bprofile.png': 'https://zvuk-b2b.com/bprofile',
+    'images/videokp.png': 'https://zvuk-b2b.com/video',
+    'images/videowave.png': 'https://zvuk-b2b.com/video',
+    'images/demovideo.png': 'https://zvuk-b2b.com/video',
+    'images/coffeoneprice.png': 'https://zvuk-b2b.com/blog/1price',
+    'images/letual.png': 'https://zvuk-b2b.com/blog/letu',
+    'images/createbanner.png': 'https://zvuk-b2b.com/audio_ads',
+    'images/bprofile phone.png': 'https://zvuk-b2b.com/partners',
+    'images/premiumbanner.png': 'https://zvuk-b2b.com/premium/',
+    'images/bprofilescreen.png': 'https://zvuk-b2b.com/bprofile',
+    'images/atmvieo.png': 'https://zvuk-b2b.com/video'
+        };
+        
+        // Ссылки для менеджеров
+        const managerLinks = {
+            'images/mankova.png': 'https://app.zvuk-b2b.com/register?promocode=mankova',
+            'images/mankova-ph.png': 'https://app.zvuk-b2b.com/register?promocode=mankova',
+            'images/ivanova.png': 'https://app.zvuk-b2b.com/register?promocode=ivanova',
+            'images/ivanova-ph.png': 'https://app.zvuk-b2b.com/register?promocode=ivanova',
+            'images/temur.png': 'https://app.zvuk-b2b.com/register?promocode=sidikov',
+            'images/temur-ph.png': 'https://app.zvuk-b2b.com/register?promocode=sidikov',
+            'images/german.png': 'https://app.zvuk-b2b.com/register?promocode=pilipcev',
+            'images/german-ph.png': 'https://app.zvuk-b2b.com/register?promocode=pilipcev',
+            'images/hlebnikova.png': 'https://app.zvuk-b2b.com/register?promocode=hlebnikova',
+            'images/hlebnikova-ph.png': 'https://app.zvuk-b2b.com/register?promocode=hlebnikova',
+            'images/zemciova.png': 'https://app.zvuk-b2b.com/register?promocode=zemtsova',
+            'images/zemciova-ph.png': 'https://app.zvuk-b2b.com/register?promocode=zemtsova',
+            'images/nikulina.png': 'https://app.zvuk-b2b.com/register?promocode=nikulina',
+            'images/nikulina-ph.png': 'https://app.zvuk-b2b.com/register?promocode=nikulina'
+        };
 
-        // Генерация QR-кода
-        function generateQrCode(url) {
-            return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
+        function getSlideLink(slide) {
+            const map = {
+                'app': 'https://zvuk-b2b.com/blog/1price',
+                'playlist': slide.image === 'images/georgia-audio.png'
+                    ? 'https://zvuk-b2b.com/gastrobar#menu1'
+                    : 'https://zvuk-b2b.com/barbershop',
+                'partner': 'https://zvuk-b2b.com/partners',
+                'premium': 'https://zvuk-b2b.com/premium/',
+                'bprofile': 'https://zvuk-b2b.com/bprofile',
+                'videokp': 'https://zvuk-b2b.com/video',
+                'videocontent': 'https://zvuk-b2b.com/video'
+            };
+            return map[slide.type] || 'https://zvuk-b2b.com';
         }
 
-        // Обновление данных текущего слайда на основе выбранных опций
-        function updateCurrentSlide() {
-            if (slides.length === 0) return;
-
-            const currentSlide = slides[currentSlideIndex];
-            const slideType = currentSlide.type;
-            const slideData = currentSlide.data;
-            const previewPage = document.querySelector(`#previewWrapper .preview-page[data-slide-id="${currentSlide.id}"]`);
-            if (!previewPage) return;
-
-            let managerLink = "";
-            let managerImage = "images/mankova.png";
-            let managerSelect = document.getElementById('manager');
-            if (managerSelect) {
-                const selectedOption = managerSelect.options[managerSelect.selectedIndex];
-                managerImage = selectedOption.value;
-                managerLink = selectedOption.getAttribute('data-link');
-            }
-
-            const personalPhoneInput = document.getElementById('personalPhone');
-            const phoneTypeService = document.querySelector('input[name="phoneType"][value="service"]');
-            const personalPhone = personalPhoneInput.value;
-            const managerPhone = phoneTypeService.checked ? '8 800 220 56 65' : personalPhone;
-            const comment = document.getElementById('comment').value;
-
-            slideData.managerImage = managerImage;
-            slideData.managerPhone = managerPhone;
-            slideData.managerLink = managerLink;
-            slideData.comment = comment;
-
-            let priceHTML = '';
-            if (slideType === 'pricing') {
-                const priceColumns = document.querySelector('input[name="priceColumns"]:checked').value;
-                const priceBanner = document.getElementById('priceBanner').value;
-                slideData.priceBanner = priceBanner;
-                
-                if (priceColumns === '1') {
-                    const price1Value = document.getElementById('price1Value').value;
-                    priceHTML = `<div class="preview-price">${price1Value} ₽/мес</div>
-                                 <div class="preview-comment">${comment}</div>`;
-                } else {
-                    const price3Value1 = document.getElementById('price3Value1').value;
-                    const price3Value2 = document.getElementById('price3Value2').value;
-                    const price3Value3 = document.getElementById('price3Value3').value;
-                    priceHTML = `<table class="price-table">
-                                    <thead>
-                                        <tr>
-                                            <th>1-3 точки</th>
-                                            <th>4-9 точек</th>
-                                            <th>10+ точек</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>${price3Value1} ₽/мес</td>
-                                            <td>${price3Value2} ₽/мес</td>
-                                            <td>${price3Value3} ₽/мес</td>
-                                        </tr>
-                                    </tbody>
-                                </table>`;
+        let currentSlideIndex = 0;
+        let isZoomed = false;
+        let draggedSlideIndex = null;
+        let dropTargetIndex = null;
+        
+        function toggleMenu(header, type) {
+            document.querySelectorAll('.menu-content.active').forEach(content => {
+                if (content !== header.nextElementSibling) {
+                    content.classList.remove('active');
+                    content.previousElementSibling.querySelector('.toggle-button').textContent = '+';
+                    content.previousElementSibling.querySelector('.menu-section-header').classList.remove('active');
                 }
-            } else if (slideType === 'app') {
-                priceHTML = `<div class="preview-price">Мобильное приложение</div><div class="preview-comment">...</div>`;
-                const linkImage1 = document.getElementById('linkImage1').value;
-                const linkImage2 = document.getElementById('linkImage2').value;
-                const link1 = document.getElementById('linkImage1').options[document.getElementById('linkImage1').selectedIndex].getAttribute('data-link');
-                const link2 = document.getElementById('linkImage2').options[document.getElementById('linkImage2').selectedIndex].getAttribute('data-link');
-
-                slideData.image1 = linkImage1;
-                slideData.link1 = link1;
-                slideData.image2 = linkImage2;
-                slideData.link2 = link2;
-            } else if (slideType === 'creative') {
-                 const price = document.getElementById('premiumPrice').value;
-                 const comment = document.getElementById('premiumComment').value;
-                 priceHTML = `<div class="preview-price">${price} ₽/мес</div>
-                              <div class="preview-comment">${comment}</div>`;
-                 slideData.price = price;
-                 slideData.comment = comment;
-            } else if (slideType === 'playlist') {
-                const playlist = document.getElementById('playlist').value;
-                priceHTML = `<div class="preview-price">Тематические плейлисты</div><div class="preview-comment">...</div>`;
-                slideData.playlist = playlist;
-            } else if (slideType === 'instructiontext') {
-                const title = document.getElementById('instructionTitle').value;
-                const text = document.getElementById('instructionTextarea').value;
-                priceHTML = `<div class="instruction-text">
-                                <p><strong>${title}</strong></p>
-                                <p>${text.replace(/\n/g, '<br>')}</p>
-                             </div>`;
-                slideData.title = title;
-                slideData.text = text;
-            } else if (slideType === 'links') {
-                const linkImage1 = document.getElementById('linkImage1').value;
-                const linkImage2 = document.getElementById('linkImage2').value;
-                const link1 = document.getElementById('linkImage1').options[document.getElementById('linkImage1').selectedIndex].getAttribute('data-link');
-                const link2 = document.getElementById('linkImage2').options[document.getElementById('linkImage2').selectedIndex].getAttribute('data-link');
-
-                slideData.image1 = linkImage1;
-                slideData.link1 = link1;
-                slideData.image2 = linkImage2;
-                slideData.link2 = link2;
-            }
+            });
             
-            previewPage.querySelector('.preview-page-content').innerHTML = priceHTML;
-            previewPage.querySelector('.preview-manager').src = slideData.managerImage;
-            previewPage.querySelector('.preview-phone').textContent = slideData.managerPhone;
-            previewPage.querySelector('.preview-link a').href = slideData.managerLink;
+            const content = header.nextElementSibling;
+            const button = header.querySelector('.toggle-button');
+            const headerText = header.querySelector('.menu-section-header');
             
-            // Обновление специфичных элементов для слайда
-            if (slideType === 'pricing' && document.getElementById('priceBanner')) {
-                const priceBanner = document.getElementById('priceBanner').value;
-                previewPage.querySelector('.preview-banner').src = priceBanner;
-            }
-            if (slideType === 'app') {
-                const linkImage1 = document.getElementById('linkImage1').value;
-                const linkImage2 = document.getElementById('linkImage2').value;
-                previewPage.querySelector('.preview-video:first-of-type img').src = linkImage1;
-                previewPage.querySelector('.preview-video:last-of-type img').src = linkImage2;
-                previewPage.querySelector('.preview-video:first-of-type a').href = document.getElementById('linkImage1').options[document.getElementById('linkImage1').selectedIndex].getAttribute('data-link');
-                previewPage.querySelector('.preview-video:last-of-type a').href = document.getElementById('linkImage2').options[document.getElementById('linkImage2').selectedIndex].getAttribute('data-link');
-            }
-            if (slideType === 'links') {
-                const linkImage1 = document.getElementById('linkImage1').value;
-                const linkImage2 = document.getElementById('linkImage2').value;
-                previewPage.querySelector('.preview-video:first-of-type img').src = linkImage1;
-                previewPage.querySelector('.preview-video:last-of-type img').src = linkImage2;
-                previewPage.querySelector('.preview-video:first-of-type a').href = document.getElementById('linkImage1').options[document.getElementById('linkImage1').selectedIndex].getAttribute('data-link');
-                previewPage.querySelector('.preview-video:last-of-type a').href = document.getElementById('linkImage2').options[document.getElementById('linkImage2').selectedIndex].getAttribute('data-link');
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                button.textContent = '+';
+                headerText.classList.remove('active');
+            } else {
+                content.classList.add('active');
+                button.textContent = '-';
+                headerText.classList.add('active');
+                
+                const slideIndex = slides.findIndex(slide => slide.type === type);
+                if (slideIndex !== -1) {
+                    showSlide(slideIndex + 1);
+                }
             }
         }
         
-        // Создание нового слайда
-        function createSlide(type, data) {
-            const slideId = `slide-${Date.now()}`;
-            return {
-                id: slideId,
-                type: type,
-                data: data
-            };
+        function toggleZoom() {
+            const slide = document.getElementById('currentSlide');
+            slide.classList.toggle('zoomed');
+            isZoomed = !isZoomed;
         }
-
-        // Добавление слайда
-        function addSlide(type) {
-            const newSlideData = {};
-            if (type === 'app') {
-                newSlideData.image1 = 'coffeoneprice.png';
-                newSlideData.link1 = 'https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness';
-                newSlideData.image2 = 'letual.png';
-                newSlideData.link2 = 'https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness';
-            } else if (type === 'creative') {
-                newSlideData.price = document.getElementById('premiumPrice').value;
-                newSlideData.comment = document.getElementById('premiumComment').value;
-            } else if (type === 'playlist') {
-                newSlideData.playlist = document.getElementById('playlist').value;
-            } else if (type === 'premium') {
-                newSlideData.price = document.getElementById('premiumPrice').value;
-                newSlideData.comment = document.getElementById('premiumComment').value;
-            } else if (type === 'videokp') {
-                 newSlideData.price = document.getElementById('videokpPrice').value;
-                 newSlideData.comment = document.getElementById('videokpComment').value;
-            } else if (type === 'instructiontext') {
-                newSlideData.title = document.getElementById('instructionTitle').value;
-                newSlideData.text = document.getElementById('instructionTextarea').value;
-            } else if (type === 'links') {
-                newSlideData.image1 = document.getElementById('linkImage1').value;
-                newSlideData.link1 = document.getElementById('linkImage1').options[document.getElementById('linkImage1').selectedIndex].getAttribute('data-link');
-                newSlideData.image2 = document.getElementById('linkImage2').value;
-                newSlideData.link2 = document.getElementById('linkImage2').options[document.getElementById('linkImage2').selectedIndex].getAttribute('data-link');
-            }
-            
-            const newSlide = createSlide(type, newSlideData);
-            slides.push(newSlide);
-            renderSlides();
-            showSlide(slides.length - 1);
-            updateSlideNumbers();
-        }
-
-        // Удаление слайда
-        function removeSlide(type) {
-            const indexToRemove = slides.findIndex(slide => slide.type === type);
-            if (indexToRemove !== -1) {
-                slides.splice(indexToRemove, 1);
-                currentSlideIndex = Math.max(0, currentSlideIndex - 1);
-                renderSlides();
-                showSlide(currentSlideIndex);
-                updateSlideNumbers();
-            }
-        }
-
-        // Рендеринг всех слайдов
-        function renderSlides() {
-            const previewWrapper = document.getElementById('previewWrapper');
-            previewWrapper.innerHTML = '';
-            
-            slides.forEach((slide, index) => {
-                const previewPage = document.createElement('div');
-                previewPage.className = 'preview-page';
-                previewPage.style.display = 'none';
-                previewPage.setAttribute('data-slide-id', slide.id);
-                previewPage.setAttribute('data-slide-type', slide.type);
-                previewPage.onclick = toggleZoom;
-
-                let contentHTML = '';
-                if (slide.type === 'general') {
-                    contentHTML = `<img class="preview-bg" src="${slide.data.background}" alt="Фон">
-                                   <img class="preview-logos" src="${slide.data.logos}" alt="Логотипы клиентов">`;
-                } else if (slide.type === 'pricing') {
-                    const priceValue = document.getElementById('price1Value').value;
-                    const priceComment = document.getElementById('comment').value;
-                    const priceBanner = document.getElementById('priceBanner').value;
-                    const qrUrl = generateQrCode(slide.data.managerLink);
-                    contentHTML = `<img class="preview-bg" src="images/bg1.png" alt="Фон">
-                                   <img class="preview-banner" src="${priceBanner}" alt="Баннер">
-                                   <div class="preview-page-content">
-                                       <div class="preview-price">${priceValue} ₽/мес</div>
-                                       <div class="preview-comment">${priceComment}</div>
-                                   </div>
-                                   <div class="preview-manager-container">
-                                       <a href="${slide.data.managerLink}" class="preview-manager-link">
-                                           <img class="preview-manager" src="${slide.data.managerImage}" alt="Сотрудник">
-                                       </a>
-                                       <div class="preview-phone">${slide.data.managerPhone}</div>
-                                   </div>
-                                   <div class="preview-qr"><a href="${slide.data.managerLink}"><img src="${qrUrl}" alt="QR Code"></a></div>`;
-                } else if (slide.type === 'app') {
-                    const link1 = slide.data.link1 || 'https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness';
-                    const link2 = slide.data.link2 || 'https://play.google.com/store/apps/details?id=ru.sber.zvukbusiness';
-                    const qrUrl = generateQrCode(slide.data.managerLink);
-                    contentHTML = `<img class="preview-bg" src="images/bg2.png" alt="Фон">
-                                   <div class="preview-page-content">
-                                       <div class="instruction-text">
-                                           <p><strong>Мобильное приложение Звук Бизнес:</strong></p>
-                                           <p>С помощью удобного мобильного приложения вы можете...
-                                            управлять плейлистами, смотреть статистику и многое другое!</p>
-                                       </div>
-                                   </div>
-                                   <div class="preview-video">
-                                       <a href="${link1}"><img src="images/coffeoneprice.png" alt="Coffeeone App"></a>
-                                   </div>
-                                   <div class="preview-video" style="bottom: 10%; left: 55%; width: 100px; height: 100px;">
-                                       <a href="${link2}"><img src="images/letual.png" alt="Лэтуаль App"></a>
-                                   </div>
-                                   <div class="preview-manager-container">
-                                       <a href="${slide.data.managerLink}" class="preview-manager-link">
-                                           <img class="preview-manager" src="${slide.data.managerImage}" alt="Сотрудник">
-                                       </a>
-                                       <div class="preview-phone">${slide.data.managerPhone}</div>
-                                   </div>
-                                   <div class="preview-qr"><a href="${slide.data.managerLink}"><img src="${qrUrl}" alt="QR Code"></a></div>`;
-                } else if (slide.type === 'creative') {
-                    const qrUrl = generateQrCode(slide.data.managerLink);
-                    contentHTML = `<img class="preview-bg" src="images/bg3.png" alt="Фон">
-                                   <div class="preview-page-content">
-                                        <div class="preview-price">${slide.data.price} ₽/мес</div>
-                                        <div class="preview-comment">${slide.data.comment}</div>
-                                   </div>
-                                   <div class="preview-manager-container">
-                                       <a href="${slide.data.managerLink}" class="preview-manager-link">
-                                           <img class="preview-manager" src="${slide.data.managerImage}" alt="Сотрудник">
-                                       </a>
-                                       <div class="preview-phone">${slide.data.managerPhone}</div>
-                                   </div>
-                                   <div class="preview-qr"><a href="${slide.data.managerLink}"><img src="${qrUrl}" alt="QR Code"></a></div>`;
-                } else if (slide.type === 'playlist') {
-                    const qrUrl = generateQrCode(slide.data.managerLink);
-                    contentHTML = `<img class="preview-bg" src="images/bg4.png" alt="Фон">
-                                   <div class="preview-page-content">
-                                   </div>
-                                   <div class="preview-manager-container">
-                                       <a href="${slide.data.managerLink}" class="preview-manager-link">
-                                           <img class="preview-manager" src="${slide.data.managerImage}" alt="Сотрудник">
-                                       </a>
-                                       <div class="preview-phone">${slide.data.managerPhone}</div>
-                                   </div>
-                                   <div class="preview-qr"><a href="${slide.data.managerLink}"><img src="${qrUrl}" alt="QR Code"></a></div>
-                                   <img class="preview-banner" src="${slide.data.playlist}" alt="Тематический плейлист">`;
-                } else if (slide.type === 'premium') {
-                    const qrUrl = generateQrCode(slide.data.managerLink);
-                    contentHTML = `<img class="preview-bg" src="images/bg3.png" alt="Фон">
-                                   <div class="preview-page-content">
-                                        <div class="preview-price">${slide.data.price} ₽/мес</div>
-                                        <div class="preview-comment">${slide.data.comment}</div>
-                                   </div>
-                                   <div class="preview-manager-container">
-                                       <a href="${slide.data.managerLink}" class="preview-manager-link">
-                                           <img class="preview-manager" src="${slide.data.managerImage}" alt="Сотрудник">
-                                       </a>
-                                       <div class="preview-phone">${slide.data.managerPhone}</div>
-                                   </div>
-                                   <div class="preview-qr"><a href="${slide.data.managerLink}"><img src="${qrUrl}" alt="QR Code"></a></div>`;
-                } else if (slide.type === 'videokp') {
-                     const qrUrl = generateQrCode(slide.data.managerLink);
-                     contentHTML = `<img class="preview-bg" src="images/bg4.png" alt="Фон">
-                                    <div class="preview-page-content">
-                                        <div class="preview-price">${slide.data.price} ₽/мес</div>
-                                        <div class="preview-comment">${slide.data.comment}</div>
-                                    </div>
-                                    <div class="preview-manager-container">
-                                        <a href="${slide.data.managerLink}" class="preview-manager-link">
-                                            <img class="preview-manager" src="${slide.data.managerImage}" alt="Сотрудник">
-                                        </a>
-                                        <div class="preview-phone">${slide.data.managerPhone}</div>
-                                    </div>
-                                    <div class="preview-qr"><a href="${slide.data.managerLink}"><img src="${qrUrl}" alt="QR Code"></a></div>`;
-                } else if (slide.type === 'instructiontext') {
-                    const qrUrl = generateQrCode(slide.data.managerLink);
-                    contentHTML = `<img class="preview-bg" src="images/bg5.png" alt="Фон">
-                                   <div class="preview-page-content">
-                                       <div class="instruction-text">
-                                           <p><strong>${slide.data.title}</strong></p>
-                                           <p>${slide.data.text.replace(/\n/g, '<br>')}</p>
-                                       </div>
-                                   </div>
-                                   <div class="preview-manager-container">
-                                       <a href="${slide.data.managerLink}" class="preview-manager-link">
-                                           <img class="preview-manager" src="${slide.data.managerImage}" alt="Сотрудник">
-                                       </a>
-                                       <div class="preview-phone">${slide.data.managerPhone}</div>
-                                   </div>
-                                   <div class="preview-qr"><a href="${slide.data.managerLink}"><img src="${qrUrl}" alt="QR Code"></a></div>`;
-                } else if (slide.type === 'links') {
-                    const qrUrl = generateQrCode(slide.data.managerLink);
-                    const link1 = slide.data.link1;
-                    const link2 = slide.data.link2;
-                    contentHTML = `<img class="preview-bg" src="images/bg6.png" alt="Фон">
-                                   <div class="preview-page-content">
-                                   </div>
-                                   <div class="preview-video" style="bottom: 30%; left: 10%;">
-                                       <a href="${link1}"><img src="images/${slide.data.image1}" alt="App link 1"></a>
-                                   </div>
-                                   <div class="preview-video" style="bottom: 30%; right: 10%; left: auto;">
-                                       <a href="${link2}"><img src="images/${slide.data.image2}" alt="App link 2"></a>
-                                   </div>
-                                   <div class="preview-manager-container">
-                                       <a href="${slide.data.managerLink}" class="preview-manager-link">
-                                           <img class="preview-manager" src="${slide.data.managerImage}" alt="Сотрудник">
-                                       </a>
-                                       <div class="preview-phone">${slide.data.managerPhone}</div>
-                                   </div>
-                                   <div class="preview-qr"><a href="${slide.data.managerLink}"><img src="${qrUrl}" alt="QR Code"></a></div>`;
+        
+        document.querySelectorAll('input[name="phoneType"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const personalPhoneContainer = document.getElementById('personalPhoneContainer');
+                if (this.value === 'personal') {
+                    personalPhoneContainer.classList.remove('hidden');
+                } else {
+                    personalPhoneContainer.classList.add('hidden');
                 }
-
-                previewPage.innerHTML = contentHTML;
-                previewWrapper.appendChild(previewPage);
-
-                // Добавляем event listeners для перетаскивания
-                previewPage.addEventListener('dragstart', handleDragStart);
-                previewPage.addEventListener('dragover', handleDragOver);
-                previewPage.addEventListener('dragenter', handleDragEnter);
-                previewPage.addEventListener('dragleave', handleDragLeave);
-                previewPage.addEventListener('dragend', handleDragEnd);
-                previewPage.draggable = true;
+                updateCurrentSlide();
             });
-            showSlide(currentSlideIndex);
+        });
+        
+        document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === '1') {
+                    document.getElementById('price1Container').classList.remove('hidden');
+                    document.getElementById('price3Container').classList.add('hidden');
+                } else {
+                    document.getElementById('price1Container').classList.add('hidden');
+                    document.getElementById('price3Container').classList.remove('hidden');
+                }
+                updateCurrentSlide();
+            });
+        });
+        
+        function updateCurrentSlide() {
+            const currentSlide = slides[currentSlideIndex];
+            const slideContainer = document.getElementById('currentSlide');
+            slideContainer.innerHTML = '';
+            
+            const bgImg = document.createElement('img');
+            bgImg.className = 'preview-bg';
+            
+            switch(currentSlide.type) {
+                case 'general':
+                    bgImg.src = 'images/Backprice1.png';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const bannerImg = document.createElement('img');
+                    bannerImg.className = 'preview-banner';
+                    bannerImg.src = document.getElementById('banner').value;
+                    
+                    const bannerLink = document.createElement('a');
+                    bannerLink.href = bannerLinks[document.getElementById('banner').value];
+                    bannerLink.target = '_blank';
+                    bannerLink.style.position = 'absolute';
+                    bannerLink.style.top = '0';
+                    bannerLink.style.right = '0';
+                    bannerLink.style.width = '35%';
+                    bannerLink.style.height = '100%';
+                    bannerLink.appendChild(bannerImg);
+                    slideContainer.appendChild(bannerLink);
+                    
+                    const logosImg = document.createElement('img');
+                    logosImg.className = 'preview-logos';
+                    logosImg.src = document.getElementById('logos').value;
+                    slideContainer.appendChild(logosImg);
+                    break;
+                    
+                case 'pricing':
+                    const priceFormat = document.querySelector('input[name="priceColumns"]:checked').value;
+                    
+                    if (priceFormat === '1') {
+                        bgImg.src = 'images/1price.png';
+                    } else {
+                        bgImg.src = 'images/3price.png';
+                    }
+                    slideContainer.appendChild(bgImg);
+                    
+                    const priceBannerImg = document.createElement('img');
+                    priceBannerImg.className = 'preview-banner';
+                    priceBannerImg.src = document.getElementById('priceBanner').value;
+                    
+                    const priceBannerLink = document.createElement('a');
+                    priceBannerLink.href = bannerLinks[document.getElementById('priceBanner').value];
+                    priceBannerLink.target = '_blank';
+                    priceBannerLink.style.position = 'absolute';
+                    priceBannerLink.style.top = '0';
+                    priceBannerLink.style.right = '0';
+                    priceBannerLink.style.width = '35%';
+                    priceBannerLink.style.height = '100%';
+                    priceBannerLink.appendChild(priceBannerImg);
+                    slideContainer.appendChild(priceBannerLink);
+                    
+                    const managerValue = document.getElementById('manager').value;
+                    const phoneType = document.querySelector('input[name="phoneType"]:checked').value;
+                    const managerImgPath = phoneType === 'personal' ? 
+                        managerValue.replace('.png', '-ph.png') : 
+                        managerValue;
+                    
+                    const managerImg = document.createElement('img');
+                    managerImg.className = 'preview-manager';
+                    managerImg.src = managerImgPath;
+                    
+                    const managerLink = document.createElement('a');
+                    managerLink.href = managerLinks[managerValue]; // Always use base manager link
+                    managerLink.target = '_blank';
+                    managerLink.style.position = 'absolute';
+                    managerLink.style.bottom = '8%';
+                    managerLink.style.left = '3%';
+                    managerLink.style.width = '58%';
+                    managerLink.style.height = 'auto';
+                    managerLink.appendChild(managerImg);
+                    slideContainer.appendChild(managerLink);
+                    
+                    if (phoneType === 'personal' && document.getElementById('personalPhone').value) {
+                        const phoneDiv = document.createElement('div');
+                        phoneDiv.className = 'preview-phone';
+                        phoneDiv.textContent = document.getElementById('personalPhone').value;
+                        slideContainer.appendChild(phoneDiv);
+                        
+                        const qrDiv = document.createElement('div');
+                        qrDiv.className = 'preview-qr';
+                        const qrImg = document.createElement('img');
+                        qrImg.src = generateQRCode(document.getElementById('personalPhone').value);
+                        qrDiv.appendChild(qrImg);
+                        
+                        const qrLink = document.createElement('a');
+                        qrLink.href = `tel:${document.getElementById('personalPhone').value}`;
+                        qrLink.target = '_blank';
+                        qrLink.style.position = 'absolute';
+                        qrLink.style.bottom = '8%';
+                        qrLink.style.right = '39%';
+                        qrLink.style.width = 'var(--qr-size)';
+                        qrLink.style.height = 'var(--qr-size)';
+                        qrLink.appendChild(qrDiv);
+                        slideContainer.appendChild(qrLink);
+                    }
+                    
+                    if (priceFormat === '1') {
+                        const priceDiv = document.createElement('div');
+                        priceDiv.className = 'preview-price';
+                        priceDiv.textContent = formatPrice(document.getElementById('price1Value').value) + ' ₽/мес.';
+                        slideContainer.appendChild(priceDiv);
+                        
+                        const commentDiv = document.createElement('div');
+                        commentDiv.className = 'preview-comment';
+                        commentDiv.textContent = document.getElementById('comment').value;
+                        slideContainer.appendChild(commentDiv);
+                    } else {
+                        const table = document.createElement('table');
+                        table.className = 'price-table';
+                        
+                        const thead = document.createElement('thead');
+                        thead.innerHTML = `
+                            <tr>
+                                <th>Количество точек</th>
+                                <th>1-3</th>
+                                <th>4-9</th>
+                                <th>10+</th>
+                            </tr>
+                        `;
+                        table.appendChild(thead);
+                        
+                        const tbody = document.createElement('tbody');
+                        tbody.innerHTML = `
+                            <tr>
+                                <td>Стоимость за точку</td>
+                                <td>${formatPrice(document.getElementById('price3Value1').value)} ₽</td>
+                                <td>${formatPrice(document.getElementById('price3Value2').value)} ₽</td>
+                                <td>${formatPrice(document.getElementById('price3Value3').value)} ₽</td>
+                            </tr>
+                        `;
+                        table.appendChild(tbody);
+                        
+                        slideContainer.appendChild(table);
+                    }
+                    break;
+                    
+                case 'instruction':
+                    bgImg.src = 'images/instruct.png';
+                    slideContainer.appendChild(bgImg);
+
+                    const managerValueForLink = document.getElementById('manager').value;
+                    const managerRegLink = managerLinks[managerValueForLink];
+
+                    const instructionTextDiv = document.createElement('div');
+                    instructionTextDiv.className = 'instruction-text';
+                    instructionTextDiv.innerHTML = `
+                        1. Зарегистрироваться <a href="${managerRegLink}" target="_blank" id="instructionLinkManager">по ссылке</a>.<br><br>
+                        2. Установить приложение на <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" id="instructionLinkComputer">компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" id="instructionLinkSmartphone">смартфон</a>.<br><br>
+                        3. С вами свяжется менеджер в течение 1-2 часов.<br><br>
+                        4. Протестировать в течение 7 дней, оформить подписку.
+                    `;
+                    slideContainer.appendChild(instructionTextDiv);
+                    break;
+                    
+                case 'app':
+                    bgImg.src = 'images/app.png';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const coffeeImg = document.createElement('img');
+                    coffeeImg.src = 'images/coffeoneprice.png';
+                    coffeeImg.style.position = 'absolute';
+                    coffeeImg.style.bottom = '4%';
+                    coffeeImg.style.left = '3%';
+                    coffeeImg.style.width = '130px';
+                    coffeeImg.style.height = '130px';
+                    
+                    const coffeeLink = document.createElement('a');
+                    coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
+                    coffeeLink.target = '_blank';
+                    coffeeLink.appendChild(coffeeImg);
+                    slideContainer.appendChild(coffeeLink);
+                    
+                    const appLink = document.createElement('a');
+                    appLink.className = 'preview-link';
+                    appLink.href = 'https://zvuk-b2b.com/blog/1price';
+                    appLink.textContent = 'zvuk-b2b.com';
+                    appLink.target = '_blank';
+                    slideContainer.appendChild(appLink);
+                    break;
+                    
+                case 'creative':
+                    bgImg.src = 'images/createbanner.png';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const creativeLink = document.createElement('a');
+                    creativeLink.href = 'https://zvuk-b2b.com/audio_ads';
+                    creativeLink.target = '_blank';
+                    creativeLink.style.position = 'absolute';
+                    creativeLink.style.top = '0';
+                    creativeLink.style.left = '0';
+                    creativeLink.style.width = '100%';
+                    creativeLink.style.height = '100%';
+                    slideContainer.appendChild(creativeLink);
+                    
+                    const coffeImg = document.createElement('img');
+                    coffeImg.src = 'images/coffeoneprice.png';
+                    
+                    const coffeLink = document.createElement('a');
+                    coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
+                    coffeLink.target = '_blank';
+                    coffeLink.style.position = 'absolute';
+                    coffeLink.style.bottom = '23%';
+                    coffeLink.style.left = '3%';
+                    coffeLink.style.width = '20%';
+                    coffeLink.style.height = '20%';
+                    coffeLink.appendChild(coffeImg);
+                    slideContainer.appendChild(coffeLink);
+                    
+                    const letualImg = document.createElement('img');
+                    letualImg.src = 'images/letual.png';
+                    
+                    const letualLink = document.createElement('a');
+                    letualLink.href = 'https://zvuk-b2b.com/blog/letu';
+                    letualLink.target = '_blank';
+                    letualLink.style.position = 'absolute';
+                    letualLink.style.bottom = '23%';
+                    letualLink.style.right = '25%';
+                    letualLink.style.width = '20%';
+                    letualLink.style.height = '20%';
+                    letualLink.appendChild(letualImg);
+                    slideContainer.appendChild(letualLink);
+                    break;
+                    
+                case 'playlist':
+                    bgImg.src = document.getElementById('playlist').value;
+                    slideContainer.appendChild(bgImg);
+                    
+                    const playlistLink = document.createElement('a');
+                    playlistLink.className = 'preview-link';
+                    playlistLink.href = document.getElementById('playlist').value === 'images/georgia-audio.png' ? 
+                        'https://zvuk-b2b.com/gastrobar#menu1' : 
+                        'https://zvuk-b2b.com/barbershop';
+                    playlistLink.textContent = 'zvuk-b2b.com';
+                    playlistLink.target = '_blank';
+                    slideContainer.appendChild(playlistLink);
+                    break;
+                    
+                case 'partner':
+                    bgImg.src = 'images/parterprogram.png';
+                    slideContainer.appendChild(bgImg);
+                   
+
+                    const partnerPhoneLink = document.createElement('a');
+                    partnerPhoneLink.href = 'https://zvuk-b2b.com/partners';
+                    partnerPhoneLink.target = '_blank';
+                    partnerPhoneLink.style.position = 'absolute';
+                    partnerPhoneLink.style.bottom = '50%';
+                    partnerPhoneLink.style.left = '8%';
+                    partnerPhoneLink.style.width = '100px';
+                    partnerPhoneLink.style.height = '100px';
+                    partnerPhoneLink.appendChild(partnerPhoneImg);
+                    slideContainer.appendChild(partnerPhoneLink);
+                    
+                    const partnerLink = document.createElement('a');
+                    partnerLink.className = 'preview-link';
+                    partnerLink.href = 'https://zvuk-b2b.com/partners';
+                    partnerLink.textContent = 'zvuk-b2b.com';
+                    partnerLink.target = '_blank';
+                    slideContainer.appendChild(partnerLink);
+                    break;
+                    
+                case 'premium':
+                    bgImg.src = 'images/premiumbanner.png';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const premiumPriceDiv = document.createElement('div');
+                    premiumPriceDiv.className = 'preview-price';
+                    premiumPriceDiv.textContent = formatPrice(document.getElementById('premiumPrice').value) + ' ₽/мес.';
+                    slideContainer.appendChild(premiumPriceDiv);
+                    
+                    const premiumCommentDiv = document.createElement('div');
+                    premiumCommentDiv.className = 'preview-comment';
+                    premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
+                    slideContainer.appendChild(premiumCommentDiv);
+                    
+                    const premiumLink = document.createElement('a');
+                    premiumLink.className = 'preview-link';
+                    premiumLink.href = 'https://zvuk-b2b.com/premium/';
+                    premiumLink.textContent = 'zvuk-b2b.com';
+                    premiumLink.target = '_blank';
+                    slideContainer.appendChild(premiumLink);
+                    break;
+                    
+                case 'bprofile':
+                    bgImg.src = 'images/bprofile.png';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const bprofileScreenLink = document.createElement('a');
+                    bprofileScreenLink.href = 'https://zvuk-b2b.com/bprofile';
+                    bprofileScreenLink.target = '_blank';
+                    bprofileScreenLink.style.position = 'absolute';
+                    bprofileScreenLink.style.bottom = '69%';
+                    bprofileScreenLink.style.left = '18%';
+                    bprofileScreenLink.style.width = '60px';
+                    bprofileScreenLink.style.height = '60px';
+                    bprofileScreenLink.appendChild(bprofileScreenImg);
+                    slideContainer.appendChild(bprofileScreenLink);
+                    
+                    const bprofileLink = document.createElement('a');
+                    bprofileLink.className = 'preview-link';
+                    bprofileLink.href = 'https://zvuk-b2b.com/bprofile';
+                    bprofileLink.textContent = 'zvuk-b2b.com';
+                    bprofileLink.target = '_blank';
+                    slideContainer.appendChild(bprofileLink);
+                    break;
+                    
+                case 'videokp':
+                    bgImg.src = 'images/atmvieo.png';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const videoPriceDiv = document.createElement('div');
+                    videoPriceDiv.className = 'preview-price';
+                    videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ' ₽/мес.';
+                    slideContainer.appendChild(videoPriceDiv);
+                    
+                    const videoCommentDiv = document.createElement('div');
+                    videoCommentDiv.className = 'preview-comment';
+                    videoCommentDiv.textContent = document.getElementById('videokpComment').value;
+                    slideContainer.appendChild(videoCommentDiv);
+                    
+                 
+                    
+                    const videoLink = document.createElement('a');
+                    videoLink.href = 'https://zvuk-b2b.com/video';
+                    videoLink.target = '_blank';
+                    videoLink.style.position = 'absolute';
+                    videoLink.style.bottom = '10%';
+                    videoLink.style.left = '50%';
+                    videoLink.style.transform = 'translateX(-50%)';
+                    videoLink.style.width = '100px';
+                    videoLink.style.height = '100px';
+                    videoLink.appendChild(videoImg);
+                    slideContainer.appendChild(videoLink);
+                    
+                    const videokpLink = document.createElement('a');
+                    videokpLink.className = 'preview-link';
+                    videokpLink.href = 'https://zvuk-b2b.com/video';
+                    videokpLink.textContent = 'zvuk-b2b.com';
+                    videokpLink.target = '_blank';
+                    slideContainer.appendChild(videokpLink);
+                    break;
+                    
+                case 'videocontent':
+                    bgImg.src = 'images/videowave.png';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const videocontentLink = document.createElement('a');
+                    videocontentLink.className = 'preview-link';
+                    videocontentLink.href = 'https://zvuk-b2b.com/video';
+                    videocontentLink.textContent = 'zvuk-b2b.com';
+                    videocontentLink.target = '_blank';
+                    slideContainer.appendChild(videocontentLink);
+                    break;
+            }
         }
-
-        // Показать конкретный слайд
+        
+        function generateQRCode(text) {
+            return `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(text)}&bgcolor=transparent&color=667099`;
+        }
+        
         function showSlide(index) {
-            const previewPages = document.querySelectorAll('.preview-page');
-            const slideNumbers = document.querySelectorAll('.slide-number');
+            if (index < 1 || index > slides.length) return;
             
-            if (index < 0 || index >= previewPages.length) return;
+            currentSlideIndex = index - 1;
             
-            previewPages.forEach(page => page.style.display = 'none');
-            slideNumbers.forEach(number => number.classList.remove('active'));
-
-            previewPages[index].style.display = 'block';
-            slideNumbers[index].classList.add('active');
-
-            currentSlideIndex = index;
-            showSlideMenu(slides[index].type);
+            document.querySelectorAll('.slide-number').forEach((btn, i) => {
+                if (i === index - 1) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
             updateCurrentSlide();
         }
-
-        // Показать следующий слайд
-        function nextSlide() {
-            let newIndex = (currentSlideIndex + 1) % slides.length;
-            showSlide(newIndex);
-        }
-
-        // Показать предыдущий слайд
-        function prevSlide() {
-            let newIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
-            showSlide(newIndex);
+        
+        function removeCurrentSlide() {
+            if (currentSlideIndex > 2) {
+                removeSlide(slides[currentSlideIndex].type);
+            }
         }
         
-        // Обновление кнопок нумерации слайдов
+        function addSlide(type) {
+            let newSlide;
+            
+            switch(type) {
+                case 'app':
+                    newSlide = { type: 'app', image: 'images/app.png' };
+                    break;
+                case 'creative':
+                    newSlide = { type: 'creative', image: 'images/createbanner.png' };
+                    break;
+                case 'playlist':
+                    newSlide = { type: 'playlist', image: document.getElementById('playlist').value };
+                    break;
+                case 'partner':
+                    newSlide = { type: 'partner', image: 'images/parterprogram.png' };
+                    break;
+                case 'premium':
+                    newSlide = { 
+                        type: 'premium', 
+                        image: 'images/premiumbanner.png',
+                        price: document.getElementById('premiumPrice').value,
+                        comment: document.getElementById('premiumComment').value
+                    };
+                    break;
+                case 'bprofile':
+                    newSlide = { type: 'bprofile', image: 'images/bprofile.png' };
+                    break;
+                case 'videokp':
+                    newSlide = { 
+                        type: 'videokp', 
+                        image: 'images/atmvieo.png',
+                        price: document.getElementById('videokpPrice').value,
+                        comment: document.getElementById('videokpComment').value
+                    };
+                    break;
+                case 'videocontent':
+                    newSlide = { type: 'videocontent', image: 'images/videowave.png' };
+                    break;
+                default:
+                    return;
+            }
+            
+            slides.push(newSlide);
+            updateSlideNumbers();
+            showSlide(slides.length);
+        }
+        
+        function removeSlide(type) {
+            if (slides.length <= 3) return;
+            
+            let indexToRemove = -1;
+            for (let i = slides.length - 1; i >= 3; i--) {
+                if (slides[i].type === type) {
+                    indexToRemove = i;
+                    break;
+                }
+            }
+            
+            if (indexToRemove === -1) return;
+            
+            slides.splice(indexToRemove, 1);
+            updateSlideNumbers();
+            
+            if (currentSlideIndex >= slides.length) {
+                showSlide(slides.length);
+            }
+        }
+        
         function updateSlideNumbers() {
-            const slideNumbersContainer = document.getElementById('slideNumbers');
-            slideNumbersContainer.innerHTML = '';
+            const slideNumbers = document.getElementById('slideNumbers');
+            slideNumbers.innerHTML = '';
             
-            slides.forEach((slide, index) => {
-                const numberBtn = document.createElement('div');
-                numberBtn.className = 'slide-number';
-                numberBtn.textContent = index + 1;
-                numberBtn.setAttribute('data-index', index);
-                numberBtn.addEventListener('click', () => showSlide(index));
+            for (let i = 0; i < slides.length; i++) {
+                const number = document.createElement('div');
+                number.className = `slide-number ${i === currentSlideIndex ? 'active' : ''}`;
+                number.textContent = i + 1;
+                number.draggable = i >= 3;
+                number.dataset.index = i;
                 
-                // Добавляем event listeners для перетаскивания
-                numberBtn.addEventListener('dragstart', handleDragStart);
-                numberBtn.addEventListener('dragover', handleDragOver);
-                numberBtn.addEventListener('dragenter', handleDragEnter);
-                numberBtn.addEventListener('dragleave', handleDragLeave);
-                numberBtn.addEventListener('dragend', handleDragEnd);
-                numberBtn.draggable = true;
-
-                slideNumbersContainer.appendChild(numberBtn);
-            });
-            
-            if (slides.length > 0) {
-                document.querySelectorAll('.slide-number')[currentSlideIndex].classList.add('active');
+                number.addEventListener('dragstart', handleDragStart);
+                number.addEventListener('dragover', handleDragOver);
+                number.addEventListener('drop', handleDrop);
+                number.addEventListener('dragend', handleDragEnd);
+                number.addEventListener('dragenter', handleDragEnter);
+                number.addEventListener('dragleave', handleDragLeave);
+                
+                number.onclick = function() { showSlide(i + 1); };
+                slideNumbers.appendChild(number);
             }
         }
         
-        // Переключение меню настроек
-        function toggleMenu(header, sectionName) {
-            const content = header.nextElementSibling;
-            const toggleButton = header.querySelector('.toggle-button');
-            const sectionHeaders = document.querySelectorAll('.menu-section-header');
-            
-            // Скрываем все разделы, кроме текущего
-            document.querySelectorAll('.menu-content').forEach(c => {
-                if (c !== content) c.style.display = 'none';
-            });
-            document.querySelectorAll('.toggle-button').forEach(b => {
-                if (b !== toggleButton) b.textContent = '+';
-            });
-            sectionHeaders.forEach(h => h.classList.remove('active'));
-
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-                toggleButton.textContent = '+';
-            } else {
-                content.style.display = 'block';
-                toggleButton.textContent = '-';
-                header.querySelector('.menu-section-header').classList.add('active');
-            }
-        }
-        
-        // Показать соответствующее меню для текущего слайда
-        function showSlideMenu(slideType) {
-            const allHeaders = document.querySelectorAll('.menu-header');
-            allHeaders.forEach(header => {
-                const content = header.nextElementSibling;
-                const toggleButton = header.querySelector('.toggle-button');
-                const sectionHeader = header.querySelector('.menu-section-header');
-                
-                content.style.display = 'none';
-                toggleButton.textContent = '+';
-                sectionHeader.classList.remove('active');
-
-                if (header.onclick.toString().includes(`'${slideType}'`)) {
-                    content.style.display = 'block';
-                    toggleButton.textContent = '-';
-                    sectionHeader.classList.add('active');
-                }
-            });
-        }
-
-        // Переключение масштаба превью
-        function toggleZoom() {
-            this.classList.toggle('zoomed');
-        }
-
-        // Сохранение в PDF
-        async function saveToPdf() {
-            const popup = document.getElementById('pdf-save-popup');
-            popup.style.display = 'flex';
-
-            const doc = new window.jspdf.jsPDF('portrait', 'pt', 'a4');
-            const previewWrapper = document.getElementById('previewWrapper');
-            const slidesCount = slides.length;
-            
-            document.body.classList.remove('preview-mode');
-            document.body.classList.add('pdf-mode');
-
-            for (let i = 0; i < slidesCount; i++) {
-                showSlide(i);
-                
-                const slideToSave = previewWrapper.querySelector('.preview-page[data-slide-id="' + slides[i].id + '"]');
-
-                // Создаем временный div для рендеринга html2canvas
-                const tempDiv = document.createElement('div');
-                tempDiv.style.width = '595px';
-                tempDiv.style.height = '842px';
-                tempDiv.style.position = 'absolute';
-                tempDiv.style.left = '-9999px';
-                document.body.appendChild(tempDiv);
-                tempDiv.innerHTML = slideToSave.outerHTML;
-                const tempSlide = tempDiv.querySelector('.preview-page');
-
-                // Ожидание загрузки изображений
-                await Promise.all(Array.from(tempSlide.querySelectorAll('img')).map(img => {
-                    if (img.complete) return;
-                    return new Promise((resolve) => {
-                        img.onload = resolve;
-                        img.onerror = resolve;
-                    });
-                }));
-
-                const canvas = await html2canvas(tempSlide, {
-                    scale: 3, // Увеличение масштаба для лучшего качества
-                    useCORS: true // Разрешить использование cross-origin изображений
-                });
-
-                const imgData = canvas.toDataURL('image/jpeg');
-
-                const width = doc.internal.pageSize.getWidth();
-                const height = doc.internal.pageSize.getHeight();
-                doc.addImage(imgData, 'JPEG', 0, 0, width, height);
-
-                // Добавление кликабельных ссылок
-                const links = tempSlide.querySelectorAll('a');
-                links.forEach(link => {
-                    const rect = link.getBoundingClientRect();
-                    const canvasRect = tempSlide.getBoundingClientRect();
-
-                    const x = (rect.left - canvasRect.left) * width / canvasRect.width;
-                    const y = (rect.top - canvasRect.top) * height / canvasRect.height;
-                    const w = rect.width * width / canvasRect.width;
-                    const h = rect.height * height / canvasRect.height;
-                    
-                    doc.link(x, y, w, h, { url: link.href });
-                });
-
-                document.body.removeChild(tempDiv);
-                
-                if (i < slidesCount - 1) {
-                    doc.addPage();
-                }
-            }
-
-            doc.save('commercial_offer.pdf');
-
-            document.body.classList.remove('pdf-mode');
-            document.body.classList.add('preview-mode');
-            
-            popup.style.display = 'none';
-        }
-
-        // Функции для перетаскивания
         function handleDragStart(e) {
-            this.style.opacity = '0.4';
-            draggingElement = this;
-            if (this.classList.contains('slide-number')) {
-                dragStartIndex = parseInt(this.getAttribute('data-index'));
-            } else if (this.classList.contains('preview-page')) {
-                dragStartIndex = Array.from(this.parentNode.children).indexOf(this);
-            }
+            draggedSlideIndex = parseInt(e.target.dataset.index);
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', e.target.innerHTML);
         }
-
+        
         function handleDragOver(e) {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
         }
-
-        function handleDragEnter(e) {
+        
+        function handleDrop(e) {
             e.preventDefault();
-            if (this !== draggingElement) {
-                this.classList.add('drop-target');
-            }
-        }
-
-        function handleDragLeave(e) {
-            this.classList.remove('drop-target');
-        }
-
-        function handleDragEnd(e) {
-            this.style.opacity = '1';
-            const dropTargets = document.querySelectorAll('.drop-target');
-            dropTargets.forEach(target => target.classList.remove('drop-target'));
-
-            const dropIndex = parseInt(this.getAttribute('data-index')) || Array.from(this.parentNode.children).indexOf(this);
-
-            if (dragStartIndex !== -1 && dragStartIndex !== dropIndex) {
-                const [draggedSlide] = slides.splice(dragStartIndex, 1);
-                slides.splice(dropIndex, 0, draggedSlide);
-
-                renderSlides();
-                currentSlideIndex = dropIndex;
-                updateSlideNumbers();
-                showSlide(currentSlideIndex);
-            }
-            draggingElement = null;
-            dragStartIndex = -1;
-        }
-
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', () => {
-            // Инициализация слайдов по умолчанию
-            slides.push(createSlide('general', {
-                background: 'images/bg1.png',
-                logos: 'images/mainlogos.png',
-                managerImage: 'images/mankova.png',
-                managerPhone: '8 800 220 56 65',
-                managerLink: document.querySelector('#manager option[value="images/mankova.png"]').getAttribute('data-link')
-            }));
-            slides.push(createSlide('pricing', {
-                managerImage: 'images/mankova.png',
-                managerPhone: '8 800 220 56 65',
-                managerLink: document.querySelector('#manager option[value="images/mankova.png"]').getAttribute('data-link'),
-                priceBanner: 'images/bkids.png'
-            }));
-
-            renderSlides();
+            const targetIndex = parseInt(e.target.dataset.index);
             
-            // Event listeners для обновления превью
+            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && 
+                draggedSlideIndex >= 3 && targetIndex >= 3) {
+                const temp = slides[draggedSlideIndex];
+                slides[draggedSlideIndex] = slides[targetIndex];
+                slides[targetIndex] = temp;
+                
+                updateSlideNumbers();
+                showSlide(currentSlideIndex + 1);
+            }
+            
+            document.querySelectorAll('.slide-number').forEach(el => {
+                el.classList.remove('drop-target');
+            });
+        }
+        
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedSlideIndex = null;
+            
+            document.querySelectorAll('.slide-number').forEach(el => {
+                el.classList.remove('drop-target');
+            });
+        }
+        
+        function handleDragEnter(e) {
+            const targetIndex = parseInt(e.target.dataset.index);
+            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && 
+                draggedSlideIndex >= 3 && targetIndex >= 3) {
+                e.target.classList.add('drop-target');
+                dropTargetIndex = targetIndex;
+            }
+        }
+        
+        function handleDragLeave(e) {
+            e.target.classList.remove('drop-target');
+            dropTargetIndex = null;
+        }
+        
+        function formatPrice(price) {
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        }
+        
+        function getFileName() {
+            const managerSelect = document.getElementById('manager');
+            const managerName = managerSelect.options[managerSelect.selectedIndex].text
+                .toLowerCase()
+                .replace(/\s+/g, '-');
+            return `zvuk-b2b-${managerName}-kp`;
+        }
+        
+        async function saveAsPDF() {
+            const fileName = getFileName() + '.pdf';
+            const pdf = new jsPDF({
+                orientation: 'landscape',
+                unit: 'px',
+                format: [1920, 1080]
+            });
+
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '0px';
+            tempContainer.style.width = '1920px';
+            tempContainer.style.height = '1080px';
+            document.body.appendChild(tempContainer);
+            
+            for (let i = 0; i < slides.length; i++) {
+                const slide = slides[i];
+                const originalSlideIndex = currentSlideIndex; 
+                showSlide(i + 1); 
+                
+                const slideContent = document.getElementById('currentSlide').cloneNode(true);
+                slideContent.style.width = '1920px';
+                slideContent.style.height = '1080px';
+                slideContent.style.transform = 'none';
+                slideContent.classList.remove('zoomed');
+                
+                tempContainer.innerHTML = '';
+                tempContainer.appendChild(slideContent);
+                
+                await new Promise(resolve => setTimeout(resolve, 50));
+
+                const canvas = await html2canvas(tempContainer, {
+                    scale: 1,
+                    logging: false,
+                    useCORS: true,
+                    width: 1920,
+                    height: 1080,
+                    letterRendering: true
+                });
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                
+                if (i > 0) {
+                    pdf.addPage([1920, 1080], 'landscape');
+                }
+                
+                pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
+                addLinksToPDF(pdf, slide, slideContent, i);
+                
+                showSlide(originalSlideIndex + 1);
+            }
+            
+            document.body.removeChild(tempContainer);
+            pdf.save(fileName);
+        }
+
+        function addLinksToPDF(pdf, slide, slideContent, pageIndex) {
+            pdf.setPage(pageIndex + 1);
+            
+            const addLinkSafe = (element, url) => {
+                if (!element || !url) return;
+
+                const rect = element.getBoundingClientRect();
+                const parentRect = slideContent.getBoundingClientRect();
+                
+                const x = rect.left - parentRect.left;
+                const y = rect.top - parentRect.top;
+                const width = rect.width;
+                const height = rect.height;
+
+                if (width > 0 && height > 0) {
+                    pdf.link(x, y, width, height, { url });
+                }
+            };
+
+            // General, Pricing Banners
+            if (slide.type === 'general' || slide.type === 'pricing') {
+                 const bannerElement = slideContent.querySelector('.preview-banner');
+                 if (bannerElement) {
+                     addLinkSafe(bannerElement.parentElement, bannerElement.parentElement.href);
+                 }
+            }
+
+            // Pricing Manager
+            if (slide.type === 'pricing') {
+                const managerElement = slideContent.querySelector('.preview-manager');
+                if (managerElement) {
+                     addLinkSafe(managerElement.parentElement, managerElement.parentElement.href);
+                }
+                const qrElement = slideContent.querySelector('.preview-qr');
+                if (qrElement) {
+                    addLinkSafe(qrElement.parentElement, qrElement.parentElement.href)
+                }
+            }
+            
+            // Instruction Links
+            if (slide.type === 'instruction') {
+                addLinkSafe(slideContent.querySelector('#instructionLinkManager'), slideContent.querySelector('#instructionLinkManager').href);
+                addLinkSafe(slideContent.querySelector('#instructionLinkComputer'), slideContent.querySelector('#instructionLinkComputer').href);
+                addLinkSafe(slideContent.querySelector('#instructionLinkSmartphone'), slideContent.querySelector('#instructionLinkSmartphone').href);
+            }
+
+            // Playlist Link
+            if (slide.type === 'playlist') {
+                const playlistLinkEl = slideContent.querySelector('.preview-link');
+                if (playlistLinkEl) addLinkSafe(playlistLinkEl, playlistLinkEl.href);
+            }
+           
+            // Specific Image/Area Links
+            const specialLinks = [
+                { type: 'app', selector: 'a[href="https://zvuk-b2b.com/blog/1price"]', url: 'https://zvuk-b2b.com/blog/1price' },
+                { type: 'creative', selector: 'a[href="https://zvuk-b2b.com/audio_ads"]', url: 'https://zvuk-b2b.com/audio_ads'},
+                { type: 'creative', selector: 'a[href="https://zvuk-b2b.com/blog/1price"]', url: 'https://zvuk-b2b.com/blog/1price'},
+                { type: 'creative', selector: 'a[href="https://zvuk-b2b.com/blog/letu"]', url: 'https://zvuk-b2b.com/blog/letu'},
+                { type: 'partner', selector: 'a[href="https://zvuk-b2b.com/partners"]', url: 'https://zvuk-b2b.com/partners' },
+                { type: 'bprofile', selector: 'a[href="https://zvuk-b2b.com/bprofile"]', url: 'https://zvuk-b2b.com/bprofile' },
+                { type: 'videokp', selector: 'a[href="https://zvuk-b2b.com/video"]', url: 'https://zvuk-b2b.com/video' },
+                { type: 'videocontent', selector: '.preview-link', url: 'https://zvuk-b2b.com/video' }
+            ];
+
+            specialLinks.forEach(item => {
+                if (slide.type === item.type) {
+                    const elements = slideContent.querySelectorAll(item.selector);
+                    elements.forEach(element => {
+                        addLinkSafe(element, item.url);
+                    });
+                }
+            });
+
+            // Premium slide - full slide link
+            if (slide.type === 'premium') {
+                pdf.link(0, 0, 1920, 1080, { url: 'https://zvuk-b2b.com/premium/' });
+            }
+        }
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обработка изменений полей ввода
             document.getElementById('banner').addEventListener('change', updateCurrentSlide);
             document.getElementById('logos').addEventListener('change', updateCurrentSlide);
             document.getElementById('manager').addEventListener('change', updateCurrentSlide);
-            document.querySelectorAll('input[name="phoneType"]').forEach(radio => {
-                radio.addEventListener('change', () => {
-                    const personalPhoneContainer = document.getElementById('personalPhoneContainer');
-                    personalPhoneContainer.classList.toggle('hidden', radio.value === 'service');
-                    updateCurrentSlide();
-                });
-            });
             document.getElementById('personalPhone').addEventListener('input', updateCurrentSlide);
-            document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
-                radio.addEventListener('change', () => {
-                    const price1Container = document.getElementById('price1Container');
-                    const price3Container = document.getElementById('price3Container');
-                    price1Container.classList.toggle('hidden', radio.value === '3');
-                    price3Container.classList.toggle('hidden', radio.value === '1');
-                    updateCurrentSlide();
-                });
-            });
             document.getElementById('price1Value').addEventListener('input', updateCurrentSlide);
             document.getElementById('price3Value1').addEventListener('input', updateCurrentSlide);
             document.getElementById('price3Value2').addEventListener('input', updateCurrentSlide);
@@ -1561,13 +1644,12 @@
             document.getElementById('premiumComment').addEventListener('input', updateCurrentSlide);
             document.getElementById('videokpPrice').addEventListener('input', updateCurrentSlide);
             document.getElementById('videokpComment').addEventListener('input', updateCurrentSlide);
-            document.getElementById('instructionTitle').addEventListener('input', updateCurrentSlide);
-            document.getElementById('instructionTextarea').addEventListener('input', updateCurrentSlide);
-            document.getElementById('linkImage1').addEventListener('change', updateCurrentSlide);
-            document.getElementById('linkImage2').addEventListener('change', updateCurrentSlide);
             
+            // Инициализация кнопок слайдов
             updateSlideNumbers();
-            showSlide(0);
+            
+            // Показываем первый слайд и раскрываем его настройки
+            showSlide(1);
             document.querySelector('.menu-header').click();
         });
     </script>
