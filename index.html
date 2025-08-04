@@ -105,6 +105,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 10px;
             overflow: hidden;
             position: relative;
@@ -209,14 +210,14 @@
         
         .preview-page {
             position: relative;
-            width: 100%;
-            height: 100%;
             max-width: 100%;
             max-height: 100%;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             transform-origin: center center;
             cursor: pointer;
+            aspect-ratio: 16 / 9; /* Пропорциональное масштабирование */
+            margin: auto; /* Центрирование в контейнере */
         }
         
         .preview-page.zoomed {
@@ -391,6 +392,7 @@
             font-weight: 500;
             font-size: 16px;
             font-family: 'SB Sans', sans-serif;
+            box-sizing: border-box;
         }
         
         input[type="number"] {
@@ -445,7 +447,7 @@
             margin-top: auto;
             padding-top:20px;
             position: sticky;
-            bottom: 40px;
+            bottom: 0;
             background: white;
             z-index: 10;
         }
@@ -516,59 +518,86 @@
             font-weight: 500;
         }
             
-        /* ---- SCALING AND POSITIONING STYLES ---- */
+        /* ---- SCALING STYLES FOR PDF vs PREVIEW ---- */
         
-        /* Scalable Image Links */
-        .app-coffee-link, .creative-coffee-link, .creative-letual-link {
-            position: absolute;
-            display: block;
-            width: 65px;  /* 50% smaller preview size */
-            height: 65px; /* 50% smaller preview size */
-            transition: width 0.2s, height 0.2s;
-        }
-        .app-coffee-link img, .creative-coffee-link img, .creative-letual-link img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .app-coffee-link { bottom: 4%; left: 3%; }
-        .creative-coffee-link { bottom: 23%; left: 3%; }
-        .creative-letual-link { bottom: 23%; right: 25%; }
-
         /* PDF Mode: Increase sizes for high-resolution export */
-        .pdf-mode .preview-price { font-size: 44px; }
-        .pdf-mode .preview-comment { font-size: 24px; }
-        .pdf-mode .price-table { font-size: 24px; }
-        .pdf-mode .price-table th, .pdf-mode .price-table td { padding: 20px; }
-        .pdf-mode .preview-phone { font-size: 14px; }
-        .pdf-mode .instruction-text { font-size: 24px; line-height: 1.5; }
-        .pdf-mode .app-coffee-link,
-        .pdf-mode .creative-coffee-link,
-        .pdf-mode .creative-letual-link {
-            width: 130px;  /* Original size for PDF */
-            height: 130px; /* Original size for PDF */
+        .pdf-mode .preview-price {
+            font-size: 44px; /* Scaled size for PDF */
+        }
+        .pdf-mode .preview-comment {
+            font-size: 24px; /* Scaled size for PDF */
+        }
+        .pdf-mode .price-table {
+            font-size: 24px; /* Scaled size for PDF */
+        }
+        .pdf-mode .price-table th, .pdf-mode .price-table td {
+             padding: 20px;
+        }
+        .pdf-mode .preview-phone {
+            font-size: 14px; /* Scaled size for PDF */
+        }
+        .pdf-mode .instruction-text {
+            font-size: 24px; /* Scaled size for PDF */
+            line-height: 1.5;
         }
 
         /* ---- END SCALING STYLES ---- */
       
-        /* Специальные стили для Safari */
-        @media not all and (min-resolution:.001dpcm) { 
-            @supports (-webkit-appearance:none) {
-                .menu-container {
-                    height: 45vh;
-                    overflow-y: scroll;
-                    -webkit-overflow-scrolling: touch;
-                }
-                .preview-container {
-                    height: 55vh;
-                }
-            }
-        }
-
-        /* Стили для Firefox */
+        /* Специальные стили для Firefox */
         @-moz-document url-prefix() {
             .menu-container {
                 scrollbar-width: thin;
+            }
+        }
+
+        /* ---- МОБИЛЬНАЯ ВЕРСИЯ ---- */
+        @media (max-width: 800px) {
+            body {
+                flex-direction: column;
+                height: auto;
+                overflow: auto; /* Включаем скролл для всей страницы */
+            }
+
+            .menu-container {
+                width: 100%;
+                height: auto;
+                overflow-y: visible;
+                box-shadow: none;
+                padding: 15px;
+                box-sizing: border-box;
+            }
+            
+            .action-buttons {
+                 /* Кнопка "в PDF" будет внизу блока настроек */
+                position: relative;
+                bottom: auto;
+                padding: 20px 0 10px 0;
+                border-top: 1px solid #eee;
+            }
+
+            .preview-container {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            
+            .preview-wrapper {
+                height: auto;
+            }
+
+            .preview-page {
+                /* Увеличение на мобильных устройствах отключено */
+                cursor: default;
+            }
+            
+            /* Скрываем иконку зума на мобильных */
+            .control-icon[onclick="toggleZoom()"] {
+                display: none;
+            }
+            
+            .menu-logo {
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -932,6 +961,10 @@
         }
         
         function toggleZoom() {
+            // Отключаем зум на мобильных устройствах (ширина меньше 801px)
+            if (window.innerWidth <= 800) {
+                return;
+            }
             const slide = document.getElementById('currentSlide');
             slide.classList.toggle('zoomed');
             isZoomed = !isZoomed;
@@ -1139,11 +1172,14 @@
                     const coffeeLink = document.createElement('a');
                     coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeeLink.target = '_blank';
-                    coffeeLink.className = 'app-coffee-link'; // Use CSS class for styling
+                    coffeeLink.style.position = 'absolute';
+                    coffeeLink.style.bottom = '4%';
+                    coffeeLink.style.left = '3%';
+                    coffeeLink.style.width = '130px'; // Consistent size
+                    coffeeLink.style.height = '130px'; // Consistent size
                     coffeeLink.appendChild(coffeeImg);
                     slideContainer.appendChild(coffeeLink);
                     
-                    // This link can remain for the general slide link if needed, or removed if redundant
                     const appLink = document.createElement('a');
                     appLink.className = 'preview-link';
                     appLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1156,7 +1192,6 @@
                     bgImg.src = 'images/createbanner.png';
                     slideContainer.appendChild(bgImg);
                     
-                    // This link covers the whole slide
                     const creativeLink = document.createElement('a');
                     creativeLink.href = 'https://zvuk-b2b.com/audio_ads';
                     creativeLink.target = '_blank';
@@ -1173,7 +1208,11 @@
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeLink.target = '_blank';
-                    coffeLink.className = 'creative-coffee-link'; // Use CSS class
+                    coffeLink.style.position = 'absolute';
+                    coffeLink.style.bottom = '23%';
+                    coffeLink.style.left = '3%';
+                    coffeLink.style.width = '130px'; // Corrected Size
+                    coffeLink.style.height = '130px'; // Corrected Size
                     coffeLink.appendChild(coffeImg);
                     slideContainer.appendChild(coffeLink);
                     
@@ -1183,7 +1222,11 @@
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
                     letualLink.target = '_blank';
-                    letualLink.className = 'creative-letual-link'; // Use CSS class
+                    letualLink.style.position = 'absolute';
+                    letualLink.style.bottom = '23%';
+                    letualLink.style.right = '25%';
+                    letualLink.style.width = '130px'; // Corrected Size
+                    letualLink.style.height = '130px'; // Corrected Size
                     letualLink.appendChild(letualImg);
                     slideContainer.appendChild(letualLink);
                     break;
@@ -1510,7 +1553,22 @@
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                await new Promise(resolve => setTimeout(resolve, 100)); // Increased delay for rendering
+                // Улучшенное ожидание прорисовки для повышения надежности в Safari
+                // 1. Ждем загрузки всех изображений в клонированном слайде
+                const images = tempContainer.querySelectorAll('img');
+                const promises = [];
+                images.forEach(img => {
+                    if (!img.complete) {
+                        promises.push(new Promise((resolve, reject) => {
+                            img.onload = resolve;
+                            img.onerror = resolve; // Продолжаем, даже если изображение не загрузилось
+                        }));
+                    }
+                });
+                await Promise.all(promises);
+
+                // 2. Дополнительная короткая задержка для рендеринга шрифтов и других элементов
+                await new Promise(resolve => setTimeout(resolve, 250));
 
                 const canvas = await html2canvas(tempContainer, {
                     scale: 1,
@@ -1561,31 +1619,33 @@
                 }
             };
             
-            // Find all anchor tags in the generated slide content and add them as links
+            // Find all anchor tags in the generated slide content and add them
             const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
-                // Ensure we don't add a link for an empty href (like '#' or 'javascript:;')
-                if (link.href && !link.href.endsWith('#')) {
-                    addLinkSafe(link, link.href);
-                }
+                addLinkSafe(link, link.href);
             });
 
+            // Specific logic for slides that are a single large link
             const slideType = slides[pageIndex].type;
-            
-            // For slides that should be one giant link, but also have smaller links on top
-            if (slideType === 'creative') {
-                 // Add the main background link first
-                 pdf.link(0, 0, 1920, 1080, { url: 'https://zvuk-b2b.com/audio_ads' });
-                 // Re-add the specific smaller links on top of the main link
-                 const smallerLinks = slideContent.querySelectorAll('.creative-coffee-link, .creative-letual-link');
-                 smallerLinks.forEach(link => addLinkSafe(link, link.href));
-            } else if (slideType === 'premium' || slideType === 'bprofile') {
-                // These slides are one single clickable area.
-                const fullSlideUrl = {
-                    'premium': 'https://zvuk-b2b.com/premium/',
-                    'bprofile': 'https://zvuk-b2b.com/bprofile'
-                }[slideType];
-                pdf.link(0, 0, 1920, 1080, { url: fullSlideUrl });
+            const fullSlideLinks = {
+                 'partner': 'https://zvuk-b2b.com/partners',
+                 'premium': 'https://zvuk-b2b.com/premium/',
+                 'bprofile': 'https://zvuk-b2b.com/bprofile',
+                 'videocontent': 'https://zvuk-b2b.com/video',
+                 'videokp': 'https://zvuk-b2b.com/video',
+                 'creative': 'https://zvuk-b2b.com/audio_ads'
+            };
+
+            if (fullSlideLinks[slideType]) {
+                 // For slides like 'creative', add the main link first
+                 if(slideType === 'creative') {
+                     pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
+                     // Re-add the specific smaller links on top
+                     const smallerLinks = slideContent.querySelectorAll('a');
+                     smallerLinks.forEach(link => addLinkSafe(link, link.href));
+                 } else if (slideType !== 'videokp') { // videokp has other links, so don't cover them
+                    pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
+                 }
             }
         }
         
