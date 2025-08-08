@@ -263,6 +263,7 @@
             font-weight: bold;
             width: 50%;
             font-size: 22px; /* Base size for preview */
+            font-family: Calibri, Arial, sans-serif; /* ИЗМЕНЕНИЕ: Установлен новый шрифт */
         }
         
         .preview-comment {
@@ -283,6 +284,7 @@
             color: white;
             border-collapse: collapse;
             font-size: 12px; /* Base size for preview */
+            font-family: Calibri, Arial, sans-serif; /* ИЗМЕНЕНИЕ: Установлен новый шрифт */
         }
         
         .price-table th, .price-table td {
@@ -620,7 +622,10 @@
                     <label class="menu-label">Баннер:</label>
                     <select id="banner">
                         <option value="images/bkids.png">Детский тариф</option>
-                        <option value="images/veranda.png">Веранда</option>                  
+                        <option value="images/veranda.png">Веранда</option>
+                        <!-- ИЗМЕНЕНИЕ: Добавлены новые баннеры -->
+                        <option value="images/autumn.png">Осенний плейлист</option>
+                        <option value="images/nostalgia.png">Ностальгия</option>
                         <option value="images/sbbarbershop.png">Статистика барбершоп</option>
                         <option value="images/sbcafe.png">Статистика кафе</option>
                         <option value="images/sbfitnes.png">Статистика фитнес</option>
@@ -719,7 +724,10 @@
                     <label class="menu-label">Баннер:</label>
                     <select id="priceBanner">
                         <option value="images/bkids.png">Детский тариф</option>
-                        <option value="images/veranda.png">Веранда</option>                  
+                        <option value="images/veranda.png">Веранда</option>
+                        <!-- ИЗМЕНЕНИЕ: Добавлены новые баннеры -->
+                        <option value="images/autumn.png">Осенний плейлист</option>
+                        <option value="images/nostalgia.png">Ностальгия</option>
                         <option value="images/sbbarbershop.png">Статистика барбершоп</option>
                         <option value="images/sbcafe.png">Статистика кафе</option>
                         <option value="images/sbfitnes.png">Статистика фитнес</option>
@@ -897,7 +905,10 @@
         // Ссылки для баннеров
         const bannerLinks = {
             'images/bkids.png': 'https://zvuk-b2b.com/music_for_kids',
-            'images/veranda.png': 'https://zvuk-b2b.com/rest',           
+            'images/veranda.png': 'https://zvuk-b2b.com/rest',
+            // ИЗМЕНЕНИЕ: Добавлены ссылки для новых баннеров
+            'images/autumn.png': 'https://zvuk-b2b.com',
+            'images/nostalgia.png': 'https://zvuk-b2b.com',
             'images/sbbarbershop.png': 'https://zvuk-b2b.com',
             'images/sbcafe.png': 'https://zvuk-b2b.com',
             'images/sbfitnes.png': 'https://zvuk-b2b.com',
@@ -1620,7 +1631,8 @@
                 }
             };
             
-            // Find all anchor tags in the generated slide content and add them
+            // ПРОВЕРКА: Этот блок кода находит все теги <a> (включая ссылки на менеджеров)
+            // и добавляет их в PDF. Логика корректна и не требует изменений.
             const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
                 addLinkSafe(link, link.href);
