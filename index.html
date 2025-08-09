@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -262,7 +263,6 @@
             font-weight: bold;
             width: 50%;
             font-size: 22px; /* Base size for preview */
-            font-family: Calibri, Arial, sans-serif;
         }
         
         .preview-comment {
@@ -283,7 +283,6 @@
             color: white;
             border-collapse: collapse;
             font-size: 12px; /* Base size for preview */
-            font-family: Calibri, Arial, sans-serif;
         }
         
         .price-table th, .price-table td {
@@ -517,30 +516,7 @@
             color: var(--button-color);
             text-decoration: none;
             font-weight: 500;
-            display: inline-block;
-        }
-
-        /* ИЗМЕНЕНИЕ: Стили для кликабельных ассетов на слайде "Креативы" */
-        .creative-asset-link {
-            position: absolute;
-            display: block;
-        }
-        .preview-mode .creative-asset-link {
-            width: 78px;  /* 130px * 0.6 */
-            height: 78px;
-            transition: all 0.2s ease-in-out;
-        }
-        .preview-mode .creative-asset-link:hover {
-            transform: scale(1.1);
-        }
-        .pdf-mode .creative-asset-link {
-            width: 130px;
-            height: 130px;
-        }
-        .creative-asset-link img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+            display: inline-block; /* ИЗМЕНЕНИЕ: Обеспечивает корректный захват размеров ссылки для PDF */
         }
             
         /* ---- SCALING STYLES FOR PDF vs PREVIEW ---- */
@@ -644,9 +620,7 @@
                     <label class="menu-label">Баннер:</label>
                     <select id="banner">
                         <option value="images/bkids.png">Детский тариф</option>
-                        <option value="images/veranda.png">Веранда</option>
-                        <option value="images/autumn.png">Осенний плейлист</option>
-                        <option value="images/nostalgia.png">Ностальгия</option>
+                        <option value="images/veranda.png">Веранда</option>                  
                         <option value="images/sbbarbershop.png">Статистика барбершоп</option>
                         <option value="images/sbcafe.png">Статистика кафе</option>
                         <option value="images/sbfitnes.png">Статистика фитнес</option>
@@ -745,9 +719,7 @@
                     <label class="menu-label">Баннер:</label>
                     <select id="priceBanner">
                         <option value="images/bkids.png">Детский тариф</option>
-                        <option value="images/veranda.png">Веранда</option>
-                        <option value="images/autumn.png">Осенний плейлист</option>
-                        <option value="images/nostalgia.png">Ностальгия</option>
+                        <option value="images/veranda.png">Веранда</option>                  
                         <option value="images/sbbarbershop.png">Статистика барбершоп</option>
                         <option value="images/sbcafe.png">Статистика кафе</option>
                         <option value="images/sbfitnes.png">Статистика фитнес</option>
@@ -925,9 +897,7 @@
         // Ссылки для баннеров
         const bannerLinks = {
             'images/bkids.png': 'https://zvuk-b2b.com/music_for_kids',
-            'images/veranda.png': 'https://zvuk-b2b.com/rest',
-            'images/autumn.png': 'https://zvuk-b2b.com',
-            'images/nostalgia.png': 'https://zvuk-b2b.com',
+            'images/veranda.png': 'https://zvuk-b2b.com/rest',           
             'images/sbbarbershop.png': 'https://zvuk-b2b.com',
             'images/sbcafe.png': 'https://zvuk-b2b.com',
             'images/sbfitnes.png': 'https://zvuk-b2b.com',
@@ -1098,19 +1068,16 @@
                     const managerImg = document.createElement('img');
                     managerImg.className = 'preview-manager';
                     managerImg.src = managerImgPath;
-                    slideContainer.appendChild(managerImg); // Просто добавляем картинку
                     
-                    // ИЗМЕНЕНИЕ: Создаем отдельный прозрачный прямоугольник для ссылки
                     const managerLink = document.createElement('a');
-                    managerLink.href = managerDataLink;
+                    managerLink.href = managerDataLink; // Use the data-link for the registration URL
                     managerLink.target = '_blank';
                     managerLink.style.position = 'absolute';
-                    managerLink.style.display = 'block';
                     managerLink.style.bottom = '8%';
                     managerLink.style.left = '3%';
-                    managerLink.style.width = '58%'; // Ширина области менеджера
-                    managerLink.style.height = '15%'; // Высота области менеджера (подбирается)
-                    managerLink.style.backgroundColor = 'transparent'; // Прозрачный фон
+                    managerLink.style.width = '58%';
+                    managerLink.style.height = 'auto';
+                    managerLink.appendChild(managerImg);
                     slideContainer.appendChild(managerLink);
                     
                     if (phoneType === 'personal' && document.getElementById('personalPhone').value) {
@@ -1209,8 +1176,8 @@
                     coffeeLink.style.position = 'absolute';
                     coffeeLink.style.bottom = '4%';
                     coffeeLink.style.left = '3%';
-                    coffeeLink.style.width = '130px';
-                    coffeeLink.style.height = '130px';
+                    coffeeLink.style.width = '130px'; // Consistent size
+                    coffeeLink.style.height = '130px'; // Consistent size
                     coffeeLink.appendChild(coffeeImg);
                     slideContainer.appendChild(coffeeLink);
                     
@@ -1236,16 +1203,17 @@
                     creativeLink.style.height = '100%';
                     slideContainer.appendChild(creativeLink);
                     
-                    // ИЗМЕНЕНИЕ: Применяем классы и убираем инлайновые размеры
                     const coffeImg = document.createElement('img');
                     coffeImg.src = 'images/coffeoneprice.png';
                     
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeLink.target = '_blank';
-                    coffeLink.className = 'creative-asset-link'; // Добавлен класс
+                    coffeLink.style.position = 'absolute';
                     coffeLink.style.bottom = '23%';
                     coffeLink.style.left = '3%';
+                    coffeLink.style.width = '130px'; // Corrected Size
+                    coffeLink.style.height = '130px'; // Corrected Size
                     coffeLink.appendChild(coffeImg);
                     slideContainer.appendChild(coffeLink);
                     
@@ -1255,9 +1223,11 @@
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
                     letualLink.target = '_blank';
-                    letualLink.className = 'creative-asset-link'; // Добавлен класс
+                    letualLink.style.position = 'absolute';
                     letualLink.style.bottom = '23%';
                     letualLink.style.right = '25%';
+                    letualLink.style.width = '130px'; // Corrected Size
+                    letualLink.style.height = '130px'; // Corrected Size
                     letualLink.appendChild(letualImg);
                     slideContainer.appendChild(letualLink);
                     break;
@@ -1584,18 +1554,21 @@
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
+                // Улучшенное ожидание прорисовки для повышения надежности в Safari
+                // 1. Ждем загрузки всех изображений в клонированном слайде
                 const images = tempContainer.querySelectorAll('img');
                 const promises = [];
                 images.forEach(img => {
                     if (!img.complete) {
-                        promises.push(new Promise((resolve) => {
+                        promises.push(new Promise((resolve, reject) => {
                             img.onload = resolve;
-                            img.onerror = resolve; 
+                            img.onerror = resolve; // Продолжаем, даже если изображение не загрузилось
                         }));
                     }
                 });
                 await Promise.all(promises);
 
+                // 2. Дополнительная короткая задержка для рендеринга шрифтов и других элементов
                 await new Promise(resolve => setTimeout(resolve, 250));
 
                 const canvas = await html2canvas(tempContainer, {
@@ -1647,11 +1620,13 @@
                 }
             };
             
+            // Find all anchor tags in the generated slide content and add them
             const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
                 addLinkSafe(link, link.href);
             });
 
+            // Specific logic for slides that are a single large link
             const slideType = slides[pageIndex].type;
             const fullSlideLinks = {
                  'partner': 'https://zvuk-b2b.com/partners',
@@ -1663,11 +1638,13 @@
             };
 
             if (fullSlideLinks[slideType]) {
+                 // For slides like 'creative', add the main link first
                  if(slideType === 'creative') {
                      pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
+                     // Re-add the specific smaller links on top
                      const smallerLinks = slideContent.querySelectorAll('a');
                      smallerLinks.forEach(link => addLinkSafe(link, link.href));
-                 } else if (slideType !== 'videokp') {
+                 } else if (slideType !== 'videokp') { // videokp has other links, so don't cover them
                     pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
                  }
             }
@@ -1702,5 +1679,3 @@
     </script>
 </body>
 </html>
-
-
