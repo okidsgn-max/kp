@@ -255,10 +255,6 @@
             object-fit: contain;
         }
         
-        .preview-price, .price-table, .preview-comment, .preview-phone, .instruction-text {
-            font-family: Calibri, Arial, sans-serif;
-        }
-        
         .preview-price {
             position: absolute;
             top: 65%;
@@ -266,6 +262,8 @@
             color: white;
             font-weight: bold;
             width: 50%;
+            font-size: 22px;
+            font-family: Calibri, Arial, sans-serif;
         }
         
         .preview-comment {
@@ -275,6 +273,7 @@
             color: #D9D9D9;
             width:100%;
             font-weight: 500;
+            font-size: 12px;
         }
         
         .price-table {
@@ -284,6 +283,8 @@
             width:60%;
             color: white;
             border-collapse: collapse;
+            font-size: 12px;
+            font-family: Calibri, Arial, sans-serif;
         }
         
         .price-table th, .price-table td {
@@ -310,6 +311,7 @@
             left: 32%;
             color: white;
             font-weight: 500;
+            font-size: 7px;
         }
         
         .preview-qr {
@@ -509,6 +511,7 @@
             font-weight: 500;
             width: 60%;
             line-height: 1.2;
+            font-size: 12px;
         }
 
         .instruction-text a {
@@ -540,37 +543,10 @@
             font-size: 24px;
             line-height: 1.5;
         }
-
-        /* Preview Mode: Smaller sizes */
-        .preview-mode .preview-price {
-            font-size: 22px;
-        }
-        .preview-mode .preview-comment {
-            font-size: 12px;
-        }
-        .preview-mode .price-table {
-            font-size: 12px;
-        }
-        .preview-mode .preview-phone {
-            font-size: 7px;
-        }
-        .preview-mode .instruction-text {
-            font-size: 12px;
-        }
-
-        /* Image scaling */
-        .preview-mode .preview-video img,
-        .preview-mode .preview-qr img,
-        .preview-mode .preview-logos {
-            max-width: 80%;
-            max-height: 80%;
-        }
-
         .pdf-mode .preview-video img,
-        .pdf-mode .preview-qr img,
         .pdf-mode .preview-logos {
-            max-width: 100%;
-            max-height: 100%;
+            max-width: 200px;
+            max-height: 200px;
         }
 
         /* ---- END SCALING STYLES ---- */
@@ -593,29 +569,31 @@
             .menu-container {
                 width: 100%;
                 height: auto;
-                max-height: 50vh;
-                overflow-y: auto;
+                overflow-y: visible;
                 box-shadow: none;
                 padding: 15px;
                 box-sizing: border-box;
                 order: 1;
             }
             
-            .preview-container {
-                width: 100%;
-                height: 50vh;
-                order: 2;
+            .action-buttons {
+                position: relative;
+                bottom: auto;
+                padding: 20px 0 10px 0;
+                border-top: 1px solid #eee;
+                order: 3;
             }
 
-            .action-buttons {
-                order: 3;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
+            .preview-container {
+                width: 100%;
+                height: auto;
                 padding: 10px;
-                background: white;
-                box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+                box-sizing: border-box;
+                order: 2;
+            }
+            
+            .preview-wrapper {
+                height: auto;
             }
 
             .preview-page {
@@ -630,26 +608,17 @@
                 margin-bottom: 20px;
             }
 
-            /* Mobile font sizes */
             .preview-price {
-                font-size: 16px;
+                font-size: 18px;
             }
-            .preview-comment {
-                font-size: 10px;
-            }
+            .preview-comment,
             .preview-phone {
-                font-size: 6px;
-            }
-            .instruction-text {
                 font-size: 10px;
             }
-
-            /* Mobile image scaling */
             .preview-video img,
-            .preview-qr img,
             .preview-logos {
-                max-width: 60%;
-                max-height: 60%;
+                max-width: 80px;
+                max-height: 80px;
             }
         }
     </style>
@@ -1019,7 +988,7 @@
         }
         
         function toggleZoom() {
-            // Отключаем зум на мобильных устройствах (ширина меньше 801px)
+            // Отключаем зум на мобильных устройствах
             if (window.innerWidth <= 800) {
                 return;
             }
@@ -1126,6 +1095,7 @@
                     managerImg.className = 'preview-manager';
                     managerImg.src = managerImgPath;
                     
+                    // Прозрачная кликабельная область для менеджера
                     const managerLink = document.createElement('a');
                     managerLink.href = managerDataLink;
                     managerLink.target = '_blank';
@@ -1135,7 +1105,6 @@
                     managerLink.style.width = '57%';
                     managerLink.style.height = '25%';
                     managerLink.style.opacity = '0';
-                    managerLink.style.zIndex = '10';
                     slideContainer.appendChild(managerLink);
                     
                     if (phoneType === 'personal' && document.getElementById('personalPhone').value) {
@@ -1298,9 +1267,9 @@
                     playlistLink.className = 'preview-link';
                     playlistLink.href = document.getElementById('playlist').value === 'images/georgia-audio.png' ? 
                         'https://zvuk-b2b.com/gastrobar#menu1' : 
-                        document.getElementById('playlist').value === 'images/barber-audio.png' ?
-                        'https://zvuk-b2b.com/barbershop' :
-                        'https://zvuk-b2b.com/rawe';
+                        document.getElementById('playlist').value === 'images/rawe.png' ?
+                        'https://zvuk-b2b.com/rawe' :
+                        'https://zvuk-b2b.com/barbershop';
                     playlistLink.textContent = 'zvuk-b2b.com';
                     playlistLink.target = '_blank';
                     slideContainer.appendChild(playlistLink);
@@ -1421,8 +1390,11 @@
         }
         
         function addSlide(type) {
-            // Проверяем, есть ли уже слайд такого типа (кроме обязательных первых трех)
-            const existingSlideIndex = slides.findIndex((slide, index) => slide.type === type && index > 2);
+            // Проверяем, есть ли уже такой слайд
+            const existingSlideIndex = slides.findIndex(slide => 
+                slide.type === type && slide.type !== 'pricing' && slide.type !== 'general' && slide.type !== 'instruction'
+            );
+            
             if (existingSlideIndex !== -1) {
                 showSlide(existingSlideIndex + 1);
                 return;
@@ -1686,15 +1658,14 @@
                 }
             };
             
-            // Обрабатываем все ссылки в слайде
+            // Добавляем все обычные ссылки
             const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
                 addLinkSafe(link, link.href);
             });
 
-            // Специальные обработки для слайдов с полным покрытием ссылкой
-            const slideType = slides[pageIndex].type;
-            const fullSlideLinks = {
+            // Для слайдов с полным покрытием ссылкой
+            const fullCoverSlides = {
                 'partner': 'https://zvuk-b2b.com/partners',
                 'premium': 'https://zvuk-b2b.com/premium/',
                 'bprofile': 'https://zvuk-b2b.com/bprofile',
@@ -1705,20 +1676,10 @@
                 'playlist': slideContent.querySelector('.preview-link')?.href || 'https://zvuk-b2b.com'
             };
 
-            if (fullSlideLinks[slideType]) {
-                if (slideType === 'creative') {
-                    // Для креативных слайдов сначала добавляем основную ссылку
-                    pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
-                    // Затем добавляем ссылки на отдельные элементы
-                    const smallerLinks = slideContent.querySelectorAll('a');
-                    smallerLinks.forEach(link => addLinkSafe(link, link.href));
-                } else if (slideType === 'playlist') {
-                    // Для плейлистов добавляем ссылку на весь слайд
-                    pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
-                } else if (slideType !== 'videokp') {
-                    // Для остальных слайдов (кроме videokp) добавляем ссылку на весь слайд
-                    pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
-                }
+            if (fullCoverSlides[slides[pageIndex].type]) {
+                pdf.link(0, 0, 1920, 1080, { 
+                    url: fullCoverSlides[slides[pageIndex].type] 
+                });
             }
         }
         
