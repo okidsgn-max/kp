@@ -216,8 +216,8 @@
             transition: all 0.3s ease;
             transform-origin: center center;
             cursor: pointer;
-            aspect-ratio: 16 / 9;
-            margin: auto;
+            aspect-ratio: 16 / 9; /* Пропорциональное масштабирование */
+            margin: auto; /* Центрирование в контейнере */
         }
         
         .preview-page.zoomed {
@@ -262,6 +262,7 @@
             color: white;
             font-weight: bold;
             width: 50%;
+            font-size: 22px; /* Base size for preview */
             font-family: Calibri, Arial, sans-serif;
         }
         
@@ -272,6 +273,7 @@
             color: #D9D9D9;
             width:100%;
             font-weight: 500;
+            font-size: 12px; /* Base size for preview */
             font-family: Calibri, Arial, sans-serif;
         }
         
@@ -282,6 +284,7 @@
             width:60%;
             color: white;
             border-collapse: collapse;
+            font-size: 12px; /* Base size for preview */
             font-family: Calibri, Arial, sans-serif;
         }
         
@@ -309,6 +312,7 @@
             left: 32%;
             color: white;
             font-weight: 500;
+            font-size: 7px; /* Base size for preview */
             font-family: Calibri, Arial, sans-serif;
         }
         
@@ -509,6 +513,7 @@
             font-weight: 500;
             width: 60%;
             line-height: 1.2;
+            font-size: 12px; /* Base size for preview */
             font-family: Calibri, Arial, sans-serif;
         }
 
@@ -521,58 +526,35 @@
             
         /* ---- SCALING STYLES FOR PDF vs PREVIEW ---- */
         
-        /* Preview Mode */
-        .preview-mode .preview-price {
-            font-size: 22px;
-        }
-        .preview-mode .preview-comment {
-            font-size: 12px;
-        }
-        .preview-mode .price-table {
-            font-size: 12px;
-        }
-        .preview-mode .price-table th, .preview-mode .price-table td {
-             padding: 10px;
-        }
-        .preview-mode .preview-phone {
-            font-size: 7px;
-        }
-        .preview-mode .instruction-text {
-            font-size: 12px;
-            line-height: 1.2;
-        }
-        .preview-mode .preview-video img,
-        .preview-mode .preview-qr img,
-        .preview-mode .preview-logos {
-            max-width: 100px;
-            max-height: 100px;
-        }
-
-        /* PDF Mode */
+        /* PDF Mode: Increase sizes for high-resolution export */
         .pdf-mode .preview-price {
-            font-size: 44px;
+            font-size: 44px; /* Scaled size for PDF */
         }
         .pdf-mode .preview-comment {
-            font-size: 24px;
+            font-size: 24px; /* Scaled size for PDF */
         }
         .pdf-mode .price-table {
-            font-size: 24px;
+            font-size: 24px; /* Scaled size for PDF */
         }
         .pdf-mode .price-table th, .pdf-mode .price-table td {
              padding: 20px;
         }
         .pdf-mode .preview-phone {
-            font-size: 14px;
+            font-size: 14px; /* Scaled size for PDF */
         }
         .pdf-mode .instruction-text {
-            font-size: 24px;
+            font-size: 24px; /* Scaled size for PDF */
             line-height: 1.5;
         }
-        .pdf-mode .preview-video img,
-        .pdf-mode .preview-qr img,
-        .pdf-mode .preview-logos {
-            max-width: 200px;
-            max-height: 200px;
+
+        /* Preview mode scaling */
+        .preview-mode .preview-logos,
+        .preview-mode .preview-manager,
+        .preview-mode .preview-price,
+        .preview-mode .preview-comment,
+        .preview-mode .price-table {
+            transform: scale(0.8);
+            transform-origin: left top;
         }
 
         /* ---- END SCALING STYLES ---- */
@@ -598,7 +580,6 @@
                 overflow-y: visible;
                 box-shadow: none;
                 padding: 15px;
-                padding-bottom: 70px;
                 box-sizing: border-box;
             }
             
@@ -607,10 +588,10 @@
                 bottom: 0;
                 left: 0;
                 right: 0;
-                padding: 10px;
                 background: white;
-                box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+                padding: 10px;
                 z-index: 100;
+                border-top: 1px solid #eee;
             }
 
             .preview-container {
@@ -618,6 +599,7 @@
                 height: auto;
                 padding: 10px;
                 box-sizing: border-box;
+                margin-bottom: 60px; /* Для кнопки PDF */
             }
             
             .preview-wrapper {
@@ -628,32 +610,23 @@
                 cursor: default;
             }
             
+            /* Уменьшаем элементы в мобильной версии */
+            .preview-logos,
+            .preview-manager,
+            .preview-price,
+            .preview-comment,
+            .price-table {
+                transform: scale(0.6);
+                transform-origin: left top;
+            }
+            
+            /* Скрываем иконку зума на мобильных */
             .control-icon[onclick="toggleZoom()"] {
                 display: none;
             }
             
             .menu-logo {
                 margin-bottom: 20px;
-            }
-
-            /* Mobile preview sizes */
-            .preview-mode .preview-price {
-                font-size: 16px;
-            }
-            .preview-mode .preview-comment {
-                font-size: 10px;
-            }
-            .preview-mode .preview-phone {
-                font-size: 6px;
-            }
-            .preview-mode .instruction-text {
-                font-size: 10px;
-            }
-            .preview-mode .preview-video img,
-            .preview-mode .preview-qr img,
-            .preview-mode .preview-logos {
-                max-width: 80px;
-                max-height: 80px;
             }
         }
     </style>
@@ -910,7 +883,9 @@
         </div>
         
         <div class="action-buttons">
+           
             <button onclick="saveAsPDF()">в PDF</button>
+        
         </div>
     </div>
     
@@ -1126,6 +1101,18 @@
                         managerValue.replace('.png', '-ph.png') : 
                         managerValue;
                     
+                    // Добавляем прозрачный кликабельный прямоугольник
+                    const managerLinkContainer = document.createElement('a');
+                    managerLinkContainer.href = managerDataLink;
+                    managerLinkContainer.target = '_blank';
+                    managerLinkContainer.style.position = 'absolute';
+                    managerLinkContainer.style.bottom = '8%';
+                    managerLinkContainer.style.left = '3%';
+                    managerLinkContainer.style.width = '57%';
+                    managerLinkContainer.style.height = '25%';
+                    managerLinkContainer.style.opacity = '0';
+                    slideContainer.appendChild(managerLinkContainer);
+                    
                     const managerImg = document.createElement('img');
                     managerImg.className = 'preview-manager';
                     managerImg.src = managerImgPath;
@@ -1140,19 +1127,6 @@
                     managerLink.style.height = 'auto';
                     managerLink.appendChild(managerImg);
                     slideContainer.appendChild(managerLink);
-                    
-                    // Добавляем прозрачную кликабельную область
-                    const managerClickArea = document.createElement('a');
-                    managerClickArea.href = managerDataLink;
-                    managerClickArea.target = '_blank';
-                    managerClickArea.style.position = 'absolute';
-                    managerClickArea.style.bottom = '8%';
-                    managerClickArea.style.left = '3%';
-                    managerClickArea.style.width = '57%';
-                    managerClickArea.style.height = '25%';
-                    managerClickArea.style.opacity = '0';
-                    managerClickArea.style.zIndex = '5';
-                    slideContainer.appendChild(managerClickArea);
                     
                     if (phoneType === 'personal' && document.getElementById('personalPhone').value) {
                         const phoneDiv = document.createElement('div');
@@ -1314,9 +1288,9 @@
                     playlistLink.className = 'preview-link';
                     playlistLink.href = document.getElementById('playlist').value === 'images/georgia-audio.png' ? 
                         'https://zvuk-b2b.com/gastrobar#menu1' : 
-                        document.getElementById('playlist').value === 'images/barber-audio.png' ?
-                        'https://zvuk-b2b.com/barbershop' :
-                        'https://zvuk-b2b.com/rawe';
+                        document.getElementById('playlist').value === 'images/rawe.png' ?
+                        'https://zvuk-b2b.com/rawe' :
+                        'https://zvuk-b2b.com/barbershop';
                     playlistLink.textContent = 'zvuk-b2b.com';
                     playlistLink.target = '_blank';
                     slideContainer.appendChild(playlistLink);
@@ -1438,12 +1412,11 @@
         
         function addSlide(type) {
             // Проверяем, есть ли уже слайд такого типа
-            const existingSlide = slides.find(slide => slide.type === type && slide.type !== 'pricing' && slide.type !== 'general' && slide.type !== 'instruction');
+            const existingSlideIndex = slides.findIndex(slide => slide.type === type && slide.type !== 'pricing' && slide.type !== 'general' && slide.type !== 'instruction');
             
-            if (existingSlide) {
-                // Если слайд уже есть, просто переходим к нему
-                const index = slides.indexOf(existingSlide);
-                showSlide(index + 1);
+            if (existingSlideIndex !== -1) {
+                // Если слайд уже есть, просто переключаемся на него
+                showSlide(existingSlideIndex + 1);
                 return;
             }
             
@@ -1679,7 +1652,7 @@
             document.body.classList.remove('pdf-mode');
             document.body.classList.add('preview-mode');
             
-            showSlide(originalSlideIndex + 1);
+            showSlide(originalSlideIndex + 1); // Restore original slide view
             document.body.removeChild(tempContainer);
 
             pdf.save(fileName);
@@ -1725,16 +1698,14 @@
                  'videokp': 'https://zvuk-b2b.com/video',
                  'creative': 'https://zvuk-b2b.com/audio_ads',
                  'app': 'https://zvuk-b2b.com/blog/1price',
-                 'playlist': slideContent.querySelector('#playlist')?.value === 'images/georgia-audio.png' ? 
-                    'https://zvuk-b2b.com/gastrobar#menu1' : 
-                    slideContent.querySelector('#playlist')?.value === 'images/barber-audio.png' ?
-                    'https://zvuk-b2b.com/barbershop' :
-                    'https://zvuk-b2b.com/rawe'
+                 'playlist': slideContent.querySelector('#playlist')?.value === 'images/rawe.png' ? 
+                     'https://zvuk-b2b.com/rawe' : 
+                     'https://zvuk-b2b.com/barbershop'
             };
 
             if (fullSlideLinks[slideType]) {
                  // For slides like 'creative', add the main link first
-                 if(slideType === 'creative' || slideType === 'app') {
+                 if(slideType === 'creative') {
                      pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
                      // Re-add the specific smaller links on top
                      const smallerLinks = slideContent.querySelectorAll('a');
