@@ -216,8 +216,8 @@
             transition: all 0.3s ease;
             transform-origin: center center;
             cursor: pointer;
-            aspect-ratio: 16 / 9; /* Пропорциональное масштабирование */
-            margin: auto; /* Центрирование в контейнере */
+            aspect-ratio: 16 / 9;
+            margin: auto;
         }
         
         .preview-page.zoomed {
@@ -255,37 +255,35 @@
             object-fit: contain;
         }
         
-        .preview-price {
+        .preview-price, .price-table, .preview-comment, .preview-phone, .instruction-text {
             font-family: Calibri, Arial, sans-serif;
+        }
+        
+        .preview-price {
             position: absolute;
             top: 65%;
             left: 3%;
             color: white;
             font-weight: bold;
             width: 50%;
-            font-size: 22px; /* Base size for preview */
         }
         
         .preview-comment {
-            font-family: Calibri, Arial, sans-serif;
             position: absolute;
             top: 60%;
             left: 3%;
             color: #D9D9D9;
             width:100%;
             font-weight: 500;
-            font-size: 12px; /* Base size for preview */
         }
         
         .price-table {
-            font-family: Calibri, Arial, sans-serif;
             position: absolute;
             top: 55%;
             left: 3%;
             width:60%;
             color: white;
             border-collapse: collapse;
-            font-size: 12px; /* Base size for preview */
         }
         
         .price-table th, .price-table td {
@@ -312,7 +310,6 @@
             left: 32%;
             color: white;
             font-weight: 500;
-            font-size: 7px; /* Base size for preview */
         }
         
         .preview-qr {
@@ -512,53 +509,71 @@
             font-weight: 500;
             width: 60%;
             line-height: 1.2;
-            font-size: 12px; /* Base size for preview */
         }
 
         .instruction-text a {
             color: var(--button-color);
             text-decoration: none;
             font-weight: 500;
-            display: inline-block; /* ИЗМЕНЕНИЕ: Обеспечивает корректный захват размеров ссылки для PDF */
+            display: inline-block;
         }
             
         /* ---- SCALING STYLES FOR PDF vs PREVIEW ---- */
         
         /* PDF Mode: Increase sizes for high-resolution export */
         .pdf-mode .preview-price {
-            font-family: Calibri, Arial, sans-serif;
-            font-size: 44px; /* Scaled size for PDF */
+            font-size: 44px;
         }
         .pdf-mode .preview-comment {
-            font-family: Calibri, Arial, sans-serif;
-            font-size: 24px; /* Scaled size for PDF */
+            font-size: 24px;
         }
         .pdf-mode .price-table {
-            font-family: Calibri, Arial, sans-serif;
-            font-size: 24px; /* Scaled size for PDF */
+            font-size: 24px;
         }
         .pdf-mode .price-table th, .pdf-mode .price-table td {
              padding: 20px;
         }
         .pdf-mode .preview-phone {
-            font-size: 14px; /* Scaled size for PDF */
+            font-size: 14px;
         }
         .pdf-mode .instruction-text {
-            font-size: 24px; /* Scaled size for PDF */
+            font-size: 24px;
             line-height: 1.5;
         }
 
-        /* ---- END SCALING STYLES ---- */
-        /* Additional scaling for preview-mode */
-        .preview-mode .preview-price,
-        .preview-mode .price-table,
-        .preview-mode .preview-comment,
-        .preview-mode .preview-phone,
+        /* Preview Mode: Smaller sizes */
+        .preview-mode .preview-price {
+            font-size: 22px;
+        }
+        .preview-mode .preview-comment {
+            font-size: 12px;
+        }
+        .preview-mode .price-table {
+            font-size: 12px;
+        }
+        .preview-mode .preview-phone {
+            font-size: 7px;
+        }
         .preview-mode .instruction-text {
-            transform: scale(0.85);
-            transform-origin: top left;
+            font-size: 12px;
         }
 
+        /* Image scaling */
+        .preview-mode .preview-video img,
+        .preview-mode .preview-qr img,
+        .preview-mode .preview-logos {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .pdf-mode .preview-video img,
+        .pdf-mode .preview-qr img,
+        .pdf-mode .preview-logos {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* ---- END SCALING STYLES ---- */
       
         /* Специальные стили для Firefox */
         @-moz-document url-prefix() {
@@ -568,63 +583,73 @@
         }
 
         /* ---- МОБИЛЬНАЯ ВЕРСИЯ ---- */
-            .action-buttons {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background: white;
-                padding: 10px;
-                box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-            }
-
         @media (max-width: 800px) {
             body {
                 flex-direction: column;
                 height: auto;
-                overflow: auto; /* Включаем скролл для всей страницы */
+                overflow: auto;
             }
 
             .menu-container {
                 width: 100%;
                 height: auto;
-                overflow-y: visible;
+                max-height: 50vh;
+                overflow-y: auto;
                 box-shadow: none;
                 padding: 15px;
                 box-sizing: border-box;
+                order: 1;
             }
             
-            .action-buttons {
-                 /* Кнопка "в PDF" будет внизу блока настроек */
-                position: relative;
-                bottom: auto;
-                padding: 20px 0 10px 0;
-                border-top: 1px solid #eee;
-            }
-
             .preview-container {
                 width: 100%;
-                height: auto;
-                padding: 10px;
-                box-sizing: border-box;
+                height: 50vh;
+                order: 2;
             }
-            
-            .preview-wrapper {
-                height: auto;
+
+            .action-buttons {
+                order: 3;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 10px;
+                background: white;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
             }
 
             .preview-page {
-                /* Увеличение на мобильных устройствах отключено */
                 cursor: default;
             }
             
-            /* Скрываем иконку зума на мобильных */
             .control-icon[onclick="toggleZoom()"] {
                 display: none;
             }
             
             .menu-logo {
                 margin-bottom: 20px;
+            }
+
+            /* Mobile font sizes */
+            .preview-price {
+                font-size: 16px;
+            }
+            .preview-comment {
+                font-size: 10px;
+            }
+            .preview-phone {
+                font-size: 6px;
+            }
+            .instruction-text {
+                font-size: 10px;
+            }
+
+            /* Mobile image scaling */
+            .preview-video img,
+            .preview-qr img,
+            .preview-logos {
+                max-width: 60%;
+                max-height: 60%;
             }
         }
     </style>
@@ -881,9 +906,7 @@
         </div>
         
         <div class="action-buttons">
-           
             <button onclick="saveAsPDF()">в PDF</button>
-        
         </div>
     </div>
     
@@ -927,9 +950,6 @@
         
         // Ссылки для баннеров
         const bannerLinks = {
-            'images/rawe.png': 'https://zvuk-b2b.com/rawe',
-            'images/autumn.png': 'https://zvuk-b2b.com',
-            'images/nostalgia.png': 'https://zvuk-b2b.com',
             'images/bkids.png': 'https://zvuk-b2b.com/music_for_kids',
             'images/veranda.png': 'https://zvuk-b2b.com/rest',           
             'images/sbbarbershop.png': 'https://zvuk-b2b.com',
@@ -958,7 +978,10 @@
             'images/bprofile phone.png': 'https://zvuk-b2b.com/partners',
             'images/premiumbanner.png': 'https://zvuk-b2b.com/premium/',
             'images/bprofilescreen.png': 'https://zvuk-b2b.com/bprofile',
-            'images/atmvieo.png': 'https://zvuk-b2b.com/video'
+            'images/atmvieo.png': 'https://zvuk-b2b.com/video',
+            'images/autumn.png': 'https://zvuk-b2b.com',
+            'images/nostalgia.png': 'https://zvuk-b2b.com',
+            'images/rawe.png': 'https://zvuk-b2b.com/rawe'
         };
         
         let currentSlideIndex = 0;
@@ -1104,15 +1127,15 @@
                     managerImg.src = managerImgPath;
                     
                     const managerLink = document.createElement('a');
-                    managerLink.href = managerDataLink; // Use the data-link for the registration URL
+                    managerLink.href = managerDataLink;
                     managerLink.target = '_blank';
                     managerLink.style.position = 'absolute';
                     managerLink.style.bottom = '8%';
                     managerLink.style.left = '3%';
                     managerLink.style.width = '57%';
                     managerLink.style.height = '25%';
-                    managerLink.style.backgroundColor = 'rgba(0,0,0,0)';
-                    managerLink.appendChild(managerImg);
+                    managerLink.style.opacity = '0';
+                    managerLink.style.zIndex = '10';
                     slideContainer.appendChild(managerLink);
                     
                     if (phoneType === 'personal' && document.getElementById('personalPhone').value) {
@@ -1211,8 +1234,8 @@
                     coffeeLink.style.position = 'absolute';
                     coffeeLink.style.bottom = '4%';
                     coffeeLink.style.left = '3%';
-                    coffeeLink.style.width = '130px'; // Consistent size
-                    coffeeLink.style.height = '130px'; // Consistent size
+                    coffeeLink.style.width = '130px';
+                    coffeeLink.style.height = '130px';
                     coffeeLink.appendChild(coffeeImg);
                     slideContainer.appendChild(coffeeLink);
                     
@@ -1247,8 +1270,8 @@
                     coffeLink.style.position = 'absolute';
                     coffeLink.style.bottom = '23%';
                     coffeLink.style.left = '3%';
-                    coffeLink.style.width = '130px'; // Corrected Size
-                    coffeLink.style.height = '130px'; // Corrected Size
+                    coffeLink.style.width = '130px';
+                    coffeLink.style.height = '130px';
                     coffeLink.appendChild(coffeImg);
                     slideContainer.appendChild(coffeLink);
                     
@@ -1261,8 +1284,8 @@
                     letualLink.style.position = 'absolute';
                     letualLink.style.bottom = '23%';
                     letualLink.style.right = '25%';
-                    letualLink.style.width = '130px'; // Corrected Size
-                    letualLink.style.height = '130px'; // Corrected Size
+                    letualLink.style.width = '130px';
+                    letualLink.style.height = '130px';
                     letualLink.appendChild(letualImg);
                     slideContainer.appendChild(letualLink);
                     break;
@@ -1275,7 +1298,9 @@
                     playlistLink.className = 'preview-link';
                     playlistLink.href = document.getElementById('playlist').value === 'images/georgia-audio.png' ? 
                         'https://zvuk-b2b.com/gastrobar#menu1' : 
-                        'https://zvuk-b2b.com/barbershop';
+                        document.getElementById('playlist').value === 'images/barber-audio.png' ?
+                        'https://zvuk-b2b.com/barbershop' :
+                        'https://zvuk-b2b.com/rawe';
                     playlistLink.textContent = 'zvuk-b2b.com';
                     playlistLink.target = '_blank';
                     slideContainer.appendChild(playlistLink);
@@ -1396,15 +1421,16 @@
         }
         
         function addSlide(type) {
+            // Проверяем, есть ли уже слайд такого типа (кроме обязательных первых трех)
+            const existingSlideIndex = slides.findIndex((slide, index) => slide.type === type && index > 2);
+            if (existingSlideIndex !== -1) {
+                showSlide(existingSlideIndex + 1);
+                return;
+            }
+            
             let newSlide;
             
             switch(type) {
-            // Prevent duplicate slides for types 4–11
-            const singleTypes = ['app','creative','playlist','partner','premium','bprofile','videokp','videocontent'];
-            if (singleTypes.includes(type) && slides.some(s => s.type === type && slides.indexOf(s) >= 3)) {
-                return; // Do not add duplicate
-            }
-
                 case 'app':
                     newSlide = { type: 'app', image: 'images/app.png' };
                     break;
@@ -1595,21 +1621,20 @@
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Улучшенное ожидание прорисовки для повышения надежности в Safari
-                // 1. Ждем загрузки всех изображений в клонированном слайде
+                // Ждем загрузки всех изображений
                 const images = tempContainer.querySelectorAll('img');
                 const promises = [];
                 images.forEach(img => {
                     if (!img.complete) {
                         promises.push(new Promise((resolve, reject) => {
                             img.onload = resolve;
-                            img.onerror = resolve; // Продолжаем, даже если изображение не загрузилось
+                            img.onerror = resolve;
                         }));
                     }
                 });
                 await Promise.all(promises);
 
-                // 2. Дополнительная короткая задержка для рендеринга шрифтов и других элементов
+                // Дополнительная задержка для рендеринга
                 await new Promise(resolve => setTimeout(resolve, 250));
 
                 const canvas = await html2canvas(tempContainer, {
@@ -1635,7 +1660,7 @@
             document.body.classList.remove('pdf-mode');
             document.body.classList.add('preview-mode');
             
-            showSlide(originalSlideIndex + 1); // Restore original slide view
+            showSlide(originalSlideIndex + 1);
             document.body.removeChild(tempContainer);
 
             pdf.save(fileName);
@@ -1661,33 +1686,39 @@
                 }
             };
             
-            // Find all anchor tags in the generated slide content and add them
+            // Обрабатываем все ссылки в слайде
             const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
                 addLinkSafe(link, link.href);
             });
 
-            // Specific logic for slides that are a single large link
+            // Специальные обработки для слайдов с полным покрытием ссылкой
             const slideType = slides[pageIndex].type;
             const fullSlideLinks = {
-                 'partner': 'https://zvuk-b2b.com/partners',
-                 'premium': 'https://zvuk-b2b.com/premium/',
-                 'bprofile': 'https://zvuk-b2b.com/bprofile',
-                 'videocontent': 'https://zvuk-b2b.com/video',
-                 'videokp': 'https://zvuk-b2b.com/video',
-                 'creative': 'https://zvuk-b2b.com/audio_ads'
+                'partner': 'https://zvuk-b2b.com/partners',
+                'premium': 'https://zvuk-b2b.com/premium/',
+                'bprofile': 'https://zvuk-b2b.com/bprofile',
+                'videocontent': 'https://zvuk-b2b.com/video',
+                'videokp': 'https://zvuk-b2b.com/video',
+                'creative': 'https://zvuk-b2b.com/audio_ads',
+                'app': 'https://zvuk-b2b.com/blog/1price',
+                'playlist': slideContent.querySelector('.preview-link')?.href || 'https://zvuk-b2b.com'
             };
 
             if (fullSlideLinks[slideType]) {
-                 // For slides like 'creative', add the main link first
-                 if(slideType === 'creative') {
-                     pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
-                     // Re-add the specific smaller links on top
-                     const smallerLinks = slideContent.querySelectorAll('a');
-                     smallerLinks.forEach(link => addLinkSafe(link, link.href));
-                 } else if (slideType !== 'videokp') { // videokp has other links, so don't cover them
+                if (slideType === 'creative') {
+                    // Для креативных слайдов сначала добавляем основную ссылку
                     pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
-                 }
+                    // Затем добавляем ссылки на отдельные элементы
+                    const smallerLinks = slideContent.querySelectorAll('a');
+                    smallerLinks.forEach(link => addLinkSafe(link, link.href));
+                } else if (slideType === 'playlist') {
+                    // Для плейлистов добавляем ссылку на весь слайд
+                    pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
+                } else if (slideType !== 'videokp') {
+                    // Для остальных слайдов (кроме videokp) добавляем ссылку на весь слайд
+                    pdf.link(0, 0, 1920, 1080, { url: fullSlideLinks[slideType] });
+                }
             }
         }
         
@@ -1720,4 +1751,3 @@
     </script>
 </body>
 </html>
-
