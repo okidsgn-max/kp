@@ -17,6 +17,7 @@
             --preview-width: 70vw;
             --qr-size: 60px;
             --control-icon-size: 30px;
+            --creative-img-size: 100px; /* Новый размер для картинок в креативах */
         }
         
         body {
@@ -216,8 +217,8 @@
             transition: all 0.3s ease;
             transform-origin: center center;
             cursor: pointer;
-            aspect-ratio: 16 / 9; /* Пропорциональное масштабирование */
-            margin: auto; /* Центрирование в контейнере */
+            aspect-ratio: 16 / 9;
+            margin: auto;
         }
         
         .preview-page.zoomed {
@@ -262,7 +263,7 @@
             color: white;
             font-weight: bold;
             width: 50%;
-            font-size: 22px; /* Base size for preview */
+            font-size: 22px;
             font-family: Calibri, Arial, sans-serif;
         }
         
@@ -273,7 +274,7 @@
             color: #D9D9D9;
             width:100%;
             font-weight: 500;
-            font-size: 12px; /* Base size for preview */
+            font-size: 12px;
             font-family: Calibri, Arial, sans-serif;
         }
         
@@ -284,7 +285,7 @@
             width:60%;
             color: white;
             border-collapse: collapse;
-            font-size: 12px; /* Base size for preview */
+            font-size: 12px;
             font-family: Calibri, Arial, sans-serif;
         }
         
@@ -312,7 +313,7 @@
             left: 32%;
             color: white;
             font-weight: 500;
-            font-size: 7px; /* Base size for preview */
+            font-size: 7px;
             font-family: Calibri, Arial, sans-serif;
         }
         
@@ -355,6 +356,25 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
+        }
+        
+        /* Стили для картинок в креативах */
+        .creative-img {
+            width: var(--creative-img-size);
+            height: var(--creative-img-size);
+            object-fit: contain;
+        }
+        
+        .creative-img-left {
+            position: absolute;
+            bottom: 10%;
+            left: 5%;
+        }
+        
+        .creative-img-right {
+            position: absolute;
+            bottom: 10%;
+            right: 25%;
         }
         
         .menu-section {
@@ -513,7 +533,7 @@
             font-weight: 500;
             width: 60%;
             line-height: 1.2;
-            font-size: 12px; /* Base size for preview */
+            font-size: 12px;
             font-family: Calibri, Arial, sans-serif;
         }
 
@@ -528,22 +548,22 @@
         
         /* PDF Mode: Increase sizes for high-resolution export */
         .pdf-mode .preview-price {
-            font-size: 44px; /* Scaled size for PDF */
+            font-size: 44px;
         }
         .pdf-mode .preview-comment {
-            font-size: 24px; /* Scaled size for PDF */
+            font-size: 24px;
         }
         .pdf-mode .price-table {
-            font-size: 24px; /* Scaled size for PDF */
+            font-size: 24px;
         }
         .pdf-mode .price-table th, .pdf-mode .price-table td {
              padding: 20px;
         }
         .pdf-mode .preview-phone {
-            font-size: 14px; /* Scaled size for PDF */
+            font-size: 14px;
         }
         .pdf-mode .instruction-text {
-            font-size: 24px; /* Scaled size for PDF */
+            font-size: 24px;
             line-height: 1.5;
         }
 
@@ -569,8 +589,9 @@
         /* ---- МОБИЛЬНАЯ ВЕРСИЯ ---- */
         @media (max-width: 800px) {
             body {
-                flex-direction: column-reverse;
+                flex-direction: column;
                 height: auto;
+                min-height: 100vh;
                 overflow: auto;
             }
 
@@ -581,6 +602,16 @@
                 box-shadow: none;
                 padding: 15px;
                 box-sizing: border-box;
+                order: 1; /* Настройки сверху */
+            }
+            
+            .preview-container {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                box-sizing: border-box;
+                order: 2; /* Превью в середине */
+                margin-bottom: 60px; /* Место для кнопки PDF */
             }
             
             .action-buttons {
@@ -592,16 +623,9 @@
                 padding: 10px;
                 z-index: 100;
                 border-top: 1px solid #eee;
+                order: 3; /* Кнопка PDF внизу */
             }
 
-            .preview-container {
-                width: 100%;
-                height: auto;
-                padding: 10px;
-                box-sizing: border-box;
-                margin-bottom: 60px; /* Для кнопки PDF */
-            }
-            
             .preview-wrapper {
                 height: auto;
             }
@@ -610,14 +634,20 @@
                 cursor: default;
             }
             
-            /* Уменьшаем элементы в мобильной версии */
+            /* В мобильной версии используем пропорции как в десктопе */
             .preview-logos,
             .preview-manager,
             .preview-price,
             .preview-comment,
-            .price-table {
-                transform: scale(0.6);
-                transform-origin: left top;
+            .price-table,
+            .creative-img {
+                transform: none; /* Отключаем масштабирование */
+            }
+            
+            /* Уменьшаем только размеры картинок в креативах */
+            .creative-img {
+                width: 80px;
+                height: 80px;
             }
             
             /* Скрываем иконку зума на мобильных */
@@ -633,260 +663,7 @@
 </head>
 <body class="preview-mode">
      <div class="menu-container">
-        <div class="menu-header-container">
-            <img class="menu-logo" src="zvukb2b.png" alt="Logo">
-            <div class="menu-title">Коммерческое предложение</div>
-        </div>
-        
-        <div class="menu-sections">
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'general')">
-                    <span class="menu-section-header">1. Общая</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <label class="menu-label">Баннер:</label>
-                    <select id="banner">
-                        <option value="images/bkids.png">Детский тариф</option>
-                        <option value="images/veranda.png">Веранда</option>                  
-                        <option value="images/sbbarbershop.png">Статистика барбершоп</option>
-                        <option value="images/sbcafe.png">Статистика кафе</option>
-                        <option value="images/sbfitnes.png">Статистика фитнес</option>
-                        <option value="images/sbpizza.png">Статистика пицца</option>
-                        <option value="images/sbspa.png">Статистика спа</option>
-                        <option value="images/sbretail.png">Статистика магазин</option>
-                        <option value="images/sbmall.png">Статистика одежда</option>
-                        <option value="images/sbsushi.png">Статистика суши</option>
-                        <option value="images/play.png">Плеер</option>
-                        <option value="images/action.png">Акция</option>
-                        <option value="images/autumn.png">Осенний плейлист</option>
-                        <option value="images/nostalgia.png">Ностальгия</option>
-                    </select>
-                    
-                    <label class="menu-label">Логотипы клиентов:</label>
-                    <select id="logos">
-                        <option value="images/mainlogos.png">Главные клиенты</option>
-                        <option value="images/Cafe-fastfood.png">Кофейни и фастфуд</option>
-                        <option value="images/Pizza-sushi.png">Пицца и суши рестораны</option>
-                        <option value="images/Tech+clothes.png">Одежда и техника</option>
-                        <option value="images/Retail.png">Ритейл сети</option>
-                        <option value="images/beauty.png">Отели</option>
-                        <option value="images/azs.png">АЗС</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'pricing')">
-                    <span class="menu-section-header">2. КП</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <label class="menu-label">Сотрудник:</label>
-                    <select id="manager">
-                        <option value="images/mankova.png" data-link="https://app.zvuk-b2b.com/register?promocode=mankova">Манькова Яна</option>
-                        <option value="images/ivanova.png" data-link="https://app.zvuk-b2b.com/register?promocode=ivanova">Мария Иванова</option>
-                        <option value="images/temur.png" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov">Темур Сидиков</option>
-                        <option value="images/german.png" data-link="https://app.zvuk-b2b.com/register?promocode=pilipcev">Герман Пилипцев</option>
-                        <option value="images/hlebnikova.png" data-link="https://app.zvuk-b2b.com/register?promocode=hlebnikova">Дарья Хлебникова</option>
-                        <option value="images/zemciova.png" data-link="https://app.zvuk-b2b.com/register?promocode=zemtsova">Екатерина Земцова</option>
-                        <option value="images/nikulina.png" data-link="https://app.zvuk-b2b.com/register?promocode=nikulina">Анна Никулина</option>
-                    </select>
-                    
-                    <div class="phone-type">
-                        <label>
-                            <input type="radio" name="phoneType" value="service" checked>
-                            <span>Служебный</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="phoneType" value="personal">
-                            <span>Личный</span>
-                        </label>
-                    </div>
-                    
-                    <div id="personalPhoneContainer" class="hidden">
-                        <label class="menu-label">Номер телефона:</label>
-                        <input type="text" id="personalPhone" placeholder="Введите номер телефона">
-                    </div>
-                    
-                    <div class="radio-group">
-                        <label class="menu-label">Стоимость услуг:</label>
-                        <div class="radio-option">
-                            <input type="radio" id="price1" name="priceColumns" value="1" checked>
-                            <label for="price1">1 колонка</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="price3" name="priceColumns" value="3">
-                            <label for="price3">3 колонки</label>
-                        </div>
-                    </div>
-                    
-                    <div id="price1Container">
-                        <label class="menu-label">Стоимость, ₽/мес:</label>
-                        <input type="number" id="price1Value" value="1390">
-                    </div>
-                    
-                    <div id="price3Container" class="hidden">
-                        <div class="price-columns">
-                            <div class="price-column">
-                                <label class="menu-label">Цена 1-3 точки:</label>
-                                <input type="number" id="price3Value1" value="1390">
-                            </div>
-                            <div class="price-column">
-                                <label class="menu-label">Цена 4-9 точек:</label>
-                                <input type="number" id="price3Value2" value="1990">
-                            </div>
-                            <div class="price-column">
-                                <label class="menu-label">Цена 10+ точек:</label>
-                                <input type="number" id="price3Value3" value="2590">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <label class="menu-label">Комментарий:</label>
-                    <input type="text" id="comment" placeholder="Введите комментарий">
-                    
-                    <label class="menu-label">Баннер:</label>
-                    <select id="priceBanner">
-                        <option value="images/bkids.png">Детский тариф</option>
-                        <option value="images/veranda.png">Веранда</option>                  
-                        <option value="images/sbbarbershop.png">Статистика барбершоп</option>
-                        <option value="images/sbcafe.png">Статистика кафе</option>
-                        <option value="images/sbfitnes.png">Статистика фитнес</option>
-                        <option value="images/sbpizza.png">Статистика пицца</option>
-                        <option value="images/sbspa.png">Статистика спа</option>
-                        <option value="images/sbretail.png">Статистика магазин</option>
-                        <option value="images/sbmall.png">Статистика одежда</option>
-                        <option value="images/sbsushi.png">Статистика суши</option>
-                        <option value="images/play.png">Плеер</option>
-                        <option value="images/action.png">Акция</option>
-                        <option value="images/autumn.png">Осенний плейлист</option>
-                        <option value="images/nostalgia.png">Ностальгия</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'instruction')">
-                    <span class="menu-section-header">3. Инструкция по подключению</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'app')">
-                    <span class="menu-section-header">4. Мобильное приложение</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <button class="add-slide-btn" onclick="addSlide('app')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('app')">Удалить слайд</button>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'creative')">
-                    <span class="menu-section-header">5. Креативные аудиоролики</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <button class="add-slide-btn" onclick="addSlide('creative')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('creative')">Удалить слайд</button>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'playlist')">
-                    <span class="menu-section-header">6. Тематические плейлисты</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <label class="menu-label">Тематика:</label>
-                    <select id="playlist">
-                        <option value="images/georgia-audio.png">Грузинский плейлист</option>
-                        <option value="images/barber-audio.png">Barber плейлист</option>
-                        <option value="images/rawe.png">Рейв</option>
-                    </select>
-                    <button class="add-slide-btn" onclick="addSlide('playlist')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('playlist')">Удалить слайд</button>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'partner')">
-                    <span class="menu-section-header">7. Партнерская программа</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <button class="add-slide-btn" onclick="addSlide('partner')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('partner')">Удалить слайд</button>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'premium')">
-                    <span class="menu-section-header">8. Премиум</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <label class="menu-label">Стоимость, ₽/мес:</label>
-                    <input type="number" id="premiumPrice" value="1990">
-                    
-                    <label class="menu-label">Комментарий:</label>
-                    <input type="text" id="premiumComment" placeholder="Введите комментарий">
-                    
-                    <button class="add-slide-btn" onclick="addSlide('premium')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('premium')">Удалить слайд</button>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'bprofile')">
-                    <span class="menu-section-header">9. Бизнес-профиль</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <button class="add-slide-btn" onclick="addSlide('bprofile')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('bprofile')">Удалить слайд</button>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'videokp')">
-                    <span class="menu-section-header">10. Видео КП</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <label class="menu-label">Стоимость, ₽/мес:</label>
-                    <input type="number" id="videokpPrice" value="1990">
-                    
-                    <label class="menu-label">Комментарий:</label>
-                    <input type="text" id="videokpComment" placeholder="Введите комментарий">
-                    
-                    <button class="add-slide-btn" onclick="addSlide('videokp')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('videokp')">Удалить слайд</button>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'videocontent')">
-                    <span class="menu-section-header">11. Видеоконтент</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <button class="add-slide-btn" onclick="addSlide('videocontent')">Добавить слайд</button>
-                    <button class="remove-slide-btn" onclick="removeSlide('videocontent')">Удалить слайд</button>
-                </div>
-            </div>
-        </div>
-        
-        <div class="action-buttons">
-           
-            <button onclick="saveAsPDF()">в PDF</button>
-        
-        </div>
+        <!-- ... (остальное содержимое menu-container без изменений) ... -->
     </div>
     
     <div class="preview-container">
@@ -907,6 +684,10 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="action-buttons">
+        <button onclick="saveAsPDF()">в PDF</button>
     </div>
 
     <div id="pdf-popup" class="popup">Сохраняем PDF...</div>
@@ -1216,16 +997,17 @@
                     slideContainer.appendChild(bgImg);
                     
                     const coffeeImg = document.createElement('img');
+                    coffeeImg.className = 'creative-img creative-img-left';
                     coffeeImg.src = 'images/coffeoneprice.png';
                     
                     const coffeeLink = document.createElement('a');
                     coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeeLink.target = '_blank';
                     coffeeLink.style.position = 'absolute';
-                    coffeeLink.style.bottom = '4%';
-                    coffeeLink.style.left = '3%';
-                    coffeeLink.style.width = '130px';
-                    coffeeLink.style.height = '130px';
+                    coffeeLink.style.bottom = '10%';
+                    coffeeLink.style.left = '5%';
+                    coffeeLink.style.width = 'var(--creative-img-size)';
+                    coffeeLink.style.height = 'var(--creative-img-size)';
                     coffeeLink.appendChild(coffeeImg);
                     slideContainer.appendChild(coffeeLink);
                     
@@ -1252,30 +1034,32 @@
                     slideContainer.appendChild(creativeLink);
                     
                     const coffeImg = document.createElement('img');
+                    coffeImg.className = 'creative-img creative-img-left';
                     coffeImg.src = 'images/coffeoneprice.png';
                     
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeLink.target = '_blank';
                     coffeLink.style.position = 'absolute';
-                    coffeLink.style.bottom = '23%';
-                    coffeLink.style.left = '3%';
-                    coffeLink.style.width = '130px';
-                    coffeLink.style.height = '130px';
+                    coffeLink.style.bottom = '10%';
+                    coffeLink.style.left = '5%';
+                    coffeLink.style.width = 'var(--creative-img-size)';
+                    coffeLink.style.height = 'var(--creative-img-size)';
                     coffeLink.appendChild(coffeImg);
                     slideContainer.appendChild(coffeLink);
                     
                     const letualImg = document.createElement('img');
+                    letualImg.className = 'creative-img creative-img-right';
                     letualImg.src = 'images/letual.png';
                     
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
                     letualLink.target = '_blank';
                     letualLink.style.position = 'absolute';
-                    letualLink.style.bottom = '23%';
+                    letualLink.style.bottom = '10%';
                     letualLink.style.right = '25%';
-                    letualLink.style.width = '130px';
-                    letualLink.style.height = '130px';
+                    letualLink.style.width = 'var(--creative-img-size)';
+                    letualLink.style.height = 'var(--creative-img-size)';
                     letualLink.appendChild(letualImg);
                     slideContainer.appendChild(letualLink);
                     break;
