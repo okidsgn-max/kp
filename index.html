@@ -374,7 +374,7 @@
             bottom: 6%;
             left: 2%;
             width: 50%;
-            max-height: 15%;
+            max-height: 18%; /* Увеличено на 20% */
             object-fit: contain;
             transition: all var(--transition-medium);
         }
@@ -430,7 +430,7 @@
             position: absolute;
             bottom: 8%;
             left: 0%;
-            width: 100%;
+            width: 69.6%; /* Увеличено на 20% */
             object-fit: contain;
             transition: all var(--transition-medium);
         }
@@ -601,29 +601,40 @@
         }
         
         .radio-option {
-           width: 16px;
-            height: 16px;
-            margin-right: 8px;
-            accent-color: #008f79;
-            transition: all var(--transition-fast);
             display: flex;
             align-items: center;
+            margin-bottom: 8px;
+            cursor: pointer;
         }
         
-        .radio-option:hover {
-            transform: translateX(0px);
-        }
-        
-        .radio-option input {
+        .radio-option input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
             width: 16px;
             height: 16px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
             margin-right: 8px;
-            accent-color: #008f79;
+            cursor: pointer;
+            position: relative;
             transition: all var(--transition-fast);
         }
         
-        .radio-option input:hover {
-            transform: scale(0);
+        .radio-option input[type="radio"]:checked {
+            border-color: var(--primary);
+            background-color: var(--primary);
+        }
+        
+        .radio-option input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: white;
         }
         
         .radio-option label {
@@ -636,6 +647,10 @@
         
         .radio-option:hover label {
             color: var(--primary);
+        }
+        
+        .radio-option:hover input[type="radio"] {
+            border-color: var(--primary-hover);
         }
         
         .price-columns {
@@ -1203,7 +1218,7 @@
         </div>
     </div>
 
-    <div id="pdf-popup" class="popup">Сохраняем PDF</div>
+    <div id="pdf-popup" class="popup">PDF уже сохраняется! Удачной сделки!</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1517,6 +1532,8 @@
                     
                     const coffeeImg = document.createElement('img');
                     coffeeImg.src = 'images/coffeoneprice.webp';
+                    coffeeImg.style.width = '50%'; // Уменьшено на 50%
+                    coffeeImg.style.height = '50%'; // Уменьшено на 50%
                     
                     const coffeeLink = document.createElement('a');
                     coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1553,6 +1570,8 @@
                     
                     const coffeImg = document.createElement('img');
                     coffeImg.src = 'images/coffeoneprice.webp';
+                    coffeImg.style.width = '50%'; // Уменьшено на 50%
+                    coffeImg.style.height = '50%'; // Уменьшено на 50%
                     
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1567,6 +1586,8 @@
                     
                     const letualImg = document.createElement('img');
                     letualImg.src = 'images/letual.webp';
+                    letualImg.style.width = '50%'; // Уменьшено на 50%
+                    letualImg.style.height = '50%'; // Уменьшено на 50%
                     
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
@@ -1833,7 +1854,7 @@
                 slides[targetIndex] = temp;
                 
                 updateSlideNumbers();
-                showSlide(currentSlideIndex + 1);
+                showSlide(targetIndex + 1); // Показываем слайд на новом месте
             }
             
             document.querySelectorAll('.slide-number').forEach(el => {
@@ -2045,7 +2066,3 @@
     </script>
 </body>
 </html>
-
-
-
-
