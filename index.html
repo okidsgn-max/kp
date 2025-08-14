@@ -601,26 +601,29 @@
         }
         
         .radio-option {
-            margin-bottom: 8px;
+           width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            accent-color: #008f79;
+            transition: all var(--transition-fast);
             display: flex;
             align-items: center;
-            transition: all var(--transition-fast);
         }
         
         .radio-option:hover {
-            transform: translateX(4px);
+            transform: translateX(0px);
         }
         
         .radio-option input {
             width: 16px;
             height: 16px;
             margin-right: 8px;
-            accent-color: var(--primary);
+            accent-color: #008f79;
             transition: all var(--transition-fast);
         }
         
         .radio-option input:hover {
-            transform: scale(1.1);
+            transform: scale(0);
         }
         
         .radio-option label {
@@ -990,11 +993,11 @@
                         <label class="menu-label">Стоимость услуг:</label>
                         <div class="radio-option">
                             <input type="radio" id="price1" name="priceColumns" value="1" checked>
-                            <label for="price1">1 колонка</label>
+                            <label for="price1">1 точка</label>
                         </div>
                         <div class="radio-option">
                             <input type="radio" id="price3" name="priceColumns" value="3">
-                            <label for="price3">3 колонки</label>
+                            <label for="price3">3 точки</label>
                         </div>
                     </div>
                     
