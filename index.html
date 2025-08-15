@@ -428,19 +428,19 @@
             color: white;
             font-weight: bold;
             width: 50%;
-            font-size: 22px;
+            font-size: 14px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
         
         .preview-comment {
             position: absolute;
-            top: 60%;
+            top: 70%;
             left: 3%;
             color: #D9D9D9;
             width:100%;
             font-weight: 500;
-            font-size: 12px;
+            font-size: 8px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -470,9 +470,9 @@
         
         .preview-manager {
             position: absolute;
-            bottom: 8%;
+            bottom: 4%;
             left: 0%;
-            width: 81.2%; /* Увеличено на 40% */
+            width: 100%; /* Увеличено на 40% */
             object-fit: contain;
             transition: all var(--transition-medium);
         }
@@ -490,8 +490,8 @@
         
         .preview-qr {
             position: absolute;
-            bottom: 8%;
-            right: 39%;
+            bottom: 4%;
+            right: 40%;
             width: var(--qr-size);
             height: var(--qr-size);
             background-color: white;
@@ -863,7 +863,7 @@
             max-height: 42px;
         }
         .pdf-mode .preview-manager {
-            width: 1624px;
+            width: 1800px;
         }
 
         /* Preview mode scaling */
@@ -872,7 +872,7 @@
         .preview-mode .preview-price,
         .preview-mode .preview-comment,
         .preview-mode .price-table {
-            transform: scale(0.8);
+            transform: scale(1.0);
             transform-origin: left top;
         }
 
@@ -945,7 +945,7 @@
             .preview-price,
             .preview-comment,
             .price-table {
-                transform: scale(0.6);
+                transform: scale(0.3);
                 transform-origin: left top;
             }
             
@@ -1597,8 +1597,10 @@
                     
                     const coffeeImg = document.createElement('img');
                     coffeeImg.src = 'images/coffeoneprice.webp';
-                    coffeeImg.style.width = '160%'; // Увеличено на 60%
-                    coffeeImg.style.height = '160%'; // Увеличено на 60%
+                    coffeeImg.style.width = '70%'; // Увеличено на 60%
+                    coffeeImg.style.height = '70%'; // Увеличено на 60%
+                    position: absolute;
+                    сoffeeImg.style.position = 'absolute';
                     
                     const coffeeLink = document.createElement('a');
                     coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1637,8 +1639,8 @@
                     
                     const coffeImg = document.createElement('img');
                     coffeImg.src = 'images/coffeoneprice.webp';
-                    coffeImg.style.width = '160%'; // Увеличено на 60%
-                    coffeImg.style.height = '160%'; // Увеличено на 60%
+                    coffeImg.style.width = '70%'; // Увеличено на 60%
+                    coffeImg.style.height = '70%'; // Увеличено на 60%
                     
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1653,8 +1655,8 @@
                     
                     const letualImg = document.createElement('img');
                     letualImg.src = 'images/letual.webp';
-                    letualImg.style.width = '160%'; // Увеличено на 60%
-                    letualImg.style.height = '160%'; // Увеличено на 60%
+                    letualImg.style.width = '70%'; // Увеличено на 60%
+                    letualImg.style.height = '70%'; // Увеличено на 60%
                     
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
