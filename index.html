@@ -24,7 +24,7 @@
             --control-icon-size: 30px;
             --scrollbar-thumb: #d1d1d1;
             --scrollbar-track: #f6f6f9;
-            --border-radius: 12px;
+            --border-radius: 8px; /* --- ИЗМЕНЕНО --- */
             --transition-fast: 0.15s;
             --transition-medium: 0.3s;
             --transition-slow: 0.5s;
@@ -38,12 +38,12 @@
         
         ::-webkit-scrollbar-track {
             background: var(--scrollbar-track);
-            border-radius: 4px;
+            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
         }
         
         ::-webkit-scrollbar-thumb {
             background: var(--scrollbar-thumb);
-            border-radius: 4px;
+            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
             transition: background var(--transition-medium);
         }
         
@@ -181,7 +181,8 @@
             color: var(--text-main);
             transition: border-color var(--transition-fast);
         }
-
+        
+        /* --- ДОБАВЛЕНО --- */
         .company-name-input::placeholder {
             color: #E0E0E0;
         }
@@ -307,7 +308,7 @@
             justify-content: center;
             cursor: pointer;
             background: transparent;
-            border-radius: 8px;
+            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
             transition: all var(--transition-medium);
         }
         
@@ -420,7 +421,7 @@
             bottom: 6%;
             left: 2%;
             width: 50%;
-            max-height: 50%; /* Увеличено на 40% */
+            max-height: 50%;
             object-fit: contain;
             transition: all var(--transition-medium);
         }
@@ -432,7 +433,7 @@
             color: white;
             font-weight: bold;
             width: 50%;
-            font-size: 2.2vw;
+            font-size: 20px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -444,7 +445,7 @@
             color: #D9D9D9;
             width:100%;
             font-weight: 500;
-            font-size: 1.2vw;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -456,13 +457,13 @@
             width:60%;
             color: white;
             border-collapse: collapse;
-            font-size: 1.2vw;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
         
         .price-table th, .price-table td {
-            padding: 1.1vw;
+            padding: 10px;
             text-align: left;
             border: 1px solid #303030;
             transition: background-color var(--transition-fast);
@@ -476,7 +477,7 @@
             position: absolute;
             bottom: 4%;
             left: 0%;
-            width: 100%; /* Увеличено на 40% */
+            width: 100%;
             object-fit: contain;
             transition: all var(--transition-medium);
         }
@@ -487,7 +488,7 @@
             left: 32%;
             color: white;
             font-weight: 500;
-            font-size: 0.7vw;
+            font-size: 7px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -499,7 +500,7 @@
             width: var(--qr-size);
             height: var(--qr-size);
             background-color: white;
-            border-radius: 8px;
+            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
             padding:7px;
             display: flex;
             align-items: center;
@@ -586,7 +587,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 4px;
+            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
         }
         
         .menu-header:hover .toggle-button {
@@ -823,7 +824,7 @@
             font-weight: 500;
             width: 60%;
             line-height: 1.2;
-            font-size: 1.2vw;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -841,34 +842,7 @@
             transform: translateX(2px);
         }
             
-        /* ---- SCALING STYLES FOR PDF vs PREVIEW ---- */
-        
-        /* PDF Mode: Increase sizes for high-resolution export */
-        .pdf-mode .preview-price {
-            font-size: 44px;
-        }
-        .pdf-mode .preview-comment {
-            font-size: 24px;
-        }
-        .pdf-mode .price-table {
-            font-size: 24px;
-        }
-        .pdf-mode .price-table th, .pdf-mode .price-table td {
-             padding: 20px;
-        }
-        .pdf-mode .preview-phone {
-            font-size: 14px;
-        }
-        .pdf-mode .instruction-text {
-            font-size: 24px;
-            line-height: 1.5;
-        }
-        .pdf-mode .preview-logos {
-            max-height: 42px;
-        }
-        .pdf-mode .preview-manager {
-            width: 1624px;
-        }
+        /* ---- SCALING STYLES REMOVED ---- */
       
         /* ---- МОБИЛЬНАЯ ВЕРСИЯ ---- */
         @media (max-width: 800px) {
@@ -930,12 +904,8 @@
             .preview-page {
                 cursor: default;
             }
-
-            .preview-price { font-size: 4.4vw; }
-            .preview-comment { font-size: 2.4vw; }
-            .price-table { font-size: 2.4vw; }
-            .preview-phone { font-size: 1.4vw; }
-            .instruction-text { font-size: 2.4vw; }
+            
+            /* --- SCALING FOR MOBILE REMOVED --- */
             
             /* Скрываем иконку зума на мобильных */
             .control-icon[onclick="toggleZoom()"] {
@@ -978,7 +948,7 @@
         }
     </style>
 </head>
-<body class="preview-mode">
+<body>
     <div class="blur-overlay"></div>
     
     <div class="menu-container">
@@ -1582,11 +1552,12 @@
                 case 'app':
                     bgImg.src = 'images/app.webp';
                     slideContainer.appendChild(bgImg);
-
+                    
+                    // --- БЛОК СКОПИРОВАН И ИЗМЕНЕН ---
                     const coffeeImg = document.createElement('img');
                     coffeeImg.src = 'images/coffeoneprice.webp';
-                    coffeeImg.style.width = '70%'; 
-                    coffeeImg.style.height = '70%';
+                    coffeeImg.style.width = '100px';
+                    coffeeImg.style.height = '100px';
                     
                     const coffeeLink = document.createElement('a');
                     coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1622,17 +1593,18 @@
                     creativeLinkContainer.style.opacity = '0';
                     slideContainer.appendChild(creativeLinkContainer);
                     
+                    // --- БЛОК ИЗМЕНЕН ---
                     const coffeImg = document.createElement('img');
                     coffeImg.src = 'images/coffeoneprice.webp';
-                    coffeImg.style.width = '70%';
-                    coffeImg.style.height = '70%';
+                    coffeImg.style.width = '100px';
+                    coffeImg.style.height = '100px';
                     
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeLink.target = '_blank';
                     coffeLink.style.position = 'absolute';
                     coffeLink.style.bottom = '4%';
-                    coffeLink.style.left = '18%'; 
+                    coffeLink.style.left = '3%'; // Позиция слева
                     coffeLink.style.width = '100px';
                     coffeLink.style.height = '100px';
                     coffeLink.appendChild(coffeImg);
@@ -1640,15 +1612,15 @@
                     
                     const letualImg = document.createElement('img');
                     letualImg.src = 'images/letual.webp';
-                    letualImg.style.width = '70%';
-                    letualImg.style.height = '70%';
+                    letualImg.style.width = '100px';
+                    letualImg.style.height = '100px';
                     
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
                     letualLink.target = '_blank';
                     letualLink.style.position = 'absolute';
                     letualLink.style.bottom = '4%';
-                    letualLink.style.left = '3%'; 
+                    letualLink.style.left = 'calc(3% + 110px)'; // Позиция рядом с первой карточкой
                     letualLink.style.width = '100px';
                     letualLink.style.height = '100px';
                     letualLink.appendChild(letualImg);
@@ -2023,7 +1995,6 @@
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
             
-            // Show blur overlay and popup
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
             
@@ -2042,10 +2013,6 @@
             tempContainer.style.height = '1080px';
             document.body.appendChild(tempContainer);
             
-            // Switch to PDF mode for scaling
-            document.body.classList.remove('preview-mode');
-            document.body.classList.add('pdf-mode');
-
             const originalSlideIndex = currentSlideIndex; 
 
             for (let i = 0; i < slides.length; i++) {
@@ -2060,7 +2027,6 @@
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Ждем загрузки всех изображений
                 const images = tempContainer.querySelectorAll('img');
                 const promises = [];
                 images.forEach(img => {
@@ -2073,7 +2039,6 @@
                 });
                 await Promise.all(promises);
 
-                // Дополнительная задержка для рендеринга
                 await new Promise(resolve => setTimeout(resolve, 250));
 
                 const canvas = await html2canvas(tempContainer, {
@@ -2095,16 +2060,11 @@
                 addLinksToPDF(pdf, slideContent, i);
             }
             
-            // Revert to preview mode
-            document.body.classList.remove('pdf-mode');
-            document.body.classList.add('preview-mode');
-            
-            showSlide(originalSlideIndex + 1); // Restore original slide view
+            showSlide(originalSlideIndex + 1);
             document.body.removeChild(tempContainer);
 
             pdf.save(fileName);
             
-            // Hide blur overlay and popup after a delay
             setTimeout(() => {
                 popup.style.display = 'none';
                 blurOverlay.style.display = 'none';
@@ -2134,13 +2094,11 @@
                 }
             };
             
-            // Find all anchor tags in the generated slide content and add them
             const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
                 addLinkSafe(link, link.href);
             });
 
-            // Specific logic for slides that are a single large link
             const slideType = slides[pageIndex].type;
             const fullSlideLinks = {
                  'partner': 'https://zvuk-b2b.com/partners',
@@ -2156,7 +2114,6 @@
             };
 
             if (fullSlideLinks[slideType]) {
-                // Добавляем прозрачный прямоугольник для кликабельной области
                 const linkRect = document.createElement('div');
                 linkRect.style.position = 'absolute';
                 linkRect.style.top = '0';
@@ -2168,7 +2125,6 @@
                 
                 addLinkSafe(linkRect, fullSlideLinks[slideType]);
                 
-                // Для слайдов с дополнительными ссылками добавляем их отдельно
                 if (slideType === 'creative' || slideType === 'app' || slideType === 'playlist') {
                     const additionalLinks = slideContent.querySelectorAll('a');
                     additionalLinks.forEach(link => {
