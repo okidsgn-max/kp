@@ -486,16 +486,21 @@
         
         .preview-phone {
             position: absolute;
-            /* 2. личный по желанию прописан в поле номер телефона, и добавляется поверх картинки менеджера */
-            /* Adjusted position to be over the manager image */
-            bottom: 12%; 
+            /* --- ИЗМЕНЕНО --- Смещаем ниже и увеличиваем шрифт в 2 раза для превью */
+            bottom: 5%; 
             left: 5%; 
             color: white;
             font-weight: 500;
-            font-size: 14px; /* Increased for better visibility over manager image */
+            font-size: 28px; 
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
-            z-index: 5; /* Ensure it's above manager image */
+            z-index: 5; 
+        }
+
+        /* --- НОВОЕ --- Для PDF оставляем старые размеры телефона */
+        .pdf-scale .preview-phone {
+            bottom: 12%; 
+            font-size: 14px;
         }
         
         .preview-qr {
@@ -789,27 +794,28 @@
             transition: opacity var(--transition-medium);
         }
         
-        /* .phone-type { /* 2. Убери радио кнопки личный служебный телефон */
-            /* display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
-        } */
-        
-        /* .phone-type label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        } */
-        
-        /* .phone-type label:hover {
-            color: var(--primary);
-        } */
+        /* ---- SCALING STYLES FOR DESKTOP PREVIEW ---- */
+        .preview-page .scale-letual-coffeone,
+        .preview-page .scale-rectangle-link {
+            /* --- ИЗМЕНЕНО --- Увеличено на 20% от предыдущего размера (1.3 * 1.2 = 1.56) */
+            transform: scale(1.56);
+            transform-origin: center center;
+        }
 
+        /* ---- SCALING STYLES FOR PDF (2.1x) ---- */
+        /* To be applied dynamically or via a class during PDF generation */
+        .pdf-scale .scale-letual-coffeone-pdf,
+        .pdf-scale .scale-rectangle-link-pdf {
+            transform: scale(2.1); /* 1 + 1.1 = 2.1 */
+            transform-origin: center center;
+        }
+
+        /* --- НОВОЕ --- Для PDF-версии двигаем картинку letual.webp правее */
+        .pdf-scale .letual-creative-pdf {
+            right: 4.2% !important; /* 3% + 40% = 4.2% */
+        }
+
+        /* --- ИЗМЕНЕНО --- Увеличиваем шрифт в предпросмотре, но не в PDF */
         .instruction-text {
             position: absolute;
             top: 40%;
@@ -818,11 +824,18 @@
             font-weight: 500;
             width: 60%;
             line-height: 1.2;
-            font-size: 12px;
+            /* --- ИЗМЕНЕНО --- Увеличиваем шрифт для предпросмотра */
+            font-size: 16px; 
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-
+        
+        /* --- ИЗМЕНЕНО --- Для PDF-версии возвращаем размер, чтобы он остался таким же, как было */
+        .pdf-scale .instruction-text-pdf {
+            font-size: 22.8px; /* 12px * 1.9 = 22.8px */
+            width: 80%; /* Adjusted for larger text */
+        }
+        
         .instruction-text a {
             color: var(--primary);
             text-decoration: none;
@@ -835,31 +848,12 @@
             text-decoration: underline;
             transform: translateX(2px);
         }
+
+        /* --- НОВОЕ --- Увеличиваем шрифт в таблицах для PDF-версии */
+        .pdf-scale .price-table-pdf {
+            font-size: 20px;
+        }
             
-        /* ---- SCALING STYLES FOR DESKTOP PREVIEW (1.3x) ---- */
-        .preview-page .scale-letual-coffeone,
-        .preview-page .scale-rectangle-link {
-            transform: scale(1.3);
-            transform-origin: center center;
-        }
-
-        /* ---- SCALING STYLES FOR PDF (2.1x) ---- */
-        /* To be applied dynamically or via a class during PDF generation */
-        .pdf-scale .scale-letual-coffeone-pdf,
-        .pdf-scale .scale-rectangle-link-pdf {
-            transform: scale(2.1); /* 1 + 1.1 = 2.1 */
-            transform-origin: center center;
-        }
-
-        .pdf-scale .instruction-text-pdf {
-            font-size: calc(12px * 1.9); /* 1.9 for 90% increase */
-            width: 80%; /* Adjusted for larger text */
-        }
-
-        .pdf-scale .instruction-text-pdf a {
-            font-size: inherit; /* Inherit from parent for consistency */
-        }
-
         .pdf-scale .preview-price-pdf {
             font-size: calc(20px * 1.5); /* 1.5 for 50% increase */
         }
@@ -925,15 +919,17 @@
                 cursor: default;
             }
             
-            /* --- SCALING FOR MOBILE PREVIEW (decrease 70% for images/links, 60% for instruction text/links, 50% for cost) --- */
+            /* --- SCALING FOR MOBILE PREVIEW --- */
             .preview-page .scale-letual-coffeone,
             .preview-page .scale-rectangle-link {
-                transform: scale(0.3); /* 1 - 0.7 = 0.3 */
+                /* --- ИЗМЕНЕНО --- Уменьшено на 70% относительно десктопного размера + 20% от текущего */
+                transform: scale(0.36); /* (1 - 0.7) * 1.2 = 0.36 */
                 transform-origin: center center;
             }
-
+            
+            /* --- ИЗМЕНЕНО --- Уменьшаем шрифт в инструкции для мобильного превью */
             .instruction-text {
-                font-size: calc(12px * 0.4); /* 1 - 0.6 = 0.4 */
+                font-size: calc(16px * 0.4); /* 1 - 0.6 = 0.4 */
                 width: 80%; /* Adjust width for smaller text */
             }
 
@@ -1448,6 +1444,7 @@
                     } else {
                         const priceTable = document.createElement('table');
                         priceTable.className = 'price-table';
+                        if (isPdf) priceTable.classList.add('price-table-pdf'); // --- НОВОЕ --- Add PDF specific class
                         priceTable.innerHTML = `
                             <thead>
                                 <tr>
@@ -1604,6 +1601,10 @@
                     letualLinkCreative.style.position = 'absolute';
                     letualLinkCreative.style.bottom = '4%';
                     letualLinkCreative.style.right = '3%';
+                    // --- НОВОЕ --- Для PDF-версии сдвигаем правее
+                    if (isPdf) {
+                         letualLinkCreative.classList.add('letual-creative-pdf');
+                    }
                     letualLinkCreative.style.width = '100px';
                     letualLinkCreative.style.height = '100px';
                     if (!isPdf) { // Apply preview scaling to the link container for rectangular links
