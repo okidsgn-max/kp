@@ -385,7 +385,7 @@
             cursor: pointer;
             aspect-ratio: 16 / 9;
             margin: auto;
-            background-color: #16151A;
+            background-color: #16151A; /* Добавлен фон по умолчанию */
         }
         
         .preview-page.zoomed {
@@ -533,8 +533,8 @@
             position: absolute;
             bottom: 0%;
             left: 35%;
-            width: 110px; /* Увеличение на 10% */
-            height: 110px; /* Увеличение на 10% */
+            width: 130px; /* Увеличение на 30% (было 100px) */
+            height: 130px; /* Увеличение на 30% (было 100px) */
             transition: all var(--transition-medium);
         }
         
@@ -906,22 +906,21 @@
                 cursor: default;
             }
             
-            /* Уменьшаем размеры картинок и ссылок в мобильной версии */
+            /* Уменьшение картинок и ссылок в мобильной версии */
             .preview-video {
-                width: 33px; /* Уменьшение на 70% от 110px */
-                height: 33px;
+                width: 39px; /* Уменьшение на 70% (130px * 0.3) */
+                height: 39px; /* Уменьшение на 70% (130px * 0.3) */
             }
             
+            /* Уменьшение текста инструкции в мобильной версии */
             .instruction-text {
-                font-size: 7.2px; /* Уменьшение на 60% от 12px */
+                font-size: 7.2px; /* Уменьшение на 60% (12px * 0.4) */
+                width: 50%;
             }
             
-            .instruction-text a {
-                font-size: 7.2px;
-            }
-            
+            /* Уменьшение стоимости в мобильной версии */
             .preview-price {
-                font-size: 10px; /* Уменьшение на 50% от 20px */
+                font-size: 10px; /* Уменьшение на 50% (20px * 0.5) */
             }
             
             /* Скрываем иконку зума на мобильных */
@@ -1432,6 +1431,18 @@
                     managerImg.className = 'preview-manager';
                     managerImg.src = managerValue;
                     
+                    // Добавляем прозрачный кликабельный прямоугольник
+                    const managerLinkContainer = document.createElement('a');
+                    managerLinkContainer.href = managerDataLink;
+                    managerLinkContainer.target = '_blank';
+                    managerLinkContainer.style.position = 'absolute';
+                    managerLinkContainer.style.bottom = '8%';
+                    managerLinkContainer.style.left = '3%';
+                    managerLinkContainer.style.width = '57%';
+                    managerLinkContainer.style.height = '25%';
+                    managerLinkContainer.style.opacity = '0';
+                    slideContainer.appendChild(managerLinkContainer);
+                    
                     const managerLink = document.createElement('a');
                     managerLink.href = managerDataLink;
                     managerLink.target = '_blank';
@@ -1516,8 +1527,8 @@
                     // --- БЛОК СКОПИРОВАН И ИЗМЕНЕН ---
                     const coffeeImg = document.createElement('img');
                     coffeeImg.src = 'images/coffeoneprice.webp';
-                    coffeeImg.style.width = '110px';
-                    coffeeImg.style.height = '110px';
+                    coffeeImg.style.width = '130px'; // Увеличение на 30%
+                    coffeeImg.style.height = '130px'; // Увеличение на 30%
                     
                     const coffeeLink = document.createElement('a');
                     coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1525,8 +1536,8 @@
                     coffeeLink.style.position = 'absolute';
                     coffeeLink.style.bottom = '4%';
                     coffeeLink.style.left = '3%';
-                    coffeeLink.style.width = '110px';
-                    coffeeLink.style.height = '110px';
+                    coffeeLink.style.width = '130px'; // Увеличение на 30%
+                    coffeeLink.style.height = '130px'; // Увеличение на 30%
                     coffeeLink.appendChild(coffeeImg);
                     slideContainer.appendChild(coffeeLink);
                     
@@ -1556,8 +1567,8 @@
                     // --- БЛОК ИЗМЕНЕН ---
                     const coffeImg = document.createElement('img');
                     coffeImg.src = 'images/coffeoneprice.webp';
-                    coffeImg.style.width = '110px';
-                    coffeImg.style.height = '110px';
+                    coffeImg.style.width = '130px'; // Увеличение на 30%
+                    coffeImg.style.height = '130px'; // Увеличение на 30%
                     
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1565,24 +1576,24 @@
                     coffeLink.style.position = 'absolute';
                     coffeLink.style.bottom = '4%';
                     coffeLink.style.left = '3%'; // Позиция слева
-                    coffeLink.style.width = '110px';
-                    coffeLink.style.height = '110px';
+                    coffeLink.style.width = '130px'; // Увеличение на 30%
+                    coffeLink.style.height = '130px'; // Увеличение на 30%
                     coffeLink.appendChild(coffeImg);
                     slideContainer.appendChild(coffeLink);
                     
                     const letualImg = document.createElement('img');
                     letualImg.src = 'images/letual.webp';
-                    letualImg.style.width = '110px';
-                    letualImg.style.height = '110px';
+                    letualImg.style.width = '130px'; // Увеличение на 30%
+                    letualImg.style.height = '130px'; // Увеличение на 30%
                     
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
                     letualLink.target = '_blank';
                     letualLink.style.position = 'absolute';
                     letualLink.style.bottom = '4%';
-                    letualLink.style.left = 'calc(3% + 120px)'; // Позиция рядом с первой карточкой
-                    letualLink.style.width = '110px';
-                    letualLink.style.height = '110px';
+                    letualLink.style.left = 'calc(3% + 140px)'; // Позиция рядом с первой карточкой
+                    letualLink.style.width = '130px'; // Увеличение на 30%
+                    letualLink.style.height = '130px'; // Увеличение на 30%
                     letualLink.appendChild(letualImg);
                     slideContainer.appendChild(letualLink);
                     break;
@@ -1984,20 +1995,37 @@
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 
-                // Увеличиваем картинки и ссылки для PDF
-                if (slides[i].type === 'app' || slides[i].type === 'creative') {
-                    const videos = slideContent.querySelectorAll('.preview-video');
-                    videos.forEach(video => {
-                        video.style.width = '220px'; // Увеличение на 100% от 110px
-                        video.style.height = '220px';
+                // Увеличение элементов для PDF
+                if (['app', 'creative'].includes(slides[i].type)) {
+                    const images = slideContent.querySelectorAll('img[src*="coffeoneprice"], img[src*="letual"]');
+                    images.forEach(img => {
+                        img.style.width = '273px'; // Увеличение на 110% (130px * 2.1)
+                        img.style.height = '273px'; // Увеличение на 110% (130px * 2.1)
+                    });
+                    
+                    const links = slideContent.querySelectorAll('a');
+                    links.forEach(link => {
+                        if (link.querySelector('img[src*="coffeoneprice"], img[src*="letual"]')) {
+                            link.style.width = '273px';
+                            link.style.height = '273px';
+                        }
                     });
                 }
                 
-                // Увеличиваем текст инструкции для PDF
+                // Увеличение текста инструкции в PDF
                 if (slides[i].type === 'instruction') {
                     const instructionText = slideContent.querySelector('.instruction-text');
                     if (instructionText) {
-                        instructionText.style.fontSize = '22.8px'; // Увеличение на 90% от 12px
+                        instructionText.style.fontSize = '22.8px'; // Увеличение на 90% (12px * 1.9)
+                        instructionText.style.width = '70%';
+                    }
+                }
+                
+                // Увеличение стоимости в PDF
+                if (slides[i].type === 'pricing' || slides[i].type === 'premium' || slides[i].type === 'videokp') {
+                    const priceText = slideContent.querySelector('.preview-price');
+                    if (priceText) {
+                        priceText.style.fontSize = '30px'; // Увеличение на 50% (20px * 1.5)
                     }
                 }
                 
