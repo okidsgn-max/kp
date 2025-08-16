@@ -385,6 +385,7 @@
             cursor: pointer;
             aspect-ratio: 16 / 9;
             margin: auto;
+            background-color: #16151A;
         }
         
         .preview-page.zoomed {
@@ -532,8 +533,8 @@
             position: absolute;
             bottom: 0%;
             left: 35%;
-            width: 100px;
-            height: 100px;
+            width: 110px; /* Увеличение на 10% */
+            height: 110px; /* Увеличение на 10% */
             transition: all var(--transition-medium);
         }
         
@@ -905,7 +906,23 @@
                 cursor: default;
             }
             
-            /* --- SCALING FOR MOBILE REMOVED --- */
+            /* Уменьшаем размеры картинок и ссылок в мобильной версии */
+            .preview-video {
+                width: 33px; /* Уменьшение на 70% от 110px */
+                height: 33px;
+            }
+            
+            .instruction-text {
+                font-size: 7.2px; /* Уменьшение на 60% от 12px */
+            }
+            
+            .instruction-text a {
+                font-size: 7.2px;
+            }
+            
+            .preview-price {
+                font-size: 10px; /* Уменьшение на 50% от 20px */
+            }
             
             /* Скрываем иконку зума на мобильных */
             .control-icon[onclick="toggleZoom()"] {
@@ -1012,18 +1029,7 @@
                         <option value="images/nikulina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=nikulina">Анна Никулина</option>
                     </select>
                     
-                    <div class="radio-group">
-                        <div class="radio-option">
-                            <input type="radio" name="phoneType" value="service" checked>
-                            <label for="phoneType">Служебный</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" name="phoneType" value="personal">
-                            <label for="phoneType">Личный</label>
-                        </div>
-                    </div>
-                    
-                    <div id="personalPhoneContainer" class="hidden">
+                    <div id="personalPhoneContainer">
                         <label class="menu-label">Номер телефона:</label>
                         <input class="zvuk-input" type="text" id="personalPhone" placeholder="Введите номер телефона">
                     </div>
@@ -1255,7 +1261,7 @@
         // Массив для хранения слайдов
         const slides = [
             { type: 'general', banner: 'images/bkids.webp', logos: 'images/alllogo.webp' },
-            { type: 'pricing', format: '1', price: '1390', comment: '', banner: 'images/bkids.webp', manager: 'images/mankova.webp', phoneType: 'service', phone: '' },
+            { type: 'pricing', format: '1', price: '1390', comment: '', banner: 'images/bkids.webp', manager: 'images/mankova.webp', phone: '' },
             { type: 'instruction' }
         ];
         
@@ -1345,18 +1351,6 @@
             isZoomed = !isZoomed;
         }
         
-        document.querySelectorAll('input[name="phoneType"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const personalPhoneContainer = document.getElementById('personalPhoneContainer');
-                if (this.value === 'personal') {
-                    personalPhoneContainer.classList.remove('hidden');
-                } else {
-                    personalPhoneContainer.classList.add('hidden');
-                }
-                updateCurrentSlide();
-            });
-        });
-        
         document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 if (this.value === '1') {
@@ -1434,26 +1428,9 @@
                     const managerValue = selectedManagerOption.value;
                     const managerDataLink = selectedManagerOption.getAttribute('data-link');
 
-                    const phoneType = document.querySelector('input[name="phoneType"]:checked').value;
-                    const managerImgPath = phoneType === 'personal' ? 
-                        managerValue.replace('.webp', '-ph.webp') : 
-                        managerValue;
-                    
-                    // Добавляем прозрачный кликабельный прямоугольник
-                    const managerLinkContainer = document.createElement('a');
-                    managerLinkContainer.href = managerDataLink;
-                    managerLinkContainer.target = '_blank';
-                    managerLinkContainer.style.position = 'absolute';
-                    managerLinkContainer.style.bottom = '8%';
-                    managerLinkContainer.style.left = '3%';
-                    managerLinkContainer.style.width = '57%';
-                    managerLinkContainer.style.height = '25%';
-                    managerLinkContainer.style.opacity = '0';
-                    slideContainer.appendChild(managerLinkContainer);
-                    
                     const managerImg = document.createElement('img');
                     managerImg.className = 'preview-manager';
-                    managerImg.src = managerImgPath;
+                    managerImg.src = managerValue;
                     
                     const managerLink = document.createElement('a');
                     managerLink.href = managerDataLink;
@@ -1466,28 +1443,11 @@
                     managerLink.appendChild(managerImg);
                     slideContainer.appendChild(managerLink);
                     
-                    if (phoneType === 'personal' && document.getElementById('personalPhone').value) {
+                    if (document.getElementById('personalPhone').value) {
                         const phoneDiv = document.createElement('div');
                         phoneDiv.className = 'preview-phone';
                         phoneDiv.textContent = document.getElementById('personalPhone').value;
                         slideContainer.appendChild(phoneDiv);
-                        
-                        const qrDiv = document.createElement('div');
-                        qrDiv.className = 'preview-qr';
-                        const qrImg = document.createElement('img');
-                        qrImg.src = generateQRCode(document.getElementById('personalPhone').value);
-                        qrDiv.appendChild(qrImg);
-                        
-                        const qrLink = document.createElement('a');
-                        qrLink.href = `tel:${document.getElementById('personalPhone').value}`;
-                        qrLink.target = '_blank';
-                        qrLink.style.position = 'absolute';
-                        qrLink.style.bottom = '8%';
-                        qrLink.style.right = '39%';
-                        qrLink.style.width = 'var(--qr-size)';
-                        qrLink.style.height = 'var(--qr-size)';
-                        qrLink.appendChild(qrDiv);
-                        slideContainer.appendChild(qrLink);
                     }
                     
                     if (priceFormat === '1') {
@@ -1556,8 +1516,8 @@
                     // --- БЛОК СКОПИРОВАН И ИЗМЕНЕН ---
                     const coffeeImg = document.createElement('img');
                     coffeeImg.src = 'images/coffeoneprice.webp';
-                    coffeeImg.style.width = '100px';
-                    coffeeImg.style.height = '100px';
+                    coffeeImg.style.width = '110px';
+                    coffeeImg.style.height = '110px';
                     
                     const coffeeLink = document.createElement('a');
                     coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1565,8 +1525,8 @@
                     coffeeLink.style.position = 'absolute';
                     coffeeLink.style.bottom = '4%';
                     coffeeLink.style.left = '3%';
-                    coffeeLink.style.width = '100px';
-                    coffeeLink.style.height = '100px';
+                    coffeeLink.style.width = '110px';
+                    coffeeLink.style.height = '110px';
                     coffeeLink.appendChild(coffeeImg);
                     slideContainer.appendChild(coffeeLink);
                     
@@ -1596,8 +1556,8 @@
                     // --- БЛОК ИЗМЕНЕН ---
                     const coffeImg = document.createElement('img');
                     coffeImg.src = 'images/coffeoneprice.webp';
-                    coffeImg.style.width = '100px';
-                    coffeImg.style.height = '100px';
+                    coffeImg.style.width = '110px';
+                    coffeImg.style.height = '110px';
                     
                     const coffeLink = document.createElement('a');
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
@@ -1605,24 +1565,24 @@
                     coffeLink.style.position = 'absolute';
                     coffeLink.style.bottom = '4%';
                     coffeLink.style.left = '3%'; // Позиция слева
-                    coffeLink.style.width = '100px';
-                    coffeLink.style.height = '100px';
+                    coffeLink.style.width = '110px';
+                    coffeLink.style.height = '110px';
                     coffeLink.appendChild(coffeImg);
                     slideContainer.appendChild(coffeLink);
                     
                     const letualImg = document.createElement('img');
                     letualImg.src = 'images/letual.webp';
-                    letualImg.style.width = '100px';
-                    letualImg.style.height = '100px';
+                    letualImg.style.width = '110px';
+                    letualImg.style.height = '110px';
                     
                     const letualLink = document.createElement('a');
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
                     letualLink.target = '_blank';
                     letualLink.style.position = 'absolute';
                     letualLink.style.bottom = '4%';
-                    letualLink.style.left = 'calc(3% + 110px)'; // Позиция рядом с первой карточкой
-                    letualLink.style.width = '100px';
-                    letualLink.style.height = '100px';
+                    letualLink.style.left = 'calc(3% + 120px)'; // Позиция рядом с первой карточкой
+                    letualLink.style.width = '110px';
+                    letualLink.style.height = '110px';
                     letualLink.appendChild(letualImg);
                     slideContainer.appendChild(letualLink);
                     break;
@@ -2023,6 +1983,23 @@
                 slideContent.style.height = '1080px';
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
+                
+                // Увеличиваем картинки и ссылки для PDF
+                if (slides[i].type === 'app' || slides[i].type === 'creative') {
+                    const videos = slideContent.querySelectorAll('.preview-video');
+                    videos.forEach(video => {
+                        video.style.width = '220px'; // Увеличение на 100% от 110px
+                        video.style.height = '220px';
+                    });
+                }
+                
+                // Увеличиваем текст инструкции для PDF
+                if (slides[i].type === 'instruction') {
+                    const instructionText = slideContent.querySelector('.instruction-text');
+                    if (instructionText) {
+                        instructionText.style.fontSize = '22.8px'; // Увеличение на 90% от 12px
+                    }
+                }
                 
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
