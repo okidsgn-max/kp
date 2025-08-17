@@ -441,7 +441,7 @@
         
         .preview-comment {
             position: absolute;
-            top: 60%;
+            bottom: 42%;
             left: 3%;
             color: #D9D9D9;
             width:100%;
@@ -489,7 +489,7 @@
             left: 32%;
             color: white;
             font-weight: 500;
-            font-size: 9px;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -1013,7 +1013,7 @@
             
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'pricing')">
-                    <span class="menu-section-header">Менеждер+стоимость</span>
+                    <span class="menu-section-header">Менеджер+стоимость</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
@@ -1591,7 +1591,7 @@
                     letualLink.target = '_blank';
                     letualLink.style.position = 'absolute';
                     letualLink.style.bottom = '4%';
-                    letualLink.style.left = 'calc(4% + 100px)'; // Позиция рядом с первой карточкой
+                    letualLink.style.left = 'calc(8% + 100px)'; // Позиция рядом с первой карточкой
                     letualLink.style.width = '130px'; // Увеличение на 30%
                     letualLink.style.height = '130px'; // Увеличение на 30%
                     letualLink.appendChild(letualImg);
@@ -2006,8 +2006,8 @@
                     const links = slideContent.querySelectorAll('a');
                     links.forEach(link => {
                         if (link.querySelector('img[src*="coffeoneprice"], img[src*="letual"]')) {
-                            link.style.width = '273px';
-                            link.style.height = '273px';
+                            link.style.width = '100px';
+                            link.style.height = '100px';
                         }
                     });
                 }
