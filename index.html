@@ -438,30 +438,6 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-
-        .preview-price-premium-1 {
-            position: absolute;
-            top: 58%;
-            left: 3%;
-            color: white;
-            font-weight: bold;
-            width: 50%;
-            font-size: 20px;
-            font-family: 'Inter', sans-serif;
-            transition: all var(--transition-medium);
-        }
-
-        .preview-price-premium-2 {
-            position: absolute;
-            top: 70%;
-            left: 3%;
-            color: white;
-            font-weight: bold;
-            width: 50%;
-            font-size: 20px;
-            font-family: 'Inter', sans-serif;
-            transition: all var(--transition-medium);
-        }
         
         .preview-comment {
             position: absolute;
@@ -943,7 +919,7 @@
             }
             
             /* Уменьшение стоимости в мобильной версии */
-            .preview-price, .preview-price-premium-1, .preview-price-premium-2 {
+            .preview-price {
                 font-size: 10px; /* Уменьшение на 50% (20px * 0.5) */
             }
             
@@ -1016,10 +992,10 @@
                         <option value="images/sbretail.webp">Статистика магазин</option>
                         <option value="images/sbmall.webp">Статистика одежда</option>
                         <option value="images/sbsushi.webp">Статистика суши</option>
-                        <option value="images/beauty.webp">Статистика салон красоты</option>
-                        <option value="images/luxrest.webp">Статистика ресторан</option>
-                        <option value="images/nedviga.webp">Статистика недвижимость</option>
-                        <option value="images/tcbanner.webp">Статистика торговый центр</option>
+                        <option value="images/beauty.webp">статистика салон красоты</option>
+                        <option value="images/luxrest.webp">статистика ресторан</option>
+                        <option value="images/nedviga.webp">статистика недвижимость</option>
+                        <option value="images/tcbanner.webp">статистика торговый центр</option>
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
@@ -1113,10 +1089,10 @@
                         <option value="images/sbretail.webp">Статистика магазин</option>
                         <option value="images/sbmall.webp">Статистика одежда</option>
                         <option value="images/sbsushi.webp">Статистика суши</option>
-                        <option value="images/beauty.webp">Статистика салон красоты</option>
-                        <option value="images/luxrest.webp">Статистика ресторан</option>
-                        <option value="images/nedviga.webp">Статистика недвижимость</option>
-                        <option value="images/tcbanner.webp">Статистика торговый центр</option>
+                        <option value="images/beauty.webp">статистика салон красоты</option>
+                        <option value="images/luxrest.webp">статистика ресторан</option>
+                        <option value="images/nedviga.webp">статистика недвижимость</option>
+                        <option value="images/tcbanner.webp">статистика торговый центр</option>
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
@@ -1143,10 +1119,10 @@
                         <option value="images/sbretail.webp">Статистика магазин</option>
                         <option value="images/sbmall.webp">Статистика одежда</option>
                         <option value="images/sbsushi.webp">Статистика суши</option>
-                        <option value="images/beauty.webp">Статистика салон красоты</option>
-                        <option value="images/luxrest.webp">Статистика ресторан</option>
-                        <option value="images/nedviga.webp">Статистика недвижимость</option>
-                        <option value="images/tcbanner.webp">Статистика торговый центр</option>
+                        <option value="images/beauty.webp">статистика салон красоты</option>
+                        <option value="images/luxrest.webp">статистика ресторан</option>
+                        <option value="images/nedviga.webp">статистика недвижимость</option>
+                        <option value="images/tcbanner.webp">статистика торговый центр</option>
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
@@ -1219,10 +1195,9 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Стоимость 1, ₽/мес:</label>
+                    <label class="menu-label">Стоимость (верхняя), ₽/мес:</label>
                     <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
-                    
-                    <label class="menu-label">Стоимость 2, ₽/мес:</label>
+                    <label class="menu-label">Стоимость (нижняя), ₽/мес:</label>
                     <input class="zvuk-input" type="number" id="premiumPrice2" value="2490">
                     
                     <label class="menu-label">Комментарий:</label>
@@ -1247,7 +1222,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'event')">
                     <span class="menu-section-header">Мероприятия</span>
@@ -1260,7 +1235,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'concept')">
                     <span class="menu-section-header">Концепции</span>
@@ -1273,7 +1248,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'videokp')">
                     <span class="menu-section-header">Видео КП</span>
@@ -1387,9 +1362,7 @@
             'images/atmvieo.webp': 'https://zvuk-b2b.com/video',
             'images/autumn.webp': 'https://zvuk-b2b.com',
             'images/nostalgia.webp': 'https://zvuk-b2b.com',
-            'images/rawe.webp': 'https://zvuk-b2b.com/rawe',
-            'images/event.webp': 'https://zvuk-b2b.com',
-            'images/concept.webp': 'https://zvuk-b2b.com'
+            'images/rawe.webp': 'https://zvuk-b2b.com/rawe'
         };
         
         let currentSlideIndex = 0;
@@ -1774,17 +1747,23 @@
                     slideContainer.appendChild(premiumLinkContainer);
                     
                     const premiumPriceDiv1 = document.createElement('div');
-                    premiumPriceDiv1.className = 'preview-price-premium-1';
+                    premiumPriceDiv1.className = 'preview-price';
+                    premiumPriceDiv1.style.top = '62%';
+                    premiumPriceDiv1.style.left = '3%';
                     premiumPriceDiv1.textContent = formatPrice(document.getElementById('premiumPrice1').value) + ' ₽/мес.';
                     slideContainer.appendChild(premiumPriceDiv1);
 
                     const premiumPriceDiv2 = document.createElement('div');
-                    premiumPriceDiv2.className = 'preview-price-premium-2';
+                    premiumPriceDiv2.className = 'preview-price';
+                    premiumPriceDiv2.style.top = '72%';
+                    premiumPriceDiv2.style.left = '3%';
                     premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ' ₽/мес.';
                     slideContainer.appendChild(premiumPriceDiv2);
                     
                     const premiumCommentDiv = document.createElement('div');
                     premiumCommentDiv.className = 'preview-comment';
+                    premiumCommentDiv.style.bottom = '18%';
+                    premiumCommentDiv.style.left = '3%';
                     premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
                     slideContainer.appendChild(premiumCommentDiv);
                     
@@ -1811,7 +1790,7 @@
                     bprofileLinkContainer.style.opacity = '0';
                     slideContainer.appendChild(bprofileLinkContainer);
                     break;
-                
+
                 case 'event':
                     bgImg.src = 'images/event.webp';
                     slideContainer.appendChild(bgImg);
@@ -2115,8 +2094,8 @@
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
-            tempContainer.style.width = '3840px'; // Render at 2x resolution
-            tempContainer.style.height = '2160px'; // Render at 2x resolution
+            tempContainer.style.width = '1920px';
+            tempContainer.style.height = '1080px';
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
@@ -2125,11 +2104,9 @@
                 showSlide(i + 1); 
                 
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                // Apply scaling to the content for 2x rendering
                 slideContent.style.width = '1920px';
                 slideContent.style.height = '1080px';
-                slideContent.style.transform = 'scale(2)';
-                slideContent.style.transformOrigin = 'top left';
+                slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 
                 // Увеличение текста инструкции в PDF
@@ -2143,12 +2120,12 @@
                 
                 // Увеличение стоимости в PDF
                 if (slides[i].type === 'pricing' || slides[i].type === 'premium' || slides[i].type === 'videokp') {
-                    const priceTexts = slideContent.querySelectorAll('.preview-price, .preview-price-premium-1, .preview-price-premium-2');
-                    priceTexts.forEach(priceText => {
-                        if(priceText) {
-                            priceText.style.fontSize = '30px'; // Увеличение на 50% (20px * 1.5)
-                        }
-                    });
+                    const priceTexts = slideContent.querySelectorAll('.preview-price');
+                    if (priceTexts) {
+                        priceTexts.forEach(priceText => {
+                           priceText.style.fontSize = '30px'; // Увеличение на 50% (20px * 1.5)
+                        });
+                    }
                 }
                 
                 tempContainer.innerHTML = '';
@@ -2169,11 +2146,11 @@
                 await new Promise(resolve => setTimeout(resolve, 250));
 
                 const canvas = await html2canvas(tempContainer, {
-                    scale: 1, // Use native resolution of the container
+                    scale: 1,
                     logging: false,
                     useCORS: true,
-                    width: 3840, // Canvas width at 2x
-                    height: 2160, // Canvas height at 2x
+                    width: 1920,
+                    height: 1080,
                     letterRendering: true
                 });
 
@@ -2183,7 +2160,6 @@
                     pdf.addPage([1920, 1080], 'landscape');
                 }
                 
-                // Add the 2x image to the 1x PDF page, jsPDF will downscale it
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
                 addLinksToPDF(pdf, slideContent, i);
             }
@@ -2205,15 +2181,13 @@
             const addLinkSafe = (element, url) => {
                 if (!element || !url) return;
 
-                // Since we scaled the content by 2x, we need to divide the coordinates by 2
-                const scaleFactor = 0.5; 
                 const rect = element.getBoundingClientRect();
                 const parentRect = slideContent.getBoundingClientRect();
                 
-                const x = (rect.left - parentRect.left) * scaleFactor;
-                const y = (rect.top - parentRect.top) * scaleFactor;
-                const width = rect.width * scaleFactor;
-                const height = rect.height * scaleFactor;
+                const x = rect.left - parentRect.left;
+                const y = rect.top - parentRect.top;
+                const width = rect.width;
+                const height = rect.height;
 
                 if (width > 0 && height > 0) {
                     try {
