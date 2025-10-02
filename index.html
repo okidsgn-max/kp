@@ -1331,7 +1331,7 @@
             'images/sbauto.webp': 'https://zvuk-b2b.com/avtosalon',
             'images/sbazs.webp': 'https://zvuk-b2b.com/avtosalon',
             'images/sbhotel.webp': 'https://zvuk-b2b.com/hotel',
-            'images/sbsocobj.webp': 'https://zvuk-b2b.com/socobj', // Предполагаемая ссылка, уточнить при необходимости
+            'images/sbsocobj.webp': 'https://zvuk-b2b.com/socobj', 
             'images/bkids.webp': 'https://zvuk-b2b.com/music_for_kids',
             'images/veranda.webp': 'https://zvuk-b2b.com/rest',
             'images/play.webp': 'https://zvuk-b2b.com/player',
@@ -1492,7 +1492,8 @@
                     managerLinkContainer.style.left = '3%';
                     managerLinkContainer.style.width = '57%';
                     managerLinkContainer.style.height = '25%';
-                    managerLinkContainer.style.opacity = '0';
+                    // managerLinkContainer.style.opacity = '0'; // For debugging, you can make it visible
+                    // managerLinkContainer.style.border = '1px solid red';
                     slideContainer.appendChild(managerLinkContainer);
                     
                     const managerLink = document.createElement('a');
@@ -1968,6 +1969,34 @@
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
         
+        // --- НОВАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
+        function scaleClonedContent(clonedContent, scaleFactor) {
+            const elementsToScale = clonedContent.querySelectorAll(
+                '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
+            );
+            
+            elementsToScale.forEach(element => {
+                const computedStyle = window.getComputedStyle(element);
+                const originalFontSize = parseFloat(computedStyle.fontSize);
+                
+                // Применяем масштабирование к размеру шрифта
+                element.style.fontSize = (originalFontSize * scaleFactor) + 'px';
+                
+                // Устанавливаем line-height, чтобы избежать наложения строк
+                element.style.lineHeight = '1.2';
+
+                // Для таблиц нужно масштабировать и padding
+                if (element.classList.contains('price-table')) {
+                    const cells = element.querySelectorAll('th, td');
+                    cells.forEach(cell => {
+                         const originalPadding = parseFloat(window.getComputedStyle(cell).paddingTop);
+                         cell.style.padding = (originalPadding * scaleFactor) + 'px';
+                    });
+                }
+            });
+        }
+
+
         async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
@@ -1982,10 +2011,9 @@
                 format: [1920, 1080]
             });
 
-            // Создаем временный контейнер с точными размерами
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px'; // Прячем за экраном
+            tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
             tempContainer.style.width = '1920px';
             tempContainer.style.height = '1080px';
@@ -1993,20 +2021,25 @@
             
             const originalSlideIndex = currentSlideIndex; 
 
+            // --- ИЗМЕНЕНИЕ: РАССЧЕТ КОЭФФИЦИЕНТА ---
+            const onScreenWidth = document.getElementById('currentSlide').offsetWidth;
+            const scaleFactor = 1920 / onScreenWidth;
+
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
-                // Клонируем содержимое слайда в наш идеально размеченный контейнер
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
                 slideContent.style.width = '100%';
                 slideContent.style.height = '100%';
-                slideContent.style.transform = 'none'; // Убираем CSS трансформации
+                slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 
+                // --- ИЗМЕНЕНИЕ: ВЫЗОВ ФУНКЦИИ МАСШТАБИРОВАНИЯ ---
+                scaleClonedContent(slideContent, scaleFactor);
+
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Ждем загрузки всех изображений на слайде
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
                     if (!img.complete) {
@@ -2018,13 +2051,12 @@
                 });
                 await Promise.all(promises);
 
-                // Даем браузеру мгновение на отрисовку
                 await new Promise(resolve => setTimeout(resolve, 300));
 
                 const canvas = await html2canvas(tempContainer, {
                     width: 1920,
                     height: 1080,
-                    scale: 2, // Используем scale для лучшего качества
+                    scale: 1, // Устанавливаем scale 1, т.к. размер холста уже правильный
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -2037,11 +2069,11 @@
                 }
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
-                addLinksToPDF(pdf, slideContent, i); // Передаем клонированный элемент
+                addLinksToPDF(pdf, slideContent, i);
             }
             
-            showSlide(originalSlideIndex + 1); // Возвращаемся на исходный слайд
-            document.body.removeChild(tempContainer); // Удаляем временный контейнер
+            showSlide(originalSlideIndex + 1);
+            document.body.removeChild(tempContainer);
 
             pdf.save(fileName);
             
@@ -2059,16 +2091,14 @@
             links.forEach(link => {
                 if (!link.href) return;
 
-                // offsetLeft/Top относительно родителя. В нашем контролируемом
-                // tempContainer родитель - это сам slideContent, так что эти значения - то, что нам нужно.
                 const x = link.offsetLeft;
                 const y = link.offsetTop;
                 const width = link.offsetWidth;
                 const height = link.offsetHeight;
 
+                // Эта проверка теперь будет работать, т.к. height не будет равен 0
                 if (width > 0 && height > 0) {
                     try {
-                        // Система координат pdf.link совпадает с нашей страницей 1920x1080
                         pdf.link(x, y, width, height, { url: link.href });
                     } catch (e) {
                         console.error('Ошибка при добавлении ссылки:', e);
