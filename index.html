@@ -388,7 +388,7 @@
         }
         
         .preview-page.zoomed {
-            transform: scale(1.4);
+            transform: scale(1.5);
             z-index: 100;
             position: fixed;
             top: 50%;
@@ -444,8 +444,8 @@
             left: 3%;
             color: #D9D9D9;
             width: 50%;
-            font-weight: 500;
-            font-size: 12px;
+            font-weight: 400;
+            font-size: 16px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -531,9 +531,9 @@
             position: absolute;
             bottom: 13%;
             left: 32%;
-            color: white;
-            font-weight: 500;
-            font-size: 12px;
+            color: #D9D9D9;
+            font-weight: 400;
+            font-size: 11px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -864,7 +864,7 @@
             top: 40%;
             left: 3%;
             color: white;
-            font-weight: 500;
+            font-weight: 300;
             width: 60%;
             line-height: 1.2;
             font-size: 14px;
@@ -1007,7 +1007,7 @@
                     
                     <div id="price1Container">
                         <label class="menu-label">Заголовок стоимости:</label>
-                        <input class="zvuk-input" type="text" id="price1Label" value="стоимость за 1 помещение, ₽ в т.ч. 20%">
+                        <input class="zvuk-input" type="text" id="price1Label" value="Стоимость за 1 помещение, ₽ в т.ч. 20%">
                         <label class="menu-label">Стоимость, ₽/мес:</label>
                         <input class="zvuk-input" type="number" id="price1Value" value="1390">
                     </div>
@@ -1982,10 +1982,10 @@
                 format: [1920, 1080]
             });
 
-            // Create a temporary container with the exact target dimensions
+            // Создаем временный контейнер с точными размерами
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px';
+            tempContainer.style.left = '-9999px'; // Прячем за экраном
             tempContainer.style.top = '0px';
             tempContainer.style.width = '1920px';
             tempContainer.style.height = '1080px';
@@ -1996,17 +1996,17 @@
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
-                // Clone the slide content into the perfectly sized container
+                // Клонируем содержимое слайда в наш идеально размеченный контейнер
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
                 slideContent.style.width = '100%';
                 slideContent.style.height = '100%';
-                slideContent.style.transform = 'none'; // Ensure no transforms are applied
+                slideContent.style.transform = 'none'; // Убираем CSS трансформации
                 slideContent.classList.remove('zoomed');
                 
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Wait for all images on the slide to load
+                // Ждем загрузки всех изображений на слайде
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
                     if (!img.complete) {
@@ -2018,13 +2018,13 @@
                 });
                 await Promise.all(promises);
 
-                // Give the browser a moment to render everything
+                // Даем браузеру мгновение на отрисовку
                 await new Promise(resolve => setTimeout(resolve, 300));
 
                 const canvas = await html2canvas(tempContainer, {
                     width: 1920,
                     height: 1080,
-                    scale: 2, // Use scale for better quality, html2canvas will handle it
+                    scale: 2, // Используем scale для лучшего качества
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -2037,11 +2037,11 @@
                 }
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
-                addLinksToPDF(pdf, slideContent, i); // Pass the cloned element
+                addLinksToPDF(pdf, slideContent, i); // Передаем клонированный элемент
             }
             
-            showSlide(originalSlideIndex + 1);
-            document.body.removeChild(tempContainer);
+            showSlide(originalSlideIndex + 1); // Возвращаемся на исходный слайд
+            document.body.removeChild(tempContainer); // Удаляем временный контейнер
 
             pdf.save(fileName);
             
@@ -2059,8 +2059,8 @@
             links.forEach(link => {
                 if (!link.href) return;
 
-                // offsetLeft/Top are relative to the offsetParent. In our controlled
-                // tempContainer, slideContent is the parent, so these values are what we need.
+                // offsetLeft/Top относительно родителя. В нашем контролируемом
+                // tempContainer родитель - это сам slideContent, так что эти значения - то, что нам нужно.
                 const x = link.offsetLeft;
                 const y = link.offsetTop;
                 const width = link.offsetWidth;
@@ -2068,10 +2068,10 @@
 
                 if (width > 0 && height > 0) {
                     try {
-                        // pdf.link's coordinate system matches our 1920x1080 page
+                        // Система координат pdf.link совпадает с нашей страницей 1920x1080
                         pdf.link(x, y, width, height, { url: link.href });
                     } catch (e) {
-                        console.error('Error adding link:', e);
+                        console.error('Ошибка при добавлении ссылки:', e);
                     }
                 }
             });
@@ -2120,4 +2120,3 @@
     </script>
 </body>
 </html>
-
