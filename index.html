@@ -24,7 +24,7 @@
             --control-icon-size: 30px;
             --scrollbar-thumb: #d1d1d1;
             --scrollbar-track: #f6f6f9;
-            --border-radius: 8px; /* --- ИЗМЕНЕНО --- */
+            --border-radius: 8px;
             --transition-fast: 0.15s;
             --transition-medium: 0.3s;
             --transition-slow: 0.5s;
@@ -38,12 +38,12 @@
         
         ::-webkit-scrollbar-track {
             background: var(--scrollbar-track);
-            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
+            border-radius: 8px;
         }
         
         ::-webkit-scrollbar-thumb {
             background: var(--scrollbar-thumb);
-            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
+            border-radius: 8px;
             transition: background var(--transition-medium);
         }
         
@@ -182,7 +182,6 @@
             transition: border-color var(--transition-fast);
         }
         
-        /* --- ДОБАВЛЕНО --- */
         .company-name-input::placeholder {
             color: #E0E0E0;
         }
@@ -308,7 +307,7 @@
             justify-content: center;
             cursor: pointer;
             background: transparent;
-            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
+            border-radius: var(--border-radius);
             transition: all var(--transition-medium);
         }
         
@@ -385,7 +384,7 @@
             cursor: pointer;
             aspect-ratio: 16 / 9;
             margin: auto;
-            background-color: #16151A; /* Добавлен фон по умолчанию */
+            background-color: #16151A;
         }
         
         .preview-page.zoomed {
@@ -403,7 +402,7 @@
         .preview-bg {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Изменено с fill на cover */
+            object-fit: cover;
             transition: opacity var(--transition-medium);
         }
         
@@ -438,6 +437,18 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
+        
+        .preview-price-label {
+            position: absolute;
+            top: 60%;
+            left: 3%;
+            color: #D9D9D9;
+            width: 50%;
+            font-weight: 500;
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition-medium);
+        }
 
         .preview-price-premium-1 {
             position: absolute;
@@ -468,7 +479,7 @@
             bottom: 4%;
             left: 3%;
             color: #D9D9D9;
-            width:100%;
+            width:60%;
             font-weight: 500;
             font-size: 12px;
             font-family: 'Inter', sans-serif;
@@ -498,6 +509,15 @@
             background-color: rgba(0,0,0,0.3);
         }
         
+        .price-table .editable-header {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+
         .preview-manager {
             position: absolute;
             bottom: 4%;
@@ -525,7 +545,7 @@
             width: var(--qr-size);
             height: var(--qr-size);
             background-color: white;
-            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
+            border-radius: var(--border-radius);
             padding:7px;
             display: flex;
             align-items: center;
@@ -557,8 +577,8 @@
             position: absolute;
             bottom: 0%;
             left: 35%;
-            width: 130px; /* Увеличение на 30% (было 100px) */
-            height: 130px; /* Увеличение на 30% (было 100px) */
+            width: 130px;
+            height: 130px;
             transition: all var(--transition-medium);
         }
         
@@ -612,7 +632,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px; /* --- ИЗМЕНЕНО --- */
+            border-radius: 8px;
         }
         
         .menu-header:hover .toggle-button {
@@ -672,6 +692,7 @@
             margin-bottom: 16px;
             display: flex;
             gap: 16px;
+            flex-wrap: wrap;
         }
         
         .radio-option {
@@ -680,7 +701,6 @@
             cursor: pointer;
         }
         
-        /* Унифицированные стили для всех радио-кнопок */
         .radio-option input[type="radio"] {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -815,9 +835,7 @@
         }
         
         .hidden {
-            display: none;
-            opacity: 0;
-            transition: opacity var(--transition-medium);
+            display: none !important;
         }
         
         .phone-type {
@@ -866,126 +884,6 @@
             text-decoration: underline;
             transform: translateX(2px);
         }
-            
-        /* ---- SCALING STYLES REMOVED ---- */
-      
-        /* ---- МОБИЛЬНАЯ ВЕРСИЯ ---- */
-        @media (max-width: 800px) {
-            :root {
-                --sidebar-width: 100%;
-                --preview-width: 100%;
-                --qr-size: 40px;
-                --control-icon-size: 24px;
-            }
-            
-            body {
-                flex-direction: column;
-                height: auto;
-                overflow: auto;
-            }
-
-            .menu-container {
-                width: 100%;
-                height: auto;
-                max-height: 50vh;
-                overflow-y: auto;
-                box-shadow: none;
-                padding: 16px;
-                box-sizing: border-box;
-                order: 2;
-                flex-grow: 1;
-            }
-            
-            .preview-container {
-                width: 100%;
-                height: auto;
-                padding: 16px;
-                box-sizing: border-box;
-                order: 1;
-                flex-shrink: 0;
-                position: sticky;
-                top: 0;
-                background: white;
-                z-index: 10;
-            }
-            
-            .action-buttons {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: white;
-                padding: 16px;
-                z-index: 100;
-                border-top: 1px solid var(--border);
-                box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-                order: 3;
-            }
-
-            .preview-wrapper {
-                height: auto;
-            }
-
-            .preview-page {
-                cursor: default;
-            }
-            
-            /* Уменьшение картинок и ссылок в мобильной версии */
-            .preview-video {
-                width: 33px; /* Уменьшение на 70% (130px * 0.3) */
-                height: 33px; /* Уменьшение на 70% (130px * 0.3) */
-            }
-            
-            /* Уменьшение текста инструкции в мобильной версии */
-            .instruction-text {
-                font-size: 7.2px; /* Уменьшение на 60% (12px * 0.4) */
-                width: 50%;
-            }
-            
-            /* Уменьшение стоимости в мобильной версии */
-            .preview-price, .preview-price-premium-1, .preview-price-premium-2 {
-                font-size: 10px; /* Уменьшение на 50% (20px * 0.5) */
-            }
-            
-            /* Скрываем иконку зума на мобильных */
-            .control-icon[onclick="toggleZoom()"] {
-                display: none;
-            }
-            
-            .menu-logo {
-                margin-bottom: 20px;
-            }
-            
-            /* Адаптация кнопок на мобильных */
-            .slide-buttons .zvuk-button {
-                font-size: 12px;
-                padding: 10px 8px;
-            }
-            
-            /* Улучшенные анимации для мобильных */
-            .menu-content.active {
-                animation: slideIn 0.3s ease forwards;
-            }
-            
-            /* Улучшенные отступы */
-            .menu-section {
-                margin-bottom: 12px;
-            }
-            
-            .menu-header {
-                padding: 14px 12px;
-            }
-            
-            .zvuk-select, .zvuk-input {
-                padding: 12px;
-                margin-bottom: 12px;
-            }
-
-            .company-name-input {
-                font-size: 18px;
-                margin-bottom: 12px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -1004,62 +902,62 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
+                    <label class="menu-label">Логотипы клиентов:</label>
+                    <select class="zvuk-select" id="logos">
+                        <option value="images/mainlogo.webp">Главные клиенты</option>
+                        <option value="images/coffeelogo.webp" data-banner="images/sbcafe.webp">Кофейни</option>
+                        <option value="images/fastfoodlogo.webp" data-banner="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/pekarnilogo.webp" data-banner="images/sbcafe.webp">Пекарни</option>
+                        <option value="images/cafe&restaurantlogo.webp" data-banner="images/sbcafe.webp">Кафе</option>
+                        <option value="images/grillplovlogo.webp" data-banner="images/sbfastfood.webp">Бургеры и грильбар</option>
+                        <option value="images/luxrestlogo.webp" data-banner="images/sbluxrest.webp">Рестораны премиум</option>
+                        <option value="images/restsetilogo.webp" data-banner="images/sbluxrest.webp">Ресторанные сети</option>
+                        <option value="images/sushilogo.webp" data-banner="images/sbsushi.webp">Суши</option>
+                        <option value="images/pizzalogo.webp" data-banner="images/sbpizza.webp">Пиццерии</option>
+                        <option value="images/clotheslogo.webp" data-banner="images/sbmall.webp">Одежда</option>
+                        <option value="images/barberlogo.webp" data-banner="images/sbbarber.webp">Барбершопы</option>
+                        <option value="images/beautylogo.webp" data-banner="images/sbbeauty.webp">Салоны красоты</option>
+                        <option value="images/Retaillogo.webp" data-banner="images/sbretail.webp">Ритейл сети</option> 
+                        <option value="images/hotellogo.webp" data-banner="images/sbhotel.webp">Отели</option>
+                        <option value="images/azslogo.webp" data-banner="images/sbazs.webp">АЗС</option>
+                        <option value="images/fitnesslogo.webp" data-banner="images/sbfitnes.webp">Фитнес</option>
+                        <option value="images/tclogo.webp" data-banner="images/sbtc.webp">Торговые центры</option>
+                        <option value="images/kidslogo.webp" data-banner="images/sbkids.webp">Развлекательные центры</option>
+                        <option value="images/socobjlogo.webp" data-banner="images/sbsocobj.webp">Общественные пространства</option>
+                        <option value="images/nlogo.webp" data-banner="images/sbned.webp">Недвижимость</option>
+                        <option value="images/autologo.webp" data-banner="images/sbauto.webp">Автосалоны</option>
+                    </select>
+
                     <label class="menu-label">Баннер:</label>
                     <select class="zvuk-select" id="banner">                                                              
-                        <option value="images/sbcafe.webp">Статистика кафе</option>
-                        <option value="images/sbcafe.webp">Статистика кофейня</option>
-                        <option value="images/sbcafe.webp">Статистика пекарня</option>
-                        <option value="images/sbfastfood.webp">Статистика фастфуд</option>
-                        <option value="images/sbfastfood.webp">Статистика грильбар</option>                        
-                        <option value="images/sbpizza.webp">Статистика пицца</option>
-                        <option value="images/sbsushi.webp">Статистика суши</option>
-                        <option value="images/sbluxrest.webp">Статистика ресторан</option>
-                        <option value="images/sbluxrest.webp">Статистика дорогой ресторан</option>
-                        <option value="images/sbretail.webp">Статистика магазин</option>
-                        <option value="images/sbmall.webp">Статистика одежда</option>
-                        <option value="images/sbtc.webp">Статистика торговый центр</option>
-                        <option value="images/sbkids.webp">Статистика детский центр</option>
-                        <option value="images/sbfitnes.webp">Статистика фитнес</option> 
-                        <option value="images/sbbeauty.webp">Статистика салон красоты</option>
-                        <option value="images/sbbarber.webp">Статистика барбершоп</option>
-                        <option value="images/sbspa.webp">Статистика спа</option>
-                        <option value="images/sbned.webp">Статистика недвижимость</option>
-                        <option value="images/sbauto.webp">Статистика автодилеры</option>
-                        <option value="images/sbazs.webp">Статистика АЗС</option>
-                        <option value="images/sbhotel.webp">Статистика отели</option>
-                        <option value="images/sbsocobj.webp">Статистика общ. пространства</option>
+                        <option value="images/sbcafe.webp">Кафе</option>
+                        <option value="images/sbcafe.webp">Кофейня</option>
+                        <option value="images/sbcafe.webp">Пекарня</option>
+                        <option value="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/sbfastfood.webp">Грильбар</option>                        
+                        <option value="images/sbpizza.webp">Пицца</option>
+                        <option value="images/sbsushi.webp">Суши</option>
+                        <option value="images/sbluxrest.webp">Ресторан</option>
+                        <option value="images/sbluxrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbretail.webp">Магазин</option>
+                        <option value="images/sbmall.webp">Одежда</option>
+                        <option value="images/sbtc.webp">Торговый центр</option>
+                        <option value="images/sbkids.webp">Детский центр</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
+                        <option value="images/sbbeauty.webp">Салон красоты</option>
+                        <option value="images/sbbarber.webp">Барбершоп</option>
+                        <option value="images/sbspa.webp">Спа</option>
+                        <option value="images/sbned.webp">Недвижимость</option>
+                        <option value="images/sbauto.webp">Автодилеры</option>
+                        <option value="images/sbazs.webp">АЗС</option>
+                        <option value="images/sbhotel.webp">Отели</option>
+                        <option value="images/sbsocobj.webp">Общ. пространства</option>
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>  
-                    </select>
-                    
-                    <label class="menu-label">Логотипы клиентов:</label>
-                    <select class="zvuk-select" id="logos">
-<option value="images/mainlogo.webp">Главные клиенты</option>
-<option value="images/coffeelogo.webp">Кофейни</option>
-<option value="images/fastfoodlogo.webp">Фастфуд</option>
-<option value="images/pekarnilogo.webp">Пекарни</option>
-<option value="images/cafe&restaurantlogo.webp">Кафе</option>
-<option value="images/grillplovlogo.webp">Бургеры и грильбар</option>
-<option value="images/luxrestlogo.webp">Рестораны премиум</option>
-<option value="images/restsetilogo.webp">Ресторанные сети</option>
-<option value="images/sushilogo.webp">Суши</option>
-<option value="images/pizzalogo.webp">Пиццерии</option>
- <option value="images/clotheslogo.webp">Одежда</option>
- <option value="images/barberlogo.webp">Барбершопы</option>
- <option value="images/beautylogo.webp">Салоны красоты</option>
-<option value="images/Retaillogo.webp">Ритейл сети</option> 
-<option value="images/hotellogo.webp">Отели</option>
-<option value="images/azslogo.webp">АЗС</option>
-<option value="images/fitnesslogo.webp">Фитнес</option>
-<option value="images/tclogo.webp">Торговые центры</option>
-<option value="images/kidslogo.webp">Развлекательные центры</option>
-<option value="images/socobjlogo.webp">Общественные пространства</option>
-<option value="images/nlogo.webp">Недвижимость</option>
-<option value="images/autologo.webp">Автосалоны</option>
                     </select>
                 </div>
             </div>
@@ -1072,13 +970,19 @@
                 <div class="menu-content">
                     <label class="menu-label">Сотрудник:</label>
                     <select class="zvuk-select" id="manager">
-                        <option value="images/mankova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=mankova">Манькова Яна</option>
                         <option value="images/ivanova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=ivanova">Мария Иванова</option>
-                        <option value="images/temur.webp" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov">Темур Сидиков</option>
-                        <option value="images/german.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pilipcev">Герман Пилипцев</option>
-                        <option value="images/hlebnikova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=hlebnikova">Дарья Хлебникова</option>
-                        <option value="images/zemciova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=zemtsova">Екатерина Земцова</option>
+                        <option value="images/mankova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=mankova">Яна Манькова</option>
+                        <option value="images/sidikov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov">Темур Сидиков</option>
+                        <option value="images/piliptsov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pilipcev">Герман Пилипцев</option>
+                        <option value="images/kropachev.webp" data-link="https://app.zvuk-b2b.com/register?promocode=kropachev">Виктор Кропачев</option>
+                        <option value="images/likashina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=likashina">Татьяна Лукашина</option>
                         <option value="images/nikulina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=nikulina">Анна Никулина</option>
+                        <option value="images/khlebnikova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=khlebnikova">Дарья Хлебникова</option>
+                        <option value="images/kim.webp" data-link="https://app.zvuk-b2b.com/register?promocode=kim">Оксана Ким</option>
+                        <option value="images/meleshko.webp" data-link="https://app.zvuk-b2b.com/register?promocode=meleshko">Роман Мелешко</option>
+                        <option value="images/pershina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pershina">Дарья Першина</option>
+                        <option value="images/umnov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=umnov">Иван Умнов</option>
+                        <option value="images/farmonov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=farmonov">Тимур Фармонов</option>
                     </select>
                     
                     <div id="personalPhoneContainer">
@@ -1095,9 +999,15 @@
                             <input type="radio" id="price3" name="priceColumns" value="3">
                             <label for="price3">3 точки</label>
                         </div>
+                        <div class="radio-option">
+                            <input type="radio" id="price10plus" name="priceColumns" value="10plus">
+                            <label for="price10plus">10+</label>
+                        </div>
                     </div>
                     
                     <div id="price1Container">
+                        <label class="menu-label">Заголовок стоимости:</label>
+                        <input class="zvuk-input" type="text" id="price1Label" value="стоимость за 1 помещение, ₽ в т.ч. 20%">
                         <label class="menu-label">Стоимость, ₽/мес:</label>
                         <input class="zvuk-input" type="number" id="price1Value" value="1390">
                     </div>
@@ -1118,35 +1028,57 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="price10plusContainer" class="hidden">
+                        <div class="price-columns">
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price10plusHeader1" value="10-19">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price10plusValue1" value="1190">
+                            </div>
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price10plusHeader2" value="20-49">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price10plusValue2" value="990">
+                            </div>
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price10plusHeader3" value="50+">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price10plusValue3" value="890">
+                            </div>
+                        </div>
+                    </div>
                     
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="comment" placeholder="Введите комментарий">
                     
                     <label class="menu-label">Баннер:</label>
                     <select class="zvuk-select" id="priceBanner">
-                                       
-                        <option value="images/sbcafe.webp">Статистика кафе</option>
-                        <option value="images/sbcafe.webp">Статистика кофейня</option>
-                        <option value="images/sbcafe.webp">Статистика пекарня</option>
-                        <option value="images/sbfastfood.webp">Статистика фастфуд</option>
-                        <option value="images/sbfastfood.webp">Статистика грильбар</option>                        
-                        <option value="images/sbpizza.webp">Статистика пицца</option>
-                        <option value="images/sbsushi.webp">Статистика суши</option>
-                        <option value="images/sbluxrest.webp">Статистика ресторан</option>
-                        <option value="images/sbluxrest.webp">Статистика дорогой ресторан</option>
-                        <option value="images/sbretail.webp">Статистика магазин</option>
-                        <option value="images/sbmall.webp">Статистика одежда</option>
-                        <option value="images/sbtc.webp">Статистика торговый центр</option>
-                        <option value="images/sbkids.webp">Статистика детский центр</option>
-                        <option value="images/sbfitnes.webp">Статистика фитнес</option> 
-                        <option value="images/sbbeauty.webp">Статистика салон красоты</option>
-                        <option value="images/sbbarber.webp">Статистика барбершоп</option>
-                        <option value="images/sbspa.webp">Статистика спа</option>
-                        <option value="images/sbned.webp">Статистика недвижимость</option>
-                        <option value="images/sbauto.webp">Статистика автодилеры</option>
-                        <option value="images/sbazs.webp">Статистика АЗС</option>
-                        <option value="images/sbhotel.webp">Статистика отели</option>
-                        <option value="images/sbsocobj.webp">Статистика общ. пространства</option>
+                        <option value="images/sbcafe.webp">Кафе</option>
+                        <option value="images/sbcafe.webp">Кофейня</option>
+                        <option value="images/sbcafe.webp">Пекарня</option>
+                        <option value="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/sbfastfood.webp">Грильбар</option>                        
+                        <option value="images/sbpizza.webp">Пицца</option>
+                        <option value="images/sbsushi.webp">Суши</option>
+                        <option value="images/sbluxrest.webp">Ресторан</option>
+                        <option value="images/sbluxrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbretail.webp">Магазин</option>
+                        <option value="images/sbmall.webp">Одежда</option>
+                        <option value="images/sbtc.webp">Торговый центр</option>
+                        <option value="images/sbkids.webp">Детский центр</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
+                        <option value="images/sbbeauty.webp">Салон красоты</option>
+                        <option value="images/sbbarber.webp">Барбершоп</option>
+                        <option value="images/sbspa.webp">Спа</option>
+                        <option value="images/sbned.webp">Недвижимость</option>
+                        <option value="images/sbauto.webp">Автодилеры</option>
+                        <option value="images/sbazs.webp">АЗС</option>
+                        <option value="images/sbhotel.webp">Отели</option>
+                        <option value="images/sbsocobj.webp">Общ. пространства</option>
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
@@ -1165,28 +1097,28 @@
                 <div class="menu-content">
                     <label class="menu-label">Баннер:</label>
                     <select class="zvuk-select" id="instructionBanner">
-                        <option value="images/sbcafe.webp">Статистика кафе</option>
-                        <option value="images/sbcafe.webp">Статистика кофейня</option>
-                        <option value="images/sbcafe.webp">Статистика пекарня</option>
-                        <option value="images/sbfastfood.webp">Статистика фастфуд</option>
-                        <option value="images/sbfastfood.webp">Статистика грильбар</option>                        
-                        <option value="images/sbpizza.webp">Статистика пицца</option>
-                        <option value="images/sbsushi.webp">Статистика суши</option>
-                        <option value="images/sbluxrest.webp">Статистика ресторан</option>
-                        <option value="images/sbluxrest.webp">Статистика дорогой ресторан</option>
-                        <option value="images/sbretail.webp">Статистика магазин</option>
-                        <option value="images/sbmall.webp">Статистика одежда</option>
-                        <option value="images/sbtc.webp">Статистика торговый центр</option>
-                        <option value="images/sbkids.webp">Статистика детский центр</option>
-                        <option value="images/sbfitnes.webp">Статистика фитнес</option> 
-                        <option value="images/sbbeauty.webp">Статистика салон красоты</option>
-                        <option value="images/sbbarber.webp">Статистика барбершоп</option>
-                        <option value="images/sbspa.webp">Статистика спа</option>
-                        <option value="images/sbned.webp">Статистика недвижимость</option>
-                        <option value="images/sbauto.webp">Статистика автодилеры</option>
-                        <option value="images/sbazs.webp">Статистика АЗС</option>
-                        <option value="images/sbhotel.webp">Статистика отели</option>
-                        <option value="images/sbsocobj.webp">Статистика общ. пространства</option>
+                        <option value="images/sbcafe.webp">Кафе</option>
+                        <option value="images/sbcafe.webp">Кофейня</option>
+                        <option value="images/sbcafe.webp">Пекарня</option>
+                        <option value="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/sbfastfood.webp">Грильбар</option>                        
+                        <option value="images/sbpizza.webp">Пицца</option>
+                        <option value="images/sbsushi.webp">Суши</option>
+                        <option value="images/sbluxrest.webp">Ресторан</option>
+                        <option value="images/sbluxrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbretail.webp">Магазин</option>
+                        <option value="images/sbmall.webp">Одежда</option>
+                        <option value="images/sbtc.webp">Торговый центр</option>
+                        <option value="images/sbkids.webp">Детский центр</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
+                        <option value="images/sbbeauty.webp">Салон красоты</option>
+                        <option value="images/sbbarber.webp">Барбершоп</option>
+                        <option value="images/sbspa.webp">Спа</option>
+                        <option value="images/sbned.webp">Недвижимость</option>
+                        <option value="images/sbauto.webp">Автодилеры</option>
+                        <option value="images/sbazs.webp">АЗС</option>
+                        <option value="images/sbhotel.webp">Отели</option>
+                        <option value="images/sbsocobj.webp">Общ. пространства</option>
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
@@ -1335,18 +1267,6 @@
                 </div>
             </div>
             
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'videocontent')">
-                    <span class="menu-section-header">Видеоволна</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('videocontent')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('videocontent')">Удалить</button>
-                    </div>
-                </div>
-            </div>
         </div>
         
         <div class="action-buttons">
@@ -1394,22 +1314,30 @@
         
         // Ссылки для баннеров
         const bannerLinks = {
+            'images/sbcafe.webp': 'https://zvuk-b2b.com/cafe',
+            'images/sbfastfood.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbpizza.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbsushi.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbluxrest.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbretail.webp': 'https://zvuk-b2b.com/shop',
+            'images/sbmall.webp': 'https://zvuk-b2b.com/odezhda',
+            'images/sbtc.webp': 'https://zvuk-b2b.com/torgovyj-centr',
+            'images/sbkids.webp': 'https://zvuk-b2b.com/prazdnik',
+            'images/sbfitnes.webp': 'https://zvuk-b2b.com/fitness',
+            'images/sbbeauty.webp': 'https://zvuk-b2b.com/salon-krasoty',
+            'images/sbbarber.webp': 'https://zvuk-b2b.com/barbershop',
+            'images/sbspa.webp': 'https://zvuk-b2b.com/spa-salon',
+            'images/sbned.webp': 'https://zvuk-b2b.com/loft?ab_redir=1758811215599',
+            'images/sbauto.webp': 'https://zvuk-b2b.com/avtosalon',
+            'images/sbazs.webp': 'https://zvuk-b2b.com/avtosalon',
+            'images/sbhotel.webp': 'https://zvuk-b2b.com/hotel',
+            'images/sbsocobj.webp': 'https://zvuk-b2b.com/socobj', // Предполагаемая ссылка, уточнить при необходимости
             'images/bkids.webp': 'https://zvuk-b2b.com/music_for_kids',
-            'images/veranda.webp': 'https://zvuk-b2b.com/rest',           
-            'images/sbbarbershop.webp': 'https://zvuk-b2b.com',
-            'images/sbcafe.webp': 'https://zvuk-b2b.com',
-            'images/sbfitnes.webp': 'https://zvuk-b2b.com',
-            'images/sbpizza.webp': 'https://zvuk-b2b.com',
-            'images/sbspa.webp': 'https://zvuk-b2b.com',
-            'images/sbretail.webp': 'https://zvuk-b2b.com',
-            'images/sbmall.webp': 'https://zvuk-b2b.com',
-            'images/sbsushi.webp': 'https://zvuk-b2b.com',
-            'images/beauty.webp': 'https://zvuk-b2b.com',
-            'images/luxrest.webp': 'https://zvuk-b2b.com',
-            'images/nedviga.webp': 'https://zvuk-b2b.com',
-            'images/tcbanner.webp': 'https://zvuk-b2b.com',
+            'images/veranda.webp': 'https://zvuk-b2b.com/rest',
             'images/play.webp': 'https://zvuk-b2b.com/player',
             'images/action.webp': 'https://zvuk-b2b.com',
+            'images/autumn.webp': 'https://zvuk-b2b.com',
+            'images/nostalgia.webp': 'https://zvuk-b2b.com',
             'images/creative-audio.webp': 'https://zvuk-b2b.com/blog/1price',
             'images/georgia-audio.webp': 'https://zvuk-b2b.com/gastrobar#menu1',
             'images/barber-audio.webp': 'https://zvuk-b2b.com/barbershop',
@@ -1418,17 +1346,6 @@
             'images/premium.webp': 'https://zvuk-b2b.com/premium/',
             'images/bprofile.webp': 'https://zvuk-b2b.com/bprofile',
             'images/videokp.webp': 'https://zvuk-b2b.com/video',
-            'images/videowave.webp': 'https://zvuk-b2b.com/video',
-            'images/demovideo.webp': 'https://zvuk-b2b.com/video',
-            'images/coffeoneprice.webp': 'https://zvuk-b2b.com/blog/1price',
-            'images/letual.webp': 'https://zvuk-b2b.com/blog/letu',
-            'images/createbanner.webp': 'https://zvuk-b2b.com/audio_ads',
-            'images/bprofile phone.webp': 'https://zvuk-b2b.com/partners',
-            'images/premiumbanner.webp': 'https://zvuk-b2b.com/premium/',
-            'images/bprofilescreen.webp': 'https://zvuk-b2b.com/bprofile',
-            'images/atmvieo.webp': 'https://zvuk-b2b.com/video',
-            'images/autumn.webp': 'https://zvuk-b2b.com',
-            'images/nostalgia.webp': 'https://zvuk-b2b.com',
             'images/rawe.webp': 'https://zvuk-b2b.com/rawe',
             'images/event.webp': 'https://zvuk-b2b.com',
             'images/concept.webp': 'https://zvuk-b2b.com'
@@ -1445,7 +1362,6 @@
             const button = header.querySelector('.toggle-button');
             const headerText = header.querySelector('.menu-section-header');
             
-            // Закрываем все другие секции
             document.querySelectorAll('.menu-section').forEach(s => {
                 if (s !== section) {
                     s.classList.remove('active');
@@ -1455,7 +1371,6 @@
                 }
             });
             
-            // Переключаем текущую секцию
             if (content.classList.contains('active')) {
                 section.classList.remove('active');
                 content.classList.remove('active');
@@ -1475,7 +1390,6 @@
         }
         
         function toggleZoom() {
-            // Отключаем зум на мобильных устройствах (ширина меньше 801px)
             if (window.innerWidth <= 800) {
                 return;
             }
@@ -1486,18 +1400,23 @@
         
         document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
             radio.addEventListener('change', function() {
+                document.getElementById('price1Container').classList.add('hidden');
+                document.getElementById('price3Container').classList.add('hidden');
+                document.getElementById('price10plusContainer').classList.add('hidden');
+                
                 if (this.value === '1') {
                     document.getElementById('price1Container').classList.remove('hidden');
-                    document.getElementById('price3Container').classList.add('hidden');
-                } else {
-                    document.getElementById('price1Container').classList.add('hidden');
+                } else if (this.value === '3') {
                     document.getElementById('price3Container').classList.remove('hidden');
+                } else if (this.value === '10plus') {
+                    document.getElementById('price10plusContainer').classList.remove('hidden');
                 }
                 updateCurrentSlide();
             });
         });
         
         function updateCurrentSlide() {
+            if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) return;
             const currentSlide = slides[currentSlideIndex];
             const slideContainer = document.getElementById('currentSlide');
             slideContainer.innerHTML = '';
@@ -1515,7 +1434,7 @@
                     bannerImg.src = document.getElementById('banner').value;
                     
                     const bannerLink = document.createElement('a');
-                    bannerLink.href = bannerLinks[document.getElementById('banner').value];
+                    bannerLink.href = bannerLinks[document.getElementById('banner').value] || '#';
                     bannerLink.target = '_blank';
                     bannerLink.style.position = 'absolute';
                     bannerLink.style.top = '0';
@@ -1546,7 +1465,7 @@
                     priceBannerImg.src = document.getElementById('priceBanner').value;
                     
                     const priceBannerLink = document.createElement('a');
-                    priceBannerLink.href = bannerLinks[document.getElementById('priceBanner').value];
+                    priceBannerLink.href = bannerLinks[document.getElementById('priceBanner').value] || '#';
                     priceBannerLink.target = '_blank';
                     priceBannerLink.style.position = 'absolute';
                     priceBannerLink.style.top = '0';
@@ -1565,7 +1484,6 @@
                     managerImg.className = 'preview-manager';
                     managerImg.src = managerValue;
                     
-                    // Добавляем прозрачный кликабельный прямоугольник
                     const managerLinkContainer = document.createElement('a');
                     managerLinkContainer.href = managerDataLink;
                     managerLinkContainer.target = '_blank';
@@ -1595,43 +1513,63 @@
                         slideContainer.appendChild(phoneDiv);
                     }
                     
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'preview-comment';
+                    commentDiv.textContent = document.getElementById('comment').value;
+
                     if (priceFormat === '1') {
+                        const priceLabelDiv = document.createElement('div');
+                        priceLabelDiv.className = 'preview-price-label';
+                        priceLabelDiv.textContent = document.getElementById('price1Label').value;
+                        slideContainer.appendChild(priceLabelDiv);
+
                         const priceDiv = document.createElement('div');
                         priceDiv.className = 'preview-price';
                         priceDiv.textContent = formatPrice(document.getElementById('price1Value').value) + ' ₽/мес.';
                         slideContainer.appendChild(priceDiv);
-                        
-                        const commentDiv = document.createElement('div');
-                        commentDiv.className = 'preview-comment';
-                        commentDiv.textContent = document.getElementById('comment').value;
                         slideContainer.appendChild(commentDiv);
-                    } else {
+
+                    } else if (priceFormat === '3') {
                         const table = document.createElement('table');
                         table.className = 'price-table';
-                        
-                        const thead = document.createElement('thead');
-                        thead.innerHTML = `
-                            <tr>
-                                <th>Количество точек</th>
-                                <th>1-3</th>
-                                <th>4-9</th>
-                                <th>10+</th>
-                            </tr>
+                        table.innerHTML = `
+                            <thead>
+                                <tr><th>Количество точек</th><th>1-3</th><th>4-9</th><th>10+</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Стоимость за точку</td>
+                                    <td>${formatPrice(document.getElementById('price3Value1').value)} ₽</td>
+                                    <td>${formatPrice(document.getElementById('price3Value2').value)} ₽</td>
+                                    <td>${formatPrice(document.getElementById('price3Value3').value)} ₽</td>
+                                </tr>
+                            </tbody>
                         `;
-                        table.appendChild(thead);
-                        
-                        const tbody = document.createElement('tbody');
-                        tbody.innerHTML = `
-                            <tr>
-                                <td>Стоимость за точку</td>
-                                <td>${formatPrice(document.getElementById('price3Value1').value)} ₽</td>
-                                <td>${formatPrice(document.getElementById('price3Value2').value)} ₽</td>
-                                <td>${formatPrice(document.getElementById('price3Value3').value)} ₽</td>
-                            </tr>
-                        `;
-                        table.appendChild(tbody);
-                        
                         slideContainer.appendChild(table);
+                        slideContainer.appendChild(commentDiv);
+                    } else if (priceFormat === '10plus') {
+                        const table = document.createElement('table');
+                        table.className = 'price-table';
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Количество точек</th>
+                                    <th>${document.getElementById('price10plusHeader1').value}</th>
+                                    <th>${document.getElementById('price10plusHeader2').value}</th>
+                                    <th>${document.getElementById('price10plusHeader3').value}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Стоимость за точку</td>
+                                    <td>${formatPrice(document.getElementById('price10plusValue1').value)} ₽</td>
+                                    <td>${formatPrice(document.getElementById('price10plusValue2').value)} ₽</td>
+                                    <td>${formatPrice(document.getElementById('price10plusValue3').value)} ₽</td>
+                                </tr>
+                            </tbody>
+                        `;
+                        slideContainer.appendChild(table);
+                        slideContainer.appendChild(commentDiv);
                     }
                     break;
                     
@@ -1644,7 +1582,7 @@
                     instructionBannerImg.src = document.getElementById('instructionBanner').value;
                     
                     const instructionBannerLink = document.createElement('a');
-                    instructionBannerLink.href = bannerLinks[document.getElementById('instructionBanner').value];
+                    instructionBannerLink.href = bannerLinks[document.getElementById('instructionBanner').value] || '#';
                     instructionBannerLink.target = '_blank';
                     instructionBannerLink.style.position = 'absolute';
                     instructionBannerLink.style.top = '0';
@@ -1685,8 +1623,8 @@
                     coffeeLink.style.position = 'absolute';
                     coffeeLink.style.bottom = '4%';
                     coffeeLink.style.left = '3%';
-                    coffeeLink.style.width = '6.77%'; // Relative width: 130px / 1920px
-                    coffeeLink.style.height = '12.04%'; // Relative height: 130px / 1080px
+                    coffeeLink.style.width = '6.77%';
+                    coffeeLink.style.height = '12.04%';
                     coffeeLink.appendChild(coffeeImg);
                     slideContainer.appendChild(coffeeLink);
                     
@@ -1713,8 +1651,8 @@
                     creativeLinkContainer.style.opacity = '0';
                     slideContainer.appendChild(creativeLinkContainer);
                     
-                    const imageContainerWidthPercent = 6.77; // 130px / 1920px
-                    const imageContainerHeightPercent = 12.04; // 130px / 1080px
+                    const imageContainerWidthPercent = 6.77;
+                    const imageContainerHeightPercent = 12.04;
                     const gapPercent = 2;
                     const firstImageLeftPercent = 3;
 
@@ -1757,12 +1695,14 @@
                     bgImg.src = document.getElementById('playlist').value;
                     slideContainer.appendChild(bgImg);
                     
-                    const playlistLinkContainer = document.createElement('a');
-                    playlistLinkContainer.href = document.getElementById('playlist').value === 'images/georgia-audio.webp' ? 
+                    const playlistLinkSrc = document.getElementById('playlist').value === 'images/georgia-audio.webp' ? 
                         'https://zvuk-b2b.com/gastrobar#menu1' : 
                         document.getElementById('playlist').value === 'images/rawe.webp' ?
                         'https://zvuk-b2b.com/rawe' :
                         'https://zvuk-b2b.com/barbershop';
+
+                    const playlistLinkContainer = document.createElement('a');
+                    playlistLinkContainer.href = playlistLinkSrc;
                     playlistLinkContainer.target = '_blank';
                     playlistLinkContainer.style.position = 'absolute';
                     playlistLinkContainer.style.top = '0';
@@ -1774,11 +1714,7 @@
                     
                     const playlistLink = document.createElement('a');
                     playlistLink.className = 'preview-link';
-                    playlistLink.href = document.getElementById('playlist').value === 'images/georgia-audio.webp' ? 
-                        'https://zvuk-b2b.com/gastrobar#menu1' : 
-                        document.getElementById('playlist').value === 'images/rawe.webp' ?
-                        'https://zvuk-b2b.com/rawe' :
-                        'https://zvuk-b2b.com/barbershop';
+                    playlistLink.href = playlistLinkSrc;
                     playlistLink.textContent = 'zvuk-b2b.com';
                     playlistLink.target = '_blank';
                     slideContainer.appendChild(playlistLink);
@@ -1885,34 +1821,7 @@
                     videokpLink.target = '_blank';
                     slideContainer.appendChild(videokpLink);
                     break;
-                    
-                case 'videocontent':
-                    bgImg.src = 'images/videowave.webp';
-                    slideContainer.appendChild(bgImg);
-                    
-                    const videocontentLinkContainer = document.createElement('a');
-                    videocontentLinkContainer.href = 'https://zvuk-b2b.com/video';
-                    videocontentLinkContainer.target = '_blank';
-                    videocontentLinkContainer.style.position = 'absolute';
-                    videocontentLinkContainer.style.top = '0';
-                    videocontentLinkContainer.style.right = '0';
-                    videocontentLinkContainer.style.width = '100%';
-                    videocontentLinkContainer.style.height = '100%';
-                    videocontentLinkContainer.style.opacity = '0';
-                    slideContainer.appendChild(videocontentLinkContainer);
-                    
-                    const videocontentLink = document.createElement('a');
-                    videocontentLink.className = 'preview-link';
-                    videocontentLink.href = 'https://zvuk-b2b.com/video';
-                    videocontentLink.textContent = 'zvuk-b2b.com';
-                    videocontentLink.target = '_blank';
-                    slideContainer.appendChild(videocontentLink);
-                    break;
             }
-        }
-        
-        function generateQRCode(text) {
-            return `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(text)}&bgcolor=transparent&color=667099`;
         }
         
         function showSlide(index) {
@@ -1921,28 +1830,25 @@
             currentSlideIndex = index - 1;
             
             document.querySelectorAll('.slide-number').forEach((btn, i) => {
-                if (i === index - 1) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                btn.classList.toggle('active', i === currentSlideIndex);
             });
             
             updateCurrentSlide();
         }
         
         function removeCurrentSlide() {
-            if (currentSlideIndex > 2) {
-                removeSlide(slides[currentSlideIndex].type);
+            if (slides.length > 3) { // Ensure we don't delete the base slides
+                const slideToRemove = slides[currentSlideIndex];
+                if (slideToRemove.type !== 'general' && slideToRemove.type !== 'pricing' && slideToRemove.type !== 'instruction') {
+                    removeSlide(slideToRemove.type);
+                }
             }
         }
         
         function addSlide(type) {
-            // Проверяем, есть ли уже слайд такого типа
-            const existingSlideIndex = slides.findIndex(slide => slide.type === type && slide.type !== 'pricing' && slide.type !== 'general' && slide.type !== 'instruction');
+            const existingSlideIndex = slides.findIndex(slide => slide.type === type);
             
             if (existingSlideIndex !== -1) {
-                // Если слайд уже есть, просто переключаемся на него
                 showSlide(existingSlideIndex + 1);
                 return;
             }
@@ -1950,51 +1856,16 @@
             let newSlide;
             
             switch(type) {
-                case 'app':
-                    newSlide = { type: 'app', image: 'images/app.webp' };
-                    break;
-                case 'creative':
-                    newSlide = { type: 'creative', image: 'images/createbanner.webp' };
-                    break;
-                case 'playlist':
-                    newSlide = { type: 'playlist', image: document.getElementById('playlist').value };
-                    break;
-                case 'partner':
-                    newSlide = { type: 'partner', image: 'images/parterprogram.webp' };
-                    break;
-                case 'premium':
-                    newSlide = { 
-                        type: 'premium', 
-                        image: 'images/premiumbanner.webp',
-                        price1: document.getElementById('premiumPrice1').value,
-                        price2: document.getElementById('premiumPrice2').value,
-                        comment: document.getElementById('premiumComment').value
-                    };
-                    break;
-                case 'bprofile':
-                    newSlide = { type: 'bprofile', image: 'images/bprofile.webp' };
-                    break;
-                case 'event':
-                    newSlide = { type: 'event', image: 'images/event.webp' };
-                    break;
-
-                case 'concept':
-                    newSlide = { type: 'concept', image: 'images/concept.webp' };
-                    break;
-                    
-                case 'videokp':
-                    newSlide = { 
-                        type: 'videokp', 
-                        image: 'images/atmvieo.webp',
-                        price: document.getElementById('videokpPrice').value,
-                        comment: document.getElementById('videokpComment').value
-                    };
-                    break;
-                case 'videocontent':
-                    newSlide = { type: 'videocontent', image: 'images/videowave.webp' };
-                    break;
-                default:
-                    return;
+                case 'app': newSlide = { type: 'app' }; break;
+                case 'creative': newSlide = { type: 'creative' }; break;
+                case 'playlist': newSlide = { type: 'playlist' }; break;
+                case 'partner': newSlide = { type: 'partner' }; break;
+                case 'premium': newSlide = { type: 'premium' }; break;
+                case 'bprofile': newSlide = { type: 'bprofile' }; break;
+                case 'event': newSlide = { type: 'event' }; break;
+                case 'concept': newSlide = { type: 'concept' }; break;
+                case 'videokp': newSlide = { type: 'videokp' }; break;
+                default: return;
             }
             
             slides.push(newSlide);
@@ -2003,23 +1874,17 @@
         }
         
         function removeSlide(type) {
-            if (slides.length <= 3) return;
+            const indexToRemove = slides.findIndex(slide => slide.type === type);
             
-            let indexToRemove = -1;
-            for (let i = slides.length - 1; i >= 3; i--) {
-                if (slides[i].type === type) {
-                    indexToRemove = i;
-                    break;
+            if (indexToRemove > 2) { // Can't remove first 3 slides
+                slides.splice(indexToRemove, 1);
+                
+                if (currentSlideIndex >= slides.length) {
+                    currentSlideIndex = slides.length - 1;
                 }
-            }
-            
-            if (indexToRemove === -1) return;
-            
-            slides.splice(indexToRemove, 1);
-            updateSlideNumbers();
-            
-            if (currentSlideIndex >= slides.length) {
-                showSlide(slides.length);
+                
+                updateSlideNumbers();
+                showSlide(currentSlideIndex + 1);
             }
         }
         
@@ -2027,11 +1892,11 @@
             const slideNumbers = document.getElementById('slideNumbers');
             slideNumbers.innerHTML = '';
             
-            for (let i = 0; i < slides.length; i++) {
+            slides.forEach((slide, i) => {
                 const number = document.createElement('div');
                 number.className = `slide-number ${i === currentSlideIndex ? 'active' : ''}`;
                 number.textContent = i + 1;
-                number.draggable = i >= 3;
+                number.draggable = i >= 3; // Only allow dragging for slides after the first 3
                 number.dataset.index = i;
                 
                 number.addEventListener('dragstart', handleDragStart);
@@ -2041,107 +1906,69 @@
                 number.addEventListener('dragenter', handleDragEnter);
                 number.addEventListener('dragleave', handleDragLeave);
                 
-                number.onclick = function() { showSlide(i + 1); };
+                number.onclick = () => showSlide(i + 1);
                 slideNumbers.appendChild(number);
-            }
+            });
         }
         
         function handleDragStart(e) {
             draggedSlideIndex = parseInt(e.target.dataset.index);
             e.target.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', e.target.innerHTML);
         }
         
         function handleDragOver(e) {
             e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
         }
         
         function handleDrop(e) {
             e.preventDefault();
             const targetIndex = parseInt(e.target.dataset.index);
             
-            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && 
-                draggedSlideIndex >= 3 && targetIndex >= 3) {
-                const temp = slides[draggedSlideIndex];
-                slides[draggedSlideIndex] = slides[targetIndex];
-                slides[targetIndex] = temp;
+            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && draggedSlideIndex >= 3 && targetIndex >= 3) {
+                const [draggedItem] = slides.splice(draggedSlideIndex, 1);
+                slides.splice(targetIndex, 0, draggedItem);
                 
-                // Анимация подсветки промежуточных слайдов
-                const step = draggedSlideIndex < targetIndex ? 1 : -1;
-                let current = draggedSlideIndex;
-                
-                function animateHighlight() {
-                    if ((step > 0 && current <= targetIndex) || (step < 0 && current >= targetIndex)) {
-                        const slideNumber = document.querySelector(`.slide-number[data-index="${current}"]`);
-                        if (slideNumber) {
-                            slideNumber.classList.add('highlight');
-                            setTimeout(() => {
-                                slideNumber.classList.remove('highlight');
-                            }, 100);
-                        }
-                        current += step;
-                        setTimeout(animateHighlight, 100);
-                    }
-                }
-                
-                animateHighlight();
-                
+                currentSlideIndex = targetIndex;
                 updateSlideNumbers();
-                setTimeout(() => {
-                    showSlide(targetIndex + 1);
-                }, 100 * Math.abs(draggedSlideIndex - targetIndex));
+                updateCurrentSlide();
             }
-            
-            document.querySelectorAll('.slide-number').forEach(el => {
-                el.classList.remove('drop-target');
-            });
+             e.target.classList.remove('drop-target', 'dragging');
         }
         
         function handleDragEnd(e) {
-            e.target.classList.remove('dragging');
-            draggedSlideIndex = null;
-            
             document.querySelectorAll('.slide-number').forEach(el => {
-                el.classList.remove('drop-target');
+                el.classList.remove('dragging', 'drop-target');
             });
+            draggedSlideIndex = null;
         }
         
         function handleDragEnter(e) {
             const targetIndex = parseInt(e.target.dataset.index);
-            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && 
-                draggedSlideIndex >= 3 && targetIndex >= 3) {
+            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && targetIndex >= 3) {
                 e.target.classList.add('drop-target');
-                dropTargetIndex = targetIndex;
             }
         }
         
         function handleDragLeave(e) {
             e.target.classList.remove('drop-target');
-            dropTargetIndex = null;
         }
         
         function formatPrice(price) {
-            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            return String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         }
         
         function getFileName() {
             const managerSelect = document.getElementById('manager');
             const managerName = managerSelect.options[managerSelect.selectedIndex].text
-                .toLowerCase()
-                .replace(/\s+/g, '-')
-                .replace(/[^a-zа-яё0-9-]/g, '');
+                .toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
                 
             const companyName = document.getElementById('companyName').value
-                .toLowerCase()
-                .replace(/\s+/g, '-')
-                .replace(/[^a-zа-яё0-9-]/g, '');
+                .toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
                 
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
         
-        async function saveAsPDF() {
+       async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
             
@@ -2155,70 +1982,53 @@
                 format: [1920, 1080]
             });
 
+            // Создаем временный контейнер, который будет использоваться для рендеринга каждого слайда
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px';
+            tempContainer.style.left = '-9999px'; // Скрываем его за пределами экрана
             tempContainer.style.top = '0px';
-            tempContainer.style.width = '3840px'; // Render at 2x resolution
-            tempContainer.style.height = '2160px'; // Render at 2x resolution
+            tempContainer.style.width = '1920px'; // Устанавливаем точный размер для рендеринга
+            tempContainer.style.height = '1080px';
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
 
             for (let i = 0; i < slides.length; i++) {
+                // Переключаемся на нужный слайд, чтобы обновить его содержимое
                 showSlide(i + 1); 
                 
+                // Клонируем содержимое текущего слайда
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                // Apply scaling to the content for 2x rendering
-                slideContent.style.width = '1920px';
-                slideContent.style.height = '1080px';
-                slideContent.style.transform = 'scale(2)';
-                slideContent.style.transformOrigin = 'top left';
+                slideContent.style.width = '100%';
+                slideContent.style.height = '100%';
+                slideContent.style.transform = 'none'; // Убираем любые трансформации
                 slideContent.classList.remove('zoomed');
                 
-                // Увеличение текста инструкции в PDF
-                if (slides[i].type === 'instruction') {
-                    const instructionText = slideContent.querySelector('.instruction-text');
-                    if (instructionText) {
-                        instructionText.style.fontSize = '22.8px'; // Увеличение на 90% (12px * 1.9)
-                        instructionText.style.width = '70%';
-                    }
-                }
-                
-                // Увеличение стоимости в PDF
-                if (slides[i].type === 'pricing' || slides[i].type === 'premium' || slides[i].type === 'videokp') {
-                    const priceTexts = slideContent.querySelectorAll('.preview-price, .preview-price-premium-1, .preview-price-premium-2');
-                    priceTexts.forEach(priceText => {
-                        if(priceText) {
-                            priceText.style.fontSize = '30px'; // Увеличение на 50% (20px * 1.5)
-                        }
-                    });
-                }
-                
+                // Очищаем и добавляем новый слайд во временный контейнер
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
+                // Ждем загрузки всех изображений на слайде
                 const images = tempContainer.querySelectorAll('img');
-                const promises = [];
-                images.forEach(img => {
+                const promises = Array.from(images).map(img => {
                     if (!img.complete) {
-                        promises.push(new Promise((resolve, reject) => {
-                            img.onload = resolve;
-                            img.onerror = resolve;
-                        }));
+                        return new Promise(resolve => {
+                            img.onload = img.onerror = resolve;
+                        });
                     }
+                    return Promise.resolve();
                 });
                 await Promise.all(promises);
 
+                // Небольшая задержка для завершения рендеринга
                 await new Promise(resolve => setTimeout(resolve, 250));
 
                 const canvas = await html2canvas(tempContainer, {
-                    scale: 1, // Use native resolution of the container
+                    scale: 2, // Увеличиваем масштаб для лучшего качества
                     logging: false,
                     useCORS: true,
-                    width: 3840, // Canvas width at 2x
-                    height: 2160, // Canvas height at 2x
-                    letterRendering: true
+                    width: 1920,
+                    height: 1080,
                 });
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -2227,11 +2037,10 @@
                     pdf.addPage([1920, 1080], 'landscape');
                 }
                 
-                // Add the 2x image to the 1x PDF page, jsPDF will downscale it
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
-                addLinksToPDF(pdf, slideContent, i);
             }
             
+            // Восстанавливаем исходный слайд и удаляем временный контейнер
             showSlide(originalSlideIndex + 1);
             document.body.removeChild(tempContainer);
 
@@ -2242,102 +2051,47 @@
                 blurOverlay.style.display = 'none';
             }, 2000);
         }
-
-        function addLinksToPDF(pdf, slideContent, pageIndex) {
-            pdf.setPage(pageIndex + 1);
-            
-            const addLinkSafe = (element, url) => {
-                if (!element || !url) return;
-
-                // Since we scaled the content by 2x, we need to divide the coordinates by 2
-                const scaleFactor = 0.5; 
-                const rect = element.getBoundingClientRect();
-                const parentRect = slideContent.getBoundingClientRect();
-                
-                const x = (rect.left - parentRect.left) * scaleFactor;
-                const y = (rect.top - parentRect.top) * scaleFactor;
-                const width = rect.width * scaleFactor;
-                const height = rect.height * scaleFactor;
-
-                if (width > 0 && height > 0) {
-                    try {
-                        pdf.link(x, y, width, height, { url });
-                    } catch (e) {
-                        console.error('Error adding link:', e);
-                    }
-                }
-            };
-            
-            const links = slideContent.querySelectorAll('a');
-            links.forEach(link => {
-                addLinkSafe(link, link.href);
-            });
-
-            const slideType = slides[pageIndex].type;
-            const fullSlideLinks = {
-                 'partner': 'https://zvuk-b2b.com/partners',
-                 'premium': 'https://zvuk-b2b.com/premium/',
-                 'bprofile': 'https://zvuk-b2b.com/bprofile',
-                 'videocontent': 'https://zvuk-b2b.com/video',
-                 'videokp': 'https://zvuk-b2b.com/video',
-                 'creative': 'https://zvuk-b2b.com/audio_ads',
-                 'app': 'https://zvuk-b2b.com/blog/1price',
-                 'playlist': slideContent.querySelector('#playlist')?.value === 'images/rawe.webp' ? 
-                     'https://zvuk-b2b.com/rawe' : 
-                     'https://zvuk-b2b.com/barbershop'
-            };
-
-            if (fullSlideLinks[slideType]) {
-                const linkRect = document.createElement('div');
-                linkRect.style.position = 'absolute';
-                linkRect.style.top = '0';
-                linkRect.style.right = '0';
-                linkRect.style.width = '35%';
-                linkRect.style.height = '100%';
-                linkRect.style.opacity = '0';
-                slideContent.appendChild(linkRect);
-                
-                addLinkSafe(linkRect, fullSlideLinks[slideType]);
-                
-                if (slideType === 'creative' || slideType === 'app' || slideType === 'playlist') {
-                    const additionalLinks = slideContent.querySelectorAll('a');
-                    additionalLinks.forEach(link => {
-                        if (link.href !== fullSlideLinks[slideType]) {
-                            addLinkSafe(link, link.href);
-                        }
-                    });
-                }
-            }
-        }
         
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            // Обработка изменений полей ввода
-            document.getElementById('banner').addEventListener('change', updateCurrentSlide);
-            document.getElementById('logos').addEventListener('change', updateCurrentSlide);
-            document.getElementById('manager').addEventListener('change', updateCurrentSlide);
-            document.getElementById('personalPhone').addEventListener('input', updateCurrentSlide);
-            document.getElementById('price1Value').addEventListener('input', updateCurrentSlide);
-            document.getElementById('price3Value1').addEventListener('input', updateCurrentSlide);
-            document.getElementById('price3Value2').addEventListener('input', updateCurrentSlide);
-            document.getElementById('price3Value3').addEventListener('input', updateCurrentSlide);
-            document.getElementById('comment').addEventListener('input', updateCurrentSlide);
-            document.getElementById('priceBanner').addEventListener('change', updateCurrentSlide);
-            document.getElementById('instructionBanner').addEventListener('change', updateCurrentSlide);
-            document.getElementById('playlist').addEventListener('change', updateCurrentSlide);
-            document.getElementById('premiumPrice1').addEventListener('input', updateCurrentSlide);
-            document.getElementById('premiumPrice2').addEventListener('input', updateCurrentSlide);
-            document.getElementById('premiumComment').addEventListener('input', updateCurrentSlide);
-            document.getElementById('videokpPrice').addEventListener('input', updateCurrentSlide);
-            document.getElementById('videokpComment').addEventListener('input', updateCurrentSlide);
-            document.getElementById('companyName').addEventListener('input', function() {
-                // Можно добавить обработку изменения названия компании
+
+            // Задача 3: Убираем "Статистика" и делаем первую букву заглавной
+            document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
+                let text = option.textContent.replace(/Статистика\s*/i, '').trim();
+                option.textContent = text.charAt(0).toUpperCase() + text.slice(1);
+            });
+
+            const inputsToUpdate = [
+                'banner', 'logos', 'manager', 'personalPhone', 'price1Value', 
+                'price3Value1', 'price3Value2', 'price3Value3', 'comment', 
+                'priceBanner', 'instructionBanner', 'playlist', 'premiumPrice1', 
+                'premiumPrice2', 'premiumComment', 'videokpPrice', 'videokpComment',
+                'price1Label', 'price10plusHeader1', 'price10plusValue1',
+                'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3'
+            ];
+
+            inputsToUpdate.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', updateCurrentSlide);
+                }
             });
             
-            // Инициализация кнопок слайдов
-            updateSlideNumbers();
+            // Задача 4: Связываем логотипы с баннерами
+            document.getElementById('logos').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const bannerValue = selectedOption.getAttribute('data-banner');
+                if (bannerValue) {
+                    const bannerSelect = document.getElementById('banner');
+                    bannerSelect.value = bannerValue;
+                    // Вызываем событие change, чтобы обновить превью
+                    bannerSelect.dispatchEvent(new Event('change'));
+                }
+            });
+
+            document.getElementById('companyName').addEventListener('input', function() {});
             
-            // Показываем первый слайд и раскрываем его настройки
+            updateSlideNumbers();
             showSlide(1);
             document.querySelector('.menu-header').click();
         });
