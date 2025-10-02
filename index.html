@@ -1982,12 +1982,13 @@
                 format: [1920, 1080]
             });
 
+            // Create a temporary container with the exact target dimensions
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
-            tempContainer.style.width = '3840px'; // Render at 2x resolution
-            tempContainer.style.height = '2160px'; // Render at 2x resolution
+            tempContainer.style.width = '1920px';
+            tempContainer.style.height = '1080px';
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
@@ -1995,57 +1996,37 @@
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
+                // Clone the slide content into the perfectly sized container
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                // Apply scaling to the content for 2x rendering
-                slideContent.style.width = '1920px';
-                slideContent.style.height = '1080px';
-                slideContent.style.transform = 'scale(2)';
-                slideContent.style.transformOrigin = 'top left';
+                slideContent.style.width = '100%';
+                slideContent.style.height = '100%';
+                slideContent.style.transform = 'none'; // Ensure no transforms are applied
                 slideContent.classList.remove('zoomed');
-                
-                // Увеличение текста инструкции в PDF
-                if (slides[i].type === 'instruction') {
-                    const instructionText = slideContent.querySelector('.instruction-text');
-                    if (instructionText) {
-                        instructionText.style.fontSize = '22.8px'; // Увеличение на 90% (12px * 1.9)
-                        instructionText.style.width = '70%';
-                    }
-                }
-                
-                // Увеличение стоимости в PDF
-                if (slides[i].type === 'pricing' || slides[i].type === 'premium' || slides[i].type === 'videokp') {
-                    const priceTexts = slideContent.querySelectorAll('.preview-price, .preview-price-premium-1, .preview-price-premium-2, .preview-price-label');
-                    priceTexts.forEach(priceText => {
-                        if(priceText) {
-                           const currentSize = parseFloat(window.getComputedStyle(priceText).fontSize);
-                           priceText.style.fontSize = (currentSize * 1.5) + 'px';
-                        }
-                    });
-                }
                 
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
+                // Wait for all images on the slide to load
                 const images = tempContainer.querySelectorAll('img');
-                const promises = [];
-                images.forEach(img => {
+                const promises = Array.from(images).map(img => {
                     if (!img.complete) {
-                        promises.push(new Promise((resolve, reject) => {
-                            img.onload = resolve;
-                            img.onerror = resolve;
-                        }));
+                        return new Promise(resolve => {
+                            img.onload = img.onerror = resolve;
+                        });
                     }
+                    return Promise.resolve();
                 });
                 await Promise.all(promises);
 
-                await new Promise(resolve => setTimeout(resolve, 250));
+                // Give the browser a moment to render everything
+                await new Promise(resolve => setTimeout(resolve, 300));
 
                 const canvas = await html2canvas(tempContainer, {
-                    scale: 1, // Use native resolution of the container
+                    width: 1920,
+                    height: 1080,
+                    scale: 2, // Use scale for better quality, html2canvas will handle it
                     logging: false,
                     useCORS: true,
-                    width: 3840, // Canvas width at 2x
-                    height: 2160, // Canvas height at 2x
                     letterRendering: true
                 });
 
@@ -2056,7 +2037,7 @@
                 }
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
-                addLinksToPDF(pdf, slideContent, i);
+                addLinksToPDF(pdf, slideContent, i); // Pass the cloned element
             }
             
             showSlide(originalSlideIndex + 1);
@@ -2073,33 +2054,28 @@
         function addLinksToPDF(pdf, slideContent, pageIndex) {
             pdf.setPage(pageIndex + 1);
             
-            const addLinkSafe = (element, url) => {
-                if (!element || !url) return;
+            const links = slideContent.querySelectorAll('a');
 
-                const scaleFactor = 0.5; 
-                const rect = element.getBoundingClientRect();
-                const parentRect = slideContent.getBoundingClientRect();
-                
-                const x = (rect.left - parentRect.left) * scaleFactor;
-                const y = (rect.top - parentRect.top) * scaleFactor;
-                const width = rect.width * scaleFactor;
-                const height = rect.height * scaleFactor;
+            links.forEach(link => {
+                if (!link.href) return;
+
+                // offsetLeft/Top are relative to the offsetParent. In our controlled
+                // tempContainer, slideContent is the parent, so these values are what we need.
+                const x = link.offsetLeft;
+                const y = link.offsetTop;
+                const width = link.offsetWidth;
+                const height = link.offsetHeight;
 
                 if (width > 0 && height > 0) {
                     try {
-                        pdf.link(x, y, width, height, { url });
+                        // pdf.link's coordinate system matches our 1920x1080 page
+                        pdf.link(x, y, width, height, { url: link.href });
                     } catch (e) {
                         console.error('Error adding link:', e);
                     }
                 }
-            };
-            
-            const links = slideContent.querySelectorAll('a');
-            links.forEach(link => {
-                addLinkSafe(link, link.href);
             });
         }
-
         
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
