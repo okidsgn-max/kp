@@ -972,8 +972,8 @@
                     <select class="zvuk-select" id="manager">
                         <option value="images/ivanova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=ivanova">Мария Иванова</option>
                         <option value="images/mankova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=mankova">Яна Манькова</option>
-                        <option value="images/sidikov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov">Темур Сидиков</option>
-                        <option value="images/piliptsov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pilipcev">Герман Пилипцев</option>
+                        <option value="images/temur.webp" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov">Темур Сидиков</option>
+                        <option value="images/german.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pilipcev">Герман Пилипцев</option>
                         <option value="images/kropachev.webp" data-link="https://app.zvuk-b2b.com/register?promocode=kropachev">Виктор Кропачев</option>
                         <option value="images/likashina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=likashina">Татьяна Лукашина</option>
                         <option value="images/nikulina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=nikulina">Анна Никулина</option>
@@ -1968,7 +1968,7 @@
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
         
-       async function saveAsPDF() {
+        async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
             
@@ -1982,53 +1982,71 @@
                 format: [1920, 1080]
             });
 
-            // Создаем временный контейнер, который будет использоваться для рендеринга каждого слайда
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px'; // Скрываем его за пределами экрана
+            tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
-            tempContainer.style.width = '1920px'; // Устанавливаем точный размер для рендеринга
-            tempContainer.style.height = '1080px';
+            tempContainer.style.width = '3840px'; // Render at 2x resolution
+            tempContainer.style.height = '2160px'; // Render at 2x resolution
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
 
             for (let i = 0; i < slides.length; i++) {
-                // Переключаемся на нужный слайд, чтобы обновить его содержимое
                 showSlide(i + 1); 
                 
-                // Клонируем содержимое текущего слайда
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                slideContent.style.width = '100%';
-                slideContent.style.height = '100%';
-                slideContent.style.transform = 'none'; // Убираем любые трансформации
+                // Apply scaling to the content for 2x rendering
+                slideContent.style.width = '1920px';
+                slideContent.style.height = '1080px';
+                slideContent.style.transform = 'scale(2)';
+                slideContent.style.transformOrigin = 'top left';
                 slideContent.classList.remove('zoomed');
                 
-                // Очищаем и добавляем новый слайд во временный контейнер
+                // Увеличение текста инструкции в PDF
+                if (slides[i].type === 'instruction') {
+                    const instructionText = slideContent.querySelector('.instruction-text');
+                    if (instructionText) {
+                        instructionText.style.fontSize = '22.8px'; // Увеличение на 90% (12px * 1.9)
+                        instructionText.style.width = '70%';
+                    }
+                }
+                
+                // Увеличение стоимости в PDF
+                if (slides[i].type === 'pricing' || slides[i].type === 'premium' || slides[i].type === 'videokp') {
+                    const priceTexts = slideContent.querySelectorAll('.preview-price, .preview-price-premium-1, .preview-price-premium-2, .preview-price-label');
+                    priceTexts.forEach(priceText => {
+                        if(priceText) {
+                           const currentSize = parseFloat(window.getComputedStyle(priceText).fontSize);
+                           priceText.style.fontSize = (currentSize * 1.5) + 'px';
+                        }
+                    });
+                }
+                
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Ждем загрузки всех изображений на слайде
                 const images = tempContainer.querySelectorAll('img');
-                const promises = Array.from(images).map(img => {
+                const promises = [];
+                images.forEach(img => {
                     if (!img.complete) {
-                        return new Promise(resolve => {
-                            img.onload = img.onerror = resolve;
-                        });
+                        promises.push(new Promise((resolve, reject) => {
+                            img.onload = resolve;
+                            img.onerror = resolve;
+                        }));
                     }
-                    return Promise.resolve();
                 });
                 await Promise.all(promises);
 
-                // Небольшая задержка для завершения рендеринга
                 await new Promise(resolve => setTimeout(resolve, 250));
 
                 const canvas = await html2canvas(tempContainer, {
-                    scale: 2, // Увеличиваем масштаб для лучшего качества
+                    scale: 1, // Use native resolution of the container
                     logging: false,
                     useCORS: true,
-                    width: 1920,
-                    height: 1080,
+                    width: 3840, // Canvas width at 2x
+                    height: 2160, // Canvas height at 2x
+                    letterRendering: true
                 });
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -2038,9 +2056,9 @@
                 }
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
+                addLinksToPDF(pdf, slideContent, i);
             }
             
-            // Восстанавливаем исходный слайд и удаляем временный контейнер
             showSlide(originalSlideIndex + 1);
             document.body.removeChild(tempContainer);
 
@@ -2051,11 +2069,41 @@
                 blurOverlay.style.display = 'none';
             }, 2000);
         }
+
+        function addLinksToPDF(pdf, slideContent, pageIndex) {
+            pdf.setPage(pageIndex + 1);
+            
+            const addLinkSafe = (element, url) => {
+                if (!element || !url) return;
+
+                const scaleFactor = 0.5; 
+                const rect = element.getBoundingClientRect();
+                const parentRect = slideContent.getBoundingClientRect();
+                
+                const x = (rect.left - parentRect.left) * scaleFactor;
+                const y = (rect.top - parentRect.top) * scaleFactor;
+                const width = rect.width * scaleFactor;
+                const height = rect.height * scaleFactor;
+
+                if (width > 0 && height > 0) {
+                    try {
+                        pdf.link(x, y, width, height, { url });
+                    } catch (e) {
+                        console.error('Error adding link:', e);
+                    }
+                }
+            };
+            
+            const links = slideContent.querySelectorAll('a');
+            links.forEach(link => {
+                addLinkSafe(link, link.href);
+            });
+        }
+
         
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
 
-            // Задача 3: Убираем "Статистика" и делаем первую букву заглавной
             document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
                 let text = option.textContent.replace(/Статистика\s*/i, '').trim();
                 option.textContent = text.charAt(0).toUpperCase() + text.slice(1);
@@ -2077,14 +2125,12 @@
                 }
             });
             
-            // Задача 4: Связываем логотипы с баннерами
             document.getElementById('logos').addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
                 const bannerValue = selectedOption.getAttribute('data-banner');
                 if (bannerValue) {
                     const bannerSelect = document.getElementById('banner');
                     bannerSelect.value = bannerValue;
-                    // Вызываем событие change, чтобы обновить превью
                     bannerSelect.dispatchEvent(new Event('change'));
                 }
             });
@@ -2098,3 +2144,4 @@
     </script>
 </body>
 </html>
+
