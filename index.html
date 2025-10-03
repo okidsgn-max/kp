@@ -872,17 +872,10 @@
             transition: all var(--transition-medium);
         }
 
-        .instruction-text a {
+        .instruction-text .highlight {
             color: var(--primary);
             text-decoration: none;
             font-weight: 500;
-            display: inline-block;
-            transition: all var(--transition-fast);
-        }
-        
-        .instruction-text a:hover {
-            text-decoration: underline;
-            transform: translateX(2px);
         }
     </style>
 </head>
@@ -1492,8 +1485,6 @@
                     managerLinkContainer.style.left = '3%';
                     managerLinkContainer.style.width = '57%';
                     managerLinkContainer.style.height = '25%';
-                    // managerLinkContainer.style.opacity = '0'; // For debugging, you can make it visible
-                    // managerLinkContainer.style.border = '1px solid red';
                     slideContainer.appendChild(managerLinkContainer);
                     
                     const managerLink = document.createElement('a');
@@ -1597,44 +1588,38 @@
                     const selectedManagerOptionForLink = managerSelectForLink.options[managerSelectForLink.selectedIndex];
                     const managerRegLink = selectedManagerOptionForLink.getAttribute('data-link');
 
+                    // --- ИЗМЕНЕНИЕ: ТЕКСТ БЕЗ ССЫЛОК ---
                     const instructionTextDiv = document.createElement('div');
                     instructionTextDiv.className = 'instruction-text';
                     instructionTextDiv.innerHTML = `
-                        1. Зарегистрироваться <a href="${managerRegLink}" target="_blank" id="instructionLinkManager">по ссылке</a>.<br><br>
-                        2. Установить приложение на <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" id="instructionLinkComputer">компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" id="instructionLinkSmartphone">смартфон</a>.<br><br>
+                        1. Зарегистрироваться <span class="highlight">по ссылке</span>.<br><br>
+                        2. Установить приложение на <span class="highlight">компьютер</span> или <span class="highlight">смартфон</span>.<br><br>
                         3. С вами свяжется менеджер в течение 1-2 часов.<br><br>
                         4. Протестировать в течение 7 дней, оформить подписку.
                     `;
                     slideContainer.appendChild(instructionTextDiv);
-                    break;
+
+                    // --- ИЗМЕНЕНИЕ: ДОБАВЛЕНИЕ НЕВИДИМЫХ ПРЯМОУГОЛЬНИКОВ-ССЫЛОК ---
+                    const createLinkBox = (href, top, left, width, height) => {
+                        const link = document.createElement('a');
+                        link.href = href;
+                        link.target = '_blank';
+                        link.style.position = 'absolute';
+                        link.style.top = top;
+                        link.style.left = left;
+                        link.style.width = width;
+                        link.style.height = height;
+                        // link.style.border = '1px solid red'; // Для отладки
+                        return link;
+                    };
                     
-                case 'app':
-                    bgImg.src = 'images/app.webp';
-                    slideContainer.appendChild(bgImg);
-                    
-                    const coffeeImg = document.createElement('img');
-                    coffeeImg.src = 'images/coffeoneprice.webp';
-                    coffeeImg.style.width = '100%';
-                    coffeeImg.style.height = '100%';
-                    coffeeImg.style.objectFit = 'contain';
-                    
-                    const coffeeLink = document.createElement('a');
-                    coffeeLink.href = 'https://zvuk-b2b.com/blog/1price';
-                    coffeeLink.target = '_blank';
-                    coffeeLink.style.position = 'absolute';
-                    coffeeLink.style.bottom = '4%';
-                    coffeeLink.style.left = '3%';
-                    coffeeLink.style.width = '6.77%';
-                    coffeeLink.style.height = '12.04%';
-                    coffeeLink.appendChild(coffeeImg);
-                    slideContainer.appendChild(coffeeLink);
-                    
-                    const appLink = document.createElement('a');
-                    appLink.className = 'preview-link';
-                    appLink.href = 'https://zvuk-b2b.com/blog/1price';
-                    appLink.textContent = 'zvuk-b2b.com';
-                    appLink.target = '_blank';
-                    slideContainer.appendChild(appLink);
+                    const managerLinkBox = createLinkBox(managerRegLink, '40.5%', '20%', '10%', '3.5%');
+                    const computerLinkBox = createLinkBox('https://help.zvuk-b2b.com/onair#desktop', '46%', '26%', '11%', '3.5%');
+                    const smartphoneLinkBox = createLinkBox('https://help.zvuk-b2b.com/onair#desktop', '46%', '41%', '11%', '3.5%');
+
+                    slideContainer.appendChild(managerLinkBox);
+                    slideContainer.appendChild(computerLinkBox);
+                    slideContainer.appendChild(smartphoneLinkBox);
                     break;
                     
                 case 'creative':
@@ -1649,9 +1634,9 @@
                     creativeLinkContainer.style.right = '0';
                     creativeLinkContainer.style.width = '35%';
                     creativeLinkContainer.style.height = '100%';
-                    creativeLinkContainer.style.opacity = '0';
                     slideContainer.appendChild(creativeLinkContainer);
                     
+                    // --- ИЗМЕНЕНИЕ: Добавляем ID для легкого доступа ---
                     const imageContainerWidthPercent = 6.77;
                     const imageContainerHeightPercent = 12.04;
                     const gapPercent = 2;
@@ -1664,6 +1649,7 @@
                     coffeImg.style.objectFit = 'contain';
 
                     const coffeLink = document.createElement('a');
+                    coffeLink.id = 'creative-case-1'; // ID
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeLink.target = '_blank';
                     coffeLink.style.position = 'absolute';
@@ -1681,6 +1667,7 @@
                     letualImg.style.objectFit = 'contain';
 
                     const letualLink = document.createElement('a');
+                    letualLink.id = 'creative-case-2'; // ID
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
                     letualLink.target = '_blank';
                     letualLink.style.position = 'absolute';
@@ -1691,66 +1678,23 @@
                     letualLink.appendChild(letualImg);
                     slideContainer.appendChild(letualLink);
                     break;
-                    
+                
+                // --- Остальные кейсы без изменений ---
+                case 'app':
+                    bgImg.src = 'images/app.webp';
+                    slideContainer.appendChild(bgImg);
+                    break;
                 case 'playlist':
                     bgImg.src = document.getElementById('playlist').value;
                     slideContainer.appendChild(bgImg);
-                    
-                    const playlistLinkSrc = document.getElementById('playlist').value === 'images/georgia-audio.webp' ? 
-                        'https://zvuk-b2b.com/gastrobar#menu1' : 
-                        document.getElementById('playlist').value === 'images/rawe.webp' ?
-                        'https://zvuk-b2b.com/rawe' :
-                        'https://zvuk-b2b.com/barbershop';
-
-                    const playlistLinkContainer = document.createElement('a');
-                    playlistLinkContainer.href = playlistLinkSrc;
-                    playlistLinkContainer.target = '_blank';
-                    playlistLinkContainer.style.position = 'absolute';
-                    playlistLinkContainer.style.top = '0';
-                    playlistLinkContainer.style.right = '0';
-                    playlistLinkContainer.style.width = '100%';
-                    playlistLinkContainer.style.height = '100%';
-                    playlistLinkContainer.style.opacity = '0';
-                    slideContainer.appendChild(playlistLinkContainer);
-                    
-                    const playlistLink = document.createElement('a');
-                    playlistLink.className = 'preview-link';
-                    playlistLink.href = playlistLinkSrc;
-                    playlistLink.textContent = 'zvuk-b2b.com';
-                    playlistLink.target = '_blank';
-                    slideContainer.appendChild(playlistLink);
                     break;
-                    
                 case 'partner':
                     bgImg.src = 'images/parterprogram.webp';
                     slideContainer.appendChild(bgImg);
-                   
-                    const partnerLinkContainer = document.createElement('a');
-                    partnerLinkContainer.href = 'https://zvuk-b2b.com/partners';
-                    partnerLinkContainer.target = '_blank';
-                    partnerLinkContainer.style.position = 'absolute';
-                    partnerLinkContainer.style.top = '0';
-                    partnerLinkContainer.style.right = '0';
-                    partnerLinkContainer.style.width = '100%';
-                    partnerLinkContainer.style.height = '100%';
-                    partnerLinkContainer.style.opacity = '0';
-                    slideContainer.appendChild(partnerLinkContainer);
                     break;
-                    
                 case 'premium':
                     bgImg.src = 'images/premiumbanner.webp';
                     slideContainer.appendChild(bgImg);
-                    
-                    const premiumLinkContainer = document.createElement('a');
-                    premiumLinkContainer.href = 'https://zvuk-b2b.com/premium/';
-                    premiumLinkContainer.target = '_blank';
-                    premiumLinkContainer.style.position = 'absolute';
-                    premiumLinkContainer.style.top = '0';
-                    premiumLinkContainer.style.right = '0';
-                    premiumLinkContainer.style.width = '100%';
-                    premiumLinkContainer.style.height = '100%';
-                    premiumLinkContainer.style.opacity = '0';
-                    slideContainer.appendChild(premiumLinkContainer);
                     
                     const premiumPriceDiv1 = document.createElement('div');
                     premiumPriceDiv1.className = 'preview-price-premium-1';
@@ -1766,41 +1710,19 @@
                     premiumCommentDiv.className = 'preview-comment';
                     premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
                     slideContainer.appendChild(premiumCommentDiv);
-                    
-                    const premiumLink = document.createElement('a');
-                    premiumLink.className = 'preview-link';
-                    premiumLink.href = 'https://zvuk-b2b.com/premium/';
-                    premiumLink.textContent = 'zvuk-b2b.com';
-                    premiumLink.target = '_blank';
-                    slideContainer.appendChild(premiumLink);
                     break;
-                    
                 case 'bprofile':
                     bgImg.src = 'images/bprofile.webp';
                     slideContainer.appendChild(bgImg);
-                    
-                    const bprofileLinkContainer = document.createElement('a');
-                    bprofileLinkContainer.href = 'https://zvuk-b2b.com/bprofile';
-                    bprofileLinkContainer.target = '_blank';
-                    bprofileLinkContainer.style.position = 'absolute';
-                    bprofileLinkContainer.style.top = '0';
-                    bprofileLinkContainer.style.right = '0';
-                    bprofileLinkContainer.style.width = '100%';
-                    bprofileLinkContainer.style.height = '100%';
-                    bprofileLinkContainer.style.opacity = '0';
-                    slideContainer.appendChild(bprofileLinkContainer);
                     break;
-                
                 case 'event':
                     bgImg.src = 'images/redact.webp';
                     slideContainer.appendChild(bgImg);
                     break;
-
                 case 'concept':
                     bgImg.src = 'images/redact.webp';
                     slideContainer.appendChild(bgImg);
                     break;
-                    
                 case 'videokp':
                     bgImg.src = 'images/atmvieo.webp';
                     slideContainer.appendChild(bgImg);
@@ -1814,31 +1736,21 @@
                     videoCommentDiv.className = 'preview-comment';
                     videoCommentDiv.textContent = document.getElementById('videokpComment').value;
                     slideContainer.appendChild(videoCommentDiv);
-                    
-                    const videokpLink = document.createElement('a');
-                    videokpLink.className = 'preview-link';
-                    videokpLink.href = 'https://zvuk-b2b.com/video';
-                    videokpLink.textContent = 'zvuk-b2b.com';
-                    videokpLink.target = '_blank';
-                    slideContainer.appendChild(videokpLink);
                     break;
             }
         }
         
         function showSlide(index) {
             if (index < 1 || index > slides.length) return;
-            
             currentSlideIndex = index - 1;
-            
             document.querySelectorAll('.slide-number').forEach((btn, i) => {
                 btn.classList.toggle('active', i === currentSlideIndex);
             });
-            
             updateCurrentSlide();
         }
         
         function removeCurrentSlide() {
-            if (slides.length > 3) { // Ensure we don't delete the base slides
+            if (slides.length > 3) {
                 const slideToRemove = slides[currentSlideIndex];
                 if (slideToRemove.type !== 'general' && slideToRemove.type !== 'pricing' && slideToRemove.type !== 'instruction') {
                     removeSlide(slideToRemove.type);
@@ -1848,14 +1760,11 @@
         
         function addSlide(type) {
             const existingSlideIndex = slides.findIndex(slide => slide.type === type);
-            
             if (existingSlideIndex !== -1) {
                 showSlide(existingSlideIndex + 1);
                 return;
             }
-            
             let newSlide;
-            
             switch(type) {
                 case 'app': newSlide = { type: 'app' }; break;
                 case 'creative': newSlide = { type: 'creative' }; break;
@@ -1868,7 +1777,6 @@
                 case 'videokp': newSlide = { type: 'videokp' }; break;
                 default: return;
             }
-            
             slides.push(newSlide);
             updateSlideNumbers();
             showSlide(slides.length);
@@ -1876,14 +1784,11 @@
         
         function removeSlide(type) {
             const indexToRemove = slides.findIndex(slide => slide.type === type);
-            
-            if (indexToRemove > 2) { // Can't remove first 3 slides
+            if (indexToRemove > 2) {
                 slides.splice(indexToRemove, 1);
-                
                 if (currentSlideIndex >= slides.length) {
                     currentSlideIndex = slides.length - 1;
                 }
-                
                 updateSlideNumbers();
                 showSlide(currentSlideIndex + 1);
             }
@@ -1892,21 +1797,18 @@
         function updateSlideNumbers() {
             const slideNumbers = document.getElementById('slideNumbers');
             slideNumbers.innerHTML = '';
-            
             slides.forEach((slide, i) => {
                 const number = document.createElement('div');
                 number.className = `slide-number ${i === currentSlideIndex ? 'active' : ''}`;
                 number.textContent = i + 1;
-                number.draggable = i >= 3; // Only allow dragging for slides after the first 3
+                number.draggable = i >= 3;
                 number.dataset.index = i;
-                
                 number.addEventListener('dragstart', handleDragStart);
                 number.addEventListener('dragover', handleDragOver);
                 number.addEventListener('drop', handleDrop);
                 number.addEventListener('dragend', handleDragEnd);
                 number.addEventListener('dragenter', handleDragEnter);
                 number.addEventListener('dragleave', handleDragLeave);
-                
                 number.onclick = () => showSlide(i + 1);
                 slideNumbers.appendChild(number);
             });
@@ -1924,11 +1826,9 @@
         function handleDrop(e) {
             e.preventDefault();
             const targetIndex = parseInt(e.target.dataset.index);
-            
             if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && draggedSlideIndex >= 3 && targetIndex >= 3) {
                 const [draggedItem] = slides.splice(draggedSlideIndex, 1);
                 slides.splice(targetIndex, 0, draggedItem);
-                
                 currentSlideIndex = targetIndex;
                 updateSlideNumbers();
                 updateCurrentSlide();
@@ -1960,17 +1860,15 @@
         
         function getFileName() {
             const managerSelect = document.getElementById('manager');
-            const managerName = managerSelect.options[managerSelect.selectedIndex].text
-                .toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
-                
-            const companyName = document.getElementById('companyName').value
-                .toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
-                
+            const managerName = managerSelect.options[managerSelect.selectedIndex].text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
+            const companyName = document.getElementById('companyName').value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
         
-        // --- НОВАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
+        // --- ОБНОВЛЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
         function scaleClonedContent(clonedContent, scaleFactor) {
+            const manualScaleMultiplier = 2.0; // Заданный множитель x2
+
             const elementsToScale = clonedContent.querySelectorAll(
                 '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
             );
@@ -1979,37 +1877,39 @@
                 const computedStyle = window.getComputedStyle(element);
                 const originalFontSize = parseFloat(computedStyle.fontSize);
                 
-                // Применяем масштабирование к размеру шрифта
-                element.style.fontSize = (originalFontSize * scaleFactor) + 'px';
-                
-                // Устанавливаем line-height, чтобы избежать наложения строк
-                element.style.lineHeight = '1.2';
+                element.style.fontSize = (originalFontSize * scaleFactor * manualScaleMultiplier) + 'px';
+                element.style.lineHeight = '1.25';
 
-                // Для таблиц нужно масштабировать и padding
                 if (element.classList.contains('price-table')) {
                     const cells = element.querySelectorAll('th, td');
                     cells.forEach(cell => {
                          const originalPadding = parseFloat(window.getComputedStyle(cell).paddingTop);
-                         cell.style.padding = (originalPadding * scaleFactor) + 'px';
+                         cell.style.padding = (originalPadding * scaleFactor * manualScaleMultiplier) + 'px';
                     });
                 }
             });
-        }
 
+            // Масштабируем картинки-кейсы на слайде 'creative'
+            const creativeCase1 = clonedContent.querySelector('#creative-case-1');
+            const creativeCase2 = clonedContent.querySelector('#creative-case-2');
+            if(creativeCase1 && creativeCase2) {
+                [creativeCase1, creativeCase2].forEach(el => {
+                    let currentWidth = parseFloat(el.style.width);
+                    let currentHeight = parseFloat(el.style.height);
+                    el.style.width = (currentWidth * manualScaleMultiplier) + '%';
+                    el.style.height = (currentHeight * manualScaleMultiplier) + '%';
+                });
+            }
+        }
 
         async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
-            
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
             
             const fileName = getFileName() + '.pdf';
-            const pdf = new jsPDF({
-                orientation: 'landscape',
-                unit: 'px',
-                format: [1920, 1080]
-            });
+            const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
 
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
@@ -2020,8 +1920,6 @@
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
-
-            // --- ИЗМЕНЕНИЕ: РАССЧЕТ КОЭФФИЦИЕНТА ---
             const onScreenWidth = document.getElementById('currentSlide').offsetWidth;
             const scaleFactor = 1920 / onScreenWidth;
 
@@ -2034,7 +1932,7 @@
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 
-                // --- ИЗМЕНЕНИЕ: ВЫЗОВ ФУНКЦИИ МАСШТАБИРОВАНИЯ ---
+                // Вызываем масштабирование
                 scaleClonedContent(slideContent, scaleFactor);
 
                 tempContainer.innerHTML = '';
@@ -2043,20 +1941,17 @@
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
                     if (!img.complete) {
-                        return new Promise(resolve => {
-                            img.onload = img.onerror = resolve;
-                        });
+                        return new Promise(resolve => { img.onload = img.onerror = resolve; });
                     }
                     return Promise.resolve();
                 });
                 await Promise.all(promises);
-
                 await new Promise(resolve => setTimeout(resolve, 300));
 
                 const canvas = await html2canvas(tempContainer, {
                     width: 1920,
                     height: 1080,
-                    scale: 1, // Устанавливаем scale 1, т.к. размер холста уже правильный
+                    scale: 1,
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -2064,9 +1959,7 @@
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
                 
-                if (i > 0) {
-                    pdf.addPage([1920, 1080], 'landscape');
-                }
+                if (i > 0) pdf.addPage([1920, 1080], 'landscape');
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
                 addLinksToPDF(pdf, slideContent, i);
@@ -2074,7 +1967,6 @@
             
             showSlide(originalSlideIndex + 1);
             document.body.removeChild(tempContainer);
-
             pdf.save(fileName);
             
             setTimeout(() => {
@@ -2085,18 +1977,13 @@
 
         function addLinksToPDF(pdf, slideContent, pageIndex) {
             pdf.setPage(pageIndex + 1);
-            
             const links = slideContent.querySelectorAll('a');
-
             links.forEach(link => {
                 if (!link.href) return;
-
                 const x = link.offsetLeft;
                 const y = link.offsetTop;
                 const width = link.offsetWidth;
                 const height = link.offsetHeight;
-
-                // Эта проверка теперь будет работать, т.к. height не будет равен 0
                 if (width > 0 && height > 0) {
                     try {
                         pdf.link(x, y, width, height, { url: link.href });
@@ -2107,14 +1994,11 @@
             });
         }
         
-        // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-
             document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
                 let text = option.textContent.replace(/Статистика\s*/i, '').trim();
                 option.textContent = text.charAt(0).toUpperCase() + text.slice(1);
             });
-
             const inputsToUpdate = [
                 'banner', 'logos', 'manager', 'personalPhone', 'price1Value', 
                 'price3Value1', 'price3Value2', 'price3Value3', 'comment', 
@@ -2123,14 +2007,12 @@
                 'price1Label', 'price10plusHeader1', 'price10plusValue1',
                 'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3'
             ];
-
             inputsToUpdate.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', updateCurrentSlide);
                 }
             });
-            
             document.getElementById('logos').addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
                 const bannerValue = selectedOption.getAttribute('data-banner');
@@ -2140,9 +2022,7 @@
                     bannerSelect.dispatchEvent(new Event('change'));
                 }
             });
-
             document.getElementById('companyName').addEventListener('input', function() {});
-            
             updateSlideNumbers();
             showSlide(1);
             document.querySelector('.menu-header').click();
