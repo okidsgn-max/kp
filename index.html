@@ -1588,7 +1588,6 @@
                     const selectedManagerOptionForLink = managerSelectForLink.options[managerSelectForLink.selectedIndex];
                     const managerRegLink = selectedManagerOptionForLink.getAttribute('data-link');
 
-                    // --- ИЗМЕНЕНИЕ: ТЕКСТ БЕЗ ССЫЛОК ---
                     const instructionTextDiv = document.createElement('div');
                     instructionTextDiv.className = 'instruction-text';
                     instructionTextDiv.innerHTML = `
@@ -1599,7 +1598,6 @@
                     `;
                     slideContainer.appendChild(instructionTextDiv);
 
-                    // --- ИЗМЕНЕНИЕ: ДОБАВЛЕНИЕ НЕВИДИМЫХ ПРЯМОУГОЛЬНИКОВ-ССЫЛОК ---
                     const createLinkBox = (href, top, left, width, height) => {
                         const link = document.createElement('a');
                         link.href = href;
@@ -1636,7 +1634,6 @@
                     creativeLinkContainer.style.height = '100%';
                     slideContainer.appendChild(creativeLinkContainer);
                     
-                    // --- ИЗМЕНЕНИЕ: Добавляем ID для легкого доступа ---
                     const imageContainerWidthPercent = 6.77;
                     const imageContainerHeightPercent = 12.04;
                     const gapPercent = 2;
@@ -1649,7 +1646,7 @@
                     coffeImg.style.objectFit = 'contain';
 
                     const coffeLink = document.createElement('a');
-                    coffeLink.id = 'creative-case-1'; // ID
+                    coffeLink.id = 'creative-case-1';
                     coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
                     coffeLink.target = '_blank';
                     coffeLink.style.position = 'absolute';
@@ -1667,7 +1664,7 @@
                     letualImg.style.objectFit = 'contain';
 
                     const letualLink = document.createElement('a');
-                    letualLink.id = 'creative-case-2'; // ID
+                    letualLink.id = 'creative-case-2';
                     letualLink.href = 'https://zvuk-b2b.com/blog/letu';
                     letualLink.target = '_blank';
                     letualLink.style.position = 'absolute';
@@ -1679,7 +1676,6 @@
                     slideContainer.appendChild(letualLink);
                     break;
                 
-                // --- Остальные кейсы без изменений ---
                 case 'app':
                     bgImg.src = 'images/app.webp';
                     slideContainer.appendChild(bgImg);
@@ -1867,7 +1863,8 @@
         
         // --- ОБНОВЛЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
         function scaleClonedContent(clonedContent, scaleFactor) {
-            const manualScaleMultiplier = 2.0; // Заданный множитель x2
+            // Убираем дополнительный множитель, возвращаясь к пропорциональному масштабу
+            const manualScaleMultiplier = 1.0; 
 
             const elementsToScale = clonedContent.querySelectorAll(
                 '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
@@ -1888,18 +1885,6 @@
                     });
                 }
             });
-
-            // Масштабируем картинки-кейсы на слайде 'creative'
-            const creativeCase1 = clonedContent.querySelector('#creative-case-1');
-            const creativeCase2 = clonedContent.querySelector('#creative-case-2');
-            if(creativeCase1 && creativeCase2) {
-                [creativeCase1, creativeCase2].forEach(el => {
-                    let currentWidth = parseFloat(el.style.width);
-                    let currentHeight = parseFloat(el.style.height);
-                    el.style.width = (currentWidth * manualScaleMultiplier) + '%';
-                    el.style.height = (currentHeight * manualScaleMultiplier) + '%';
-                });
-            }
         }
 
         async function saveAsPDF() {
