@@ -29,34 +29,34 @@
             --transition-medium: 0.3s;
             --transition-slow: 0.5s;
         }
-
+        
         /* Стили скроллбара */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
-
+        
         ::-webkit-scrollbar-track {
             background: var(--scrollbar-track);
             border-radius: 8px;
         }
-
+        
         ::-webkit-scrollbar-thumb {
             background: var(--scrollbar-thumb);
             border-radius: 8px;
             transition: background var(--transition-medium);
         }
-
+        
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-hover);
         }
-
+        
         /* Для Firefox */
         * {
             scrollbar-width: thin;
             scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
-
+        
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -114,7 +114,7 @@
             content: "...";
             animation: dots 1.5s steps(5, end) infinite;
         }
-
+        
         /* Blur effect for PDF save */
         .blur-overlay {
             position: fixed;
@@ -126,7 +126,7 @@
             z-index: 1000;
             display: none;
         }
-
+        
         .menu-container {
             width: var(--sidebar-width);
             background-color: white;
@@ -138,13 +138,13 @@
             flex-direction: column;
             transition: all var(--transition-medium);
         }
-
+        
         .menu-header-container {
             display: flex;
             flex-direction: column;
             margin-bottom: 2px;
         }
-
+        
         .menu-logo {
             height: 24px;
             width: auto;
@@ -153,11 +153,11 @@
             margin-bottom: 16px;
             transition: transform var(--transition-fast);
         }
-
+        
         .menu-logo:hover {
             transform: scale(1.05);
         }
-
+        
         .menu-title {
             color: var(--text-main);
             font-weight: 600;
@@ -166,7 +166,7 @@
             transition: color var(--transition-fast);
             display: none; /* Скрываем старый заголовок */
         }
-
+        
         .company-name-input {
             font-family: 'Inter', sans-serif;
             font-size: 20px;
@@ -181,22 +181,22 @@
             color: var(--text-main);
             transition: border-color var(--transition-fast);
         }
-
+        
         .company-name-input::placeholder {
             color: #E0E0E0;
         }
-
+        
         .company-name-input:focus {
             border-bottom-color: var(--primary);
         }
-
+        
         .menu-sections {
             flex-grow: 1;
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
-
+        
         .menu-section-header {
             color: var(--text-secondary);
             font-weight: 600;
@@ -204,15 +204,15 @@
             margin: 0;
             transition: color var(--transition-fast);
         }
-
+        
         .menu-section-header:hover {
             color: var(--primary);
         }
-
+        
         .menu-section-header.active {
             color: var(--primary);
         }
-
+        
         .menu-label {
             color: var(--text-secondary);
             font-weight: 500;
@@ -221,7 +221,7 @@
             margin-bottom: 8px;
             transition: color var(--transition-fast);
         }
-
+        
         .preview-container {
             width: var(--preview-width);
             display: flex;
@@ -234,7 +234,7 @@
             background-color: var(--background-light);
             transition: all var(--transition-medium);
         }
-
+        
         .preview-wrapper {
             position: relative;
             margin-bottom: 20px;
@@ -245,14 +245,14 @@
             width: 100%;
             height: 90%;
         }
-
+        
         .preview-controls {
             position: absolute;
             top: 10px;
             right: 10px;
             z-index: 10;
         }
-
+        
         .delete-slide-btn {
             background-color: transparent;
             border: none;
@@ -262,43 +262,43 @@
             padding: 0;
             transition: transform var(--transition-fast);
         }
-
+        
         .delete-slide-btn:hover {
             transform: scale(1.1);
         }
-
+        
         .delete-slide-btn img {
             width: 100%;
             height: 100%;
             transition: opacity var(--transition-fast);
         }
-
+        
         .delete-slide-btn:hover img {
             opacity: 0.8;
         }
-
+        
         .slide-controls-container {
             display: flex;
             justify-content: center;
             margin-top: 20px;
             width: 100%;
         }
-
+        
         .slide-controls {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 8px 15px;
             background: transparent;
-
+            
             transition: all var(--transition-medium);
         }
-
+        
         #slideNumbers {
             display: flex;
             gap: 8px;
         }
-
+        
         .control-icon {
             width: var(--control-icon-size);
             height: var(--control-icon-size);
@@ -310,28 +310,28 @@
             border-radius: var(--border-radius);
             transition: all var(--transition-medium);
         }
-
+        
         .control-icon:hover {
             background: var(--background-light);
             transform: translateY(-2px);
-
+        
         }
-
+        
         .control-icon:active {
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
+        
         .control-icon img {
             width: 20px;
             height: 20px;
             transition: transform var(--transition-fast);
         }
-
+        
         .control-icon:hover img {
             transform: scale(1.1);
         }
-
+        
         .slide-number {
             width: var(--control-icon-size);
             height: var(--control-icon-size);
@@ -346,34 +346,34 @@
             user-select: none;
             transition: all var(--transition-medium);
         }
-
+        
         .slide-number:hover {
             transform: scale(1.1);
             background-color: var(--primary-hover);
             color: white;
         }
-
+        
         .slide-number.active {
             background-color: var(--primary);
             color: white;
             transform: scale(1.1);
         }
-
+        
         .slide-number.dragging {
             opacity: 0.5;
             transform: scale(1.2);
         }
-
+        
         .slide-number.drop-target {
             transform: scale(1.1);
             background-color: var(--primary-hover);
             color: white;
         }
-
+        
         .slide-number.highlight {
             animation: slideHighlight 0.5s ease forwards;
         }
-
+        
         .preview-page {
             position: relative;
             max-width: 100%;
@@ -386,7 +386,7 @@
             margin: auto;
             background-color: #16151A;
         }
-
+        
         .preview-page.zoomed {
             transform: scale(1.5);
             z-index: 100;
@@ -398,14 +398,14 @@
             max-height: 70vh;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
-
+        
         .preview-bg {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: opacity var(--transition-medium);
         }
-
+        
         .preview-banner {
             position: absolute;
             top: 0;
@@ -415,7 +415,7 @@
             object-fit: fill;
             transition: all var(--transition-medium);
         }
-
+        
         .preview-logos {
             position: absolute;
             bottom: 6%;
@@ -425,26 +425,27 @@
             object-fit: contain;
             transition: all var(--transition-medium);
         }
-
+        
         .preview-price {
             position: absolute;
             top: 65%;
             left: 3%;
             color: white;
             font-weight: bold;
-           
-            font-size: 26px;
+            width: 50%;
+            font-size: 20px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-
+        
         .preview-price-label {
             position: absolute;
             top: 60%;
             left: 3%;
             color: #D9D9D9;
-                     font-weight: 400;
-            font-size: 26px;
+            width: 50%;
+            font-weight: 400;
+            font-size: 16px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -455,8 +456,8 @@
             left: 3%;
             color: white;
             font-weight: bold;
-            
-            font-size: 26px;
+            width: 30%;
+            font-size: 20px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -467,11 +468,12 @@
             left: 65%;
             color: white;
             font-weight: bold;
-                        font-size: 26px;
+            width: 50%;
+            font-size: 20px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-
+        
         .preview-comment {
             position: absolute;
             bottom: 4%;
@@ -483,7 +485,7 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-
+        
         .price-table {
             position: absolute;
             top: 55%;
@@ -491,22 +493,22 @@
             width:60%;
             color: white;
             border-collapse: collapse;
-            font-size: 22px;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-
+        
         .price-table th, .price-table td {
-            padding: 5px;
+            padding: 10px;
             text-align: left;
             border: 1px solid #303030;
             transition: background-color var(--transition-fast);
         }
-
+        
         .price-table th {
             background-color: rgba(0,0,0,0.3);
         }
-
+        
         .price-table .editable-header {
             background-color: transparent;
             border: none;
@@ -524,7 +526,7 @@
             object-fit: contain;
             transition: all var(--transition-medium);
         }
-
+        
         .preview-phone {
             position: absolute;
             bottom: 13%;
@@ -535,7 +537,7 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-
+        
         .preview-qr {
             position: absolute;
             bottom: 8%;
@@ -550,27 +552,27 @@
             justify-content: center;
             transition: all var(--transition-medium);
         }
-
+        
         .preview-qr:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-
+        
         .preview-qr img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             transition: all var(--transition-fast);
         }
-
+        
         .preview-link {
             position: absolute;
             bottom: 5%;
             right: 5%;
-            color: transparent;
+            color: transparent; 
             transition: all var(--transition-fast);
         }
-
+        
         .preview-video {
             position: absolute;
             bottom: 0%;
@@ -579,24 +581,24 @@
             height: 130px;
             transition: all var(--transition-medium);
         }
-
+        
         .preview-video img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             transition: all var(--transition-fast);
         }
-
+        
         .menu-section {
             margin-bottom: 8px;
             border-radius: var(--border-radius);
             transition: all var(--transition-medium);
         }
-
+        
         .menu-section.active {
             background-color: var(--background-light);
         }
-
+        
         .menu-header {
             display: flex;
             justify-content: space-between;
@@ -606,21 +608,21 @@
             border-radius: var(--border-radius);
             transition: all var(--transition-medium);
         }
-
+        
         .menu-header:hover {
             background-color: var(--background-light);
         }
-
+        
         .menu-content {
             display: none;
             padding: 0 12px 12px;
             animation: fadeIn var(--transition-medium) ease forwards;
         }
-
+        
         .menu-content.active {
             display: block;
         }
-
+        
         .toggle-button {
             font-size: 20px;
             color: var(--text-secondary);
@@ -632,16 +634,16 @@
             justify-content: center;
             border-radius: 8px;
         }
-
+        
         .menu-header:hover .toggle-button {
             color: var(--primary);
             transform: rotate(90deg);
         }
-
+        
         .menu-header.active .toggle-button {
             transform: rotate(45deg);
         }
-
+        
         .zvuk-select, .zvuk-input {
             font-size: 14px;
             font-weight: 500;
@@ -657,11 +659,11 @@
             transition: all var(--transition-medium);
             margin-bottom: 16px;
         }
-
+        
         .zvuk-select:hover, .zvuk-input:hover {
             border-color: var(--primary-hover);
         }
-
+        
         .zvuk-select {
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%239A9FA5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -669,36 +671,36 @@
             background-position: right 12px center;
             cursor: pointer;
         }
-
+        
         .zvuk-select:focus, .zvuk-input:focus {
             border-color: var(--primary);
             background-color: #fff;
             box-shadow: 0 0 0 2px rgba(0, 179, 152, 0.1);
         }
-
+        
         .zvuk-input[type="number"] {
             -moz-appearance: textfield;
         }
-
+        
         .zvuk-input[type="number"]::-webkit-outer-spin-button,
         .zvuk-input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-
+        
         .radio-group {
             margin-bottom: 16px;
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
         }
-
+        
         .radio-option {
             display: flex;
             align-items: center;
             cursor: pointer;
         }
-
+        
         .radio-option input[type="radio"] {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -712,12 +714,12 @@
             position: relative;
             transition: all var(--transition-fast);
         }
-
+        
         .radio-option input[type="radio"]:checked {
             border-color: var(--primary);
             background-color: var(--primary);
         }
-
+        
         .radio-option input[type="radio"]:checked::after {
             content: '';
             position: absolute;
@@ -728,7 +730,7 @@
             border-radius: 50%;
             background-color: white;
         }
-
+        
         .radio-option label {
             color: var(--text-secondary);
             font-weight: 500;
@@ -736,26 +738,26 @@
             cursor: pointer;
             transition: color var(--transition-fast);
         }
-
+        
         .radio-option:hover label {
             color: var(--primary);
         }
-
+        
         .radio-option:hover input[type="radio"] {
             border-color: var(--primary-hover);
         }
-
+        
         .price-columns {
             display: flex;
             gap: 10px;
             margin-bottom: 16px;
         }
-
+        
         .price-column {
             flex: 1;
             transition: all var(--transition-medium);
         }
-
+        
         .action-buttons {
             display: flex;
             gap: 0px;
@@ -767,7 +769,7 @@
             z-index: 10;
             transition: all var(--transition-medium);
         }
-
+        
         .zvuk-button {
             font-family: 'Inter', sans-serif;
             font-weight: 500;
@@ -783,47 +785,47 @@
             justify-content: center;
             flex: 1;
         }
-
+        
         .zvuk-button--primary {
             background-color: var(--primary);
             color: #FFFFFF;
         }
-
+        
         .zvuk-button--primary:hover {
             background-color: var(--primary-hover);
             transform: translateY(0px);
             box-shadow: 0 0px 0px rgba(0,0,0,0.15);
         }
-
+        
         .zvuk-button--primary:active {
             background-color: var(--primary-active);
             transform: translateY(0);
             box-shadow: 0 0px 0px rgba(0,0,0,0.1);
         }
-
+        
         .zvuk-button--secondary {
             background-color: var(--background-light);
             color: var(--text-secondary);
             border: 1px solid var(--border);
         }
-
+        
         .zvuk-button--secondary:hover {
             background-color: #e8e8f0;
             transform: translateY(0px);
             box-shadow: 0 0px 0px rgba(0,0,0,0.1);
         }
-
+        
         .zvuk-button--secondary:active {
             transform: translateY(0);
             box-shadow: 0 0px 0px rgba(0,0,0,0.05);
         }
-
+        
         .slide-buttons {
             display: flex;
             gap: 10px;
             margin-top: 8px;
         }
-
+        
         .slide-buttons .zvuk-button {
             flex: 1;
             min-width: 0;
@@ -831,17 +833,17 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-
+        
         .hidden {
             display: none !important;
         }
-
+        
         .phone-type {
             display: flex;
-            gap: 18px;
+            gap: 16px;
             margin-bottom: 16px;
         }
-
+        
         .phone-type label {
             display: flex;
             align-items: center;
@@ -852,7 +854,7 @@
             cursor: pointer;
             transition: all var(--transition-fast);
         }
-
+        
         .phone-type label:hover {
             color: var(--primary);
         }
@@ -865,7 +867,7 @@
             font-weight: 300;
             width: 60%;
             line-height: 1.2;
-            font-size: 24px;
+            font-size: 14px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -879,13 +881,13 @@
 </head>
 <body>
     <div class="blur-overlay"></div>
-
+    
     <div class="menu-container">
         <div class="menu-header-container">
             <img class="menu-logo" src="logo.png" alt="Logo">
             <input type="text" class="company-name-input" id="companyName" placeholder="Впишите имя клиента" value="">
         </div>
-
+        
         <div class="menu-sections">
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'general')">
@@ -908,7 +910,7 @@
                         <option value="images/clotheslogo.webp" data-banner="images/sbmall.webp">Одежда</option>
                         <option value="images/barberlogo.webp" data-banner="images/sbbarber.webp">Барбершопы</option>
                         <option value="images/beautylogo.webp" data-banner="images/sbbeauty.webp">Салоны красоты</option>
-                        <option value="images/Retaillogo.webp" data-banner="images/sbretail.webp">Ритейл сети</option>
+                        <option value="images/Retaillogo.webp" data-banner="images/sbretail.webp">Ритейл сети</option> 
                         <option value="images/hotellogo.webp" data-banner="images/sbhotel.webp">Отели</option>
                         <option value="images/azslogo.webp" data-banner="images/sbazs.webp">АЗС</option>
                         <option value="images/fitnesslogo.webp" data-banner="images/sbfitnes.webp">Фитнес</option>
@@ -920,12 +922,12 @@
                     </select>
 
                     <label class="menu-label">Баннер:</label>
-                    <select class="zvuk-select" id="banner">
+                    <select class="zvuk-select" id="banner">                                                              
                         <option value="images/sbcafe.webp">Кафе</option>
                         <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbcafe.webp">Пекарня</option>
                         <option value="images/sbfastfood.webp">Фастфуд</option>
-                        <option value="images/sbfastfood.webp">Грильбар</option>
+                        <option value="images/sbfastfood.webp">Грильбар</option>                        
                         <option value="images/sbpizza.webp">Пицца</option>
                         <option value="images/sbsushi.webp">Суши</option>
                         <option value="images/sbluxrest.webp">Ресторан</option>
@@ -934,7 +936,7 @@
                         <option value="images/sbmall.webp">Одежда</option>
                         <option value="images/sbtc.webp">Торговый центр</option>
                         <option value="images/sbkids.webp">Детский центр</option>
-                        <option value="images/sbfitnes.webp">Фитнес</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
                         <option value="images/sbbeauty.webp">Салон красоты</option>
                         <option value="images/sbbarber.webp">Барбершоп</option>
                         <option value="images/sbspa.webp">Спа</option>
@@ -946,13 +948,13 @@
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
-                        <option value="images/nostalgia.webp">Ностальгия</option>
+                        <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
-                        <option value="images/veranda.webp">Веранда</option>
+                        <option value="images/veranda.webp">Веранда</option>  
                     </select>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'pricing')">
                     <span class="menu-section-header">Менеджер+стоимость</span>
@@ -975,12 +977,12 @@
                         <option value="images/umnov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=umnov">Иван Умнов</option>
                         <option value="images/farmonov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=farmonov">Тимур Фармонов</option>
                     </select>
-
+                    
                     <div id="personalPhoneContainer">
                         <label class="menu-label">Добавить номер:</label>
                         <input class="zvuk-input" type="text" id="personalPhone" placeholder="Введите номер телефона">
                     </div>
-
+                    
                     <div class="radio-group">
                         <div class="radio-option">
                             <input type="radio" id="price1" name="priceColumns" value="1" checked>
@@ -995,14 +997,14 @@
                             <label for="price10plus">10+</label>
                         </div>
                     </div>
-
+                    
                     <div id="price1Container">
                         <label class="menu-label">Заголовок стоимости:</label>
                         <input class="zvuk-input" type="text" id="price1Label" value="Стоимость за 1 помещение, ₽ в т.ч. 20%">
                         <label class="menu-label">Стоимость, ₽/мес:</label>
                         <input class="zvuk-input" type="number" id="price1Value" value="1390">
                     </div>
-
+                    
                     <div id="price3Container" class="hidden">
                         <div class="price-columns">
                             <div class="price-column">
@@ -1042,17 +1044,17 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="comment" placeholder="Введите комментарий">
-
+                    
                     <label class="menu-label">Баннер:</label>
                     <select class="zvuk-select" id="priceBanner">
                         <option value="images/sbcafe.webp">Кафе</option>
                         <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbcafe.webp">Пекарня</option>
                         <option value="images/sbfastfood.webp">Фастфуд</option>
-                        <option value="images/sbfastfood.webp">Грильбар</option>
+                        <option value="images/sbfastfood.webp">Грильбар</option>                        
                         <option value="images/sbpizza.webp">Пицца</option>
                         <option value="images/sbsushi.webp">Суши</option>
                         <option value="images/sbluxrest.webp">Ресторан</option>
@@ -1061,7 +1063,7 @@
                         <option value="images/sbmall.webp">Одежда</option>
                         <option value="images/sbtc.webp">Торговый центр</option>
                         <option value="images/sbkids.webp">Детский центр</option>
-                        <option value="images/sbfitnes.webp">Фитнес</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
                         <option value="images/sbbeauty.webp">Салон красоты</option>
                         <option value="images/sbbarber.webp">Барбершоп</option>
                         <option value="images/sbspa.webp">Спа</option>
@@ -1073,13 +1075,13 @@
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
-                        <option value="images/nostalgia.webp">Ностальгия</option>
+                        <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
-                        <option value="images/veranda.webp">Веранда</option>
+                        <option value="images/veranda.webp">Веранда</option>  
                     </select>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'instruction')">
                     <span class="menu-section-header">Инструкция по подключению</span>
@@ -1092,7 +1094,7 @@
                         <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbcafe.webp">Пекарня</option>
                         <option value="images/sbfastfood.webp">Фастфуд</option>
-                        <option value="images/sbfastfood.webp">Грильбар</option>
+                        <option value="images/sbfastfood.webp">Грильбар</option>                        
                         <option value="images/sbpizza.webp">Пицца</option>
                         <option value="images/sbsushi.webp">Суши</option>
                         <option value="images/sbluxrest.webp">Ресторан</option>
@@ -1101,7 +1103,7 @@
                         <option value="images/sbmall.webp">Одежда</option>
                         <option value="images/sbtc.webp">Торговый центр</option>
                         <option value="images/sbkids.webp">Детский центр</option>
-                        <option value="images/sbfitnes.webp">Фитнес</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
                         <option value="images/sbbeauty.webp">Салон красоты</option>
                         <option value="images/sbbarber.webp">Барбершоп</option>
                         <option value="images/sbspa.webp">Спа</option>
@@ -1113,13 +1115,13 @@
                         <option value="images/play.webp">Плеер</option>
                         <option value="images/action.webp">Акция</option>
                         <option value="images/autumn.webp">Осенний плейлист</option>
-                        <option value="images/nostalgia.webp">Ностальгия</option>
+                        <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
-                        <option value="images/veranda.webp">Веранда</option>
+                        <option value="images/veranda.webp">Веранда</option> 
                     </select>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'app')">
                     <span class="menu-section-header">Мобильное приложение</span>
@@ -1132,7 +1134,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'creative')">
                     <span class="menu-section-header">Креативные аудиоролики</span>
@@ -1145,7 +1147,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'playlist')">
                     <span class="menu-section-header">Тематические плейлисты</span>
@@ -1164,7 +1166,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'partner')">
                     <span class="menu-section-header">Партнерская программа</span>
@@ -1177,7 +1179,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'premium')">
                     <span class="menu-section-header">Премиум тариф</span>
@@ -1186,20 +1188,20 @@
                 <div class="menu-content">
                     <label class="menu-label">Стоимость 1, ₽/мес:</label>
                     <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
-
+                    
                     <label class="menu-label">Стоимость 2, ₽ разово:</label>
                     <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
-
+                    
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="premiumComment" placeholder="Введите комментарий">
-
+                    
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('premium')">Добавить</button>
                         <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('premium')">Удалить</button>
                     </div>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'bprofile')">
                     <span class="menu-section-header">Бизнес-профиль</span>
@@ -1212,7 +1214,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'event')">
                     <span class="menu-section-header">Мероприятия</span>
@@ -1247,30 +1249,30 @@
                 <div class="menu-content">
                     <label class="menu-label">Стоимость, ₽/мес:</label>
                     <input class="zvuk-input" type="number" id="videokpPrice" value="1990">
-
+                    
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="videokpComment" placeholder="Введите комментарий">
-
+                    
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('videokp')">Добавить</button>
                         <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('videokp')">Удалить</button>
                     </div>
                 </div>
             </div>
-
+            
         </div>
-
+        
         <div class="action-buttons">
             <button class="zvuk-button zvuk-button--primary" onclick="saveAsPDF()">в PDF</button>
         </div>
     </div>
-
+    
     <div class="preview-container">
         <div class="preview-wrapper">
             <div id="slideContainer">
                 <div class="preview-page" id="currentSlide" onclick="toggleZoom()"></div>
             </div>
-
+            
             <div class="slide-controls-container">
                 <div class="slide-controls">
                     <div class="control-icon" onclick="toggleZoom()">
@@ -1290,19 +1292,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
-
+    
+    
     <script>
         // Инициализация jsPDF
         const { jsPDF } = window.jspdf;
-
+        
         // Массив для хранения слайдов
         const slides = [
             { type: 'general', banner: 'images/bkids.webp', logos: 'images/alllogo.webp' },
             { type: 'pricing', format: '1', price: '1390', comment: '', banner: 'images/bkids.webp', manager: 'images/mankova.webp', phone: '' },
             { type: 'instruction' }
         ];
-
+        
         // Ссылки для баннеров
         const bannerLinks = {
             'images/sbcafe.webp': 'https://zvuk-b2b.com/cafe',
@@ -1322,7 +1324,7 @@
             'images/sbauto.webp': 'https://zvuk-b2b.com/avtosalon',
             'images/sbazs.webp': 'https://zvuk-b2b.com/avtosalon',
             'images/sbhotel.webp': 'https://zvuk-b2b.com/hotel',
-            'images/sbsocobj.webp': 'https://zvuk-b2b.com/socobj',
+            'images/sbsocobj.webp': 'https://zvuk-b2b.com/socobj', 
             'images/bkids.webp': 'https://zvuk-b2b.com/music_for_kids',
             'images/veranda.webp': 'https://zvuk-b2b.com/rest',
             'images/play.webp': 'https://zvuk-b2b.com/player',
@@ -1341,18 +1343,18 @@
             'images/event.webp': 'https://zvuk-b2b.com',
             'images/concept.webp': 'https://zvuk-b2b.com'
         };
-
+        
         let currentSlideIndex = 0;
         let isZoomed = false;
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
-
+        
         function toggleMenu(header, type) {
             const section = header.parentElement;
             const content = header.nextElementSibling;
             const button = header.querySelector('.toggle-button');
             const headerText = header.querySelector('.menu-section-header');
-
+            
             document.querySelectorAll('.menu-section').forEach(s => {
                 if (s !== section) {
                     s.classList.remove('active');
@@ -1361,7 +1363,7 @@
                     s.querySelector('.menu-section-header').classList.remove('active');
                 }
             });
-
+            
             if (content.classList.contains('active')) {
                 section.classList.remove('active');
                 content.classList.remove('active');
@@ -1372,14 +1374,14 @@
                 content.classList.add('active');
                 button.textContent = '-';
                 headerText.classList.add('active');
-
+                
                 const slideIndex = slides.findIndex(slide => slide.type === type);
                 if (slideIndex !== -1) {
                     showSlide(slideIndex + 1);
                 }
             }
         }
-
+        
         function toggleZoom() {
             if (window.innerWidth <= 800) {
                 return;
@@ -1388,13 +1390,13 @@
             slide.classList.toggle('zoomed');
             isZoomed = !isZoomed;
         }
-
+        
         document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 document.getElementById('price1Container').classList.add('hidden');
                 document.getElementById('price3Container').classList.add('hidden');
                 document.getElementById('price10plusContainer').classList.add('hidden');
-
+                
                 if (this.value === '1') {
                     document.getElementById('price1Container').classList.remove('hidden');
                 } else if (this.value === '3') {
@@ -1405,25 +1407,25 @@
                 updateCurrentSlide();
             });
         });
-
+        
         function updateCurrentSlide() {
             if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) return;
             const currentSlide = slides[currentSlideIndex];
             const slideContainer = document.getElementById('currentSlide');
             slideContainer.innerHTML = '';
-
+            
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
-
+            
             switch(currentSlide.type) {
                 case 'general':
                     bgImg.src = 'images/Backprice1.webp';
                     slideContainer.appendChild(bgImg);
-
+                    
                     const bannerImg = document.createElement('img');
                     bannerImg.className = 'preview-banner';
                     bannerImg.src = document.getElementById('banner').value;
-
+                    
                     const bannerLink = document.createElement('a');
                     bannerLink.href = bannerLinks[document.getElementById('banner').value] || '#';
                     bannerLink.target = '_blank';
@@ -1434,27 +1436,27 @@
                     bannerLink.style.height = '100%';
                     bannerLink.appendChild(bannerImg);
                     slideContainer.appendChild(bannerLink);
-
+                    
                     const logosImg = document.createElement('img');
                     logosImg.className = 'preview-logos';
                     logosImg.src = document.getElementById('logos').value;
                     slideContainer.appendChild(logosImg);
                     break;
-
+                    
                 case 'pricing':
                     const priceFormat = document.querySelector('input[name="priceColumns"]:checked').value;
-
+                    
                     if (priceFormat === '1') {
                         bgImg.src = 'images/1price.webp';
                     } else {
                         bgImg.src = 'images/3price.webp';
                     }
                     slideContainer.appendChild(bgImg);
-
+                    
                     const priceBannerImg = document.createElement('img');
                     priceBannerImg.className = 'preview-banner';
                     priceBannerImg.src = document.getElementById('priceBanner').value;
-
+                    
                     const priceBannerLink = document.createElement('a');
                     priceBannerLink.href = bannerLinks[document.getElementById('priceBanner').value] || '#';
                     priceBannerLink.target = '_blank';
@@ -1465,7 +1467,7 @@
                     priceBannerLink.style.height = '100%';
                     priceBannerLink.appendChild(priceBannerImg);
                     slideContainer.appendChild(priceBannerLink);
-
+                    
                     const managerSelect = document.getElementById('manager');
                     const selectedManagerOption = managerSelect.options[managerSelect.selectedIndex];
                     const managerValue = selectedManagerOption.value;
@@ -1474,7 +1476,7 @@
                     const managerImg = document.createElement('img');
                     managerImg.className = 'preview-manager';
                     managerImg.src = managerValue;
-
+                    
                     const managerLinkContainer = document.createElement('a');
                     managerLinkContainer.href = managerDataLink;
                     managerLinkContainer.target = '_blank';
@@ -1484,7 +1486,7 @@
                     managerLinkContainer.style.width = '57%';
                     managerLinkContainer.style.height = '25%';
                     slideContainer.appendChild(managerLinkContainer);
-
+                    
                     const managerLink = document.createElement('a');
                     managerLink.href = managerDataLink;
                     managerLink.target = '_blank';
@@ -1495,14 +1497,14 @@
                     managerLink.style.height = 'auto';
                     managerLink.appendChild(managerImg);
                     slideContainer.appendChild(managerLink);
-
+                    
                     if (document.getElementById('personalPhone').value) {
                         const phoneDiv = document.createElement('div');
                         phoneDiv.className = 'preview-phone';
                         phoneDiv.textContent = document.getElementById('personalPhone').value;
                         slideContainer.appendChild(phoneDiv);
                     }
-
+                    
                     const commentDiv = document.createElement('div');
                     commentDiv.className = 'preview-comment';
                     commentDiv.textContent = document.getElementById('comment').value;
@@ -1562,7 +1564,7 @@
                         slideContainer.appendChild(commentDiv);
                     }
                     break;
-
+                    
                 case 'instruction':
                     bgImg.src = 'images/instruct.webp';
                     slideContainer.appendChild(bgImg);
@@ -1570,7 +1572,7 @@
                     const instructionBannerImg = document.createElement('img');
                     instructionBannerImg.className = 'preview-banner';
                     instructionBannerImg.src = document.getElementById('instructionBanner').value;
-
+                    
                     const instructionBannerLink = document.createElement('a');
                     instructionBannerLink.href = bannerLinks[document.getElementById('instructionBanner').value] || '#';
                     instructionBannerLink.target = '_blank';
@@ -1608,7 +1610,7 @@
                         // link.style.border = '1px solid red'; // Для отладки
                         return link;
                     };
-
+                    
                     const managerLinkBox = createLinkBox(managerRegLink, '40.5%', '20%', '10%', '3.5%');
                     const computerLinkBox = createLinkBox('https://help.zvuk-b2b.com/onair#desktop', '46%', '26%', '11%', '3.5%');
                     const smartphoneLinkBox = createLinkBox('https://help.zvuk-b2b.com/onair#desktop', '46%', '41%', '11%', '3.5%');
@@ -1617,11 +1619,11 @@
                     slideContainer.appendChild(computerLinkBox);
                     slideContainer.appendChild(smartphoneLinkBox);
                     break;
-
+                    
                 case 'creative':
                     bgImg.src = 'images/createbanner.webp';
                     slideContainer.appendChild(bgImg);
-
+                    
                     const creativeLinkContainer = document.createElement('a');
                     creativeLinkContainer.href = 'https://zvuk-b2b.com/audio_ads';
                     creativeLinkContainer.target = '_blank';
@@ -1631,7 +1633,7 @@
                     creativeLinkContainer.style.width = '35%';
                     creativeLinkContainer.style.height = '100%';
                     slideContainer.appendChild(creativeLinkContainer);
-
+                    
                     const imageContainerWidthPercent = 6.77;
                     const imageContainerHeightPercent = 12.04;
                     const gapPercent = 2;
@@ -1673,7 +1675,7 @@
                     letualLink.appendChild(letualImg);
                     slideContainer.appendChild(letualLink);
                     break;
-
+                
                 case 'app':
                     bgImg.src = 'images/app.webp';
                     slideContainer.appendChild(bgImg);
@@ -1689,7 +1691,7 @@
                 case 'premium':
                     bgImg.src = 'images/premiumbanner.webp';
                     slideContainer.appendChild(bgImg);
-
+                    
                     const premiumPriceDiv1 = document.createElement('div');
                     premiumPriceDiv1.className = 'preview-price-premium-1';
                     premiumPriceDiv1.textContent = formatPrice(document.getElementById('premiumPrice1').value) + ' ₽/мес.';
@@ -1699,7 +1701,7 @@
                     premiumPriceDiv2.className = 'preview-price-premium-2';
                     premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ' ₽/мес.';
                     slideContainer.appendChild(premiumPriceDiv2);
-
+                    
                     const premiumCommentDiv = document.createElement('div');
                     premiumCommentDiv.className = 'preview-comment';
                     premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
@@ -1720,12 +1722,12 @@
                 case 'videokp':
                     bgImg.src = 'images/atmvieo.webp';
                     slideContainer.appendChild(bgImg);
-
+                    
                     const videoPriceDiv = document.createElement('div');
                     videoPriceDiv.className = 'preview-price';
                     videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ' ₽/мес.';
                     slideContainer.appendChild(videoPriceDiv);
-
+                    
                     const videoCommentDiv = document.createElement('div');
                     videoCommentDiv.className = 'preview-comment';
                     videoCommentDiv.textContent = document.getElementById('videokpComment').value;
@@ -1733,7 +1735,7 @@
                     break;
             }
         }
-
+        
         function showSlide(index) {
             if (index < 1 || index > slides.length) return;
             currentSlideIndex = index - 1;
@@ -1742,7 +1744,7 @@
             });
             updateCurrentSlide();
         }
-
+        
         function removeCurrentSlide() {
             if (slides.length > 3) {
                 const slideToRemove = slides[currentSlideIndex];
@@ -1751,7 +1753,7 @@
                 }
             }
         }
-
+        
         function addSlide(type) {
             const existingSlideIndex = slides.findIndex(slide => slide.type === type);
             if (existingSlideIndex !== -1) {
@@ -1775,7 +1777,7 @@
             updateSlideNumbers();
             showSlide(slides.length);
         }
-
+        
         function removeSlide(type) {
             const indexToRemove = slides.findIndex(slide => slide.type === type);
             if (indexToRemove > 2) {
@@ -1787,7 +1789,7 @@
                 showSlide(currentSlideIndex + 1);
             }
         }
-
+        
         function updateSlideNumbers() {
             const slideNumbers = document.getElementById('slideNumbers');
             slideNumbers.innerHTML = '';
@@ -1807,16 +1809,16 @@
                 slideNumbers.appendChild(number);
             });
         }
-
+        
         function handleDragStart(e) {
             draggedSlideIndex = parseInt(e.target.dataset.index);
             e.target.classList.add('dragging');
         }
-
+        
         function handleDragOver(e) {
             e.preventDefault();
         }
-
+        
         function handleDrop(e) {
             e.preventDefault();
             const targetIndex = parseInt(e.target.dataset.index);
@@ -1829,34 +1831,72 @@
             }
              e.target.classList.remove('drop-target', 'dragging');
         }
-
+        
         function handleDragEnd(e) {
             document.querySelectorAll('.slide-number').forEach(el => {
                 el.classList.remove('dragging', 'drop-target');
             });
             draggedSlideIndex = null;
         }
-
+        
         function handleDragEnter(e) {
             const targetIndex = parseInt(e.target.dataset.index);
             if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && targetIndex >= 3) {
                 e.target.classList.add('drop-target');
             }
         }
-
+        
         function handleDragLeave(e) {
             e.target.classList.remove('drop-target');
         }
-
+        
         function formatPrice(price) {
             return String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
         }
-
+        
         function getFileName() {
             const managerSelect = document.getElementById('manager');
             const managerName = managerSelect.options[managerSelect.selectedIndex].text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
             const companyName = document.getElementById('companyName').value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
+        }
+        
+        // --- ОБНОВЛЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
+        function scaleClonedContent(clonedContent, scaleFactor) {
+            // Увеличиваем дополнительный множитель для текста в 2.5 раза
+            const manualScaleMultiplier = 2.5;
+
+            const elementsToScale = clonedContent.querySelectorAll(
+                '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
+            );
+            
+            elementsToScale.forEach(element => {
+                const computedStyle = window.getComputedStyle(element);
+                const originalFontSize = parseFloat(computedStyle.fontSize);
+                
+                // Увеличиваем шрифт в 2.5 раза
+                element.style.fontSize = (originalFontSize * scaleFactor * manualScaleMultiplier) + 'px';
+                element.style.lineHeight = '1.25';
+
+                if (element.classList.contains('price-table')) {
+                    const cells = element.querySelectorAll('th, td');
+                    cells.forEach(cell => {
+                         const originalPadding = parseFloat(window.getComputedStyle(cell).paddingTop);
+                         cell.style.padding = (originalPadding * scaleFactor * manualScaleMultiplier) + 'px';
+                    });
+                }
+            });
+
+            // Увеличиваем изображения в креативных слайдах в 2 раза
+            const creativeImages = clonedContent.querySelectorAll('#creative-case-1, #creative-case-2');
+            creativeImages.forEach(img => {
+                const computedStyle = window.getComputedStyle(img);
+                const originalWidth = parseFloat(computedStyle.width);
+                const originalHeight = parseFloat(computedStyle.height);
+                
+                img.style.width = (originalWidth * scaleFactor * 2) + 'px';
+                img.style.height = (originalHeight * scaleFactor * 2) + 'px';
+            });
         }
 
         async function saveAsPDF() {
@@ -1864,7 +1904,7 @@
             const blurOverlay = document.querySelector('.blur-overlay');
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
-
+            
             const fileName = getFileName() + '.pdf';
             const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
 
@@ -1875,55 +1915,57 @@
             tempContainer.style.width = '1920px';
             tempContainer.style.height = '1080px';
             document.body.appendChild(tempContainer);
-
-            const originalSlideIndex = currentSlideIndex;
+            
+            const originalSlideIndex = currentSlideIndex; 
             const onScreenWidth = document.getElementById('currentSlide').offsetWidth;
-            const renderScale = 2; // Increased scale for higher quality capture
+            const scaleFactor = 1920 / onScreenWidth;
 
             for (let i = 0; i < slides.length; i++) {
-                showSlide(i + 1);
-
+                showSlide(i + 1); 
+                
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                slideContent.style.width = '1920px';
-                slideContent.style.height = '1080px';
+                slideContent.style.width = '100%';
+                slideContent.style.height = '100%';
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
+                
+                // Вызываем масштабирование с увеличенными коэффициентами
+                scaleClonedContent(slideContent, scaleFactor);
 
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
-
-                // Wait for all images to load
+                
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
-                    if (img.complete) return Promise.resolve();
-                    return new Promise(resolve => {
-                        img.onload = img.onerror = resolve;
-                    });
+                    if (!img.complete) {
+                        return new Promise(resolve => { img.onload = img.onerror = resolve; });
+                    }
+                    return Promise.resolve();
                 });
                 await Promise.all(promises);
-                await new Promise(resolve => setTimeout(resolve, 300)); // Small delay for content rendering
+                await new Promise(resolve => setTimeout(resolve, 300));
 
-                const canvas = await html2canvas(slideContent, {
+                const canvas = await html2canvas(tempContainer, {
                     width: 1920,
                     height: 1080,
-                    scale: renderScale,
+                    scale: 1,
                     logging: false,
                     useCORS: true,
                     letterRendering: true
                 });
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
-
+                
                 if (i > 0) pdf.addPage([1920, 1080], 'landscape');
-
+                
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
                 addLinksToPDF(pdf, slideContent, i);
             }
-
+            
             showSlide(originalSlideIndex + 1);
             document.body.removeChild(tempContainer);
             pdf.save(fileName);
-
+            
             setTimeout(() => {
                 popup.style.display = 'none';
                 blurOverlay.style.display = 'none';
@@ -1933,17 +1975,12 @@
         function addLinksToPDF(pdf, slideContent, pageIndex) {
             pdf.setPage(pageIndex + 1);
             const links = slideContent.querySelectorAll('a');
-            const scaleX = 1920 / 1920; 
-            const scaleY = 1080 / 1080;
-
             links.forEach(link => {
                 if (!link.href) return;
-                const rect = link.getBoundingClientRect();
-                const x = rect.left * scaleX;
-                const y = rect.top * scaleY;
-                const width = rect.width * scaleX;
-                const height = rect.height * scaleY;
-
+                const x = link.offsetLeft;
+                const y = link.offsetTop;
+                const width = link.offsetWidth;
+                const height = link.offsetHeight;
                 if (width > 0 && height > 0) {
                     try {
                         pdf.link(x, y, width, height, { url: link.href });
@@ -1953,16 +1990,16 @@
                 }
             });
         }
-
+        
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
                 let text = option.textContent.replace(/Статистика\s*/i, '').trim();
                 option.textContent = text.charAt(0).toUpperCase() + text.slice(1);
             });
             const inputsToUpdate = [
-                'banner', 'logos', 'manager', 'personalPhone', 'price1Value',
-                'price3Value1', 'price3Value2', 'price3Value3', 'comment',
-                'priceBanner', 'instructionBanner', 'playlist', 'premiumPrice1',
+                'banner', 'logos', 'manager', 'personalPhone', 'price1Value', 
+                'price3Value1', 'price3Value2', 'price3Value3', 'comment', 
+                'priceBanner', 'instructionBanner', 'playlist', 'premiumPrice1', 
                 'premiumPrice2', 'premiumComment', 'videokpPrice', 'videokpComment',
                 'price1Label', 'price10plusHeader1', 'price10plusValue1',
                 'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3'
