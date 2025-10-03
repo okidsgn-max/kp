@@ -1861,44 +1861,6 @@
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
         
-        // --- ОБНОВЛЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
-        function scaleClonedContent(clonedContent, scaleFactor) {
-            // Увеличиваем дополнительный множитель для текста в 2.5 раза
-            const manualScaleMultiplier = 2.5;
-
-            const elementsToScale = clonedContent.querySelectorAll(
-                '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
-            );
-            
-            elementsToScale.forEach(element => {
-                const computedStyle = window.getComputedStyle(element);
-                const originalFontSize = parseFloat(computedStyle.fontSize);
-                
-                // Увеличиваем шрифт в 2.5 раза
-                element.style.fontSize = (originalFontSize * scaleFactor * manualScaleMultiplier) + 'px';
-                element.style.lineHeight = '1.25';
-
-                if (element.classList.contains('price-table')) {
-                    const cells = element.querySelectorAll('th, td');
-                    cells.forEach(cell => {
-                         const originalPadding = parseFloat(window.getComputedStyle(cell).paddingTop);
-                         cell.style.padding = (originalPadding * scaleFactor * manualScaleMultiplier) + 'px';
-                    });
-                }
-            });
-
-            // Увеличиваем изображения в креативных слайдах в 2 раза
-            const creativeImages = clonedContent.querySelectorAll('#creative-case-1, #creative-case-2');
-            creativeImages.forEach(img => {
-                const computedStyle = window.getComputedStyle(img);
-                const originalWidth = parseFloat(computedStyle.width);
-                const originalHeight = parseFloat(computedStyle.height);
-                
-                img.style.width = (originalWidth * scaleFactor * 2) + 'px';
-                img.style.height = (originalHeight * scaleFactor * 2) + 'px';
-            });
-        }
-
         async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
@@ -1918,37 +1880,35 @@
             
             const originalSlideIndex = currentSlideIndex; 
             const onScreenWidth = document.getElementById('currentSlide').offsetWidth;
-            const scaleFactor = 1920 / onScreenWidth;
+            const renderScale = 2; // Increased scale for higher quality capture
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                slideContent.style.width = '100%';
-                slideContent.style.height = '100%';
+                slideContent.style.width = '1920px';
+                slideContent.style.height = '1080px';
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 
-                // Вызываем масштабирование с увеличенными коэффициентами
-                scaleClonedContent(slideContent, scaleFactor);
-
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
+                // Wait for all images to load
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
-                    if (!img.complete) {
-                        return new Promise(resolve => { img.onload = img.onerror = resolve; });
-                    }
-                    return Promise.resolve();
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = img.onerror = resolve;
+                    });
                 });
                 await Promise.all(promises);
                 await new Promise(resolve => setTimeout(resolve, 300));
 
-                const canvas = await html2canvas(tempContainer, {
+                const canvas = await html2canvas(slideContent, {
                     width: 1920,
                     height: 1080,
-                    scale: 1,
+                    scale: renderScale,
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -1975,12 +1935,15 @@
         function addLinksToPDF(pdf, slideContent, pageIndex) {
             pdf.setPage(pageIndex + 1);
             const links = slideContent.querySelectorAll('a');
+            
             links.forEach(link => {
                 if (!link.href) return;
-                const x = link.offsetLeft;
-                const y = link.offsetTop;
-                const width = link.offsetWidth;
-                const height = link.offsetHeight;
+                const rect = link.getBoundingClientRect();
+                const x = rect.left;
+                const y = rect.top;
+                const width = rect.width;
+                const height = rect.height;
+
                 if (width > 0 && height > 0) {
                     try {
                         pdf.link(x, y, width, height, { url: link.href });
