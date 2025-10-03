@@ -1607,7 +1607,7 @@
                         link.style.left = left;
                         link.style.width = width;
                         link.style.height = height;
-                        // link.style.border = '1px solid red'; // Для отладки
+                        link.style.display = 'block';
                         return link;
                     };
                     
@@ -1860,33 +1860,93 @@
             const companyName = document.getElementById('companyName').value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
-        
-        // --- ОБНОВЛЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
-        function scaleClonedContent(clonedContent, scaleFactor) {
-            // Убираем дополнительный множитель, возвращаясь к пропорциональному масштабу
-            const manualScaleMultiplier = 1.0; 
 
+        // --- УЛУЧШЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ДЛЯ PDF ---
+        function scaleClonedContent(clonedContent, scaleFactor) {
+            // Масштабируем все текстовые элементы и таблицы
             const elementsToScale = clonedContent.querySelectorAll(
-                '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
+                '.preview-price, .preview-price-label, .preview-price-premium-1, ' +
+                '.preview-price-premium-2, .preview-comment, .price-table, ' +
+                '.preview-phone, .instruction-text, .instruction-text .highlight'
             );
             
             elementsToScale.forEach(element => {
                 const computedStyle = window.getComputedStyle(element);
                 const originalFontSize = parseFloat(computedStyle.fontSize);
                 
-                element.style.fontSize = (originalFontSize * scaleFactor * manualScaleMultiplier) + 'px';
-                element.style.lineHeight = '1.25';
-
+                // Масштабируем шрифт пропорционально
+                element.style.fontSize = (originalFontSize * scaleFactor) + 'px';
+                element.style.lineHeight = '1.2';
+                
+                // Масштабируем отступы для таблиц
                 if (element.classList.contains('price-table')) {
                     const cells = element.querySelectorAll('th, td');
                     cells.forEach(cell => {
-                         const originalPadding = parseFloat(window.getComputedStyle(cell).paddingTop);
-                         cell.style.padding = (originalPadding * scaleFactor * manualScaleMultiplier) + 'px';
+                        const originalPadding = parseFloat(window.getComputedStyle(cell).paddingTop);
+                        cell.style.padding = (originalPadding * scaleFactor) + 'px';
                     });
+                }
+                
+                // Масштабируем позиционирование
+                const positions = ['top', 'left', 'right', 'bottom', 'width', 'height'];
+                positions.forEach(position => {
+                    const value = computedStyle[position];
+                    if (value !== 'auto' && value !== '0px') {
+                        const numericValue = parseFloat(value);
+                        if (!isNaN(numericValue)) {
+                            element.style[position] = (numericValue * scaleFactor) + 'px';
+                        }
+                    }
+                });
+            });
+            
+            // Масштабируем размеры изображений
+            const imagesToScale = clonedContent.querySelectorAll(
+                '.preview-logos, .preview-banner, .preview-manager, .preview-qr, .preview-video img'
+            );
+            
+            imagesToScale.forEach(img => {
+                const computedStyle = window.getComputedStyle(img);
+                const positions = ['width', 'height', 'top', 'left', 'right', 'bottom'];
+                positions.forEach(position => {
+                    const value = computedStyle[position];
+                    if (value !== 'auto' && value !== '0px') {
+                        const numericValue = parseFloat(value);
+                        if (!isNaN(numericValue)) {
+                            img.style[position] = (numericValue * scaleFactor) + 'px';
+                        }
+                    }
+                });
+            });
+        }
+
+        // --- УЛУЧШЕННАЯ ФУНКЦИЯ ДОБАВЛЕНИЯ ССЫЛОК В PDF ---
+        function addLinksToPDF(pdf, slideContent, pageIndex) {
+            pdf.setPage(pageIndex + 1);
+            const links = slideContent.querySelectorAll('a');
+            
+            links.forEach(link => {
+                if (!link.href || link.href === '#' || !link.offsetWidth || !link.offsetHeight) return;
+                
+                try {
+                    // Получаем точные координаты и размеры ссылки
+                    const rect = link.getBoundingClientRect();
+                    const x = rect.left;
+                    const y = rect.top;
+                    const width = rect.width;
+                    const height = rect.height;
+                    
+                    // Добавляем ссылку в PDF
+                    pdf.link(x, y, width, height, { url: link.href });
+                    
+                    console.log(`Added link to PDF: ${link.href} at [${x}, ${y}, ${width}, ${height}]`);
+                } catch (e) {
+                    console.warn('Не удалось добавить ссылку в PDF:', e.message);
                 }
             });
         }
 
+        // --- ОБНОВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ PDF ---
         async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
@@ -1894,89 +1954,125 @@
             popup.style.display = 'block';
             
             const fileName = getFileName() + '.pdf';
-            const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
+            const pdf = new jsPDF({ 
+                orientation: 'landscape', 
+                unit: 'px', 
+                format: [1920, 1080] 
+            });
 
+            // Создаем временный контейнер для рендеринга
             const tempContainer = document.createElement('div');
-            tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px';
-            tempContainer.style.top = '0px';
+            tempContainer.style.position = 'fixed';
+            tempContainer.style.left = '0';
+            tempContainer.style.top = '0';
             tempContainer.style.width = '1920px';
             tempContainer.style.height = '1080px';
+            tempContainer.style.overflow = 'hidden';
+            tempContainer.style.backgroundColor = '#16151A';
+            tempContainer.style.zIndex = '10000';
             document.body.appendChild(tempContainer);
             
-            const originalSlideIndex = currentSlideIndex; 
+            const originalSlideIndex = currentSlideIndex;
             const onScreenWidth = document.getElementById('currentSlide').offsetWidth;
             const scaleFactor = 1920 / onScreenWidth;
 
-            for (let i = 0; i < slides.length; i++) {
-                showSlide(i + 1); 
-                
-                const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                slideContent.style.width = '100%';
-                slideContent.style.height = '100%';
-                slideContent.style.transform = 'none';
-                slideContent.classList.remove('zoomed');
-                
-                // Вызываем масштабирование
-                scaleClonedContent(slideContent, scaleFactor);
+            console.log(`Scale factor: ${scaleFactor}`);
 
-                tempContainer.innerHTML = '';
-                tempContainer.appendChild(slideContent);
-                
-                const images = tempContainer.querySelectorAll('img');
-                const promises = Array.from(images).map(img => {
-                    if (!img.complete) {
-                        return new Promise(resolve => { img.onload = img.onerror = resolve; });
+            try {
+                for (let i = 0; i < slides.length; i++) {
+                    console.log(`Processing slide ${i + 1} of ${slides.length}`);
+                    
+                    // Показываем слайд для рендеринга
+                    showSlide(i + 1);
+                    
+                    // Ждем обновления DOM
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    // Клонируем содержимое слайда
+                    const slideContent = document.getElementById('currentSlide').cloneNode(true);
+                    slideContent.style.width = '1920px';
+                    slideContent.style.height = '1080px';
+                    slideContent.style.position = 'relative';
+                    slideContent.style.transform = 'none';
+                    slideContent.style.left = '0';
+                    slideContent.style.top = '0';
+                    slideContent.classList.remove('zoomed');
+                    
+                    // Применяем масштабирование ко всем элементам
+                    scaleClonedContent(slideContent, scaleFactor);
+                    
+                    // Очищаем и добавляем в временный контейнер
+                    tempContainer.innerHTML = '';
+                    tempContainer.appendChild(slideContent);
+                    
+                    // Ждем загрузки всех изображений
+                    const images = tempContainer.querySelectorAll('img');
+                    const imagePromises = Array.from(images).map(img => {
+                        return new Promise((resolve) => {
+                            if (img.complete) {
+                                resolve();
+                            } else {
+                                img.onload = resolve;
+                                img.onerror = resolve;
+                                // Таймаут на случай если изображение не загрузится
+                                setTimeout(resolve, 1000);
+                            }
+                        });
+                    });
+                    
+                    await Promise.all(imagePromises);
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    
+                    // Рендерим в canvas
+                    const canvas = await html2canvas(tempContainer, {
+                        width: 1920,
+                        height: 1080,
+                        scale: 1,
+                        logging: false,
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: '#16151A',
+                        onclone: function(clonedDoc) {
+                            // Дополнительная обработка клонированного документа
+                            const clonedContent = clonedDoc.querySelector('.preview-page');
+                            if (clonedContent) {
+                                scaleClonedContent(clonedContent, scaleFactor);
+                            }
+                        }
+                    });
+
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    
+                    if (i > 0) {
+                        pdf.addPage([1920, 1080], 'landscape');
                     }
-                    return Promise.resolve();
-                });
-                await Promise.all(promises);
-                await new Promise(resolve => setTimeout(resolve, 300));
-
-                const canvas = await html2canvas(tempContainer, {
-                    width: 1920,
-                    height: 1080,
-                    scale: 1,
-                    logging: false,
-                    useCORS: true,
-                    letterRendering: true
-                });
-
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                
-                if (i > 0) pdf.addPage([1920, 1080], 'landscape');
-                
-                pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
-                addLinksToPDF(pdf, slideContent, i);
-            }
-            
-            showSlide(originalSlideIndex + 1);
-            document.body.removeChild(tempContainer);
-            pdf.save(fileName);
-            
-            setTimeout(() => {
-                popup.style.display = 'none';
-                blurOverlay.style.display = 'none';
-            }, 2000);
-        }
-
-        function addLinksToPDF(pdf, slideContent, pageIndex) {
-            pdf.setPage(pageIndex + 1);
-            const links = slideContent.querySelectorAll('a');
-            links.forEach(link => {
-                if (!link.href) return;
-                const x = link.offsetLeft;
-                const y = link.offsetTop;
-                const width = link.offsetWidth;
-                const height = link.offsetHeight;
-                if (width > 0 && height > 0) {
-                    try {
-                        pdf.link(x, y, width, height, { url: link.href });
-                    } catch (e) {
-                        console.error('Ошибка при добавлении ссылки:', e);
-                    }
+                    
+                    // Добавляем изображение в PDF
+                    pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080, undefined, 'FAST');
+                    
+                    // Добавляем ссылки поверх изображения
+                    addLinksToPDF(pdf, slideContent, i);
+                    
+                    console.log(`Slide ${i + 1} added to PDF`);
                 }
-            });
+                
+                // Сохраняем PDF
+                pdf.save(fileName);
+                console.log('PDF saved successfully');
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Произошла ошибка при создании PDF. Пожалуйста, попробуйте еще раз.');
+            } finally {
+                // Восстанавливаем оригинальное состояние
+                showSlide(originalSlideIndex + 1);
+                document.body.removeChild(tempContainer);
+                
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                    blurOverlay.style.display = 'none';
+                }, 2000);
+            }
         }
         
         document.addEventListener('DOMContentLoaded', function() {
