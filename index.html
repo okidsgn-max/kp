@@ -29,34 +29,34 @@
             --transition-medium: 0.3s;
             --transition-slow: 0.5s;
         }
-        
+
         /* Стили скроллбара */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: var(--scrollbar-track);
             border-radius: 8px;
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: var(--scrollbar-thumb);
             border-radius: 8px;
             transition: background var(--transition-medium);
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-hover);
         }
-        
+
         /* Для Firefox */
         * {
             scrollbar-width: thin;
             scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -114,7 +114,7 @@
             content: "...";
             animation: dots 1.5s steps(5, end) infinite;
         }
-        
+
         /* Blur effect for PDF save */
         .blur-overlay {
             position: fixed;
@@ -126,7 +126,7 @@
             z-index: 1000;
             display: none;
         }
-        
+
         .menu-container {
             width: var(--sidebar-width);
             background-color: white;
@@ -138,13 +138,13 @@
             flex-direction: column;
             transition: all var(--transition-medium);
         }
-        
+
         .menu-header-container {
             display: flex;
             flex-direction: column;
             margin-bottom: 2px;
         }
-        
+
         .menu-logo {
             height: 24px;
             width: auto;
@@ -153,11 +153,11 @@
             margin-bottom: 16px;
             transition: transform var(--transition-fast);
         }
-        
+
         .menu-logo:hover {
             transform: scale(1.05);
         }
-        
+
         .menu-title {
             color: var(--text-main);
             font-weight: 600;
@@ -166,7 +166,7 @@
             transition: color var(--transition-fast);
             display: none; /* Скрываем старый заголовок */
         }
-        
+
         .company-name-input {
             font-family: 'Inter', sans-serif;
             font-size: 20px;
@@ -181,22 +181,22 @@
             color: var(--text-main);
             transition: border-color var(--transition-fast);
         }
-        
+
         .company-name-input::placeholder {
             color: #E0E0E0;
         }
-        
+
         .company-name-input:focus {
             border-bottom-color: var(--primary);
         }
-        
+
         .menu-sections {
             flex-grow: 1;
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
-        
+
         .menu-section-header {
             color: var(--text-secondary);
             font-weight: 600;
@@ -204,15 +204,15 @@
             margin: 0;
             transition: color var(--transition-fast);
         }
-        
+
         .menu-section-header:hover {
             color: var(--primary);
         }
-        
+
         .menu-section-header.active {
             color: var(--primary);
         }
-        
+
         .menu-label {
             color: var(--text-secondary);
             font-weight: 500;
@@ -221,7 +221,7 @@
             margin-bottom: 8px;
             transition: color var(--transition-fast);
         }
-        
+
         .preview-container {
             width: var(--preview-width);
             display: flex;
@@ -234,7 +234,7 @@
             background-color: var(--background-light);
             transition: all var(--transition-medium);
         }
-        
+
         .preview-wrapper {
             position: relative;
             margin-bottom: 20px;
@@ -245,14 +245,14 @@
             width: 100%;
             height: 90%;
         }
-        
+
         .preview-controls {
             position: absolute;
             top: 10px;
             right: 10px;
             z-index: 10;
         }
-        
+
         .delete-slide-btn {
             background-color: transparent;
             border: none;
@@ -262,43 +262,43 @@
             padding: 0;
             transition: transform var(--transition-fast);
         }
-        
+
         .delete-slide-btn:hover {
             transform: scale(1.1);
         }
-        
+
         .delete-slide-btn img {
             width: 100%;
             height: 100%;
             transition: opacity var(--transition-fast);
         }
-        
+
         .delete-slide-btn:hover img {
             opacity: 0.8;
         }
-        
+
         .slide-controls-container {
             display: flex;
             justify-content: center;
             margin-top: 20px;
             width: 100%;
         }
-        
+
         .slide-controls {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 8px 15px;
             background: transparent;
-            
+
             transition: all var(--transition-medium);
         }
-        
+
         #slideNumbers {
             display: flex;
             gap: 8px;
         }
-        
+
         .control-icon {
             width: var(--control-icon-size);
             height: var(--control-icon-size);
@@ -310,28 +310,28 @@
             border-radius: var(--border-radius);
             transition: all var(--transition-medium);
         }
-        
+
         .control-icon:hover {
             background: var(--background-light);
             transform: translateY(-2px);
-        
+
         }
-        
+
         .control-icon:active {
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
         .control-icon img {
             width: 20px;
             height: 20px;
             transition: transform var(--transition-fast);
         }
-        
+
         .control-icon:hover img {
             transform: scale(1.1);
         }
-        
+
         .slide-number {
             width: var(--control-icon-size);
             height: var(--control-icon-size);
@@ -346,34 +346,34 @@
             user-select: none;
             transition: all var(--transition-medium);
         }
-        
+
         .slide-number:hover {
             transform: scale(1.1);
             background-color: var(--primary-hover);
             color: white;
         }
-        
+
         .slide-number.active {
             background-color: var(--primary);
             color: white;
             transform: scale(1.1);
         }
-        
+
         .slide-number.dragging {
             opacity: 0.5;
             transform: scale(1.2);
         }
-        
+
         .slide-number.drop-target {
             transform: scale(1.1);
             background-color: var(--primary-hover);
             color: white;
         }
-        
+
         .slide-number.highlight {
             animation: slideHighlight 0.5s ease forwards;
         }
-        
+
         .preview-page {
             position: relative;
             max-width: 100%;
@@ -386,7 +386,7 @@
             margin: auto;
             background-color: #16151A;
         }
-        
+
         .preview-page.zoomed {
             transform: scale(1.5);
             z-index: 100;
@@ -398,14 +398,14 @@
             max-height: 70vh;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
-        
+
         .preview-bg {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: opacity var(--transition-medium);
         }
-        
+
         .preview-banner {
             position: absolute;
             top: 0;
@@ -415,7 +415,7 @@
             object-fit: fill;
             transition: all var(--transition-medium);
         }
-        
+
         .preview-logos {
             position: absolute;
             bottom: 6%;
@@ -425,7 +425,7 @@
             object-fit: contain;
             transition: all var(--transition-medium);
         }
-        
+
         .preview-price {
             position: absolute;
             top: 65%;
@@ -437,7 +437,7 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-        
+
         .preview-price-label {
             position: absolute;
             top: 60%;
@@ -473,7 +473,7 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-        
+
         .preview-comment {
             position: absolute;
             bottom: 4%;
@@ -485,7 +485,7 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-        
+
         .price-table {
             position: absolute;
             top: 55%;
@@ -497,18 +497,18 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-        
+
         .price-table th, .price-table td {
             padding: 10px;
             text-align: left;
             border: 1px solid #303030;
             transition: background-color var(--transition-fast);
         }
-        
+
         .price-table th {
             background-color: rgba(0,0,0,0.3);
         }
-        
+
         .price-table .editable-header {
             background-color: transparent;
             border: none;
@@ -526,7 +526,7 @@
             object-fit: contain;
             transition: all var(--transition-medium);
         }
-        
+
         .preview-phone {
             position: absolute;
             bottom: 13%;
@@ -537,7 +537,7 @@
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
-        
+
         .preview-qr {
             position: absolute;
             bottom: 8%;
@@ -552,27 +552,27 @@
             justify-content: center;
             transition: all var(--transition-medium);
         }
-        
+
         .preview-qr:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-        
+
         .preview-qr img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             transition: all var(--transition-fast);
         }
-        
+
         .preview-link {
             position: absolute;
             bottom: 5%;
             right: 5%;
-            color: transparent; 
+            color: transparent;
             transition: all var(--transition-fast);
         }
-        
+
         .preview-video {
             position: absolute;
             bottom: 0%;
@@ -581,24 +581,24 @@
             height: 130px;
             transition: all var(--transition-medium);
         }
-        
+
         .preview-video img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             transition: all var(--transition-fast);
         }
-        
+
         .menu-section {
             margin-bottom: 8px;
             border-radius: var(--border-radius);
             transition: all var(--transition-medium);
         }
-        
+
         .menu-section.active {
             background-color: var(--background-light);
         }
-        
+
         .menu-header {
             display: flex;
             justify-content: space-between;
@@ -608,21 +608,21 @@
             border-radius: var(--border-radius);
             transition: all var(--transition-medium);
         }
-        
+
         .menu-header:hover {
             background-color: var(--background-light);
         }
-        
+
         .menu-content {
             display: none;
             padding: 0 12px 12px;
             animation: fadeIn var(--transition-medium) ease forwards;
         }
-        
+
         .menu-content.active {
             display: block;
         }
-        
+
         .toggle-button {
             font-size: 20px;
             color: var(--text-secondary);
@@ -634,16 +634,16 @@
             justify-content: center;
             border-radius: 8px;
         }
-        
+
         .menu-header:hover .toggle-button {
             color: var(--primary);
             transform: rotate(90deg);
         }
-        
+
         .menu-header.active .toggle-button {
             transform: rotate(45deg);
         }
-        
+
         .zvuk-select, .zvuk-input {
             font-size: 14px;
             font-weight: 500;
@@ -659,11 +659,11 @@
             transition: all var(--transition-medium);
             margin-bottom: 16px;
         }
-        
+
         .zvuk-select:hover, .zvuk-input:hover {
             border-color: var(--primary-hover);
         }
-        
+
         .zvuk-select {
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%239A9FA5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -671,36 +671,36 @@
             background-position: right 12px center;
             cursor: pointer;
         }
-        
+
         .zvuk-select:focus, .zvuk-input:focus {
             border-color: var(--primary);
             background-color: #fff;
             box-shadow: 0 0 0 2px rgba(0, 179, 152, 0.1);
         }
-        
+
         .zvuk-input[type="number"] {
             -moz-appearance: textfield;
         }
-        
+
         .zvuk-input[type="number"]::-webkit-outer-spin-button,
         .zvuk-input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        
+
         .radio-group {
             margin-bottom: 16px;
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
         }
-        
+
         .radio-option {
             display: flex;
             align-items: center;
             cursor: pointer;
         }
-        
+
         .radio-option input[type="radio"] {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -714,12 +714,12 @@
             position: relative;
             transition: all var(--transition-fast);
         }
-        
+
         .radio-option input[type="radio"]:checked {
             border-color: var(--primary);
             background-color: var(--primary);
         }
-        
+
         .radio-option input[type="radio"]:checked::after {
             content: '';
             position: absolute;
@@ -730,7 +730,7 @@
             border-radius: 50%;
             background-color: white;
         }
-        
+
         .radio-option label {
             color: var(--text-secondary);
             font-weight: 500;
@@ -738,26 +738,26 @@
             cursor: pointer;
             transition: color var(--transition-fast);
         }
-        
+
         .radio-option:hover label {
             color: var(--primary);
         }
-        
+
         .radio-option:hover input[type="radio"] {
             border-color: var(--primary-hover);
         }
-        
+
         .price-columns {
             display: flex;
             gap: 10px;
             margin-bottom: 16px;
         }
-        
+
         .price-column {
             flex: 1;
             transition: all var(--transition-medium);
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 0px;
@@ -769,7 +769,7 @@
             z-index: 10;
             transition: all var(--transition-medium);
         }
-        
+
         .zvuk-button {
             font-family: 'Inter', sans-serif;
             font-weight: 500;
@@ -785,47 +785,47 @@
             justify-content: center;
             flex: 1;
         }
-        
+
         .zvuk-button--primary {
             background-color: var(--primary);
             color: #FFFFFF;
         }
-        
+
         .zvuk-button--primary:hover {
             background-color: var(--primary-hover);
             transform: translateY(0px);
             box-shadow: 0 0px 0px rgba(0,0,0,0.15);
         }
-        
+
         .zvuk-button--primary:active {
             background-color: var(--primary-active);
             transform: translateY(0);
             box-shadow: 0 0px 0px rgba(0,0,0,0.1);
         }
-        
+
         .zvuk-button--secondary {
             background-color: var(--background-light);
             color: var(--text-secondary);
             border: 1px solid var(--border);
         }
-        
+
         .zvuk-button--secondary:hover {
             background-color: #e8e8f0;
             transform: translateY(0px);
             box-shadow: 0 0px 0px rgba(0,0,0,0.1);
         }
-        
+
         .zvuk-button--secondary:active {
             transform: translateY(0);
             box-shadow: 0 0px 0px rgba(0,0,0,0.05);
         }
-        
+
         .slide-buttons {
             display: flex;
             gap: 10px;
             margin-top: 8px;
         }
-        
+
         .slide-buttons .zvuk-button {
             flex: 1;
             min-width: 0;
@@ -833,17 +833,17 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        
+
         .hidden {
             display: none !important;
         }
-        
+
         .phone-type {
             display: flex;
             gap: 16px;
             margin-bottom: 16px;
         }
-        
+
         .phone-type label {
             display: flex;
             align-items: center;
@@ -854,7 +854,7 @@
             cursor: pointer;
             transition: all var(--transition-fast);
         }
-        
+
         .phone-type label:hover {
             color: var(--primary);
         }
@@ -1861,44 +1861,6 @@
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
         
-        // --- ОБНОВЛЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
-        function scaleClonedContent(clonedContent, scaleFactor) {
-            // Увеличиваем дополнительный множитель для текста в 2.5 раза
-            const manualScaleMultiplier = 2.5;
-
-            const elementsToScale = clonedContent.querySelectorAll(
-                '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
-            );
-            
-            elementsToScale.forEach(element => {
-                const computedStyle = window.getComputedStyle(element);
-                const originalFontSize = parseFloat(computedStyle.fontSize);
-                
-                // Увеличиваем шрифт в 2.5 раза
-                element.style.fontSize = (originalFontSize * scaleFactor * manualScaleMultiplier) + 'px';
-                element.style.lineHeight = '1.25';
-
-                if (element.classList.contains('price-table')) {
-                    const cells = element.querySelectorAll('th, td');
-                    cells.forEach(cell => {
-                         const originalPadding = parseFloat(window.getComputedStyle(cell).paddingTop);
-                         cell.style.padding = (originalPadding * scaleFactor * manualScaleMultiplier) + 'px';
-                    });
-                }
-            });
-
-            // Увеличиваем изображения в креативных слайдах в 2 раза
-            const creativeImages = clonedContent.querySelectorAll('#creative-case-1, #creative-case-2');
-            creativeImages.forEach(img => {
-                const computedStyle = window.getComputedStyle(img);
-                const originalWidth = parseFloat(computedStyle.width);
-                const originalHeight = parseFloat(computedStyle.height);
-                
-                img.style.width = (originalWidth * scaleFactor * 2) + 'px';
-                img.style.height = (originalHeight * scaleFactor * 2) + 'px';
-            });
-        }
-
         async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
@@ -1918,37 +1880,35 @@
             
             const originalSlideIndex = currentSlideIndex; 
             const onScreenWidth = document.getElementById('currentSlide').offsetWidth;
-            const scaleFactor = 1920 / onScreenWidth;
+            const renderScale = 2; // Increased scale for higher quality capture
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                slideContent.style.width = '100%';
-                slideContent.style.height = '100%';
+                slideContent.style.width = '1920px';
+                slideContent.style.height = '1080px';
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 
-                // Вызываем масштабирование с увеличенными коэффициентами
-                scaleClonedContent(slideContent, scaleFactor);
-
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
+                // Wait for all images to load
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
-                    if (!img.complete) {
-                        return new Promise(resolve => { img.onload = img.onerror = resolve; });
-                    }
-                    return Promise.resolve();
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = img.onerror = resolve;
+                    });
                 });
                 await Promise.all(promises);
                 await new Promise(resolve => setTimeout(resolve, 300));
 
-                const canvas = await html2canvas(tempContainer, {
+                const canvas = await html2canvas(slideContent, {
                     width: 1920,
                     height: 1080,
-                    scale: 1,
+                    scale: renderScale,
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -1975,12 +1935,15 @@
         function addLinksToPDF(pdf, slideContent, pageIndex) {
             pdf.setPage(pageIndex + 1);
             const links = slideContent.querySelectorAll('a');
+            
             links.forEach(link => {
                 if (!link.href) return;
-                const x = link.offsetLeft;
-                const y = link.offsetTop;
-                const width = link.offsetWidth;
-                const height = link.offsetHeight;
+                const rect = link.getBoundingClientRect();
+                const x = rect.left;
+                const y = rect.top;
+                const width = rect.width;
+                const height = rect.height;
+
                 if (width > 0 && height > 0) {
                     try {
                         pdf.link(x, y, width, height, { url: link.href });
