@@ -1870,11 +1870,9 @@
             const fileName = getFileName() + '.pdf';
             const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
 
-            // Создаем временный контейнер для рендеринга каждого слайда в высоком разрешении.
-            // Этот контейнер имеет точные размеры целевой страницы PDF.
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px'; // Позиционируем за пределами экрана
+            tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
             tempContainer.style.width = '1920px';
             tempContainer.style.height = '1080px';
@@ -1882,42 +1880,34 @@
             
             const originalSlideIndex = currentSlideIndex; 
             
-            // Получаем размеры слайда на экране для расчета коэффициента масштабирования.
             const onScreenSlide = document.getElementById('currentSlide');
             const onScreenWidth = onScreenSlide.offsetWidth;
             const onScreenHeight = onScreenSlide.offsetHeight;
             
-            // Коэффициент масштабирования - это отношение целевой ширины к исходной.
-            // Так как соотношение сторон (16:9) постоянно, достаточно основываться на ширине.
             const scaleFactor = 1920 / onScreenWidth;
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
-                // Клонируем содержимое текущего слайда.
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
                 
-                // Сбрасываем стили, которые могут помешать (например, класс увеличения).
+                // Сбрасываем стили, которые могут помешать
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
-
-                // **КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ**
-                // Вместо ручного масштабирования шрифтов, мы масштабируем весь контейнер слайда.
-                // 1. Явно устанавливаем размер клона равным его исходным размерам на экране.
+                // Убираем автоматический отступ, чтобы избежать белой полосы
+                slideContent.style.margin = '0'; 
+                
+                // Устанавливаем размер клона равным его исходным размерам на экране
                 slideContent.style.width = onScreenWidth + 'px';
                 slideContent.style.height = onScreenHeight + 'px';
                 
-                // 2. Применяем CSS-трансформацию для пропорционального увеличения всего элемента.
-                //    'transform-origin: top left' гарантирует, что масштабирование происходит
-                //    от верхнего левого угла для правильного позиционирования.
+                // Применяем CSS-трансформацию для пропорционального увеличения
                 slideContent.style.transform = `scale(${scaleFactor})`;
                 slideContent.style.transformOrigin = 'top left';
 
-                // Помещаем масштабированный слайд в наш временный контейнер высокого разрешения.
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Ждем полной загрузки всех изображений на слайде перед созданием скриншота.
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
                     if (!img.complete) {
@@ -1926,14 +1916,12 @@
                     return Promise.resolve();
                 });
                 await Promise.all(promises);
-                // Добавляем небольшую задержку для завершения рендеринга.
                 await new Promise(resolve => setTimeout(resolve, 300));
 
-                // Используем html2canvas для захвата содержимого контейнера в виде изображения.
                 const canvas = await html2canvas(tempContainer, {
                     width: 1920,
                     height: 1080,
-                    scale: 1, // Используем scale 1, так как мы уже масштабировали содержимое.
+                    scale: 1,
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -1941,24 +1929,18 @@
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
                 
-                // Добавляем новую страницу для каждого слайда, начиная со второго.
                 if (i > 0) pdf.addPage([1920, 1080], 'landscape');
                 
-                // Добавляем захваченное изображение на страницу PDF.
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
                 
-                // Добавляем кликабельные ссылки на страницу PDF.
                 addLinksToPDF(pdf, slideContent, i, scaleFactor);
             }
             
-            // Восстанавливаем слайд, на котором был пользователь.
             showSlide(originalSlideIndex + 1);
             
-            // Удаляем временный контейнер.
             document.body.removeChild(tempContainer);
             pdf.save(fileName);
             
-            // Скрываем уведомление и эффект размытия.
             setTimeout(() => {
                 popup.style.display = 'none';
                 blurOverlay.style.display = 'none';
@@ -1969,7 +1951,6 @@
             pdf.setPage(pageIndex + 1);
             const links = slideContent.querySelectorAll('a');
             
-            // Эта функция рекурсивно находит истинное смещение элемента относительно контейнера слайда.
             const getTrueOffset = (element) => {
                 let top = 0, left = 0;
                 let current = element;
@@ -1986,7 +1967,6 @@
 
                 const offset = getTrueOffset(link);
                 
-                // Масштабируем позицию и размеры области ссылки.
                 const x = offset.left * scaleFactor;
                 const y = offset.top * scaleFactor;
                 const width = link.offsetWidth * scaleFactor;
