@@ -877,33 +877,6 @@
             text-decoration: none;
             font-weight: 500;
         }
-
-        /* --- СТИЛИ ДЛЯ ЭКСПОРТА В PDF --- */
-        .pdf-export-mode .preview-price,
-        .pdf-export-mode .preview-price-premium-1,
-        .pdf-export-mode .preview-price-premium-2 {
-            font-size: 28px !important;
-        }
-        .pdf-export-mode .preview-price-label {
-            font-size: 22px !important;
-        }
-        .pdf-export-mode .instruction-text {
-            font-size: 17px !important;
-            line-height: 1.4 !important;
-        }
-        .pdf-export-mode .price-table {
-            font-size: 18px !important;
-        }
-        .pdf-export-mode .preview-comment {
-            font-size: 16px !important;
-        }
-        .pdf-export-mode .preview-phone {
-            font-size: 15px !important;
-        }
-        .pdf-export-mode .price-table th,
-        .pdf-export-mode .price-table td {
-            padding: 12px !important;
-        }
     </style>
 </head>
 <body>
@@ -1893,16 +1866,25 @@
             const blurOverlay = document.querySelector('.blur-overlay');
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
+
+            const SCALE = 3;
+            const PDF_WIDTH = 1920;
+            const PDF_HEIGHT = 1080;
             
             const fileName = getFileName() + '.pdf';
-            const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
+            const pdf = new jsPDF({ 
+                orientation: 'landscape', 
+                unit: 'px', 
+                format: [PDF_WIDTH, PDF_HEIGHT] 
+            });
 
+            // Временный контейнер остается размером с артборд, а контент внутри масштабируется
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
-            tempContainer.style.width = '1920px';
-            tempContainer.style.height = '1080px';
+            tempContainer.style.width = `${PDF_WIDTH}px`;
+            tempContainer.style.height = `${PDF_HEIGHT}px`;
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
@@ -1911,14 +1893,14 @@
                 showSlide(i + 1); 
                 
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
+                // Применяем масштабирование к контенту
                 slideContent.style.width = '100%';
                 slideContent.style.height = '100%';
-                slideContent.style.transform = 'none';
+                slideContent.style.transform = `scale(${SCALE})`;
+                slideContent.style.transformOrigin = 'top left';
                 slideContent.classList.remove('zoomed');
                 
                 tempContainer.innerHTML = '';
-                // Применяем специальный класс для PDF-стилей
-                tempContainer.classList.add('pdf-export-mode');
                 tempContainer.appendChild(slideContent);
                 
                 const images = tempContainer.querySelectorAll('img');
@@ -1932,9 +1914,10 @@
                 await new Promise(resolve => setTimeout(resolve, 300));
 
                 const canvas = await html2canvas(tempContainer, {
-                    width: 1920,
-                    height: 1080,
-                    scale: 1,
+                    // Указываем html2canvas снимать с 3-х кратным разрешением
+                    width: PDF_WIDTH,
+                    height: PDF_HEIGHT,
+                    scale: SCALE,
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -1942,13 +1925,12 @@
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
                 
-                if (i > 0) pdf.addPage([1920, 1080], 'landscape');
+                if (i > 0) pdf.addPage([PDF_WIDTH, PDF_HEIGHT], 'landscape');
                 
-                pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
+                pdf.addImage(imgData, 'JPEG', 0, 0, PDF_WIDTH, PDF_HEIGHT);
+                
+                // Ссылки добавляем без масштабирования, так как их координаты берутся относительно немасштабированного контейнера
                 addLinksToPDF(pdf, slideContent, i);
-                
-                // Убираем класс после рендеринга
-                tempContainer.classList.remove('pdf-export-mode');
             }
             
             showSlide(originalSlideIndex + 1);
@@ -1966,10 +1948,14 @@
             const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
                 if (!link.href) return;
+                
+                // Координаты берутся с немасштабированных элементов внутри контейнера,
+                // поэтому дополнительное деление не требуется.
                 const x = link.offsetLeft;
                 const y = link.offsetTop;
                 const width = link.offsetWidth;
                 const height = link.offsetHeight;
+
                 if (width > 0 && height > 0) {
                     try {
                         pdf.link(x, y, width, height, { url: link.href });
