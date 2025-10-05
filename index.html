@@ -1865,6 +1865,52 @@
         // --- НОВАЯ УЛУЧШЕННАЯ ЛОГИКА СОХРАНЕНИЯ В PDF ---
 
         /**
+         * Рекурсивно "растеризует" макет: копирует вычисленные стили из исходного
+         * элемента в клон, применяя коэффициент масштабирования.
+         * @param {HTMLElement} sourceNode - Исходный узел DOM для чтения стилей.
+         * @param {HTMLElement} cloneNode - Клонированный узел для применения стилей.
+         * @param {number} scale - Коэффициент масштабирования.
+         */
+        function rasterizeAndScaleLayout(sourceNode, cloneNode, scale) {
+            const sourceStyles = window.getComputedStyle(sourceNode);
+            const cloneStyle = cloneNode.style;
+
+            // Свойства, которые нужно скопировать и отмасштабировать
+            const propsToScale = [
+                'width', 'height', 'top', 'left', 'right', 'bottom', 'fontSize', 'lineHeight',
+                'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+                'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+                'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
+                'borderRadius'
+            ];
+            
+            // Свойства, которые нужно просто скопировать
+            const propsToCopy = [
+                'display', 'position', 'backgroundColor', 'color', 'fontWeight', 'textAlign',
+                'fontFamily', 'objectFit', 'borderCollapse'
+            ];
+
+            propsToScale.forEach(prop => {
+                const value = sourceStyles.getPropertyValue(prop);
+                if (value.endsWith('px')) {
+                    cloneStyle[prop] = `${parseFloat(value) * scale}px`;
+                }
+            });
+
+            propsToCopy.forEach(prop => {
+                cloneStyle[prop] = sourceStyles.getPropertyValue(prop);
+            });
+            
+            // Рекурсивный вызов для дочерних элементов
+            Array.from(sourceNode.children).forEach((sourceChild, index) => {
+                if (cloneNode.children[index]) {
+                    rasterizeAndScaleLayout(sourceChild, cloneNode.children[index], scale);
+                }
+            });
+        }
+
+
+        /**
          * Основная асинхронная функция для сохранения презентации в PDF.
          */
         async function saveAsPDF() {
@@ -1886,34 +1932,33 @@
             const onScreenElement = document.getElementById('currentSlide');
             const originalSlideIndex = currentSlideIndex;
 
-            // Создаем временный контейнер для размещения клона вне экрана
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
-            tempContainer.style.width = `${onScreenElement.offsetWidth}px`;
-            tempContainer.style.height = `${onScreenElement.offsetHeight}px`;
+            tempContainer.style.width = `${PDF_WIDTH}px`;
+            tempContainer.style.height = `${PDF_HEIGHT}px`;
+            tempContainer.style.overflow = 'hidden';
             document.body.appendChild(tempContainer);
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1);
-                await new Promise(resolve => setTimeout(resolve, 50)); // Даем время на рендер
+                await new Promise(resolve => setTimeout(resolve, 100)); // Короткая пауза для рендера
                 
-                // Клонируем содержимое текущего слайда
+                const scaleFactor = PDF_WIDTH / onScreenElement.offsetWidth;
+                
                 const slideContent = onScreenElement.cloneNode(true);
                 slideContent.classList.remove('zoomed');
+                slideContent.style.transform = ''; // Убираем любые трансформации
                 
-                // ВАЖНО: Рассчитываем коэффициент масштабирования, чтобы компенсировать уменьшение.
-                const scaleFactor = PDF_WIDTH / onScreenElement.offsetWidth;
+                // "Растеризуем" макет, применяя масштабированные стили
+                rasterizeAndScaleLayout(onScreenElement, slideContent, scaleFactor);
+                slideContent.style.width = `${PDF_WIDTH}px`;
+                slideContent.style.height = `${PDF_HEIGHT}px`;
 
-                // Применяем масштабирование через transform. Это самый надежный способ.
-                slideContent.style.transform = `scale(${scaleFactor})`;
-                slideContent.style.transformOrigin = 'top left';
-                
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Ждем загрузки всех изображений
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
                     if (!img.complete) {
@@ -1924,14 +1969,13 @@
                 await Promise.all(promises);
                 await new Promise(resolve => setTimeout(resolve, 300));
 
-                // html2canvas делает снимок именно с отмасштабированного элемента
-                const canvas = await html2canvas(slideContent, {
-                    scale: 1, // Масштаб уже применен через CSS
+                const canvas = await html2canvas(tempContainer, {
+                    width: PDF_WIDTH,
+                    height: PDF_HEIGHT,
+                    scale: 1,
                     logging: false,
                     useCORS: true,
                     letterRendering: true,
-                    width: onScreenElement.offsetWidth * scaleFactor,
-                    height: onScreenElement.offsetHeight * scaleFactor
                 });
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -1940,10 +1984,9 @@
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, PDF_WIDTH, PDF_HEIGHT);
                 
-                addLinksToPDF(pdf, slideContent, i, scaleFactor);
+                addLinksToPDF(pdf, tempContainer, i);
             }
             
-            // Восстанавливаем исходное состояние
             showSlide(originalSlideIndex + 1);
             document.body.removeChild(tempContainer);
             pdf.save(fileName);
@@ -1955,24 +1998,25 @@
         }
 
         /**
-         * Добавляет невидимые кликабельные области в PDF, учитывая масштаб.
+         * Добавляет невидимые кликабельные области в PDF.
          */
-        function addLinksToPDF(pdf, container, pageIndex, scale) {
+        function addLinksToPDF(pdf, container, pageIndex) {
             pdf.setPage(pageIndex + 1);
             const links = container.querySelectorAll('a');
-            
+            const containerRect = container.getBoundingClientRect();
+
             links.forEach(link => {
                 if (!link.href || link.href.endsWith('#')) return;
-
-                const x = link.offsetLeft;
-                const y = link.offsetTop;
-                const width = link.offsetWidth;
-                const height = link.offsetHeight;
+                
+                const rect = link.getBoundingClientRect();
+                const x = rect.left - containerRect.left;
+                const y = rect.top - containerRect.top;
+                const width = rect.width;
+                const height = rect.height;
 
                 if (width > 0 && height > 0) {
                     try {
-                        // Масштабируем координаты и размеры перед добавлением в PDF
-                        pdf.link(x * scale, y * scale, width * scale, height * scale, { url: link.href });
+                        pdf.link(x, y, width, height, { url: link.href });
                     } catch (e) {
                         console.error('Ошибка при добавлении ссылки в PDF:', e);
                     }
