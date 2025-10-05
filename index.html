@@ -444,8 +444,8 @@
             left: 3%;
             color: #D9D9D9;
             width: 50%;
-            font-weight: 600;
-            font-size: 12px;
+            font-weight: 400;
+            font-size: 16px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -464,7 +464,7 @@
 
         .preview-price-premium-2 {
             position: absolute;
-            top: 37%;
+            top: 40%;
             left: 65%;
             color: white;
             font-weight: bold;
@@ -1861,14 +1861,9 @@
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
         
-        // --- НОВАЯ УЛУЧШЕННАЯ ЛОГИКА СОХРАНЕНИЯ В PDF ---
-        
-        /**
-         * Масштабирует текстовые элементы внутри клонированного слайда для оптимального вида в PDF.
-         * @param {HTMLElement} clonedContent - Клонированный узел слайда.
-         * @param {number} scaleFactor - Коэффициент масштабирования.
-         */
+        // --- ОБНОВЛЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
         function scaleClonedContent(clonedContent, scaleFactor) {
+            // Увеличиваем шрифты только для экспорта в PDF
             const elementsToScale = clonedContent.querySelectorAll(
                 '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
             );
@@ -1877,13 +1872,25 @@
                 const computedStyle = window.getComputedStyle(element);
                 const originalFontSize = parseFloat(computedStyle.fontSize);
                 
-                // Пропорционально увеличиваем шрифты
+                // Увеличиваем шрифты для лучшей читаемости в PDF
                 let newFontSize = originalFontSize * scaleFactor;
                 
+                // Дополнительное увеличение для конкретных элементов
+                if (element.classList.contains('preview-price') || 
+                    element.classList.contains('preview-price-premium-1') || 
+                    element.classList.contains('preview-price-premium-2')) {
+                    newFontSize = 26; // Фиксированный размер для цен
+                } else if (element.classList.contains('instruction-text')) {
+                    newFontSize = 24; // Фиксированный размер для инструкции
+                } else if (element.classList.contains('price-table')) {
+                    newFontSize = 24; // Фиксированный размер для таблицы
+                } else if (element.classList.contains('preview-price-label')) {
+                    newFontSize = 24; // Фиксированный размер для заголовка стоимости
+                }
+                
                 element.style.fontSize = newFontSize + 'px';
-                element.style.lineHeight = '1.25'; // Улучшаем межстрочный интервал
+                element.style.lineHeight = '1.25';
 
-                // Масштабируем padding для ячеек таблицы
                 if (element.classList.contains('price-table')) {
                     const cells = element.querySelectorAll('th, td');
                     cells.forEach(cell => {
@@ -1894,59 +1901,42 @@
             });
         }
 
-        /**
-         * Основная асинхронная функция для сохранения презентации в PDF.
-         */
         async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
             
-            const PDF_WIDTH = 1920;
-            const PDF_HEIGHT = 1080;
-            
             const fileName = getFileName() + '.pdf';
-            const pdf = new jsPDF({ 
-                orientation: 'landscape', 
-                unit: 'px', 
-                format: [PDF_WIDTH, PDF_HEIGHT] 
-            });
+            const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
 
-            // Создаем временный контейнер ("холст") с фиксированными размерами
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px'; // Скрываем за пределами экрана
+            tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
-            tempContainer.style.width = `${PDF_WIDTH}px`;
-            tempContainer.style.height = `${PDF_HEIGHT}px`;
-            tempContainer.style.overflow = 'hidden';
+            tempContainer.style.width = '1920px';
+            tempContainer.style.height = '1080px';
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
-            const onScreenElement = document.getElementById('currentSlide');
-            
-            // Определяем коэффициент масштабирования один раз
-            const scaleFactor = PDF_HEIGHT / onScreenElement.offsetHeight;
+            const onScreenWidth = document.getElementById('currentSlide').offsetWidth;
+            const scaleFactor = 1920 / onScreenWidth;
 
-            // Цикл по всем слайдам для рендеринга и добавления в PDF
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
-                // Клонируем содержимое текущего слайда
-                const slideContent = onScreenElement.cloneNode(true);
+                const slideContent = document.getElementById('currentSlide').cloneNode(true);
                 slideContent.style.width = '100%';
                 slideContent.style.height = '100%';
-                slideContent.style.transform = 'none'; // Сбрасываем трансформации
+                slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 
-                // Масштабируем шрифты и отступы для PDF
+                // Вызываем масштабирование с увеличенными шрифтами
                 scaleClonedContent(slideContent, scaleFactor);
 
-                tempContainer.innerHTML = ''; // Очищаем холст
+                tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Ждем загрузки всех изображений на слайде
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
                     if (!img.complete) {
@@ -1955,13 +1945,12 @@
                     return Promise.resolve();
                 });
                 await Promise.all(promises);
-                await new Promise(resolve => setTimeout(resolve, 300)); // Доп. задержка на рендеринг
+                await new Promise(resolve => setTimeout(resolve, 300));
 
-                // Делаем снимок холста с высоким качеством
                 const canvas = await html2canvas(tempContainer, {
-                    width: PDF_WIDTH,
-                    height: PDF_HEIGHT,
-                    scale: 1, // Масштаб 1, т.к. размер холста уже правильный
+                    width: 1920,
+                    height: 1080,
+                    scale: 1,
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -1969,53 +1958,36 @@
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
                 
-                if (i > 0) pdf.addPage([PDF_WIDTH, PDF_HEIGHT], 'landscape');
+                if (i > 0) pdf.addPage([1920, 1080], 'landscape');
                 
-                pdf.addImage(imgData, 'JPEG', 0, 0, PDF_WIDTH, PDF_HEIGHT);
-                
-                // Добавляем кликабельные ссылки на страницу PDF
-                addLinksToPDF(pdf, tempContainer, i);
+                pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
+                addLinksToPDF(pdf, slideContent, i);
             }
             
-            // Восстанавливаем исходное состояние
             showSlide(originalSlideIndex + 1);
             document.body.removeChild(tempContainer);
             pdf.save(fileName);
             
-            // Скрываем оверлей
             setTimeout(() => {
                 popup.style.display = 'none';
                 blurOverlay.style.display = 'none';
             }, 2000);
         }
 
-        /**
-         * Добавляет невидимые кликабельные области в PDF на основе <a> тегов.
-         * @param {jsPDF} pdf - Экземпляр jsPDF.
-         * @param {HTMLElement} container - Контейнер, с которого делался снимок.
-         * @param {number} pageIndex - Индекс текущей страницы PDF.
-         */
-        function addLinksToPDF(pdf, container, pageIndex) {
+        function addLinksToPDF(pdf, slideContent, pageIndex) {
             pdf.setPage(pageIndex + 1);
-            const links = container.querySelectorAll('a');
+            const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
-                if (!link.href || link.href.endsWith('#')) return;
-
-                // Получаем точные координаты и размеры относительно контейнера 1920x1080
-                const rect = link.getBoundingClientRect();
-                const containerRect = container.getBoundingClientRect();
-
-                const x = rect.left - containerRect.left;
-                const y = rect.top - containerRect.top;
-                const width = rect.width;
-                const height = rect.height;
-
+                if (!link.href) return;
+                const x = link.offsetLeft;
+                const y = link.offsetTop;
+                const width = link.offsetWidth;
+                const height = link.offsetHeight;
                 if (width > 0 && height > 0) {
                     try {
-                        // Добавляем ссылку в PDF
                         pdf.link(x, y, width, height, { url: link.href });
                     } catch (e) {
-                        console.error('Ошибка при добавлении ссылки в PDF:', e);
+                        console.error('Ошибка при добавлении ссылки:', e);
                     }
                 }
             });
@@ -2057,3 +2029,4 @@
     </script>
 </body>
 </html>
+
