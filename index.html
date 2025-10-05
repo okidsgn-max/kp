@@ -1889,31 +1889,31 @@
             // Создаем временный контейнер для размещения клона вне экрана
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px'; // Скрываем за пределами экрана
+            tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
+            tempContainer.style.width = `${onScreenElement.offsetWidth}px`;
+            tempContainer.style.height = `${onScreenElement.offsetHeight}px`;
             document.body.appendChild(tempContainer);
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1);
+                await new Promise(resolve => setTimeout(resolve, 50)); // Даем время на рендер
                 
                 // Клонируем содержимое текущего слайда
                 const slideContent = onScreenElement.cloneNode(true);
                 slideContent.classList.remove('zoomed');
-
+                
                 // ВАЖНО: Рассчитываем коэффициент масштабирования, чтобы компенсировать уменьшение.
                 const scaleFactor = PDF_WIDTH / onScreenElement.offsetWidth;
 
-                // Применяем масштабирование через transform. Это самый надежный способ
-                // сохранить все пропорции, включая % и сложные элементы.
-                slideContent.style.width = `${onScreenElement.offsetWidth}px`;
-                slideContent.style.height = `${onScreenElement.offsetHeight}px`;
+                // Применяем масштабирование через transform. Это самый надежный способ.
                 slideContent.style.transform = `scale(${scaleFactor})`;
                 slideContent.style.transformOrigin = 'top left';
                 
-                tempContainer.innerHTML = ''; // Очищаем холст
+                tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
-                // Ждем загрузки всех изображений на слайде
+                // Ждем загрузки всех изображений
                 const images = tempContainer.querySelectorAll('img');
                 const promises = Array.from(images).map(img => {
                     if (!img.complete) {
@@ -1926,14 +1926,12 @@
 
                 // html2canvas делает снимок именно с отмасштабированного элемента
                 const canvas = await html2canvas(slideContent, {
-                    scale: 1, // Масштаб уже применен через CSS transform
+                    scale: 1, // Масштаб уже применен через CSS
                     logging: false,
                     useCORS: true,
                     letterRendering: true,
-                    width: PDF_WIDTH, // Явно указываем финальные размеры
-                    height: PDF_HEIGHT,
-                    windowWidth: PDF_WIDTH,
-                    windowHeight: PDF_HEIGHT
+                    width: onScreenElement.offsetWidth * scaleFactor,
+                    height: onScreenElement.offsetHeight * scaleFactor
                 });
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
