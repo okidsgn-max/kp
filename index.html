@@ -1867,6 +1867,7 @@
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
 
+            // --- ОБНОВЛЕННАЯ ЛОГИКА ---
             const SCALE = 3;
             const PDF_WIDTH = 1920;
             const PDF_HEIGHT = 1080;
@@ -1878,13 +1879,13 @@
                 format: [PDF_WIDTH, PDF_HEIGHT] 
             });
 
+            // 1. Создаем холст 1920x1080
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
             tempContainer.style.width = `${PDF_WIDTH}px`;
             tempContainer.style.height = `${PDF_HEIGHT}px`;
-            tempContainer.style.overflow = 'hidden'; // Важно, чтобы обрезанный контент не влиял на рендер
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
@@ -1895,10 +1896,10 @@
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
                 slideContent.style.width = '100%';
                 slideContent.style.height = '100%';
-                slideContent.style.transform = `scale(${SCALE})`;
-                slideContent.style.transformOrigin = 'top left';
                 slideContent.classList.remove('zoomed');
-                
+                // Масштабирование контента не требуется, т.к. html2canvas сделает это сам
+                slideContent.style.transform = 'none';
+
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
                 
@@ -1910,12 +1911,11 @@
                     return Promise.resolve();
                 });
                 await Promise.all(promises);
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 100)); // Небольшая задержка для рендеринга
 
+                // 2. Делаем снимок холста 1920x1080, но с 3-кратным масштабом рендеринга
                 const canvas = await html2canvas(tempContainer, {
-                    width: PDF_WIDTH,
-                    height: PDF_HEIGHT,
-                    scale: SCALE, // Ключевая опция для высокого разрешения
+                    scale: SCALE, // Ключевая опция для суперсэмплинга
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -1925,6 +1925,7 @@
                 
                 if (i > 0) pdf.addPage([PDF_WIDTH, PDF_HEIGHT], 'landscape');
                 
+                // 3. Помещаем высококачественное изображение на PDF-страницу 1920x1080
                 pdf.addImage(imgData, 'JPEG', 0, 0, PDF_WIDTH, PDF_HEIGHT);
                 addLinksToPDF(pdf, slideContent, i);
             }
@@ -1945,8 +1946,7 @@
             links.forEach(link => {
                 if (!link.href) return;
                 
-                // Координаты берутся с немасштабированных элементов,
-                // так как transform не меняет DOM-свойства offsetLeft/Top/Width/Height.
+                // Координаты берутся с немасштабированного макета 1:1, что нам и нужно
                 const x = link.offsetLeft;
                 const y = link.offsetTop;
                 const width = link.offsetWidth;
