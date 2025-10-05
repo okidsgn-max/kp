@@ -464,7 +464,7 @@
 
         .preview-price-premium-2 {
             position: absolute;
-            top: 40%;
+            top: 37%;
             left: 65%;
             color: white;
             font-weight: bold;
@@ -493,7 +493,7 @@
             width:60%;
             color: white;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 11px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -867,7 +867,7 @@
             font-weight: 300;
             width: 60%;
             line-height: 1.2;
-            font-size: 14px;
+            font-size: 12px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -877,6 +877,43 @@
             text-decoration: none;
             font-weight: 500;
         }
+
+        /* Стили для поиска в списке менеджеров */
+        .custom-select-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        #manager-search {
+            margin-bottom: 0;
+        }
+
+        .custom-options {
+            display: none;
+            position: absolute;
+            border: 2px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            background-color: white;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            box-sizing: border-box;
+        }
+
+        .custom-options .option {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .custom-options .option:hover {
+            background-color: var(--background-light);
+            color: var(--primary);
+        }
+
     </style>
 </head>
 <body>
@@ -962,22 +999,26 @@
                 </div>
                 <div class="menu-content">
                     <label class="menu-label">Сотрудник:</label>
-                    <select class="zvuk-select" id="manager">
-                        <option value="images/ivanova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=ivanova">Мария Иванова</option>
-                        <option value="images/mankova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=mankova">Яна Манькова</option>
-                        <option value="images/temur.webp" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov">Темур Сидиков</option>
-                        <option value="images/german.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pilipcev">Герман Пилипцев</option>
-                        <option value="images/kropachev.webp" data-link="https://app.zvuk-b2b.com/register?promocode=kropachev">Виктор Кропачев</option>
-                        <option value="images/likashina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=likashina">Татьяна Лукашина</option>
-                        <option value="images/nikulina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=nikulina">Анна Никулина</option>
-                        <option value="images/khlebnikova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=khlebnikova">Дарья Хлебникова</option>
-                        <option value="images/kim.webp" data-link="https://app.zvuk-b2b.com/register?promocode=kim">Оксана Ким</option>
-                        <option value="images/meleshko.webp" data-link="https://app.zvuk-b2b.com/register?promocode=meleshko">Роман Мелешко</option>
-                        <option value="images/pershina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pershina">Дарья Першина</option>
-                        <option value="images/umnov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=umnov">Иван Умнов</option>
-                        <option value="images/farmonov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=farmonov">Тимур Фармонов</option>
-                    </select>
-                    
+                    <div class="custom-select-wrapper">
+                        <input type="text" id="manager-search" class="zvuk-input" placeholder="Поиск по имени...">
+                        <div id="manager-options" class="custom-options"></div>
+                        <select class="zvuk-select" id="manager" style="display: none;">
+                            <option value="images/ivanova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=ivanova">Мария Иванова</option>
+                            <option value="images/mankova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=mankova">Яна Манькова</option>
+                            <option value="images/temur.webp" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov">Темур Сидиков</option>
+                            <option value="images/german.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pilipcev">Герман Пилипцев</option>
+                            <option value="images/kropachev.webp" data-link="https://app.zvuk-b2b.com/register?promocode=kropachev">Виктор Кропачев</option>
+                            <option value="images/likashina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=likashina">Татьяна Лукашина</option>
+                            <option value="images/nikulina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=nikulina">Анна Никулина</option>
+                            <option value="images/khlebnikova.webp" data-link="https://app.zvuk-b2b.com/register?promocode=khlebnikova">Дарья Хлебникова</option>
+                            <option value="images/kim.webp" data-link="https://app.zvuk-b2b.com/register?promocode=kim">Оксана Ким</option>
+                            <option value="images/meleshko.webp" data-link="https://app.zvuk-b2b.com/register?promocode=meleshko">Роман Мелешко</option>
+                            <option value="images/pershina.webp" data-link="https://app.zvuk-b2b.com/register?promocode=pershina">Дарья Першина</option>
+                            <option value="images/umnov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=umnov">Иван Умнов</option>
+                            <option value="images/farmonov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=farmonov">Тимур Фармонов</option>
+                        </select>
+                    </div>
+
                     <div id="personalPhoneContainer">
                         <label class="menu-label">Добавить номер:</label>
                         <input class="zvuk-input" type="text" id="personalPhone" placeholder="Введите номер телефона">
@@ -1706,6 +1747,16 @@
                     premiumCommentDiv.className = 'preview-comment';
                     premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
                     slideContainer.appendChild(premiumCommentDiv);
+                    
+                    const premiumBannerLink = document.createElement('a');
+                    premiumBannerLink.href = 'https://zvuk-b2b.com/premium';
+                    premiumBannerLink.target = '_blank';
+                    premiumBannerLink.style.position = 'absolute';
+                    premiumBannerLink.style.top = '0';
+                    premiumBannerLink.style.right = '0';
+                    premiumBannerLink.style.width = '35%';
+                    premiumBannerLink.style.height = '100%';
+                    slideContainer.appendChild(premiumBannerLink);
                     break;
                 case 'bprofile':
                     bgImg.src = 'images/bprofile.webp';
@@ -2011,6 +2062,64 @@
                 }
             });
             document.getElementById('companyName').addEventListener('input', function() {});
+
+            // --- Логика для поиска по менеджерам ---
+            const managerSelect = document.getElementById('manager');
+            const managerSearch = document.getElementById('manager-search');
+            const managerOptionsContainer = document.getElementById('manager-options');
+
+            const options = Array.from(managerSelect.options);
+            options.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('option');
+                optionDiv.textContent = option.textContent;
+                optionDiv.dataset.value = option.value;
+                managerOptionsContainer.appendChild(optionDiv);
+            });
+            managerSearch.value = managerSelect.options[managerSelect.selectedIndex].text;
+
+            managerSearch.addEventListener('focus', () => {
+                managerOptionsContainer.style.display = 'block';
+                managerSearch.value = ''; // Очищаем поле для удобного поиска
+                managerSearch.dispatchEvent(new Event('input')); // Показываем все опции
+            });
+
+            managerSearch.addEventListener('blur', () => {
+                setTimeout(() => {
+                    managerOptionsContainer.style.display = 'none';
+                    // Возвращаем текст выбранного элемента, если поле пустое
+                    if (!managerSearch.value) {
+                         managerSearch.value = managerSelect.options[managerSelect.selectedIndex].text;
+                    }
+                }, 150);
+            });
+
+            managerSearch.addEventListener('input', () => {
+                const filter = managerSearch.value.toLowerCase();
+                const customOptions = managerOptionsContainer.querySelectorAll('.option');
+                customOptions.forEach(option => {
+                    if (option.textContent.toLowerCase().includes(filter)) {
+                        option.style.display = '';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+
+            managerOptionsContainer.addEventListener('mousedown', (e) => {
+                if (e.target.classList.contains('option')) {
+                    const selectedText = e.target.textContent;
+                    const selectedValue = e.target.dataset.value;
+
+                    managerSearch.value = selectedText;
+                    managerSelect.value = selectedValue;
+                    
+                    managerSelect.dispatchEvent(new Event('change'));
+                    managerOptionsContainer.style.display = 'none';
+                }
+            });
+            // --- Конец логики для поиска ---
+
             updateSlideNumbers();
             showSlide(1);
             document.querySelector('.menu-header').click();
