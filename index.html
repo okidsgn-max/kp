@@ -861,13 +861,13 @@
 
         .instruction-text {
             position: absolute;
-            top: 35%;
+            top: 40%;
             left: 3%;
             color: white;
             font-weight: 300;
             width: 60%;
             line-height: 1.2;
-            font-size: 17px;
+            font-size: 14px;
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -876,6 +876,33 @@
             color: var(--primary);
             text-decoration: none;
             font-weight: 500;
+        }
+
+        /* --- СТИЛИ ДЛЯ ЭКСПОРТА В PDF --- */
+        .pdf-export-mode .preview-price,
+        .pdf-export-mode .preview-price-premium-1,
+        .pdf-export-mode .preview-price-premium-2 {
+            font-size: 28px !important;
+        }
+        .pdf-export-mode .preview-price-label {
+            font-size: 22px !important;
+        }
+        .pdf-export-mode .instruction-text {
+            font-size: 17px !important;
+            line-height: 1.4 !important;
+        }
+        .pdf-export-mode .price-table {
+            font-size: 18px !important;
+        }
+        .pdf-export-mode .preview-comment {
+            font-size: 16px !important;
+        }
+        .pdf-export-mode .preview-phone {
+            font-size: 15px !important;
+        }
+        .pdf-export-mode .price-table th,
+        .pdf-export-mode .price-table td {
+            padding: 12px !important;
         }
     </style>
 </head>
@@ -1860,46 +1887,6 @@
             const companyName = document.getElementById('companyName').value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
             return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
         }
-        
-        // --- ОБНОВЛЕННАЯ ФУНКЦИЯ МАСШТАБИРОВАНИЯ ---
-        function scaleClonedContent(clonedContent, scaleFactor) {
-            // Увеличиваем шрифты только для экспорта в PDF
-            const elementsToScale = clonedContent.querySelectorAll(
-                '.preview-price, .preview-price-label, .preview-price-premium-1, .preview-price-premium-2, .preview-comment, .price-table, .preview-phone, .instruction-text'
-            );
-            
-            elementsToScale.forEach(element => {
-                const computedStyle = window.getComputedStyle(element);
-                const originalFontSize = parseFloat(computedStyle.fontSize);
-                
-                // Увеличиваем шрифты для лучшей читаемости в PDF
-                let newFontSize = originalFontSize * scaleFactor;
-                
-                // Дополнительное увеличение для конкретных элементов
-                if (element.classList.contains('preview-price') || 
-                    element.classList.contains('preview-price-premium-1') || 
-                    element.classList.contains('preview-price-premium-2')) {
-                    newFontSize = 26; // Фиксированный размер для цен
-                } else if (element.classList.contains('instruction-text')) {
-                    newFontSize = 24; // Фиксированный размер для инструкции
-                } else if (element.classList.contains('price-table')) {
-                    newFontSize = 24; // Фиксированный размер для таблицы
-                } else if (element.classList.contains('preview-price-label')) {
-                    newFontSize = 24; // Фиксированный размер для заголовка стоимости
-                }
-                
-                element.style.fontSize = newFontSize + 'px';
-                element.style.lineHeight = '1.25';
-
-                if (element.classList.contains('price-table')) {
-                    const cells = element.querySelectorAll('th, td');
-                    cells.forEach(cell => {
-                         const originalPadding = parseFloat(window.getComputedStyle(cell).paddingTop);
-                         cell.style.padding = (originalPadding * scaleFactor) + 'px';
-                    });
-                }
-            });
-        }
 
         async function saveAsPDF() {
             const popup = document.getElementById('pdf-popup');
@@ -1919,8 +1906,6 @@
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
-            const onScreenWidth = document.getElementById('currentSlide').offsetWidth;
-            const scaleFactor = 1920 / onScreenWidth;
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
@@ -1931,10 +1916,9 @@
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 
-                // Вызываем масштабирование с увеличенными шрифтами
-                scaleClonedContent(slideContent, scaleFactor);
-
                 tempContainer.innerHTML = '';
+                // Применяем специальный класс для PDF-стилей
+                tempContainer.classList.add('pdf-export-mode');
                 tempContainer.appendChild(slideContent);
                 
                 const images = tempContainer.querySelectorAll('img');
@@ -1962,6 +1946,9 @@
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
                 addLinksToPDF(pdf, slideContent, i);
+                
+                // Убираем класс после рендеринга
+                tempContainer.classList.remove('pdf-export-mode');
             }
             
             showSlide(originalSlideIndex + 1);
@@ -2029,5 +2016,3 @@
     </script>
 </body>
 </html>
-
-
