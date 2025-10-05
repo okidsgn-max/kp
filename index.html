@@ -914,6 +914,61 @@
             color: var(--primary);
         }
 
+        /* ------------ МОБИЛЬНАЯ ВЕРСТКА ------------ */
+        @media (max-width: 800px) {
+            body {
+                flex-direction: column;
+                overflow: hidden; /* Предотвращаем двойной скролл */
+            }
+
+            .preview-container {
+                width: 100%;
+                height: auto;
+                flex-shrink: 0;
+                padding: 10px;
+                /* Устанавливаем соотношение сторон, чтобы превью не сжималось */
+                aspect-ratio: 16 / 9;
+                --preview-width: 100%;
+            }
+
+            .menu-container {
+                width: 100%;
+                height: 100%; /* Занимает всю оставшуюся высоту */
+                flex-grow: 1;
+                box-shadow: none; /* Убираем тень сбоку */
+                /* Добавляем отступ снизу, чтобы контент не перекрывала зафиксированная кнопка */
+                padding-bottom: 80px; 
+                --sidebar-width: 100%;
+            }
+
+            /* Кнопка "в PDF" будет зафиксирована внизу экрана */
+            .action-buttons {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                padding: 16px;
+                box-sizing: border-box; /* Чтобы padding не влиял на общую ширину */
+                background-color: white;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Добавляем тень для визуального отделения */
+                z-index: 20;
+            }
+
+            /* Убираем возможность зума превью на мобильных, т.к. она отключена в JS */
+            .preview-page.zoomed {
+                transform: none;
+                position: relative;
+                top: auto;
+                left: auto;
+                max-width: 100%;
+                max-height: 100%;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            }
+
+            .slide-controls-container {
+                margin-top: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2132,5 +2187,3 @@
     </script>
 </body>
 </html>
-
-
