@@ -1863,7 +1863,38 @@
         }
         
         // --- НОВАЯ УЛУЧШЕННАЯ ЛОГИКА СОХРАНЕНИЯ В PDF ---
-        
+
+        /**
+         * Рекурсивно масштабирует CSS-свойства всех дочерних элементов.
+         * @param {HTMLElement} element - родительский элемент для масштабирования.
+         * @param {number} scale - коэффициент масштабирования.
+         */
+        function forceScaleElements(element, scale) {
+            const computedStyle = getComputedStyle(element);
+            
+            // Список CSS свойств для масштабирования
+            const propertiesToScale = [
+                'width', 'height', 'top', 'left', 'right', 'bottom',
+                'fontSize', 'lineHeight',
+                'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+                'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+                'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
+                'borderRadius'
+            ];
+
+            propertiesToScale.forEach(prop => {
+                const value = computedStyle[prop];
+                if (value && value.endsWith('px')) {
+                    element.style[prop] = `${parseFloat(value) * scale}px`;
+                }
+            });
+
+            // Рекурсивно применяем ко всем дочерним элементам
+            Array.from(element.children).forEach(child => {
+                forceScaleElements(child, scale);
+            });
+        }
+
         /**
          * Основная асинхронная функция для сохранения презентации в PDF.
          */
@@ -1883,41 +1914,32 @@
                 format: [PDF_WIDTH, PDF_HEIGHT] 
             });
 
-            // Исходный элемент на экране, который мы будем клонировать
             const onScreenElement = document.getElementById('currentSlide');
-            // Вычисляем коэффициент масштабирования, чтобы подогнать ширину под 1920px
-            const scaleFactor = PDF_WIDTH / onScreenElement.offsetWidth;
-            
-            const scaledWidth = onScreenElement.offsetWidth * scaleFactor;
-            const scaledHeight = onScreenElement.offsetHeight * scaleFactor;
+            const originalSlideIndex = currentSlideIndex;
 
-            // Создаем временный контейнер ("холст")
+            // Создаем временный контейнер ("холст") с фиксированными размерами
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px'; // Скрываем за пределами экрана
             tempContainer.style.top = '0px';
-            // Задаем размеры контейнера, соответствующие масштабированному элементу
-            tempContainer.style.width = `${scaledWidth}px`;
-            tempContainer.style.height = `${scaledHeight}px`;
+            tempContainer.style.width = `${PDF_WIDTH}px`;
+            tempContainer.style.height = `${PDF_HEIGHT}px`;
             tempContainer.style.overflow = 'hidden';
             document.body.appendChild(tempContainer);
-            
-            const originalSlideIndex = currentSlideIndex; 
 
             for (let i = 0; i < slides.length; i++) {
-                showSlide(i + 1); 
+                showSlide(i + 1);
                 
                 // Клонируем содержимое текущего слайда
                 const slideContent = onScreenElement.cloneNode(true);
-                // Важно! Устанавливаем трансформацию для увеличения контента
-                slideContent.style.transform = `scale(${scaleFactor})`;
-                slideContent.style.transformOrigin = 'top left';
-                
-                // Сбрасываем лишние стили
-                slideContent.style.width = `${onScreenElement.offsetWidth}px`;
-                slideContent.style.height = `${onScreenElement.offsetHeight}px`;
+                slideContent.style.width = `${PDF_WIDTH}px`;
+                slideContent.style.height = `${PDF_HEIGHT}px`;
                 slideContent.classList.remove('zoomed');
 
+                // ВАЖНО: Вычисляем коэффициент и принудительно масштабируем каждый элемент
+                const scaleFactor = PDF_WIDTH / onScreenElement.offsetWidth;
+                forceScaleElements(slideContent, scaleFactor);
+                
                 tempContainer.innerHTML = ''; // Очищаем холст
                 tempContainer.appendChild(slideContent);
                 
@@ -1930,15 +1952,17 @@
                     return Promise.resolve();
                 });
                 await Promise.all(promises);
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 300)); // Доп. задержка на рендеринг
 
                 const canvas = await html2canvas(tempContainer, {
-                    width: scaledWidth,
-                    height: scaledHeight,
-                    scale: 1,
+                    width: PDF_WIDTH,
+                    height: PDF_HEIGHT,
+                    scale: 1, // Масштаб 1, т.к. холст уже имеет нужный размер
                     logging: false,
                     useCORS: true,
-                    letterRendering: true
+                    letterRendering: true,
+                    scrollX: 0,
+                    scrollY: 0
                 });
 
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
@@ -1947,8 +1971,8 @@
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, PDF_WIDTH, PDF_HEIGHT);
                 
-                // Добавляем кликабельные ссылки, масштабируя их координаты
-                addLinksToPDF(pdf, slideContent, i, scaleFactor);
+                // Добавляем кликабельные ссылки
+                addLinksToPDF(pdf, tempContainer, i);
             }
             
             // Восстанавливаем исходное состояние
@@ -1963,24 +1987,25 @@
         }
 
         /**
-         * Добавляет невидимые кликабельные области в PDF на основе <a> тегов.
+         * Добавляет невидимые кликабельные области в PDF.
          */
-        function addLinksToPDF(pdf, container, pageIndex, scale) {
+        function addLinksToPDF(pdf, container, pageIndex) {
             pdf.setPage(pageIndex + 1);
             const links = container.querySelectorAll('a');
+            const containerRect = container.getBoundingClientRect();
+
             links.forEach(link => {
                 if (!link.href || link.href.endsWith('#')) return;
-
-                // Получаем оригинальные размеры и положение
-                const x = link.offsetLeft;
-                const y = link.offsetTop;
-                const width = link.offsetWidth;
-                const height = link.offsetHeight;
+                
+                const rect = link.getBoundingClientRect();
+                const x = rect.left - containerRect.left;
+                const y = rect.top - containerRect.top;
+                const width = rect.width;
+                const height = rect.height;
 
                 if (width > 0 && height > 0) {
                     try {
-                        // Масштабируем координаты и размеры перед добавлением в PDF
-                        pdf.link(x * scale, y * scale, width * scale, height * scale, { url: link.href });
+                        pdf.link(x, y, width, height, { url: link.href });
                     } catch (e) {
                         console.error('Ошибка при добавлении ссылки в PDF:', e);
                     }
