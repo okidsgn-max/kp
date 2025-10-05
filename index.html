@@ -1867,8 +1867,8 @@
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
 
-            // --- ОБНОВЛЕННАЯ ЛОГИКА ---
-            const SCALE = 3;
+            // --- ОБНОВЛЕННАЯ ЛОГИКА ДЛЯ МАСШТАБИРОВАНИЯ (ЗУМА) ---
+            const ZOOM_FACTOR = 3;
             const PDF_WIDTH = 1920;
             const PDF_HEIGHT = 1080;
             
@@ -1879,13 +1879,14 @@
                 format: [PDF_WIDTH, PDF_HEIGHT] 
             });
 
-            // 1. Создаем холст 1920x1080
+            // 1. Создаем контейнер-«окно» размером 1920x1080, который будет обрезать контент
             const tempContainer = document.createElement('div');
             tempContainer.style.position = 'absolute';
             tempContainer.style.left = '-9999px';
             tempContainer.style.top = '0px';
             tempContainer.style.width = `${PDF_WIDTH}px`;
             tempContainer.style.height = `${PDF_HEIGHT}px`;
+            tempContainer.style.overflow = 'hidden'; // Важно для обрезки
             document.body.appendChild(tempContainer);
             
             const originalSlideIndex = currentSlideIndex; 
@@ -1897,8 +1898,10 @@
                 slideContent.style.width = '100%';
                 slideContent.style.height = '100%';
                 slideContent.classList.remove('zoomed');
-                // Масштабирование контента не требуется, т.к. html2canvas сделает это сам
-                slideContent.style.transform = 'none';
+
+                // 2. Масштабируем сам контент ВНУТРИ контейнера
+                slideContent.style.transform = `scale(${ZOOM_FACTOR})`;
+                slideContent.style.transformOrigin = 'top left';
 
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
@@ -1911,11 +1914,11 @@
                     return Promise.resolve();
                 });
                 await Promise.all(promises);
-                await new Promise(resolve => setTimeout(resolve, 100)); // Небольшая задержка для рендеринга
+                await new Promise(resolve => setTimeout(resolve, 300));
 
-                // 2. Делаем снимок холста 1920x1080, но с 3-кратным масштабом рендеринга
+                // 3. Делаем снимок контейнера 1920x1080, на котором виден увеличенный фрагмент
                 const canvas = await html2canvas(tempContainer, {
-                    scale: SCALE, // Ключевая опция для суперсэмплинга
+                    scale: 1, // Масштабирование контента уже сделано через transform
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -1925,9 +1928,9 @@
                 
                 if (i > 0) pdf.addPage([PDF_WIDTH, PDF_HEIGHT], 'landscape');
                 
-                // 3. Помещаем высококачественное изображение на PDF-страницу 1920x1080
+                // 4. Помещаем полученный снимок на PDF-страницу
                 pdf.addImage(imgData, 'JPEG', 0, 0, PDF_WIDTH, PDF_HEIGHT);
-                addLinksToPDF(pdf, slideContent, i);
+                addLinksToPDF(pdf, slideContent, i, ZOOM_FACTOR, PDF_WIDTH, PDF_HEIGHT);
             }
             
             showSlide(originalSlideIndex + 1);
@@ -1940,21 +1943,22 @@
             }, 2000);
         }
 
-        function addLinksToPDF(pdf, slideContent, pageIndex) {
+        function addLinksToPDF(pdf, slideContent, pageIndex, zoom, viewWidth, viewHeight) {
             pdf.setPage(pageIndex + 1);
             const links = slideContent.querySelectorAll('a');
             links.forEach(link => {
                 if (!link.href) return;
                 
-                // Координаты берутся с немасштабированного макета 1:1, что нам и нужно
                 const x = link.offsetLeft;
                 const y = link.offsetTop;
                 const width = link.offsetWidth;
                 const height = link.offsetHeight;
 
-                if (width > 0 && height > 0) {
+                // Добавляем только те ссылки, которые хотя бы частично попадают в видимую область
+                if (x * zoom < viewWidth && y * zoom < viewHeight) {
                     try {
-                        pdf.link(x, y, width, height, { url: link.href });
+                        // Масштабируем координаты и размеры ссылок
+                        pdf.link(x * zoom, y * zoom, width * zoom, height * zoom, { url: link.href });
                     } catch (e) {
                         console.error('Ошибка при добавлении ссылки:', e);
                     }
