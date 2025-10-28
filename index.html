@@ -688,6 +688,30 @@
             -webkit-appearance: none;
             margin: 0;
         }
+
+        .zvuk-input[type="file"] {
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .zvuk-input[type="file"]::-webkit-file-upload-button {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 13px;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            border: none;
+            background-color: var(--primary-light);
+            color: var(--primary-active);
+            margin-right: 12px;
+        }
+
+        .zvuk-input[type="file"]::-webkit-file-upload-button:hover {
+            background-color: var(--primary);
+            color: white;
+        }
         
         .radio-group {
             margin-bottom: 16px;
@@ -1065,6 +1089,15 @@
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>  
                     </select>
+
+                    <label class="menu-label">Логотип клиента (png, jpg, svg, webp):</label>
+                    <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
+                    <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
+
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('general')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('general')">Удалить</button>
+                    </div>
                 </div>
             </div>
             
@@ -1198,6 +1231,11 @@
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>  
                     </select>
+
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('pricing')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('pricing')">Удалить</button>
+                    </div>
                 </div>
             </div>
             
@@ -1238,6 +1276,11 @@
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option> 
                     </select>
+
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('instruction')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('instruction')">Удалить</button>
+                    </div>
                 </div>
             </div>
             
@@ -1348,6 +1391,19 @@
             </div>
 
             <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'artist')">
+                    <span class="menu-section-header">Артисты на мероприятие</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('artist')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('artist')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'concept')">
                     <span class="menu-section-header">Концепции</span>
                     <span class="toggle-button">+</span>
@@ -1419,9 +1475,7 @@
         
            // Массив для хранения слайдов
         const slides = [
-            { type: 'general', banner: 'images/bkids.webp', logos: 'images/alllogo.webp' },
-            { type: 'pricing', format: '1', price: '1390', comment: '', banner: 'images/bkids.webp', manager: 'images/mankova.webp', phone: '' },
-            { type: 'instruction' }
+            { type: 'general' } // Начинаем с одного слайда "general"
         ];
         
         // Ссылки для баннеров
@@ -1460,13 +1514,15 @@
             'images/videokp.webp': 'https://zvuk-b2b.com/video',
             'images/rawe.webp': 'https://zvuk-b2b.com/rawe',
             'images/event.webp': 'https://zvuk-b2b.com',
-            'images/concept.webp': 'https://zvuk-b2b.com'
+            'images/concept.webp': 'https://zvuk-b2b.com',
+            'images/artist.webp': 'https://zvuk-b2b.com' // Добавлена ссылка для нового слайда, если нужна
         };
         
-        let currentSlideIndex = 0;
+        let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
         let isZoomed = false;
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
+        let globalClientLogo = null; // Глобальная переменная для логотипа клиента
         
         function toggleMenu(header, type) {
             const section = header.parentElement;
@@ -1528,7 +1584,10 @@
         });
         
         function updateCurrentSlide() {
-            if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) return;
+            if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
+                document.getElementById('currentSlide').innerHTML = ''; // Очищаем, если нет слайдов
+                return;
+            }
             const currentSlide = slides[currentSlideIndex];
             const slideContainer = document.getElementById('currentSlide');
             slideContainer.innerHTML = '';
@@ -1560,6 +1619,21 @@
                     logosImg.className = 'preview-logos';
                     logosImg.src = document.getElementById('logos').value;
                     slideContainer.appendChild(logosImg);
+
+                    // --- NEW CLIENT LOGO ---
+                    if (globalClientLogo) {
+                        const clientLogoImg = document.createElement('img');
+                        clientLogoImg.id = 'clientLogo';
+                        clientLogoImg.src = globalClientLogo;
+                        clientLogoImg.style.position = 'absolute';
+                        clientLogoImg.style.top = '5%';
+                        clientLogoImg.style.left = '17%';
+                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
+                        clientLogoImg.style.width = 'auto'; // Maintain aspect ratio
+                        clientLogoImg.style.objectFit = 'contain';
+                        slideContainer.appendChild(clientLogoImg);
+                    }
+                    // --- END NEW CLIENT LOGO ---
                     break;
                     
                 case 'pricing':
@@ -1844,6 +1918,10 @@
                     bgImg.src = 'images/redact.webp';
                     slideContainer.appendChild(bgImg);
                     break;
+                case 'artist': // --- NEW SLIDE ---
+                    bgImg.src = 'images/artist.webp';
+                    slideContainer.appendChild(bgImg);
+                    break;
                 case 'concept':
                     bgImg.src = 'images/redact.webp';
                     slideContainer.appendChild(bgImg);
@@ -1866,6 +1944,12 @@
         }
         
         function showSlide(index) {
+            if (slides.length === 0) {
+                currentSlideIndex = -1;
+                document.getElementById('currentSlide').innerHTML = '';
+                updateSlideNumbers();
+                return;
+            }
             if (index < 1 || index > slides.length) return;
             currentSlideIndex = index - 1;
             document.querySelectorAll('.slide-number').forEach((btn, i) => {
@@ -1875,22 +1959,29 @@
         }
         
         function removeCurrentSlide() {
-            if (slides.length > 3) {
-                const slideToRemove = slides[currentSlideIndex];
-                if (slideToRemove.type !== 'general' && slideToRemove.type !== 'pricing' && slideToRemove.type !== 'instruction') {
-                    removeSlide(slideToRemove.type);
-                }
+            if (slides.length > 0 && currentSlideIndex > -1) {
+                removeSlide(slides[currentSlideIndex].type);
             }
         }
         
         function addSlide(type) {
             const existingSlideIndex = slides.findIndex(slide => slide.type === type);
             if (existingSlideIndex !== -1) {
+                // Если слайд уже есть, просто переключаемся на него
                 showSlide(existingSlideIndex + 1);
+                 // И подсвечиваем его номер
+                const slideNumEl = document.querySelector(`.slide-number[data-index="${existingSlideIndex}"]`);
+                if(slideNumEl) {
+                    slideNumEl.classList.add('highlight');
+                    setTimeout(() => slideNumEl.classList.remove('highlight'), 500);
+                }
                 return;
             }
             let newSlide;
             switch(type) {
+                case 'general': newSlide = { type: 'general' }; break;
+                case 'pricing': newSlide = { type: 'pricing' }; break;
+                case 'instruction': newSlide = { type: 'instruction' }; break;
                 case 'app': newSlide = { type: 'app' }; break;
                 case 'creative': newSlide = { type: 'creative' }; break;
                 case 'playlist': newSlide = { type: 'playlist' }; break;
@@ -1898,6 +1989,7 @@
                 case 'premium': newSlide = { type: 'premium' }; break;
                 case 'bprofile': newSlide = { type: 'bprofile' }; break;
                 case 'event': newSlide = { type: 'event' }; break;
+                case 'artist': newSlide = { type: 'artist' }; break;
                 case 'concept': newSlide = { type: 'concept' }; break;
                 case 'videokp': newSlide = { type: 'videokp' }; break;
                 default: return;
@@ -1909,13 +2001,20 @@
         
         function removeSlide(type) {
             const indexToRemove = slides.findIndex(slide => slide.type === type);
-            if (indexToRemove > 2) {
+            if (indexToRemove > -1) {
                 slides.splice(indexToRemove, 1);
-                if (currentSlideIndex >= slides.length) {
-                    currentSlideIndex = slides.length - 1;
+                
+                if (slides.length === 0) {
+                    currentSlideIndex = -1;
+                    document.getElementById('currentSlide').innerHTML = ''; // Очистить превью
+                } else {
+                    if (currentSlideIndex >= slides.length) {
+                        currentSlideIndex = slides.length - 1; // Перейти к последнему слайду
+                    }
+                    // Показать слайд, который теперь на этом индексе (или новый последний)
+                    showSlide(currentSlideIndex + 1); 
                 }
                 updateSlideNumbers();
-                showSlide(currentSlideIndex + 1);
             }
         }
         
@@ -1926,7 +2025,7 @@
                 const number = document.createElement('div');
                 number.className = `slide-number ${i === currentSlideIndex ? 'active' : ''}`;
                 number.textContent = i + 1;
-                number.draggable = i >= 3;
+                number.draggable = true; // Все слайды можно перетаскивать
                 number.dataset.index = i;
                 number.addEventListener('dragstart', handleDragStart);
                 number.addEventListener('dragover', handleDragOver);
@@ -1951,7 +2050,7 @@
         function handleDrop(e) {
             e.preventDefault();
             const targetIndex = parseInt(e.target.dataset.index);
-            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && draggedSlideIndex >= 3 && targetIndex >= 3) {
+            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) {
                 const [draggedItem] = slides.splice(draggedSlideIndex, 1);
                 slides.splice(targetIndex, 0, draggedItem);
                 currentSlideIndex = targetIndex;
@@ -1970,7 +2069,7 @@
         
         function handleDragEnter(e) {
             const targetIndex = parseInt(e.target.dataset.index);
-            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex && targetIndex >= 3) {
+            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) {
                 e.target.classList.add('drop-target');
             }
         }
@@ -1991,6 +2090,11 @@
         }
 
         async function saveAsPDF() {
+            if (slides.length === 0) {
+                alert('Нет слайдов для сохранения в PDF.');
+                return;
+            }
+
             const popup = document.getElementById('pdf-popup');
             const blurOverlay = document.querySelector('.blur-overlay');
             blurOverlay.style.display = 'block';
@@ -2010,8 +2114,16 @@
             const originalSlideIndex = currentSlideIndex; 
             
             const onScreenSlide = document.getElementById('currentSlide');
-            const onScreenWidth = onScreenSlide.offsetWidth;
-            const onScreenHeight = onScreenSlide.offsetHeight;
+            // Если слайдов нет, onScreenSlide может не иметь размеров
+            let onScreenWidth = onScreenSlide.offsetWidth;
+            let onScreenHeight = onScreenSlide.offsetHeight;
+            
+            // Если размеры 0 (слайдов не было), используем стандартные
+            if (onScreenWidth === 0 || onScreenHeight === 0) {
+                const previewWrapper = document.querySelector('.preview-wrapper');
+                onScreenWidth = previewWrapper.offsetWidth; 
+                onScreenHeight = onScreenWidth * (9 / 16);
+            }
             
             const scaleFactor = 1920 / onScreenWidth;
 
@@ -2147,6 +2259,29 @@
             });
             document.getElementById('companyName').addEventListener('input', function() {});
 
+            // --- Листенер для загрузки лого ---
+            document.getElementById('clientLogoUpload').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        globalClientLogo = e.target.result; // Сохраняем в глобальную переменную
+                        
+                        // Показываем превью в меню
+                        const previewContainer = document.getElementById('clientLogoPreviewContainer');
+                        previewContainer.innerHTML = `<img src="${globalClientLogo}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain;">`;
+                        
+                        // Обновляем текущий слайд, если он 'general'
+                        if (slides[currentSlideIndex] && slides[currentSlideIndex].type === 'general') {
+                            updateCurrentSlide();
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            // --- Конец листенера ---
+
+
             // --- Логика для поиска по менеджерам ---
             const managerSelect = document.getElementById('manager');
             const managerSearch = document.getElementById('manager-search');
@@ -2210,15 +2345,14 @@
             // --- Конец логики для поиска ---
 
             updateSlideNumbers();
-            showSlide(1);
-            document.querySelector('.menu-header').click();
+            if (slides.length > 0) {
+                showSlide(1); // Показываем первый слайд (индекс 0 + 1)
+            }
+            // Открываем первое меню по умолчанию
+            if (document.querySelector('.menu-header')) {
+                document.querySelector('.menu-header').click();
+            }
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
