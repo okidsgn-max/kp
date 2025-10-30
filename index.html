@@ -1023,6 +1023,13 @@
             <input type="text" class="company-name-input" id="companyName" placeholder="Впишите имя клиента" value="">
         </div>
         
+        <label class="menu-label">Логотип клиента (файл):</label>
+        <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
+        
+        <label class="menu-label">Или ссылка на логотип (URL):</label>
+        <input class="zvuk-input" type="text" id="clientLogoUrl" placeholder="https://.../logo.png">
+        
+        <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
         <div class="menu-sections">
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'general')">
@@ -1088,18 +1095,7 @@
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>
-                        <option value="newyears25.webp">Новогодняя атмосфера</option> <!-- ИЗМЕНЕНИЕ 2.1 -->
-                    </select>
-
-                    <!-- ИЗМЕНЕНИЕ 1.1: Поля для логотипа -->
-                    <label class="menu-label">Логотип клиента (файл):</label>
-                    <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
-                    
-                    <label class="menu-label">Или ссылка на логотип (URL):</label>
-                    <input class="zvuk-input" type="text" id="clientLogoUrl" placeholder="https://.../logo.png">
-                    
-                    <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
-                    <!-- КОНЕЦ ИЗМЕНЕНИЯ 1.1 -->
+                        <option value="newyears25.webp">Новогодняя атмосфера</option> </select>
 
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('general')">Добавить</button>
@@ -1133,8 +1129,7 @@
                             <option value="images/umnov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=umnov" data-number="122">Иван Умнов</option>
                             <option value="images/farmonov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=farmonov" data-number="126">Тимур Фармонов</option>
                             <option value="images/chugunov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=chugunov">Дмитрий Чугунов</option>
-                            <option value="chubak.webp" data-link="https://app.zvuk-b2b.com/register?promocode=chubak">Сергей Чубак</option> <!-- ИЗМЕНЕНИЕ 3 -->
-                        </select>
+                            <option value="chubak.webp" data-link="https://app.zvuk-b2b.com/register?promocode=chubak">Сергей Чубак</option> </select>
                     </div>
 
                     <div id="personalPhoneContainer">
@@ -1238,8 +1233,7 @@
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>
-                        <option value="newyears25.webp">Новогодняя атмосфера</option> <!-- ИЗМЕНЕНИЕ 2.2 -->
-                    </select>
+                        <option value="newyears25.webp">Новогодняя атмосфера</option> </select>
 
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('pricing')">Добавить</button>
@@ -1284,8 +1278,7 @@
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>
-                        <option value="newyears25.webp">Новогодняя атмосфера</option> <!-- ИЗМЕНЕНИЕ 2.3 -->
-                    </select>
+                        <option value="newyears25.webp">Новогодняя атмосфера</option> </select>
 
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('instruction')">Добавить</button>
@@ -1361,8 +1354,7 @@
                     <label class="menu-label">Стоимость 1, ₽/мес:</label>
                     <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
                     
-                    <label class="menu-label">Стоимость 2, ₽ разово:</label> <!-- ИЗМЕНЕНИЕ 4 -->
-                    <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
+                    <label class="menu-label">Стоимость 2, ₽:</label> <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
                     
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="premiumComment" placeholder="Введите комментарий">
@@ -1904,7 +1896,8 @@
 
                     const premiumPriceDiv2 = document.createElement('div');
                     premiumPriceDiv2.className = 'preview-price-premium-2';
-                    premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ' ₽ разово:'; // ИЗМЕНЕНИЕ 5
+                    /* ИЗМЕНЕНИЕ 1.2: Изменен текст на слайде */
+                    premiumPriceDiv2.textContent = 'Стоимость 2, ₽ ' + formatPrice(document.getElementById('premiumPrice2').value); // ИЗМЕНЕНИЕ 5
                     slideContainer.appendChild(premiumPriceDiv2);
                     
                     const premiumCommentDiv = document.createElement('div');
@@ -1942,6 +1935,21 @@
                     bgImg.src = 'images/atmvieo.webp';
                     slideContainer.appendChild(bgImg);
                     
+                    // --- NEW CLIENT LOGO ---
+                    if (globalClientLogo) {
+                        const clientLogoImg = document.createElement('img');
+                        clientLogoImg.id = 'clientLogo';
+                        clientLogoImg.src = globalClientLogo;
+                        clientLogoImg.style.position = 'absolute';
+                        clientLogoImg.style.top = '5%';
+                        clientLogoImg.style.left = '17%';
+                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
+                        clientLogoImg.style.width = 'auto'; // Maintain aspect ratio
+                        clientLogoImg.style.maxWidth = '30%'; // Ограничение ширины
+                        clientLogoImg.style.objectFit = 'contain';
+                        slideContainer.appendChild(clientLogoImg);
+                    }
+                    // --- END NEW CLIENT LOGO ---
                     const videoPriceDiv = document.createElement('div');
                     videoPriceDiv.className = 'preview-price';
                     videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ' ₽/мес.';
@@ -2253,8 +2261,8 @@
                 previewContainer.innerHTML = '';
             }
             
-            // Обновляем текущий слайд, если он 'general'
-            if (slides[currentSlideIndex] && slides[currentSlideIndex].type === 'general') {
+            // Обновляем текущий слайд, если он 'general' или 'videokp' (ИЗМЕНЕНИЕ 2.3)
+            if (slides[currentSlideIndex] && (slides[currentSlideIndex].type === 'general' || slides[currentSlideIndex].type === 'videokp')) {
                 updateCurrentSlide();
             }
         }
