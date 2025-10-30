@@ -1087,12 +1087,19 @@
                         <option value="images/autumn.webp">Осенний плейлист</option>
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
-                        <option value="images/veranda.webp">Веранда</option>  
+                        <option value="images/veranda.webp">Веранда</option>
+                        <option value="newyears25.webp">Новогодняя атмосфера</option> <!-- ИЗМЕНЕНИЕ 2.1 -->
                     </select>
 
-                    <label class="menu-label">Логотип клиента (png, jpg, svg, webp):</label>
+                    <!-- ИЗМЕНЕНИЕ 1.1: Поля для логотипа -->
+                    <label class="menu-label">Логотип клиента (файл):</label>
                     <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
+                    
+                    <label class="menu-label">Или ссылка на логотип (URL):</label>
+                    <input class="zvuk-input" type="text" id="clientLogoUrl" placeholder="https://.../logo.png">
+                    
                     <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
+                    <!-- КОНЕЦ ИЗМЕНЕНИЯ 1.1 -->
 
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('general')">Добавить</button>
@@ -1126,6 +1133,7 @@
                             <option value="images/umnov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=umnov" data-number="122">Иван Умнов</option>
                             <option value="images/farmonov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=farmonov" data-number="126">Тимур Фармонов</option>
                             <option value="images/chugunov.webp" data-link="https://app.zvuk-b2b.com/register?promocode=chugunov">Дмитрий Чугунов</option>
+                            <option value="chubak.webp" data-link="https://app.zvuk-b2b.com/register?promocode=chubak">Сергей Чубак</option> <!-- ИЗМЕНЕНИЕ 3 -->
                         </select>
                     </div>
 
@@ -1229,7 +1237,8 @@
                         <option value="images/autumn.webp">Осенний плейлист</option>
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
-                        <option value="images/veranda.webp">Веранда</option>  
+                        <option value="images/veranda.webp">Веранда</option>
+                        <option value="newyears25.webp">Новогодняя атмосфера</option> <!-- ИЗМЕНЕНИЕ 2.2 -->
                     </select>
 
                     <div class="slide-buttons">
@@ -1274,7 +1283,8 @@
                         <option value="images/autumn.webp">Осенний плейлист</option>
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
-                        <option value="images/veranda.webp">Веранда</option> 
+                        <option value="images/veranda.webp">Веранда</option>
+                        <option value="newyears25.webp">Новогодняя атмосфера</option> <!-- ИЗМЕНЕНИЕ 2.3 -->
                     </select>
 
                     <div class="slide-buttons">
@@ -1351,7 +1361,7 @@
                     <label class="menu-label">Стоимость 1, ₽/мес:</label>
                     <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
                     
-                    <label class="menu-label">Стоимость 2, ₽ разово:</label>
+                    <label class="menu-label">Стоимость 2, ₽ разово:</label> <!-- ИЗМЕНЕНИЕ 4 -->
                     <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
                     
                     <label class="menu-label">Комментарий:</label>
@@ -1515,7 +1525,8 @@
             'images/rawe.webp': 'https://zvuk-b2b.com/rawe',
             'images/event.webp': 'https://zvuk-b2b.com',
             'images/concept.webp': 'https://zvuk-b2b.com',
-            'images/artist.webp': 'https://zvuk-b2b.com' // Добавлена ссылка для нового слайда, если нужна
+            'images/artist.webp': 'https://zvuk-b2b.com',
+            'newyears25.webp': 'https://zvuk-b2b.com/newyear_concept' // ИЗМЕНЕНИЕ 2.4
         };
         
         let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
@@ -1630,6 +1641,7 @@
                         clientLogoImg.style.left = '17%';
                         clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
                         clientLogoImg.style.width = 'auto'; // Maintain aspect ratio
+                        clientLogoImg.style.maxWidth = '30%'; // Ограничение ширины
                         clientLogoImg.style.objectFit = 'contain';
                         slideContainer.appendChild(clientLogoImg);
                     }
@@ -1892,7 +1904,7 @@
 
                     const premiumPriceDiv2 = document.createElement('div');
                     premiumPriceDiv2.className = 'preview-price-premium-2';
-                    premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ' ₽/мес.';
+                    premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ' ₽ разово:'; // ИЗМЕНЕНИЕ 5
                     slideContainer.appendChild(premiumPriceDiv2);
                     
                     const premiumCommentDiv = document.createElement('div');
@@ -2091,7 +2103,7 @@
 
         async function saveAsPDF() {
             if (slides.length === 0) {
-                alert('Нет слайдов для сохранения в PDF.');
+                alert('Нет слайдов для сохранения в PDF.'); // Используем alert, т.к. кастомного модала нет
                 return;
             }
 
@@ -2228,6 +2240,25 @@
                 }
             });
         }
+
+        // --- ИЗМЕНЕНИЕ 1.2: Функция для установки логотипа ---
+        function setClientLogo(logoSrc) {
+            globalClientLogo = logoSrc;
+            
+            // Показываем превью в меню
+            const previewContainer = document.getElementById('clientLogoPreviewContainer');
+            if (logoSrc) {
+                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain;">`;
+            } else {
+                previewContainer.innerHTML = '';
+            }
+            
+            // Обновляем текущий слайд, если он 'general'
+            if (slides[currentSlideIndex] && slides[currentSlideIndex].type === 'general') {
+                updateCurrentSlide();
+            }
+        }
+        // --- КОНЕЦ ИЗМЕНЕНИЯ 1.2 ---
         
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
@@ -2240,7 +2271,8 @@
                 'priceBanner', 'instructionBanner', 'playlist', 'premiumPrice1', 
                 'premiumPrice2', 'premiumComment', 'videokpPrice', 'videokpComment',
                 'price1Label', 'price10plusHeader1', 'price10plusValue1',
-                'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3'
+                'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3',
+                'clientLogoUrl' // ИЗМЕНЕНИЕ 1.3: Добавляем URL в список
             ];
             inputsToUpdate.forEach(id => {
                 const element = document.getElementById(id);
@@ -2259,27 +2291,37 @@
             });
             document.getElementById('companyName').addEventListener('input', function() {});
 
-            // --- Листенер для загрузки лого ---
+            // --- ИЗМЕНЕНИЕ 1.4: Обновленные листенеры для лого ---
             document.getElementById('clientLogoUpload').addEventListener('change', function(event) {
                 const file = event.target.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        globalClientLogo = e.target.result; // Сохраняем в глобальную переменную
-                        
-                        // Показываем превью в меню
-                        const previewContainer = document.getElementById('clientLogoPreviewContainer');
-                        previewContainer.innerHTML = `<img src="${globalClientLogo}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain;">`;
-                        
-                        // Обновляем текущий слайд, если он 'general'
-                        if (slides[currentSlideIndex] && slides[currentSlideIndex].type === 'general') {
-                            updateCurrentSlide();
-                        }
+                        setClientLogo(e.target.result);
+                        document.getElementById('clientLogoUrl').value = ''; // Очищаем поле URL
                     };
                     reader.readAsDataURL(file);
                 }
             });
-            // --- Конец листенера ---
+
+            document.getElementById('clientLogoUrl').addEventListener('input', function(event) {
+                const url = event.target.value.trim();
+                if (url) {
+                    // Простая проверка на URL (можно улучшить)
+                    if (url.startsWith('http') || url.startsWith('https')) {
+                        setClientLogo(url);
+                        document.getElementById('clientLogoUpload').value = ''; // Очищаем поле файла
+                    } else {
+                        // Если URL неполный, пока не ставим его
+                        if (globalClientLogo === document.getElementById('clientLogoUrl').value) {
+                             setClientLogo(null); // Очищаем, если стерли
+                        }
+                    }
+                } else {
+                     setClientLogo(null); // Очищаем, если поле пустое
+                }
+            });
+            // --- КОНЕЦ ИЗМЕНЕНИЯ 1.4 ---
 
 
             // --- Логика для поиска по менеджерам ---
@@ -2356,4 +2398,3 @@
     </script>
 </body>
 </html>
-
