@@ -1023,14 +1023,22 @@
             <input type="text" class="company-name-input" id="companyName" placeholder="Впишите имя клиента" value="">
         </div>
         
-        <label class="menu-label">Логотип клиента (файл):</label>
-        <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
-        
-        <label class="menu-label">Или ссылка на логотип (URL):</label>
-        <input class="zvuk-input" type="text" id="clientLogoUrl" placeholder="https://.../logo.png">
-        
-        <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
         <div class="menu-sections">
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'clientLogoSection')">
+                    <span class="menu-section-header">Логотип клиента</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <label class="menu-label">Логотип клиента (файл):</label>
+                    <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
+                    
+                    <label class="menu-label">Или ссылка на логотип (URL):</label>
+                    <input class="zvuk-input" type="text" id="clientLogoUrl" placeholder="https://.../logo.png">
+                    
+                    <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
+                </div>
+            </div>
             <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'general')">
                     <span class="menu-section-header">Общая+лого</span>
@@ -1896,8 +1904,8 @@
 
                     const premiumPriceDiv2 = document.createElement('div');
                     premiumPriceDiv2.className = 'preview-price-premium-2';
-                    /* ИЗМЕНЕНИЕ 1.2: Изменен текст на слайде */
-                    premiumPriceDiv2.textContent = 'Стоимость 2, ₽ ' + formatPrice(document.getElementById('premiumPrice2').value); // ИЗМЕНЕНИЕ 5
+                    /* ИЗМЕНЕНИЕ 2: Изменен текст на слайде (только цена и валюта) */
+                    premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + '₽'; // ИЗМЕНЕНИЕ 5
                     slideContainer.appendChild(premiumPriceDiv2);
                     
                     const premiumCommentDiv = document.createElement('div');
@@ -2400,6 +2408,7 @@
             }
             // Открываем первое меню по умолчанию
             if (document.querySelector('.menu-header')) {
+                // ИЗМЕНЕНИЕ 1.1: Кликаем на новый первый раздел (лого)
                 document.querySelector('.menu-header').click();
             }
         });
