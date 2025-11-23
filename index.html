@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Генератор коммерческого предложения</title>
-    <!-- Добавлен фавикон -->
-    <link rel="icon" type="image/svg+xml" href="zvb2bsale.svg">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="128x128" href="zvb2bsale.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -337,7 +338,6 @@
             gap: 10px;
             padding: 8px 15px;
             background: transparent;
-            
             transition: all var(--transition-medium);
         }
         
@@ -361,7 +361,6 @@
         .control-icon:hover {
             background: var(--background-light);
             transform: translateY(-2px);
-        
         }
         
         .control-icon:active {
@@ -474,13 +473,15 @@
             transition: all var(--transition-medium);
         }
         
+        /* Mobile responsive font sizing variable */
         .preview-price {
             position: absolute;
-            top: 56%; /* Изменено с 66% (поднято на 10%) */
+            top: 56%;
             left: 3%;
             color: white;
             font-weight: bold;
             width: 50%;
+            /* Proportional sizing logic */
             font-size: calc(20px * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
@@ -488,7 +489,7 @@
         
         .preview-price-label {
             position: absolute;
-            top: 51%; /* Изменено с 61% (поднято на 10%) */
+            top: 51%;
             left: 3%;
             color: #D9D9D9;
             width: 50%;
@@ -967,81 +968,33 @@
             color: var(--primary-hover);
         }
 
-        /* Checkbox for Inverting Logo - HIDDEN AS REQUESTED */
-        .checkbox-container {
-            display: none; /* Убрано из UI */
-        }
-
-        .checkbox-container input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
-        }
-
-        .checkmark {
-            height: 18px;
-            width: 18px;
-            background-color: #fff;
-            border: 2px solid var(--border);
-            border-radius: 4px;
-            margin-right: 10px;
-            transition: all 0.2s;
-        }
-
-        .checkbox-container:hover input ~ .checkmark {
-            border-color: var(--primary-hover);
-        }
-
-        .checkbox-container input:checked ~ .checkmark {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-
-        .checkbox-container input:checked ~ .checkmark:after {
-            display: block;
-            left: 6px;
-            top: 2px;
-            width: 4px;
-            height: 9px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-
-        /* Styles for Region Tabs */
-        .region-tabs {
+        /* Region Selection Buttons */
+        .region-buttons {
             display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
-        .region-tab {
+        .region-btn {
             flex: 1;
-            padding: 8px;
+            padding: 6px 0;
             border: 1px solid var(--border);
-            background-color: var(--background-light);
-            color: var(--text-secondary);
+            background-color: white;
             border-radius: 6px;
-            cursor: pointer;
+            font-size: 13px;
             font-weight: 600;
-            text-align: center;
+            color: var(--text-secondary);
+            cursor: pointer;
             transition: all var(--transition-fast);
         }
 
-        .region-tab:hover {
-            background-color: #e0e0e0;
+        .region-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
-        .region-tab.active {
-            background-color: var(--primary);
+        .region-btn.active {
+            background-color: var(--primary); /* Green for active */
             color: white;
             border-color: var(--primary);
         }
@@ -1082,8 +1035,9 @@
             }
             
             .preview-page {
-                --element-scale: 0.5;
-                --qr-size: calc(60px * 0.5);
+                /* Dynamic scale will be set by JS, but fallback here */
+                --element-scale: 0.58; 
+                --qr-size: calc(60px * var(--element-scale));
                 width: 100%; /* Force width on mobile */
             }
 
@@ -1126,8 +1080,12 @@
             }
         }
         
-        /* Removed .pdf-render-mode style as we will force scale 1 in JS */
-        
+        .preview-page.pdf-render-mode {
+             /* PDF Mode enforces desktop scale */
+            --element-scale: 1.5;
+            --qr-size: calc(60px * 1.5);
+        }
+
         /* Стиль для кликабельных областей концепций */
         .concept-link-area {
             position: absolute;
@@ -1156,20 +1114,10 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Сайт клиента (авто-подбор лого и SEO):</label>
-                    <input class="zvuk-input" type="text" id="clientWebsiteUrl" placeholder="https://site.ru" onchange="fetchSiteData()">
-
-                    <label class="menu-label">Загрузите логотип клиента в *png? *svg</label>
+                    <label class="menu-label">Загрузите логотип клиента</label>
                     <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
                     <div id="clientLogoPreviewContainer"></div>
                     <div class="logo-link-trigger" onclick="openLogoLinkPopup()">или укажите ссылку на лого</div>
-                    
-                    <!-- Checkbox removed from view but ID kept for logic compatibility if needed, though default is automatic now -->
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="invertLogoCheckbox" onchange="toggleLogoInversion()">
-                        <span class="checkmark"></span>
-                        Инвертировать цвет (для светлых лого)
-                    </label>
                 </div>
             </div>
             <div class="menu-section">
@@ -1251,13 +1199,11 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Регион:</label>
-                    <div class="region-tabs">
-                        <button class="region-tab active" onclick="filterManagers('ru', this)">RU</button>
-                        <button class="region-tab" onclick="filterManagers('kz', this)">KZ</button>
-                        <button class="region-tab" onclick="filterManagers('rb', this)">RB</button>
+                    <div class="region-buttons">
+                        <button class="region-btn active" onclick="setRegion('ru')" id="btn-ru">RU</button>
+                        <button class="region-btn" onclick="setRegion('kz')" id="btn-kz">KZ</button>
+                        <button class="region-btn" onclick="setRegion('rb')" id="btn-rb">RB</button>
                     </div>
-
                     <label class="menu-label">Сотрудник:</label>
                     <div class="custom-select-wrapper">
                         <input type="text" id="manager-search" class="zvuk-input" placeholder="Поиск по имени или доб.номеру...">
@@ -1639,8 +1585,8 @@
     <!-- Popup for Link Input -->
     <div id="logo-link-popup" class="popup-input-container">
         <div class="popup-content-dark">
-            <h3>Укажите ссылку на логотип</h3>
-            <input type="text" id="logoLinkInput" placeholder="https://example.com/logo.png">
+            <h3>Укажите ссылку на логотип или сайт</h3>
+            <input type="text" id="logoLinkInput" placeholder="https://fitnesshouse.ru или ссылка на картинку">
             <div class="popup-buttons">
                 <button onclick="saveLogoLink()">ОК</button>
                 <button onclick="closeLogoLinkPopup()">Отмена</button>
@@ -1712,13 +1658,46 @@
             kz: ['partner', 'premium', 'artist', 'web'],
             rb: ['partner', 'premium', 'artist', 'web', 'videokp']
         };
+
+        // SEO Keys Mapping for Auto-Select
+        const seoKeys = {
+            'fitnes': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
+            'sport': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
+            'gym': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
+            'cafe': { logo: 'images/coffeelogo.webp', banner: 'images/sbcafe.webp' },
+            'coffee': { logo: 'images/coffeelogo.webp', banner: 'images/sbcafe.webp' },
+            'rest': { logo: 'images/sbrest.webp', banner: 'images/sbrest.webp' },
+            'pizza': { logo: 'images/pizzalogo.webp', banner: 'images/sbpizza.webp' },
+            'sushi': { logo: 'images/sushilogo.webp', banner: 'images/sbsushi.webp' },
+            'food': { logo: 'images/fastfoodlogo.webp', banner: 'images/sbfastfood.webp' },
+            'burger': { logo: 'images/grillplovlogo.webp', banner: 'images/sbgrill.webp' },
+            'grill': { logo: 'images/grillplovlogo.webp', banner: 'images/sbgrill.webp' },
+            'auto': { logo: 'images/autologo.webp', banner: 'images/sbauto.webp' },
+            'car': { logo: 'images/autologo.webp', banner: 'images/sbauto.webp' },
+            'salon': { logo: 'images/beautylogo.webp', banner: 'images/sbbeauty.webp' },
+            'beauty': { logo: 'images/beautylogo.webp', banner: 'images/sbbeauty.webp' },
+            'hair': { logo: 'images/barberlogo.webp', banner: 'images/sbbarber.webp' },
+            'barber': { logo: 'images/barberlogo.webp', banner: 'images/sbbarber.webp' },
+            'shop': { logo: 'images/Retaillogo.webp', banner: 'images/sbretail.webp' },
+            'store': { logo: 'images/Retaillogo.webp', banner: 'images/sbretail.webp' },
+            'cloth': { logo: 'images/clotheslogo.webp', banner: 'images/sbmall.webp' },
+            'kids': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
+            'baby': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
+            'hotel': { logo: 'images/hotellogo.webp', banner: 'images/sbhotel.webp' },
+            // Новые ключи
+            'pekar': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
+            'xleb': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
+            'bakery': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' }
+        };
         
         let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
         let isZoomed = false;
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
         let globalClientLogo = null;
-        let isLogoInverted = false; // По умолчанию выключено, но будет включаться автоматически
+        // По умолчанию инверсия включена всегда для логотипов клиентов (монохром)
+        const isLogoInverted = true; 
+        let currentRegion = 'ru';
 
         function isSectionRestricted(type) {
             const { region } = getRegionInfo();
@@ -1784,6 +1763,29 @@
             slide.classList.toggle('zoomed');
             isZoomed = !isZoomed;
         }
+
+        // Обновляем CSS переменную масштаба для мобильных устройств
+        function updateMobileScale() {
+            if (window.innerWidth <= 768) {
+                const previewContainer = document.querySelector('.preview-container');
+                // Базовая ширина десктопа для расчета пропорций (примерно 900-1000px рабочей области превью)
+                const baseDesktopWidth = 1200; 
+                // Текущая ширина контейнера
+                const currentWidth = previewContainer.offsetWidth;
+                // Рассчитываем масштаб, чтобы сохранить пропорцию "как на десктопе"
+                // 1/17 соотношение шрифта к артборду
+                let scale = currentWidth / baseDesktopWidth;
+                // Ограничиваем минимум, чтобы совсем не исчезло
+                if(scale < 0.3) scale = 0.3;
+                
+                document.documentElement.style.setProperty('--element-scale', scale);
+            } else {
+                document.documentElement.style.setProperty('--element-scale', 1);
+            }
+        }
+        
+        window.addEventListener('resize', updateMobileScale);
+        window.addEventListener('load', updateMobileScale);
         
         document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
             radio.addEventListener('change', function() {
@@ -1802,11 +1804,45 @@
             });
         });
 
-        // Функция для определения региона
-        function getRegionInfo() {
+        // Функция установки региона
+        function setRegion(region) {
+            currentRegion = region;
+            
+            // Обновляем кнопки
+            document.querySelectorAll('.region-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${region}`).classList.add('active');
+
+            // Фильтруем список менеджеров
             const managerSelect = document.getElementById('manager');
-            const selectedOption = managerSelect.options[managerSelect.selectedIndex];
-            const region = selectedOption.getAttribute('data-region') || 'ru';
+            const options = Array.from(managerSelect.options);
+            let firstVisibleOption = null;
+
+            options.forEach(option => {
+                if (option.getAttribute('data-region') === region) {
+                    if (!firstVisibleOption) firstVisibleOption = option;
+                }
+            });
+
+            // Обновляем кастомный поиск менеджеров
+            const managerSearch = document.getElementById('manager-search');
+            managerSearch.value = ''; 
+            
+            // Принудительно выбираем первого менеджера из региона
+            if (firstVisibleOption) {
+                managerSelect.value = firstVisibleOption.value;
+                managerSearch.value = firstVisibleOption.text;
+                // Важно: диспатчим событие change, чтобы обновился слайд
+                managerSelect.dispatchEvent(new Event('change'));
+            }
+
+            // Обновляем доступность разделов и перерисовываем
+            updateSectionAvailability();
+            updateCurrentSlide();
+        }
+
+        // Функция для определения региона (теперь берет из state)
+        function getRegionInfo() {
+            const region = currentRegion;
             
             let currency = '₽';
             let bgImage = 'images/Backprice1.webp';
@@ -1828,56 +1864,6 @@
             return { region, currency, bgImage, mainLogo, domainSuffix };
         }
 
-        // Фильтрация менеджеров по кнопкам RU/KZ/RB
-        function filterManagers(region, btnElement) {
-            // Обновляем активный класс кнопок
-            document.querySelectorAll('.region-tab').forEach(b => b.classList.remove('active'));
-            if(btnElement) btnElement.classList.add('active');
-
-            const managerSelect = document.getElementById('manager');
-            const options = Array.from(managerSelect.options);
-            let firstVisibleIndex = -1;
-
-            options.forEach((option, index) => {
-                const optRegion = option.getAttribute('data-region');
-                if (optRegion === region) {
-                    option.style.display = ''; // Показываем
-                    if (firstVisibleIndex === -1) firstVisibleIndex = index;
-                } else {
-                    option.style.display = 'none'; // Скрываем
-                }
-            });
-
-            // Выбираем первого доступного менеджера из региона
-            if (firstVisibleIndex !== -1) {
-                managerSelect.selectedIndex = firstVisibleIndex;
-                managerSelect.dispatchEvent(new Event('change'));
-            }
-
-            // Обновляем список для кастомного поиска
-            updateManagerSearchOptions(region);
-        }
-
-        function updateManagerSearchOptions(region) {
-            const customOptions = document.getElementById('manager-options').querySelectorAll('.option');
-            const managerSelect = document.getElementById('manager');
-            
-            customOptions.forEach(optDiv => {
-                // Находим соответствующий option в селекте чтобы проверить его регион
-                const val = optDiv.dataset.value;
-                const selectOption = managerSelect.querySelector(`option[value="${val}"]`);
-                if(selectOption && selectOption.getAttribute('data-region') === region) {
-                    optDiv.style.display = '';
-                } else {
-                    optDiv.style.display = 'none';
-                }
-            });
-            
-            // Обновляем текст в инпуте поиска
-            const currentManagerName = managerSelect.options[managerSelect.selectedIndex].text;
-            document.getElementById('manager-search').value = currentManagerName;
-        }
-
         // Функция обновления доступности разделов в зависимости от региона
         function updateSectionAvailability() {
             const { region } = getRegionInfo();
@@ -1891,7 +1877,7 @@
             // Применяем ограничения
             restrictions.forEach(type => {
                 let sectionId = '';
-                // Сопоставление type и ID разделов в HTML (там где есть id="section-...")
+                // Сопоставление type и ID разделов в HTML
                 if (type === 'partner') sectionId = 'section-partner';
                 if (type === 'premium') sectionId = 'section-premium';
                 if (type === 'artist') sectionId = 'section-artist';
@@ -1950,149 +1936,58 @@
         }
 
         function saveLogoLink() {
-            const link = document.getElementById('logoLinkInput').value;
-            if (link) {
-                setClientLogo(link);
-                closeLogoLinkPopup();
-            }
-        }
-        
-        function toggleLogoInversion() {
-            isLogoInverted = document.getElementById('invertLogoCheckbox').checked;
-            updateCurrentSlide();
-        }
+            const inputVal = document.getElementById('logoLinkInput').value.trim();
+            if (!inputVal) return;
 
-        // --- FETCH SITE DATA LOGIC (SEO + LOGO) ---
-        async function fetchSiteData() {
-            const urlInput = document.getElementById('clientWebsiteUrl');
-            let url = urlInput.value.trim();
-            if (!url) return;
-
-            if (!url.startsWith('http')) {
-                url = 'https://' + url;
-            }
-
-            const loadingPopup = document.getElementById('pdf-popup');
-            loadingPopup.textContent = "Анализируем сайт...";
-            loadingPopup.style.display = 'block';
-
-            try {
-                // Using AllOrigins as a proxy to bypass CORS
-                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
-                
-                if (data.contents) {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data.contents, 'text/html');
-
-                    // 1. Keyword Analysis
-                    const textContent = (doc.body.textContent + " " + (doc.querySelector('meta[name="description"]')?.content || "") + " " + (doc.querySelector('meta[name="keywords"]')?.content || "")).toLowerCase();
-                    
-                    analyzeKeywords(textContent);
-
-                    // 2. Logo Scraping
-                    const logoUrl = findLogo(doc, url);
-                    if (logoUrl) {
-                        setClientLogo(logoUrl);
-                        // Auto-enable inversion logic (assuming retrieved logos might need it or just applying default style)
-                        // User requirement: "if logo is light... monochrome and inverted by default"
-                        // Since checking brightness is hard via proxy, we'll force the style by default for scraped logos
-                        document.getElementById('invertLogoCheckbox').checked = true;
-                        isLogoInverted = true;
-                    }
-
-                }
-            } catch (error) {
-                console.error("Error fetching site data:", error);
-                // Fail silently or show toast
-            } finally {
-                loadingPopup.style.display = 'none';
-                loadingPopup.textContent = "PDF уже сохраняется! Удачной сделки!"; // Reset text
-            }
-        }
-
-        function analyzeKeywords(text) {
-            const mappings = [
-                { keys: ['пекарн', 'хлеб', 'булочн', 'выпечка'], logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
-                { keys: ['фитнес', 'трениров', 'зал', 'спорт', 'качал', 'fitness', 'gym'], logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
-                { keys: ['кофе', 'coffee', 'бариста', 'капучино'], logo: 'images/coffeelogo.webp', banner: 'images/sbcafe.webp' },
-                { keys: ['бургер', 'гриль', 'мясо', 'стейк'], logo: 'images/grillplovlogo.webp', banner: 'images/sbgrill.webp' },
-                { keys: ['суши', 'ролл', 'sushi', 'японск'], logo: 'images/sushilogo.webp', banner: 'images/sbsushi.webp' },
-                { keys: ['пицца', 'pizza', 'итальян'], logo: 'images/pizzalogo.webp', banner: 'images/sbpizza.webp' },
-                { keys: ['одежд', 'мода', 'style', 'fashion', 'плать'], logo: 'images/clotheslogo.webp', banner: 'images/sbmall.webp' },
-                { keys: ['барбер', 'стрижк', 'barber', 'hair'], logo: 'images/barberlogo.webp', banner: 'images/sbbarber.webp' },
-                { keys: ['красот', 'beauty', 'маникюр', 'ногт', 'салон'], logo: 'images/beautylogo.webp', banner: 'images/sbbeauty.webp' },
-                { keys: ['авто', 'машин', 'car', 'auto', 'сервис'], logo: 'images/autologo.webp', banner: 'images/sbauto.webp' },
-                { keys: ['детск', 'ребенок', 'игр', 'kids'], logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
-                { keys: ['отель', 'гостиниц', 'hotel', 'inn'], logo: 'images/hotellogo.webp', banner: 'images/sbhotel.webp' }
-            ];
-
-            for (let item of mappings) {
-                if (item.keys.some(key => text.includes(key))) {
-                    // Update Logos Dropdown
+            // 1. Поиск ключевых слов для настройки темы (SEO keys)
+            let topicFound = false;
+            const lowerVal = inputVal.toLowerCase();
+            
+            for (const [key, settings] of Object.entries(seoKeys)) {
+                if (lowerVal.includes(key)) {
+                    // Устанавливаем логотип категории
                     const logoSelect = document.getElementById('logos');
-                    logoSelect.value = item.logo;
-                    
-                    // Update Banner Dropdown
                     const bannerSelect = document.getElementById('banner');
-                    bannerSelect.value = item.banner;
                     
-                    // Trigger changes
-                    updateCurrentSlide();
-                    break; // Stop at first match
+                    // Найти опцию с таким значением и выбрать её
+                    if (settings.logo) {
+                        Array.from(logoSelect.options).forEach(opt => {
+                            if (opt.value === settings.logo) logoSelect.value = settings.logo;
+                        });
+                    }
+                    if (settings.banner) {
+                        Array.from(bannerSelect.options).forEach(opt => {
+                             if (opt.value === settings.banner) bannerSelect.value = settings.banner;
+                        });
+                    }
+                    topicFound = true;
+                    // Не делаем break, так как могут быть уточняющие ключи, берем последний
                 }
             }
-        }
 
-        function findLogo(doc, baseUrl) {
-            // Priority selectors
-            const selectors = [
-                '.logo img', 
-                'img.logo', 
-                'header img', 
-                '.header__logo img',
-                '.tn-atom img', // Tilda class mentioned
-                '.footer__logo img',
-                'img[alt*="Логотип"]',
-                'img[alt*="logo" i]'
-            ];
-
-            let foundSrc = null;
-
-            for (let sel of selectors) {
-                const img = doc.querySelector(sel);
-                if (img && img.src) {
-                    foundSrc = img.src;
-                    break;
+            // 2. Обработка самой ссылки для логотипа клиента
+            // Если это ссылка на картинку (заканчивается на расширение)
+            if (inputVal.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
+                setClientLogo(inputVal);
+            } 
+            // Если это ссылка на сайт - пробуем достать лого через Clearbit API
+            // (Имитация поведения "взять из хедера", так как прямой парсинг невозможен на клиенте)
+            else {
+                try {
+                    // Извлекаем домен
+                    const urlObj = new URL(inputVal.startsWith('http') ? inputVal : 'https://' + inputVal);
+                    const domain = urlObj.hostname;
+                    const logoApiUrl = `https://logo.clearbit.com/${domain}`;
+                    setClientLogo(logoApiUrl);
+                } catch (e) {
+                    console.log('Не удалось извлечь домен для логотипа');
                 }
             }
             
-            // Look for Tilda background image if img not found
-            if (!foundSrc) {
-                const divLogo = doc.querySelector('.tn-atom');
-                if (divLogo && divLogo.style.backgroundImage) {
-                    foundSrc = divLogo.style.backgroundImage.slice(5, -2);
-                }
-            }
-
-            if (foundSrc) {
-                // Convert relative URL to absolute
-                try {
-                    // Check if it's already absolute
-                    if (foundSrc.startsWith('//')) {
-                        return 'https:' + foundSrc;
-                    }
-                    if (!foundSrc.startsWith('http') && !foundSrc.startsWith('data:')) {
-                         const base = new URL(baseUrl);
-                         return new URL(foundSrc, base.origin).href;
-                    }
-                } catch(e) { console.log("Url parse error", e); }
-                return foundSrc;
-            }
-            return null;
+            closeLogoLinkPopup();
+            updateCurrentSlide();
         }
 
-        
         function updateCurrentSlide() {
             if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
                 document.getElementById('currentSlide').innerHTML = ''; 
@@ -2109,14 +2004,10 @@
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
             
-            // Helper to apply inverted filter if checked
+            // Apply monochrome and invert filter by default (makes logo white)
             const applyLogoFilter = (imgElement) => {
-                if (isLogoInverted) {
-                    // Monochrome and Inverted logic
-                    imgElement.style.filter = 'grayscale(100%) invert(100%) brightness(2)';
-                } else {
-                    imgElement.style.filter = 'none';
-                }
+                // Всегда монохром и инверсия (белый логотип)
+                imgElement.style.filter = 'brightness(0) invert(1)';
             };
 
             switch(currentSlide.type) {
@@ -2159,6 +2050,12 @@
                         clientLogoImg.style.width = 'auto'; 
                         clientLogoImg.style.maxWidth = '30%'; 
                         clientLogoImg.style.objectFit = 'contain';
+                        
+                        // Error handling for auto-fetched logos
+                        clientLogoImg.onerror = function() {
+                            this.style.display = 'none';
+                        };
+                        
                         applyLogoFilter(clientLogoImg);
                         slideContainer.appendChild(clientLogoImg);
                     }
@@ -2474,6 +2371,11 @@
                         clientLogoImg.style.width = 'auto'; 
                         clientLogoImg.style.maxWidth = '30%';
                         clientLogoImg.style.objectFit = 'contain';
+                        
+                        clientLogoImg.onerror = function() {
+                            this.style.display = 'none';
+                        };
+
                         applyLogoFilter(clientLogoImg);
                         slideContainer.appendChild(clientLogoImg);
                     }
@@ -2680,37 +2582,42 @@
             
             const originalSlideIndex = currentSlideIndex; 
             
-            // For saving, we ALWAYS use desktop dimensions (1920x1080)
-            // regardless of mobile or desktop view
-            const onScreenWidth = 1920; 
-            const scaleFactor = 1; 
+            const onScreenSlide = document.getElementById('currentSlide');
+            let onScreenWidth = onScreenSlide.offsetWidth;
+            let onScreenHeight = onScreenSlide.offsetHeight;
+            
+            // Если мы на мобильном, размеры могут быть маленькими, но нам нужен 1920 для PDF
+            if (onScreenWidth === 0 || onScreenHeight === 0) {
+                const previewWrapper = document.querySelector('.preview-wrapper');
+                onScreenWidth = previewWrapper.offsetWidth; 
+                onScreenHeight = onScreenWidth * (9 / 16);
+            }
+            
+            // Корректируем scaleFactor для PDF (1920px canvas)
+            // Если на мобильном, используем фиксированный скейл, иначе вычисляем
+            const isMobile = window.innerWidth <= 768;
+            const scaleFactor = isMobile ? (1920 / onScreenWidth) : (1920 / onScreenWidth);
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
                 
-                // Force scale to 1 (Desktop scale) for PDF generation
-                slideContent.style.setProperty('--element-scale', '1');
+                // ВАЖНО: Принудительно ставим класс для рендера PDF, который увеличивает шрифты
+                // чтобы они соответствовали масштабу 1920px
+                slideContent.classList.add('pdf-render-mode');
+
+                slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 slideContent.style.margin = '0'; 
                 
+                // Фиксируем размеры для html2canvas
                 slideContent.style.width = '1920px';
                 slideContent.style.height = '1080px';
                 
-                slideContent.style.transform = `none`;
+                // Сбрасываем скейл для html2canvas, так как мы задали размеры явно
+                slideContent.style.transform = `scale(1)`; 
                 slideContent.style.transformOrigin = 'top left';
-
-                // Ensure font sizes and QR codes are recalculated for desktop scale
-                // The CSS variable --element-scale handles this in the styles, 
-                // but we need to make sure inline styles or specific JS-set styles are correct.
-                const qr = slideContent.querySelector('.preview-qr');
-                if (qr) {
-                     // Reset QR size to desktop standard if it was scaled for mobile
-                     qr.style.width = '60px';
-                     qr.style.height = '60px';
-                     qr.style.padding = '7px';
-                }
 
                 tempContainer.innerHTML = '';
                 tempContainer.appendChild(slideContent);
@@ -2728,7 +2635,7 @@
                 const canvas = await html2canvas(tempContainer, {
                     width: 1920,
                     height: 1080,
-                    scale: 1,
+                    scale: 1, // Важно: scale 1, так как мы уже задали контейнеру 1920px
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -2740,7 +2647,11 @@
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
                 
-                addLinksToPDF(pdf, slideContent, i, scaleFactor);
+                // Для ссылок нужно использовать оригинальный scaleFactor относительно экрана
+                // Но так как мы рендерим из tempContainer (1920), координаты уже правильные
+                // Единственное но: ссылки берутся из slideContent (клона), у которого width=1920
+                // Значит scaleFactor должен быть 1
+                addLinksToPDF(pdf, slideContent, i, 1);
             }
             
             showSlide(originalSlideIndex + 1);
@@ -2795,7 +2706,8 @@
             
             const previewContainer = document.getElementById('clientLogoPreviewContainer');
             if (logoSrc) {
-                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain;">`;
+                // Показываем в превью инвертированный логотип (принудительно белый/монохром)
+                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain; filter: brightness(0) invert(1);">`;
             } else {
                 previewContainer.innerHTML = '';
             }
@@ -2857,21 +2769,34 @@
             const managerSearch = document.getElementById('manager-search');
             const managerOptionsContainer = document.getElementById('manager-options');
 
-            const options = Array.from(managerSelect.options);
-            options.forEach(option => {
-                const optionDiv = document.createElement('div');
-                optionDiv.classList.add('option');
-                optionDiv.textContent = option.textContent;
-                optionDiv.dataset.value = option.value;
-                optionDiv.dataset.number = option.dataset.number;
-                managerOptionsContainer.appendChild(optionDiv);
-            });
-            managerSearch.value = managerSelect.options[managerSelect.selectedIndex].text;
+            // Инициализируем опции поиска
+            const updateManagerSearchOptions = () => {
+                managerOptionsContainer.innerHTML = '';
+                const options = Array.from(managerSelect.options);
+                options.forEach(option => {
+                    // Добавляем в поиск только те, что сейчас видимы (прошли фильтр региона)
+                    if (option.getAttribute('data-region') === currentRegion) {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.classList.add('option');
+                        optionDiv.textContent = option.textContent;
+                        optionDiv.dataset.value = option.value;
+                        optionDiv.dataset.number = option.dataset.number;
+                        managerOptionsContainer.appendChild(optionDiv);
+                    }
+                });
+            };
+
+            // Первичная инициализация (RU)
+            setRegion('ru'); 
+            updateMobileScale(); // Инициализация масштаба для мобильных
 
             managerSearch.addEventListener('focus', () => {
+                // Обновляем список перед показом, чтобы он соответствовал текущему региону
+                updateManagerSearchOptions();
                 managerOptionsContainer.style.display = 'block';
                 managerSearch.value = ''; 
-                managerSearch.dispatchEvent(new Event('input')); 
+                const customOptions = managerOptionsContainer.querySelectorAll('.option');
+                customOptions.forEach(option => option.style.display = '');
             });
 
             managerSearch.addEventListener('blur', () => {
@@ -2887,9 +2812,6 @@
                 const filter = managerSearch.value.toLowerCase();
                 const customOptions = managerOptionsContainer.querySelectorAll('.option');
                 customOptions.forEach(option => {
-                    // Check logic considering current filtered state
-                    if(option.style.display === 'none') return; // Skip currently hidden by Region
-
                     const nameMatch = option.textContent.toLowerCase().includes(filter);
                     const numberMatch = option.dataset.number && option.dataset.number.includes(filter);
 
@@ -2922,10 +2844,6 @@
             if (document.querySelector('.menu-header')) {
                 document.querySelector('.menu-header').click();
             }
-            
-            // Инициализация менеджеров (RU по умолчанию)
-            filterManagers('ru', document.querySelector('.region-tab.active'));
-            updateSectionAvailability();
         });
     </script>
 </body>
