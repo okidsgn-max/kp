@@ -335,7 +335,6 @@
             gap: 10px;
             padding: 8px 15px;
             background: transparent;
-            
             transition: all var(--transition-medium);
         }
         
@@ -359,7 +358,6 @@
         .control-icon:hover {
             background: var(--background-light);
             transform: translateY(-2px);
-        
         }
         
         .control-icon:active {
@@ -472,13 +470,15 @@
             transition: all var(--transition-medium);
         }
         
+        /* Mobile responsive font sizing variable */
         .preview-price {
             position: absolute;
-            top: 56%; /* Изменено с 66% (поднято на 10%) */
+            top: 56%;
             left: 3%;
             color: white;
             font-weight: bold;
             width: 50%;
+            /* Proportional sizing logic */
             font-size: calc(20px * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
@@ -486,7 +486,7 @@
         
         .preview-price-label {
             position: absolute;
-            top: 51%; /* Изменено с 61% (поднято на 10%) */
+            top: 51%;
             left: 3%;
             color: #D9D9D9;
             width: 50%;
@@ -965,60 +965,35 @@
             color: var(--primary-hover);
         }
 
-        /* Checkbox for Inverting Logo */
-        .checkbox-container {
+        /* Region Selection Buttons */
+        .region-buttons {
             display: flex;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-            font-size: 14px;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .region-btn {
+            flex: 1;
+            padding: 6px 0;
+            border: 1px solid var(--border);
+            background-color: white;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
             color: var(--text-secondary);
-            user-select: none;
-            margin-bottom: 16px;
-        }
-
-        .checkbox-container input {
-            position: absolute;
-            opacity: 0;
             cursor: pointer;
-            height: 0;
-            width: 0;
+            transition: all var(--transition-fast);
         }
 
-        .checkmark {
-            height: 18px;
-            width: 18px;
-            background-color: #fff;
-            border: 2px solid var(--border);
-            border-radius: 4px;
-            margin-right: 10px;
-            transition: all 0.2s;
-        }
-
-        .checkbox-container:hover input ~ .checkmark {
-            border-color: var(--primary-hover);
-        }
-
-        .checkbox-container input:checked ~ .checkmark {
-            background-color: var(--primary);
+        .region-btn:hover {
             border-color: var(--primary);
+            color: var(--primary);
         }
 
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-
-        .checkbox-container input:checked ~ .checkmark:after {
-            display: block;
-            left: 6px;
-            top: 2px;
-            width: 4px;
-            height: 9px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
+        .region-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
 
@@ -1057,8 +1032,8 @@
             }
             
             .preview-page {
-                --element-scale: 0.5;
-                --qr-size: calc(60px * 0.5);
+                --element-scale: 0.58; /* Увеличено для пропорции ~1/17 на мобильных */
+                --qr-size: calc(60px * 0.58);
                 width: 100%; /* Force width on mobile */
             }
 
@@ -1134,16 +1109,10 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Загрузите логотип клиента в *png? *svg</label>
+                    <label class="menu-label">Загрузите логотип клиента</label>
                     <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
                     <div id="clientLogoPreviewContainer"></div>
                     <div class="logo-link-trigger" onclick="openLogoLinkPopup()">или укажите ссылку на лого</div>
-                    
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="invertLogoCheckbox" onchange="toggleLogoInversion()">
-                        <span class="checkmark"></span>
-                        Инвертировать цвет (для светлых лого)
-                    </label>
                 </div>
             </div>
             <div class="menu-section">
@@ -1225,6 +1194,11 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
+                    <div class="region-buttons">
+                        <button class="region-btn active" onclick="setRegion('ru')" id="btn-ru">RU</button>
+                        <button class="region-btn" onclick="setRegion('kz')" id="btn-kz">KZ</button>
+                        <button class="region-btn" onclick="setRegion('rb')" id="btn-rb">RB</button>
+                    </div>
                     <label class="menu-label">Сотрудник:</label>
                     <div class="custom-select-wrapper">
                         <input type="text" id="manager-search" class="zvuk-input" placeholder="Поиск по имени или доб.номеру...">
@@ -1606,8 +1580,8 @@
     <!-- Popup for Link Input -->
     <div id="logo-link-popup" class="popup-input-container">
         <div class="popup-content-dark">
-            <h3>Укажите ссылку на логотип</h3>
-            <input type="text" id="logoLinkInput" placeholder="https://example.com/logo.png">
+            <h3>Укажите ссылку на логотип или сайт</h3>
+            <input type="text" id="logoLinkInput" placeholder="https://fitnesshouse.ru или ссылка на картинку">
             <div class="popup-buttons">
                 <button onclick="saveLogoLink()">ОК</button>
                 <button onclick="closeLogoLinkPopup()">Отмена</button>
@@ -1679,13 +1653,42 @@
             kz: ['partner', 'premium', 'artist', 'web'],
             rb: ['partner', 'premium', 'artist', 'web', 'videokp']
         };
+
+        // SEO Keys Mapping for Auto-Select
+        const seoKeys = {
+            'fitnes': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
+            'sport': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
+            'gym': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
+            'cafe': { logo: 'images/coffeelogo.webp', banner: 'images/sbcafe.webp' },
+            'coffee': { logo: 'images/coffeelogo.webp', banner: 'images/sbcafe.webp' },
+            'rest': { logo: 'images/sbrest.webp', banner: 'images/sbrest.webp' },
+            'pizza': { logo: 'images/pizzalogo.webp', banner: 'images/sbpizza.webp' },
+            'sushi': { logo: 'images/sushilogo.webp', banner: 'images/sbsushi.webp' },
+            'food': { logo: 'images/fastfoodlogo.webp', banner: 'images/sbfastfood.webp' },
+            'burger': { logo: 'images/grillplovlogo.webp', banner: 'images/sbgrill.webp' },
+            'grill': { logo: 'images/grillplovlogo.webp', banner: 'images/sbgrill.webp' },
+            'auto': { logo: 'images/autologo.webp', banner: 'images/sbauto.webp' },
+            'car': { logo: 'images/autologo.webp', banner: 'images/sbauto.webp' },
+            'salon': { logo: 'images/beautylogo.webp', banner: 'images/sbbeauty.webp' },
+            'beauty': { logo: 'images/beautylogo.webp', banner: 'images/sbbeauty.webp' },
+            'hair': { logo: 'images/barberlogo.webp', banner: 'images/sbbarber.webp' },
+            'barber': { logo: 'images/barberlogo.webp', banner: 'images/sbbarber.webp' },
+            'shop': { logo: 'images/Retaillogo.webp', banner: 'images/sbretail.webp' },
+            'store': { logo: 'images/Retaillogo.webp', banner: 'images/sbretail.webp' },
+            'cloth': { logo: 'images/clotheslogo.webp', banner: 'images/sbmall.webp' },
+            'kids': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
+            'baby': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
+            'hotel': { logo: 'images/hotellogo.webp', banner: 'images/sbhotel.webp' }
+        };
         
         let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
         let isZoomed = false;
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
         let globalClientLogo = null;
-        let isLogoInverted = false;
+        // По умолчанию инверсия включена всегда для логотипов клиентов
+        let isLogoInverted = true; 
+        let currentRegion = 'ru';
 
         function isSectionRestricted(type) {
             const { region } = getRegionInfo();
@@ -1769,11 +1772,46 @@
             });
         });
 
-        // Функция для определения региона
-        function getRegionInfo() {
+        // Функция установки региона
+        function setRegion(region) {
+            currentRegion = region;
+            
+            // Обновляем кнопки
+            document.querySelectorAll('.region-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${region}`).classList.add('active');
+
+            // Фильтруем список менеджеров
             const managerSelect = document.getElementById('manager');
-            const selectedOption = managerSelect.options[managerSelect.selectedIndex];
-            const region = selectedOption.getAttribute('data-region') || 'ru';
+            const options = Array.from(managerSelect.options);
+            let firstVisibleOption = null;
+
+            options.forEach(option => {
+                if (option.getAttribute('data-region') === region) {
+                    // Важно: в селекте нельзя просто скрыть option через display:none в Safari/Mobile
+                    // Но мы используем это для выборки. 
+                    // Для полной корректности лучше перестраивать селект, но здесь оставим логику переключения.
+                    if (!firstVisibleOption) firstVisibleOption = option;
+                }
+            });
+
+            // Обновляем кастомный поиск менеджеров (тут фильтрация работает через display)
+            const managerSearch = document.getElementById('manager-search');
+            managerSearch.value = ''; // Сброс поиска
+            
+            // Принудительно выбираем первого менеджера из региона
+            if (firstVisibleOption) {
+                managerSelect.value = firstVisibleOption.value;
+                managerSearch.value = firstVisibleOption.text;
+            }
+
+            // Обновляем доступность разделов и перерисовываем
+            updateSectionAvailability();
+            updateCurrentSlide();
+        }
+
+        // Функция для определения региона (теперь берет из state)
+        function getRegionInfo() {
+            const region = currentRegion;
             
             let currency = '₽';
             let bgImage = 'images/Backprice1.webp';
@@ -1808,7 +1846,7 @@
             // Применяем ограничения
             restrictions.forEach(type => {
                 let sectionId = '';
-                // Сопоставление type и ID разделов в HTML (там где есть id="section-...")
+                // Сопоставление type и ID разделов в HTML
                 if (type === 'partner') sectionId = 'section-partner';
                 if (type === 'premium') sectionId = 'section-premium';
                 if (type === 'artist') sectionId = 'section-artist';
@@ -1867,19 +1905,56 @@
         }
 
         function saveLogoLink() {
-            const link = document.getElementById('logoLinkInput').value;
-            if (link) {
-                setClientLogo(link);
-                closeLogoLinkPopup();
+            const inputVal = document.getElementById('logoLinkInput').value.trim();
+            if (!inputVal) return;
+
+            // 1. Поиск ключевых слов для настройки темы
+            let topicFound = false;
+            for (const [key, settings] of Object.entries(seoKeys)) {
+                if (inputVal.toLowerCase().includes(key)) {
+                    // Устанавливаем логотип категории
+                    const logoSelect = document.getElementById('logos');
+                    const bannerSelect = document.getElementById('banner');
+                    
+                    // Найти опцию с таким значением и выбрать её
+                    if (settings.logo) {
+                        // Попытка найти точное совпадение значения
+                        Array.from(logoSelect.options).forEach(opt => {
+                            if (opt.value === settings.logo) logoSelect.value = settings.logo;
+                        });
+                    }
+                    if (settings.banner) {
+                        Array.from(bannerSelect.options).forEach(opt => {
+                             if (opt.value === settings.banner) bannerSelect.value = settings.banner;
+                        });
+                    }
+                    topicFound = true;
+                    break;
+                }
             }
-        }
-        
-        function toggleLogoInversion() {
-            isLogoInverted = document.getElementById('invertLogoCheckbox').checked;
+
+            // 2. Обработка самой ссылки для логотипа клиента
+            // Если это ссылка на картинку (заканчивается на расширение)
+            if (inputVal.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
+                setClientLogo(inputVal);
+            } 
+            // Если это ссылка на сайт - пробуем достать лого через Clearbit API
+            else {
+                try {
+                    // Извлекаем домен
+                    const urlObj = new URL(inputVal.startsWith('http') ? inputVal : 'https://' + inputVal);
+                    const domain = urlObj.hostname;
+                    const logoApiUrl = `https://logo.clearbit.com/${domain}`;
+                    setClientLogo(logoApiUrl);
+                } catch (e) {
+                    console.log('Не удалось извлечь домен для логотипа');
+                }
+            }
+            
+            closeLogoLinkPopup();
             updateCurrentSlide();
         }
 
-        
         function updateCurrentSlide() {
             if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
                 document.getElementById('currentSlide').innerHTML = ''; 
@@ -1896,13 +1971,10 @@
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
             
-            // Helper to apply inverted filter if checked
+            // Apply monochrome and invert filter by default (makes logo white)
             const applyLogoFilter = (imgElement) => {
-                if (isLogoInverted) {
-                    imgElement.style.filter = 'invert(1)';
-                } else {
-                    imgElement.style.filter = 'none';
-                }
+                // Используем brightness(0) invert(1) для превращения любого лого в белый монохром
+                imgElement.style.filter = 'brightness(0) invert(1)';
             };
 
             switch(currentSlide.type) {
@@ -1945,6 +2017,12 @@
                         clientLogoImg.style.width = 'auto'; 
                         clientLogoImg.style.maxWidth = '30%'; 
                         clientLogoImg.style.objectFit = 'contain';
+                        
+                        // Error handling for auto-fetched logos
+                        clientLogoImg.onerror = function() {
+                            this.style.display = 'none';
+                        };
+                        
                         applyLogoFilter(clientLogoImg);
                         slideContainer.appendChild(clientLogoImg);
                     }
@@ -2260,6 +2338,11 @@
                         clientLogoImg.style.width = 'auto'; 
                         clientLogoImg.style.maxWidth = '30%';
                         clientLogoImg.style.objectFit = 'contain';
+                        
+                        clientLogoImg.onerror = function() {
+                            this.style.display = 'none';
+                        };
+
                         applyLogoFilter(clientLogoImg);
                         slideContainer.appendChild(clientLogoImg);
                     }
@@ -2580,7 +2663,8 @@
             
             const previewContainer = document.getElementById('clientLogoPreviewContainer');
             if (logoSrc) {
-                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain;">`;
+                // Показываем в превью инвертированный логотип, чтобы пользователь понимал, как это будет выглядеть
+                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain; filter: invert(1);">`;
             } else {
                 previewContainer.innerHTML = '';
             }
@@ -2642,21 +2726,36 @@
             const managerSearch = document.getElementById('manager-search');
             const managerOptionsContainer = document.getElementById('manager-options');
 
-            const options = Array.from(managerSelect.options);
-            options.forEach(option => {
-                const optionDiv = document.createElement('div');
-                optionDiv.classList.add('option');
-                optionDiv.textContent = option.textContent;
-                optionDiv.dataset.value = option.value;
-                optionDiv.dataset.number = option.dataset.number;
-                managerOptionsContainer.appendChild(optionDiv);
-            });
-            managerSearch.value = managerSelect.options[managerSelect.selectedIndex].text;
+            // Инициализируем опции поиска
+            const updateManagerSearchOptions = () => {
+                managerOptionsContainer.innerHTML = '';
+                const options = Array.from(managerSelect.options);
+                options.forEach(option => {
+                    // Добавляем в поиск только те, что сейчас видимы (прошли фильтр региона)
+                    // Но так как option.style.display не всегда надежен в JS при инициализации, проверяем регион вручную
+                    if (option.getAttribute('data-region') === currentRegion) {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.classList.add('option');
+                        optionDiv.textContent = option.textContent;
+                        optionDiv.dataset.value = option.value;
+                        optionDiv.dataset.number = option.dataset.number;
+                        managerOptionsContainer.appendChild(optionDiv);
+                    }
+                });
+            };
+
+            // Первичная инициализация
+            setRegion('ru'); // Это запустит updateSectionAvailability и первичную фильтрацию
 
             managerSearch.addEventListener('focus', () => {
+                // Обновляем список перед показом, чтобы он соответствовал текущему региону
+                updateManagerSearchOptions();
                 managerOptionsContainer.style.display = 'block';
                 managerSearch.value = ''; 
-                managerSearch.dispatchEvent(new Event('input')); 
+                // Триггерим input чтобы показать все варианты региона
+                const filter = '';
+                const customOptions = managerOptionsContainer.querySelectorAll('.option');
+                customOptions.forEach(option => option.style.display = '');
             });
 
             managerSearch.addEventListener('blur', () => {
@@ -2704,9 +2803,6 @@
             if (document.querySelector('.menu-header')) {
                 document.querySelector('.menu-header').click();
             }
-            
-            // Инициализация ограничений при старте
-            updateSectionAvailability();
         });
     </script>
 </body>
