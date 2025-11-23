@@ -92,7 +92,7 @@
             100% { background-color: var(--primary); }
         }
 
-        /* Pop-up for PDF generation */
+        /* Pop-up for PDF generation and Restrictions */
         .popup {
             display: none;
             position: fixed;
@@ -108,14 +108,16 @@
             font-weight: 500;
             animation: fadeIn 0.3s ease;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 80%;
         }
 
-        .popup::after {
+        .popup.loading::after {
             content: "...";
             animation: dots 1.5s steps(5, end) infinite;
         }
         
-        /* Blur effect for PDF save */
+        /* Blur effect */
         .blur-overlay {
             position: fixed;
             top: 0;
@@ -396,8 +398,7 @@
         
         .preview-price {
             position: absolute;
-            /* Изменено с 66% на 51% (поднято на 15%) */
-            top: 51%;
+            top: 56%; /* Изменено с 66% (поднято на 10%) */
             left: 3%;
             color: white;
             font-weight: bold;
@@ -409,8 +410,7 @@
         
         .preview-price-label {
             position: absolute;
-            /* Изменено с 61% на 46% (поднято на 15%) */
-            top: 46%;
+            top: 51%; /* Изменено с 61% (поднято на 10%) */
             left: 3%;
             color: #D9D9D9;
             width: 50%;
@@ -536,16 +536,6 @@
             background-color: var(--background-light);
         }
         
-        /* Стили для недоступных разделов */
-        .menu-section.restricted .menu-section-header {
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        .menu-section.restricted .toggle-button {
-            color: #999;
-        }
-
         .menu-header {
             display: flex;
             justify-content: space-between;
@@ -560,6 +550,15 @@
             background-color: var(--background-light);
         }
         
+        /* Restricted section style */
+        .menu-section.restricted {
+            filter: grayscale(100%);
+            opacity: 0.6;
+        }
+        .menu-section.restricted .menu-header:hover {
+            background-color: transparent;
+        }
+
         .menu-content {
             display: none;
             padding: 0 12px 12px;
@@ -822,9 +821,8 @@
             transition: all var(--transition-medium);
         }
 
-        /* Обновлен цвет ссылок в инструкции */
         .instruction-text .highlight {
-            color: #04C9B0;
+            color: #04C9B0; /* Новый цвет по запросу */
             text-decoration: none;
             font-weight: 500;
         }
@@ -865,8 +863,7 @@
             color: var(--primary);
         }
 
-        /* --- MOBILE STYLES DISABLED (COMMENTED OUT) --- */
-        /*
+        /* --- MOBILE STYLES --- */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -877,19 +874,27 @@
             .menu-container, .preview-container {
                 width: 100%;
                 box-sizing: border-box;
-                height: auto;
-                overflow-y: visible;
                 box-shadow: none;
             }
 
             .preview-container {
                 order: 1;
                 padding: 16px 16px 0;
+                position: sticky;
+                top: 0;
+                z-index: 50;
+                background-color: #f5f5f5;
+                height: auto;
+                overflow-y: visible;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #e0e0e0;
             }
 
             .menu-container {
                 order: 2;
-                padding-bottom: 100px;
+                padding-bottom: 100px; /* Space for fixed bottom button */
+                height: auto;
+                overflow-y: visible;
             }
             
             .preview-page {
@@ -904,6 +909,11 @@
 
             .slide-controls-container {
                 margin-top: 10px;
+            }
+
+            /* Hide zoom button on mobile */
+            .control-icon:first-child {
+                display: none; 
             }
 
             .action-buttons {
@@ -930,7 +940,6 @@
                 box-shadow: 0 0 10px rgba(0,0,0,0.2);
             }
         }
-        */
         
         .preview-page.pdf-render-mode {
             --element-scale: 2.5;
@@ -941,7 +950,6 @@
         .concept-link-area {
             position: absolute;
             cursor: pointer;
-            /* border: 1px solid rgba(255, 0, 0, 0.5);  Для отладки можно включить */ 
             z-index: 5;
         }
         .concept-link-area:hover {
@@ -960,7 +968,7 @@
         </div>
         
         <div class="menu-sections">
-            <div class="menu-section" id="section-clientLogo">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'clientLogoSection')">
                     <span class="menu-section-header">Логотип клиента</span>
                     <span class="toggle-button">+</span>
@@ -971,7 +979,7 @@
                     <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
                 </div>
             </div>
-            <div class="menu-section" id="section-general">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'general')">
                     <span class="menu-section-header">Общая+лого</span>
                     <span class="toggle-button">+</span>
@@ -981,12 +989,12 @@
                     <select class="zvuk-select" id="logos">
                         <option value="images/mainlogo.webp">Главные клиенты</option>
                         <option value="images/coffeelogo.webp" data-banner="images/sbcafe.webp">Кофейни</option>
-                        <option value="images/fastfoodlogo.webp" data-banner="images/sbgrill.webp">Фастфуд</option>
+                        <option value="images/fastfoodlogo.webp" data-banner="images/sbfastfood.webp">Фастфуд</option>
                         <option value="images/pekarnilogo.webp" data-banner="images/sbbakery.webp">Пекарни</option>
                         <option value="images/cafe&restaurantlogo.webp" data-banner="images/sbcafe.webp">Кафе</option>
-                        <option value="images/grillplovlogo.webp" data-banner="images/sbgrill.webp">Бургеры и грильбар</option>
-                        <option value="images/luxrestlogo.webp" data-banner="images/sbrest.webp">Рестораны премиум</option>
-                        <option value="images/restsetilogo.webp" data-banner="images/sbrest.webp">Ресторанные сети</option>
+                        <option value="images/grillplovlogo.webp" data-banner="images/sbfastfood.webp">Бургеры и грильбар</option>
+                        <option value="images/luxrestlogo.webp" data-banner="images/sbluxrest.webp">Рестораны премиум</option>
+                        <option value="images/restsetilogo.webp" data-banner="images/sbluxrest.webp">Ресторанные сети</option>
                         <option value="images/sushilogo.webp" data-banner="images/sbsushi.webp">Суши</option>
                         <option value="images/pizzalogo.webp" data-banner="images/sbpizza.webp">Пиццерии</option>
                         <option value="images/clotheslogo.webp" data-banner="images/sbmall.webp">Одежда</option>
@@ -1044,7 +1052,7 @@
                 </div>
             </div>
             
-            <div class="menu-section" id="section-pricing">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'pricing')">
                     <span class="menu-section-header">Менеджер+стоимость</span>
                     <span class="toggle-button">+</span>
@@ -1106,8 +1114,7 @@
                     <div id="price1Container">
                         <label class="menu-label">Заголовок стоимости:</label>
                         <input class="zvuk-input" type="text" id="price1Label" value="Стоимость за 1 помещение, ₽ в т.ч. 20%">
-                        <!-- Заменено "₽/мес" на "валюта/мес" -->
-                        <label class="menu-label">Стоимость 1, валюта/мес:</label>
+                        <label class="menu-label">Стоимость 1, <span class="currency-label-text">валюта</span>/мес:</label>
                         <input class="zvuk-input" type="number" id="price1Value" value="1390">
                     </div>
                     
@@ -1194,7 +1201,7 @@
                 </div>
             </div>
             
-            <div class="menu-section" id="section-instruction">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'instruction')">
                     <span class="menu-section-header">Инструкция по подключению</span>
                     <span class="toggle-button">+</span>
@@ -1239,7 +1246,7 @@
                 </div>
             </div>
             
-            <div class="menu-section" id="section-app">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'app')">
                     <span class="menu-section-header">Мобильное приложение</span>
                     <span class="toggle-button">+</span>
@@ -1252,7 +1259,7 @@
                 </div>
             </div>
             
-            <div class="menu-section" id="section-creative">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'creative')">
                     <span class="menu-section-header">Креативные аудиоролики</span>
                     <span class="toggle-button">+</span>
@@ -1265,7 +1272,7 @@
                 </div>
             </div>
             
-            <div class="menu-section" id="section-playlist">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'playlist')">
                     <span class="menu-section-header">Тематические плейлисты</span>
                     <span class="toggle-button">+</span>
@@ -1303,11 +1310,10 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <!-- Заменено "₽/мес" на "валюта/мес" -->
-                    <label class="menu-label">Стоимость 1, валюта/мес:</label>
+                    <label class="menu-label">Стоимость 1, <span class="currency-label-text">валюта</span>/мес:</label>
                     <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
                     
-                    <label class="menu-label">Стоимость 2, валюта:</label> <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
+                    <label class="menu-label">Стоимость 2, <span class="currency-label-text">валюта</span>:</label> <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
                     
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="premiumComment" placeholder="Введите комментарий">
@@ -1319,7 +1325,7 @@
                 </div>
             </div>
             
-            <div class="menu-section" id="section-bprofile">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'bprofile')">
                     <span class="menu-section-header">Бизнес-профиль</span>
                     <span class="toggle-button">+</span>
@@ -1332,7 +1338,7 @@
                 </div>
             </div>
             
-            <div class="menu-section" id="section-event">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'event')">
                     <span class="menu-section-header">Мероприятия</span>
                     <span class="toggle-button">+</span>
@@ -1358,7 +1364,7 @@
                 </div>
             </div>
 
-            <div class="menu-section" id="section-concept">
+            <div class="menu-section">
                 <div class="menu-header" onclick="toggleMenu(this, 'concept')">
                     <span class="menu-section-header">Концепции</span>
                     <span class="toggle-button">+</span>
@@ -1390,7 +1396,7 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Стоимость, валюта/мес:</label>
+                    <label class="menu-label">Стоимость, <span class="currency-label-text">валюта</span>/мес:</label>
                     <input class="zvuk-input" type="number" id="videokpPrice" value="1990">
                     
                     <label class="menu-label">Комментарий:</label>
@@ -1431,6 +1437,7 @@
     </div>
 
     <div id="pdf-popup" class="popup">PDF уже сохраняется! Удачной сделки!</div>
+    <div id="restriction-popup" class="popup">Данная услуга пока недоступна в вашей стране</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1450,10 +1457,10 @@
         const bannerLinks = {
             'images/sbcafe.webp': 'https://zvuk-b2b.com/cafe',
             'images/sbfastfood.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
-            'images/sbgrill.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599', // Гриль
+            'images/sbgrill.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
             'images/sbpizza.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
             'images/sbsushi.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
-            'images/sbrest.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599', // Ресторан / Дорогой ресторан
+            'images/sbrest.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
             'images/sbretail.webp': 'https://zvuk-b2b.com/shop',
             'images/sbmall.webp': 'https://zvuk-b2b.com/odezhda',
             'images/sbtc.webp': 'https://zvuk-b2b.com/torgovyj-centr',
@@ -1488,11 +1495,10 @@
             'images/newyears25.webp': 'https://zvuk-b2b.com/newyear_concept'
         };
 
-        // Правила ограничений для регионов
-        const regionRestrictions = {
-            'ru': [],
-            'kz': ['partner', 'premium', 'artist', 'web'],
-            'rb': ['partner', 'premium', 'artist', 'web', 'videokp']
+        // Конфигурация ограничений
+        const restrictedSections = {
+            kz: ['partner', 'premium', 'artist', 'web'],
+            rb: ['partner', 'premium', 'artist', 'web', 'videokp']
         };
         
         let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
@@ -1500,19 +1506,29 @@
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
         let globalClientLogo = null;
+
+        function isSectionRestricted(type) {
+            const { region } = getRegionInfo();
+            const restrictions = restrictedSections[region];
+            return restrictions && restrictions.includes(type);
+        }
+
+        function showRestrictionPopup() {
+            const popup = document.getElementById('restriction-popup');
+            const blurOverlay = document.querySelector('.blur-overlay');
+            blurOverlay.style.display = 'block';
+            popup.style.display = 'block';
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                blurOverlay.style.display = 'none';
+            }, 2000);
+        }
         
         function toggleMenu(header, type) {
-            // Проверка ограничений региона
-            const { region } = getRegionInfo();
-            const restrictedList = regionRestrictions[region] || [];
-            
-            if (restrictedList.includes(type)) {
-                // Если раздел недоступен для региона, ничего не делаем, показываем подсказку (которая сейчас захардкожена в alert, или можно кастомный UI)
-                // Но пользователь просил "появляется подсказка", когда пользователь "пытается нажать +"
-                // Мы реализуем это внутри функции, перехватывая событие.
-                // В коде ниже мы добавим логику, которая блокирует открытие, если это кнопка +
-                // Однако toggleMenu вызывается на весь header.
-                return; // Блокировка открытия, если секция заблокирована (обработка клика сделана ниже через stopPropagation в event listener, но здесь тоже защита)
+            if (isSectionRestricted(type)) {
+                showRestrictionPopup();
+                return;
             }
 
             const section = header.parentElement;
@@ -1599,45 +1615,54 @@
             return { region, currency, bgImage, mainLogo, domainSuffix };
         }
 
-        // Обновление доступности разделов меню на основе региона
+        // Функция обновления доступности разделов в зависимости от региона
         function updateSectionAvailability() {
             const { region } = getRegionInfo();
-            const restrictedList = regionRestrictions[region] || [];
+            const restrictions = restrictedSections[region] || [];
 
-            // Список всех секций, которые могут быть заблокированы (по id)
-            // 'partner', 'premium', 'artist', 'web', 'videokp'
-            
-            // Проходим по всем секциям меню
-            const sections = document.querySelectorAll('.menu-section');
-            sections.forEach(section => {
-                // Извлекаем тип секции из ID (например, section-partner -> partner)
-                const sectionType = section.id.replace('section-', '');
-                
-                const header = section.querySelector('.menu-header');
-                const button = section.querySelector('.toggle-button');
+            // Сначала сбрасываем все ограничения
+            document.querySelectorAll('.menu-section').forEach(section => {
+                section.classList.remove('restricted');
+            });
 
-                if (restrictedList.includes(sectionType)) {
-                    section.classList.add('restricted');
-                    // Добавляем обработчик на перехват клика
-                    header.onclick = function(e) {
-                         // Проверяем, был ли клик по кнопке "+" (или вообще по хедеру, т.к. весь хедер открывает)
-                         // Пользователь просит "появляется подсказка: Данная услуга пока недоступна в вашей стране"
-                         alert('Данная услуга пока недоступна в вашей стране');
-                         e.stopPropagation();
-                         return false;
-                    };
-                } else {
-                    section.classList.remove('restricted');
-                    // Возвращаем стандартный обработчик
-                    header.onclick = function() { toggleMenu(this, sectionType); };
+            // Применяем ограничения
+            restrictions.forEach(type => {
+                let sectionId = '';
+                // Сопоставление type и ID разделов в HTML (там где есть id="section-...")
+                if (type === 'partner') sectionId = 'section-partner';
+                if (type === 'premium') sectionId = 'section-premium';
+                if (type === 'artist') sectionId = 'section-artist';
+                if (type === 'web') sectionId = 'section-web';
+                if (type === 'videokp') sectionId = 'section-videokp';
+
+                if (sectionId) {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.classList.add('restricted');
+                        // Если раздел открыт - закрываем его
+                        if (section.classList.contains('active')) {
+                            section.querySelector('.menu-header').click(); 
+                        }
+                    }
                 }
             });
         }
 
-        // Обновление UI валюты в меню (больше не меняем span в сайдбаре, так как там текст фиксирован "валюта")
+        // Обновление UI валюты в меню (только для визуализации на артборде, в меню теперь текст "валюта")
         function updateCurrencyLabels() {
-            // Оставляем пустым или используем для другой логики, если нужно.
-            // Текст "валюта/мес" теперь статичен в HTML по запросу.
+            const { currency } = getRegionInfo();
+            // В сайдбаре мы теперь используем статичный текст "валюта" по запросу, 
+            // поэтому здесь обновлять DOM .currency-label-text не нужно, или можно, если хотим "₽/мес"
+            // Пользователь просил: "заменить знак валют- на “Стоимость 1, валюта/мес”"
+            
+            // Обновляем заголовок цены на артборде
+            const priceLabel = document.getElementById('price1Label');
+            // Если текст дефолтный, меняем валюту, сохраняя структуру
+            if (priceLabel.value.includes('Стоимость за 1 помещение')) {
+                // Пытаемся сохранить пользовательский ввод, если он просто меняет валюту
+                 if (currency === '₽') priceLabel.value = 'Стоимость за 1 помещение, ₽ в т.ч. 20%';
+                 else priceLabel.value = `Стоимость за 1 помещение, ${currency}`;
+            }
         }
 
         // Получение локализованной ссылки баннера
@@ -1666,9 +1691,8 @@
                 return;
             }
 
+            updateCurrencyLabels(); // Обновляем логику валют
             const { currency, bgImage, mainLogo, domainSuffix } = getRegionInfo();
-            // Обновляем состояние доступности меню при каждом обновлении слайда (на случай смены менеджера)
-            updateSectionAvailability();
 
             const currentSlide = slides[currentSlideIndex];
             const slideContainer = document.getElementById('currentSlide');
@@ -1793,12 +1817,10 @@
                         const priceLabelDiv = document.createElement('div');
                         priceLabelDiv.className = 'preview-price-label';
                         priceLabelDiv.textContent = document.getElementById('price1Label').value;
-                        // CSS for .preview-price-label is now top: 46% (shifted 15% up)
                         slideContainer.appendChild(priceLabelDiv);
 
                         const priceDiv = document.createElement('div');
                         priceDiv.className = 'preview-price';
-                        // CSS for .preview-price is now top: 51% (shifted 15% up)
                         priceDiv.textContent = formatPrice(document.getElementById('price1Value').value) + ` ${currency}/мес.`;
                         slideContainer.appendChild(priceDiv);
                         slideContainer.appendChild(commentDiv);
@@ -1872,7 +1894,7 @@
                     const selectedManagerOptionForLink = managerSelectForLink.options[managerSelectForLink.selectedIndex];
                     const managerRegLink = selectedManagerOptionForLink.getAttribute('data-link');
 
-                    // Цвет ссылок изменен в CSS .instruction-text .highlight на #04C9B0
+                    // FIX: Embedding links directly into the text for better PDF export
                     const instructionTextDiv = document.createElement('div');
                     instructionTextDiv.className = 'instruction-text';
                     instructionTextDiv.innerHTML = `
@@ -1898,46 +1920,26 @@
                     creativeLinkContainer.style.height = '100%';
                     slideContainer.appendChild(creativeLinkContainer);
                     
-                    const imageContainerWidthPercent = 6.77;
-                    const imageContainerHeightPercent = 12.04;
-                    const gapPercent = 2;
-                    const firstImageLeftPercent = 3;
+                    // Invisible clickable areas based on user request (no duplicated images)
+                    const cCardLink1 = document.createElement('a');
+                    cCardLink1.href = 'https://zvuk-b2b.com/blog/1price';
+                    cCardLink1.target = '_blank';
+                    cCardLink1.className = 'concept-link-area';
+                    cCardLink1.style.bottom = '6%';
+                    cCardLink1.style.left = '3%';
+                    cCardLink1.style.width = '7%';
+                    cCardLink1.style.height = '12%';
+                    slideContainer.appendChild(cCardLink1);
 
-                    const coffeImg = document.createElement('img');
-                    coffeImg.src = 'images/coffeoneprice.webp';
-                    coffeImg.style.width = '100%';
-                    coffeImg.style.height = '100%';
-                    coffeImg.style.objectFit = 'contain';
-
-                    const coffeLink = document.createElement('a');
-                    coffeLink.id = 'creative-case-1';
-                    coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
-                    coffeLink.target = '_blank';
-                    coffeLink.style.position = 'absolute';
-                    coffeLink.style.bottom = '6%';
-                    coffeLink.style.left = `${firstImageLeftPercent}%`;
-                    coffeLink.style.width = `${imageContainerWidthPercent}%`;
-                    coffeLink.style.height = `${imageContainerHeightPercent}%`;
-                    coffeLink.appendChild(coffeImg);
-                    slideContainer.appendChild(coffeLink);
-
-                    const letualImg = document.createElement('img');
-                    letualImg.src = 'images/letual.webp';
-                    letualImg.style.width = '100%';
-                    letualImg.style.height = '100%';
-                    letualImg.style.objectFit = 'contain';
-
-                    const letualLink = document.createElement('a');
-                    letualLink.id = 'creative-case-2';
-                    letualLink.href = 'https://zvuk-b2b.com/blog/letu';
-                    letualLink.target = '_blank';
-                    letualLink.style.position = 'absolute';
-                    letualLink.style.bottom = '6%';
-                    letualLink.style.left = `${firstImageLeftPercent + imageContainerWidthPercent + gapPercent}%`;
-                    letualLink.style.width = `${imageContainerWidthPercent}%`;
-                    letualLink.style.height = `${imageContainerHeightPercent}%`;
-                    letualLink.appendChild(letualImg);
-                    slideContainer.appendChild(letualLink);
+                    const cCardLink2 = document.createElement('a');
+                    cCardLink2.href = 'https://zvuk-b2b.com/blog/letu';
+                    cCardLink2.target = '_blank';
+                    cCardLink2.className = 'concept-link-area';
+                    cCardLink2.style.bottom = '6%';
+                    cCardLink2.style.left = '12%'; // 3% + 7% + 2% gap roughly
+                    cCardLink2.style.width = '7%';
+                    cCardLink2.style.height = '12%';
+                    slideContainer.appendChild(cCardLink2);
                     break;
                 
                 case 'app':
@@ -2089,6 +2091,12 @@
         }
         
         function addSlide(type) {
+            // Check restriction before adding
+            if (isSectionRestricted(type)) {
+                showRestrictionPopup();
+                return;
+            }
+
             const existingSlideIndex = slides.findIndex(slide => slide.type === type);
             if (existingSlideIndex !== -1) {
                 showSlide(existingSlideIndex + 1);
@@ -2231,6 +2239,7 @@
             }
 
             const popup = document.getElementById('pdf-popup');
+            popup.classList.add('loading');
             const blurOverlay = document.querySelector('.blur-overlay');
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
@@ -2317,6 +2326,7 @@
             
             setTimeout(() => {
                 popup.style.display = 'none';
+                popup.classList.remove('loading');
                 blurOverlay.style.display = 'none';
             }, 2000);
         }
@@ -2387,7 +2397,13 @@
             inputsToUpdate.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
-                    element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', updateCurrentSlide);
+                    element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', function() {
+                        updateCurrentSlide();
+                        // Если поменялся менеджер, проверяем доступность разделов
+                        if (id === 'manager') {
+                            updateSectionAvailability();
+                        }
+                    });
                 }
             });
             document.getElementById('logos').addEventListener('change', function() {
@@ -2479,6 +2495,9 @@
             if (document.querySelector('.menu-header')) {
                 document.querySelector('.menu-header').click();
             }
+            
+            // Инициализация ограничений при старте
+            updateSectionAvailability();
         });
     </script>
 </body>
