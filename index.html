@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Убрана мобильная адаптация, зафиксирована ширина для отображения как на ПК -->
+    <meta name="viewport" content="width=1280, initial-scale=1.0">
     <title>Генератор коммерческого предложения</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -113,6 +114,24 @@
         .popup::after {
             content: "...";
             animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        /* Toast for region restrictions */
+        .region-toast {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            z-index: 2000;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease;
         }
         
         /* Blur effect for PDF save */
@@ -396,7 +415,8 @@
         
         .preview-price {
             position: absolute;
-            top: 66%;
+            /* Подняли на 15% вверх (было 66%) */
+            top: 51%; 
             left: 3%;
             color: white;
             font-weight: bold;
@@ -408,7 +428,8 @@
         
         .preview-price-label {
             position: absolute;
-            top: 61%;
+             /* Подняли на 15% вверх (было 61%) */
+            top: 46%;
             left: 3%;
             color: #D9D9D9;
             width: 50%;
@@ -532,6 +553,12 @@
         
         .menu-section.active {
             background-color: var(--background-light);
+        }
+
+        /* Визуальный стиль для недоступных разделов */
+        .menu-section.disabled-section {
+            opacity: 0.5;
+            filter: grayscale(1);
         }
         
         .menu-header {
@@ -811,7 +838,7 @@
         }
 
         .instruction-text .highlight {
-            color: var(--primary);
+            color: #04C9B0 !important; /* Обновленный цвет ссылок */
             text-decoration: none;
             font-weight: 500;
         }
@@ -852,70 +879,7 @@
             color: var(--primary);
         }
 
-        /* --- MOBILE STYLES --- */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                height: auto;
-                overflow: auto;
-            }
-
-            .menu-container, .preview-container {
-                width: 100%;
-                box-sizing: border-box;
-                height: auto;
-                overflow-y: visible;
-                box-shadow: none;
-            }
-
-            .preview-container {
-                order: 1;
-                padding: 16px 16px 0;
-            }
-
-            .menu-container {
-                order: 2;
-                padding-bottom: 100px;
-            }
-            
-            .preview-page {
-                --element-scale: 0.5;
-                --qr-size: calc(60px * 0.5);
-            }
-
-            .preview-wrapper {
-                height: auto;
-                margin-bottom: 10px;
-            }
-
-            .slide-controls-container {
-                margin-top: 10px;
-            }
-
-            .action-buttons {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                width: 100%;
-                background: white;
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-                padding: 16px;
-                box-sizing: border-box;
-                margin-top: 0;
-                z-index: 100;
-            }
-
-            .preview-page.zoomed {
-                transform: none;
-                position: relative;
-                top: auto;
-                left: auto;
-                max-width: 100%;
-                max-height: 100%;
-                box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            }
-        }
+        /* --- MOBILE STYLES (REMOVED) --- */
         
         .preview-page.pdf-render-mode {
             --element-scale: 2.5;
@@ -926,7 +890,7 @@
         .concept-link-area {
             position: absolute;
             cursor: pointer;
-            /* border: 1px solid rgba(255, 0, 0, 0.5);  Для отладки можно включить */ 
+            /* background: rgba(0,255,0,0.3); */ /* Раскомментируйте для отладки позиционирования */
             z-index: 5;
         }
         .concept-link-area:hover {
@@ -937,6 +901,7 @@
 </head>
 <body>
     <div class="blur-overlay"></div>
+    <div id="region-toast" class="region-toast">Данная услуга пока недоступна в вашей стране</div>
     
     <div class="menu-container">
         <div class="menu-header-container">
@@ -945,7 +910,7 @@
         </div>
         
         <div class="menu-sections">
-            <div class="menu-section">
+            <div class="menu-section" id="section-clientLogoSection">
                 <div class="menu-header" onclick="toggleMenu(this, 'clientLogoSection')">
                     <span class="menu-section-header">Логотип клиента</span>
                     <span class="toggle-button">+</span>
@@ -953,11 +918,10 @@
                 <div class="menu-content">
                     <label class="menu-label">Логотип клиента (файл):</label>
                     <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
-                    <!-- Удалена опция добавления по URL -->
                     <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
                 </div>
             </div>
-            <div class="menu-section">
+            <div class="menu-section" id="section-general">
                 <div class="menu-header" onclick="toggleMenu(this, 'general')">
                     <span class="menu-section-header">Общая+лого</span>
                     <span class="toggle-button">+</span>
@@ -967,12 +931,12 @@
                     <select class="zvuk-select" id="logos">
                         <option value="images/mainlogo.webp">Главные клиенты</option>
                         <option value="images/coffeelogo.webp" data-banner="images/sbcafe.webp">Кофейни</option>
-                        <option value="images/fastfoodlogo.webp" data-banner="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/fastfoodlogo.webp" data-banner="images/sbgrill.webp">Фастфуд</option>
                         <option value="images/pekarnilogo.webp" data-banner="images/sbbakery.webp">Пекарни</option>
                         <option value="images/cafe&restaurantlogo.webp" data-banner="images/sbcafe.webp">Кафе</option>
-                        <option value="images/grillplovlogo.webp" data-banner="images/sbfastfood.webp">Бургеры и грильбар</option>
-                        <option value="images/luxrestlogo.webp" data-banner="images/sbluxrest.webp">Рестораны премиум</option>
-                        <option value="images/restsetilogo.webp" data-banner="images/sbluxrest.webp">Ресторанные сети</option>
+                        <option value="images/grillplovlogo.webp" data-banner="images/sbgrill.webp">Бургеры и грильбар</option>
+                        <option value="images/luxrestlogo.webp" data-banner="images/sbrest.webp">Рестораны премиум</option>
+                        <option value="images/restsetilogo.webp" data-banner="images/sbrest.webp">Ресторанные сети</option>
                         <option value="images/sushilogo.webp" data-banner="images/sbsushi.webp">Суши</option>
                         <option value="images/pizzalogo.webp" data-banner="images/sbpizza.webp">Пиццерии</option>
                         <option value="images/clotheslogo.webp" data-banner="images/sbmall.webp">Одежда</option>
@@ -996,11 +960,11 @@
                         <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbbakery.webp">Пекарня</option>
                         <option value="images/sbfastfood.webp">Фастфуд</option>
-                        <option value="images/sbfastfood.webp">Грильбар</option>                        
+                        <option value="images/sbgrill.webp">Грильбар</option>                        
                         <option value="images/sbpizza.webp">Пицца</option>
                         <option value="images/sbsushi.webp">Суши</option>
-                        <option value="images/sbluxrest.webp">Ресторан</option>
-                        <option value="images/sbluxrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbrest.webp">Ресторан</option>
+                        <option value="images/sbrest.webp">Дорогой ресторан</option>
                         <option value="images/sbretail.webp">Магазин</option>
                         <option value="images/sbmall.webp">Одежда</option>
                         <option value="images/sbtc.webp">Торговый центр</option>
@@ -1030,7 +994,7 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-pricing">
                 <div class="menu-header" onclick="toggleMenu(this, 'pricing')">
                     <span class="menu-section-header">Менеджер+стоимость</span>
                     <span class="toggle-button">+</span>
@@ -1091,8 +1055,8 @@
                     
                     <div id="price1Container">
                         <label class="menu-label">Заголовок стоимости:</label>
-                        <input class="zvuk-input" type="text" id="price1Label" value="Стоимость за 1 помещение, ₽ в т.ч. 20%">
-                        <label class="menu-label">Стоимость, <span class="currency-label">₽</span>/мес:</label>
+                        <input class="zvuk-input" type="text" id="price1Label" value="Стоимость за 1 помещение, валюта в т.ч. 20%">
+                        <label class="menu-label">Стоимость, валюта/мес:</label>
                         <input class="zvuk-input" type="number" id="price1Value" value="1390">
                     </div>
                     
@@ -1145,11 +1109,11 @@
                         <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbcafe.webp">Пекарня</option>
                         <option value="images/sbfastfood.webp">Фастфуд</option>
-                        <option value="images/sbfastfood.webp">Грильбар</option>                        
+                        <option value="images/sbgrill.webp">Грильбар</option>                        
                         <option value="images/sbpizza.webp">Пицца</option>
                         <option value="images/sbsushi.webp">Суши</option>
-                        <option value="images/sbluxrest.webp">Ресторан</option>
-                        <option value="images/sbluxrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbrest.webp">Ресторан</option>
+                        <option value="images/sbrest.webp">Дорогой ресторан</option>
                         <option value="images/sbretail.webp">Магазин</option>
                         <option value="images/sbmall.webp">Одежда</option>
                         <option value="images/sbtc.webp">Торговый центр</option>
@@ -1170,7 +1134,7 @@
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>
-                        <option value="newyears25.webp">Новогодняя атмосфера</option> </select>
+                        <option value="images/newyears25.webp">Новогодняя атмосфера</option> </select>
 
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('pricing')">Добавить</button>
@@ -1179,7 +1143,7 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-instruction">
                 <div class="menu-header" onclick="toggleMenu(this, 'instruction')">
                     <span class="menu-section-header">Инструкция по подключению</span>
                     <span class="toggle-button">+</span>
@@ -1191,11 +1155,11 @@
                         <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbcafe.webp">Пекарня</option>
                         <option value="images/sbfastfood.webp">Фастфуд</option>
-                        <option value="images/sbfastfood.webp">Грильбар</option>                        
+                        <option value="images/sbgrill.webp">Грильбар</option>                        
                         <option value="images/sbpizza.webp">Пицца</option>
                         <option value="images/sbsushi.webp">Суши</option>
-                        <option value="images/sbluxrest.webp">Ресторан</option>
-                        <option value="images/sbluxrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbrest.webp">Ресторан</option>
+                        <option value="images/sbrest.webp">Дорогой ресторан</option>
                         <option value="images/sbretail.webp">Магазин</option>
                         <option value="images/sbmall.webp">Одежда</option>
                         <option value="images/sbtc.webp">Торговый центр</option>
@@ -1224,7 +1188,7 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-app">
                 <div class="menu-header" onclick="toggleMenu(this, 'app')">
                     <span class="menu-section-header">Мобильное приложение</span>
                     <span class="toggle-button">+</span>
@@ -1237,7 +1201,7 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-creative">
                 <div class="menu-header" onclick="toggleMenu(this, 'creative')">
                     <span class="menu-section-header">Креативные аудиоролики</span>
                     <span class="toggle-button">+</span>
@@ -1250,7 +1214,7 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-playlist">
                 <div class="menu-header" onclick="toggleMenu(this, 'playlist')">
                     <span class="menu-section-header">Тематические плейлисты</span>
                     <span class="toggle-button">+</span>
@@ -1269,7 +1233,7 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-partner">
                 <div class="menu-header" onclick="toggleMenu(this, 'partner')">
                     <span class="menu-section-header">Партнерская программа</span>
                     <span class="toggle-button">+</span>
@@ -1282,16 +1246,16 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-premium">
                 <div class="menu-header" onclick="toggleMenu(this, 'premium')">
                     <span class="menu-section-header">Премиум тариф</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Стоимость 1, <span class="currency-label">₽</span>/мес:</label>
+                    <label class="menu-label">Стоимость 1, валюта/мес:</label>
                     <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
                     
-                    <label class="menu-label">Стоимость 2, <span class="currency-label">₽</span>:</label> <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
+                    <label class="menu-label">Стоимость 2, валюта:</label> <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
                     
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="premiumComment" placeholder="Введите комментарий">
@@ -1303,7 +1267,7 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-bprofile">
                 <div class="menu-header" onclick="toggleMenu(this, 'bprofile')">
                     <span class="menu-section-header">Бизнес-профиль</span>
                     <span class="toggle-button">+</span>
@@ -1316,7 +1280,7 @@
                 </div>
             </div>
             
-            <div class="menu-section">
+            <div class="menu-section" id="section-event">
                 <div class="menu-header" onclick="toggleMenu(this, 'event')">
                     <span class="menu-section-header">Мероприятия</span>
                     <span class="toggle-button">+</span>
@@ -1329,7 +1293,7 @@
                 </div>
             </div>
 
-            <div class="menu-section">
+            <div class="menu-section" id="section-artist">
                 <div class="menu-header" onclick="toggleMenu(this, 'artist')">
                     <span class="menu-section-header">Артисты на мероприятие</span>
                     <span class="toggle-button">+</span>
@@ -1342,7 +1306,7 @@
                 </div>
             </div>
 
-            <div class="menu-section">
+            <div class="menu-section" id="section-concept">
                 <div class="menu-header" onclick="toggleMenu(this, 'concept')">
                     <span class="menu-section-header">Концепции</span>
                     <span class="toggle-button">+</span>
@@ -1355,7 +1319,7 @@
                 </div>
             </div>
 
-            <div class="menu-section">
+            <div class="menu-section" id="section-web">
                 <div class="menu-header" onclick="toggleMenu(this, 'web')">
                     <span class="menu-section-header">Музыка для веба</span>
                     <span class="toggle-button">+</span>
@@ -1368,13 +1332,13 @@
                 </div>
             </div>
 
-            <div class="menu-section">
+            <div class="menu-section" id="section-videokp">
                 <div class="menu-header" onclick="toggleMenu(this, 'videokp')">
                     <span class="menu-section-header">Видео КП</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Стоимость, <span class="currency-label">₽</span>/мес:</label>
+                    <label class="menu-label">Стоимость, валюта/мес:</label>
                     <input class="zvuk-input" type="number" id="videokpPrice" value="1990">
                     
                     <label class="menu-label">Комментарий:</label>
@@ -1430,990 +1394,17 @@
             { type: 'general' } // Начинаем с одного слайда "general"
         ];
         
-        // Ссылки для баннеров
+        // Ссылки для баннеров (Обновлены под новые файлы)
         const bannerLinks = {
             'images/sbcafe.webp': 'https://zvuk-b2b.com/cafe',
             'images/sbfastfood.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbgrill.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
             'images/sbpizza.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
             'images/sbsushi.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
-            'images/sbluxrest.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbrest.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
             'images/sbretail.webp': 'https://zvuk-b2b.com/shop',
             'images/sbmall.webp': 'https://zvuk-b2b.com/odezhda',
             'images/sbtc.webp': 'https://zvuk-b2b.com/torgovyj-centr',
             'images/sbkids.webp': 'https://zvuk-b2b.com/prazdnik',
             'images/sbfitnes.webp': 'https://zvuk-b2b.com/fitness',
-            'images/sbbeauty.webp': 'https://zvuk-b2b.com/salon-krasoty',
-            'images/sbbarber.webp': 'https://zvuk-b2b.com/barbershop',
-            'images/sbspa.webp': 'https://zvuk-b2b.com/spa-salon',
-            'images/sbned.webp': 'https://zvuk-b2b.com/loft?ab_redir=1758811215599',
-            'images/sbauto.webp': 'https://zvuk-b2b.com/avtosalon',
-            'images/sbazs.webp': 'https://zvuk-b2b.com/avtosalon',
-            'images/sbhotel.webp': 'https://zvuk-b2b.com/hotel',
-            'images/sbsocobj.webp': 'https://zvuk-b2b.com/socobj', 
-            'images/bkids.webp': 'https://zvuk-b2b.com/music_for_kids',
-            'images/veranda.webp': 'https://zvuk-b2b.com/rest',
-            'images/play.webp': 'https://zvuk-b2b.com/player',
-            'images/action.webp': 'https://zvuk-b2b.com',
-            'images/autumn.webp': 'https://zvuk-b2b.com',
-            'images/nostalgia.webp': 'https://zvuk-b2b.com',
-            'images/creative-audio.webp': 'https://zvuk-b2b.com/blog/1price',
-            'images/georgia-audio.webp': 'https://zvuk-b2b.com/gastrobar#menu1',
-            'images/barber-audio.webp': 'https://zvuk-b2b.com/barbershop',
-            'images/parterprogram.webp': 'https://zvuk-b2b.com/partners',
-            'images/app.webp': 'https://zvuk-b2b.com/blog/1price',
-            'images/premium.webp': 'https://zvuk-b2b.com/premium/',
-            'images/bprofile.webp': 'https://zvuk-b2b.com/bprofile',
-            'images/videokp.webp': 'https://zvuk-b2b.com/video',
-            'images/rawe.webp': 'https://zvuk-b2b.com/rawe',
-            'images/event.webp': 'https://zvuk-b2b.com',
-            'images/concept.webp': 'https://zvuk-b2b.com',
-            'images/artist.webp': 'https://zvuk-b2b.com',
-            'images/newyears25.webp': 'https://zvuk-b2b.com/newyear_concept'
-        };
-        
-        let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
-        let isZoomed = false;
-        let draggedSlideIndex = null;
-        let dropTargetIndex = null;
-        let globalClientLogo = null;
-        
-        function toggleMenu(header, type) {
-            const section = header.parentElement;
-            const content = header.nextElementSibling;
-            const button = header.querySelector('.toggle-button');
-            const headerText = header.querySelector('.menu-section-header');
-            
-            document.querySelectorAll('.menu-section').forEach(s => {
-                if (s !== section) {
-                    s.classList.remove('active');
-                    s.querySelector('.menu-content').classList.remove('active');
-                    s.querySelector('.toggle-button').textContent = '+';
-                    s.querySelector('.menu-section-header').classList.remove('active');
-                }
-            });
-            
-            if (content.classList.contains('active')) {
-                section.classList.remove('active');
-                content.classList.remove('active');
-                button.textContent = '+';
-                headerText.classList.remove('active');
-            } else {
-                section.classList.add('active');
-                content.classList.add('active');
-                button.textContent = '-';
-                headerText.classList.add('active');
-                
-                const slideIndex = slides.findIndex(slide => slide.type === type);
-                if (slideIndex !== -1) {
-                    showSlide(slideIndex + 1);
-                }
-            }
-        }
-        
-        function toggleZoom() {
-            if (window.innerWidth <= 768) { 
-                return;
-            }
-            const slide = document.getElementById('currentSlide');
-            slide.classList.toggle('zoomed');
-            isZoomed = !isZoomed;
-        }
-        
-        document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                document.getElementById('price1Container').classList.add('hidden');
-                document.getElementById('price3Container').classList.add('hidden');
-                document.getElementById('price10plusContainer').classList.add('hidden');
-                
-                if (this.value === '1') {
-                    document.getElementById('price1Container').classList.remove('hidden');
-                } else if (this.value === '3') {
-                    document.getElementById('price3Container').classList.remove('hidden');
-                } else if (this.value === '10plus') {
-                    document.getElementById('price10plusContainer').classList.remove('hidden');
-                }
-                updateCurrentSlide();
-            });
-        });
-
-        // Функция для определения региона
-        function getRegionInfo() {
-            const managerSelect = document.getElementById('manager');
-            const selectedOption = managerSelect.options[managerSelect.selectedIndex];
-            const region = selectedOption.getAttribute('data-region') || 'ru';
-            
-            let currency = '₽';
-            let bgImage = 'images/Backprice1.webp';
-            let mainLogo = 'images/mainlogo.webp';
-            let domainSuffix = '.com';
-
-            if (region === 'kz') {
-                currency = '₸';
-                bgImage = 'images/Backprice1-kz.webp';
-                mainLogo = 'images/mainlogokz.webp';
-                domainSuffix = '.kz';
-            } else if (region === 'rb') {
-                currency = 'Br';
-                bgImage = 'images/Backprice1-rb.webp';
-                mainLogo = 'images/mainlogorb.webp';
-                domainSuffix = '.by';
-            }
-
-            return { region, currency, bgImage, mainLogo, domainSuffix };
-        }
-
-        // Обновление UI валюты в меню
-        function updateCurrencyLabels() {
-            const { currency } = getRegionInfo();
-            document.querySelectorAll('.currency-label').forEach(el => {
-                el.textContent = currency;
-            });
-            // Обновляем заголовок цены
-            const priceLabel = document.getElementById('price1Label');
-            if (priceLabel.value.includes('Стоимость за 1 помещение')) {
-                // Если пользователь не менял текст полностью вручную, обновляем валюту
-                if (currency === '₽') priceLabel.value = 'Стоимость за 1 помещение, ₽ в т.ч. 20%';
-                else priceLabel.value = `Стоимость за 1 помещение, ${currency}`;
-            }
-        }
-
-        // Получение локализованной ссылки баннера
-        function getLocalizedBannerLink(originalLink, domainSuffix) {
-            if (!originalLink) return '#';
-            
-            // Список баннеров, требующих локализации ссылки
-            const bannersToLocalize = [
-                '/rest', '/cafe', '/shop', '/barbershop', '/fitness', '/hotel', '/coffee'
-            ];
-            
-            let link = originalLink;
-            // Проверяем, содержит ли ссылка один из путей для локализации
-            const needsLocalization = bannersToLocalize.some(path => link.includes(path));
-
-            if (needsLocalization && domainSuffix !== '.com') {
-                link = link.replace('.com', domainSuffix);
-            }
-            
-            return link;
-        }
-        
-        function updateCurrentSlide() {
-            if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
-                document.getElementById('currentSlide').innerHTML = ''; 
-                return;
-            }
-
-            updateCurrencyLabels(); // Обновляем метки валют в меню
-            const { currency, bgImage, mainLogo, domainSuffix } = getRegionInfo();
-
-            const currentSlide = slides[currentSlideIndex];
-            const slideContainer = document.getElementById('currentSlide');
-            slideContainer.innerHTML = '';
-            
-            const bgImg = document.createElement('img');
-            bgImg.className = 'preview-bg';
-            
-            switch(currentSlide.type) {
-                case 'general':
-                    bgImg.src = bgImage; // Локализованный фон
-                    slideContainer.appendChild(bgImg);
-                    
-                    const bannerVal = document.getElementById('banner').value;
-                    const bannerImg = document.createElement('img');
-                    bannerImg.className = 'preview-banner';
-                    bannerImg.src = bannerVal;
-                    
-                    const bannerLinkUrl = getLocalizedBannerLink(bannerLinks[bannerVal], domainSuffix);
-                    const bannerLink = document.createElement('a');
-                    bannerLink.href = bannerLinkUrl;
-                    bannerLink.target = '_blank';
-                    bannerLink.style.position = 'absolute';
-                    bannerLink.style.top = '0';
-                    bannerLink.style.right = '0';
-                    bannerLink.style.width = '35%';
-                    bannerLink.style.height = '100%';
-                    bannerLink.appendChild(bannerImg);
-                    slideContainer.appendChild(bannerLink);
-                    
-                    const logosVal = document.getElementById('logos').value;
-                    const logosImg = document.createElement('img');
-                    logosImg.className = 'preview-logos';
-                    // Если выбраны "Главные клиенты", подставляем локализованный файл
-                    logosImg.src = (logosVal === 'images/mainlogo.webp') ? mainLogo : logosVal;
-                    slideContainer.appendChild(logosImg);
-
-                    if (globalClientLogo) {
-                        const clientLogoImg = document.createElement('img');
-                        clientLogoImg.id = 'clientLogo';
-                        clientLogoImg.src = globalClientLogo;
-                        clientLogoImg.style.position = 'absolute';
-                        clientLogoImg.style.top = '5%';
-                        clientLogoImg.style.left = '17%';
-                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
-                        clientLogoImg.style.width = 'auto'; 
-                        clientLogoImg.style.maxWidth = '30%'; 
-                        clientLogoImg.style.objectFit = 'contain';
-                        slideContainer.appendChild(clientLogoImg);
-                    }
-                    break;
-                    
-                case 'pricing':
-                    const priceFormat = document.querySelector('input[name="priceColumns"]:checked').value;
-                    
-                    if (priceFormat === '1') {
-                        bgImg.src = 'images/1price.webp';
-                    } else {
-                        bgImg.src = 'images/3price.webp';
-                    }
-                    slideContainer.appendChild(bgImg);
-                    
-                    const priceBannerVal = document.getElementById('priceBanner').value;
-                    const priceBannerImg = document.createElement('img');
-                    priceBannerImg.className = 'preview-banner';
-                    priceBannerImg.src = priceBannerVal;
-                    
-                    const priceBannerLinkUrl = getLocalizedBannerLink(bannerLinks[priceBannerVal], domainSuffix);
-                    const priceBannerLink = document.createElement('a');
-                    priceBannerLink.href = priceBannerLinkUrl;
-                    priceBannerLink.target = '_blank';
-                    priceBannerLink.style.position = 'absolute';
-                    priceBannerLink.style.top = '0';
-                    priceBannerLink.style.right = '0';
-                    priceBannerLink.style.width = '35%';
-                    priceBannerLink.style.height = '100%';
-                    priceBannerLink.appendChild(priceBannerImg);
-                    slideContainer.appendChild(priceBannerLink);
-                    
-                    const managerSelect = document.getElementById('manager');
-                    const selectedManagerOption = managerSelect.options[managerSelect.selectedIndex];
-                    const managerValue = selectedManagerOption.value;
-                    const managerDataLink = selectedManagerOption.getAttribute('data-link');
-
-                    const managerImg = document.createElement('img');
-                    managerImg.className = 'preview-manager';
-                    managerImg.src = managerValue;
-                    
-                    const managerLinkContainer = document.createElement('a');
-                    managerLinkContainer.href = managerDataLink;
-                    managerLinkContainer.target = '_blank';
-                    managerLinkContainer.style.position = 'absolute';
-                    managerLinkContainer.style.bottom = '8%';
-                    managerLinkContainer.style.left = '3%';
-                    managerLinkContainer.style.width = '57%';
-                    managerLinkContainer.style.height = '25%';
-                    slideContainer.appendChild(managerLinkContainer);
-                    
-                    const managerLink = document.createElement('a');
-                    managerLink.href = managerDataLink;
-                    managerLink.target = '_blank';
-                    managerLink.style.position = 'absolute';
-                    managerLink.style.bottom = '8%';
-                    managerLink.style.left = '3%';
-                    managerLink.style.width = '58%';
-                    managerLink.style.height = 'auto';
-                    managerLink.appendChild(managerImg);
-                    slideContainer.appendChild(managerLink);
-                    
-                    if (document.getElementById('personalPhone').value) {
-                        const phoneDiv = document.createElement('div');
-                        phoneDiv.className = 'preview-phone';
-                        phoneDiv.textContent = document.getElementById('personalPhone').value;
-                        slideContainer.appendChild(phoneDiv);
-                    }
-                    
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'preview-comment';
-                    commentDiv.textContent = document.getElementById('comment').value;
-
-                    if (priceFormat === '1') {
-                        const priceLabelDiv = document.createElement('div');
-                        priceLabelDiv.className = 'preview-price-label';
-                        priceLabelDiv.textContent = document.getElementById('price1Label').value;
-                        slideContainer.appendChild(priceLabelDiv);
-
-                        const priceDiv = document.createElement('div');
-                        priceDiv.className = 'preview-price';
-                        priceDiv.textContent = formatPrice(document.getElementById('price1Value').value) + ` ${currency}/мес.`;
-                        slideContainer.appendChild(priceDiv);
-                        slideContainer.appendChild(commentDiv);
-
-                    } else if (priceFormat === '3') {
-                        const table = document.createElement('table');
-                        table.className = 'price-table';
-                        table.innerHTML = `
-                            <thead>
-                                <tr><th>Количество точек</th><th>1-3</th><th>4-9</th><th>10+</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Стоимость за точку</td>
-                                    <td>${formatPrice(document.getElementById('price3Value1').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price3Value2').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price3Value3').value)} ${currency}</td>
-                                </tr>
-                            </tbody>
-                        `;
-                        slideContainer.appendChild(table);
-                        slideContainer.appendChild(commentDiv);
-                    } else if (priceFormat === '10plus') {
-                        const table = document.createElement('table');
-                        table.className = 'price-table';
-                        table.innerHTML = `
-                            <thead>
-                                <tr>
-                                    <th>Количество точек</th>
-                                    <th>${document.getElementById('price10plusHeader1').value}</th>
-                                    <th>${document.getElementById('price10plusHeader2').value}</th>
-                                    <th>${document.getElementById('price10plusHeader3').value}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Стоимость за точку</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue1').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue2').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue3').value)} ${currency}</td>
-                                </tr>
-                            </tbody>
-                        `;
-                        slideContainer.appendChild(table);
-                        slideContainer.appendChild(commentDiv);
-                    }
-                    break;
-                    
-                case 'instruction':
-                    bgImg.src = 'images/instruct.webp';
-                    slideContainer.appendChild(bgImg);
-
-                    const instructionBannerVal = document.getElementById('instructionBanner').value;
-                    const instructionBannerImg = document.createElement('img');
-                    instructionBannerImg.className = 'preview-banner';
-                    instructionBannerImg.src = instructionBannerVal;
-                    
-                    const instructionBannerLinkUrl = getLocalizedBannerLink(bannerLinks[instructionBannerVal], domainSuffix);
-                    const instructionBannerLink = document.createElement('a');
-                    instructionBannerLink.href = instructionBannerLinkUrl;
-                    instructionBannerLink.target = '_blank';
-                    instructionBannerLink.style.position = 'absolute';
-                    instructionBannerLink.style.top = '0';
-                    instructionBannerLink.style.right = '0';
-                    instructionBannerLink.style.width = '35%';
-                    instructionBannerLink.style.height = '100%';
-                    instructionBannerLink.appendChild(instructionBannerImg);
-                    slideContainer.appendChild(instructionBannerLink);
-
-                    const managerSelectForLink = document.getElementById('manager');
-                    const selectedManagerOptionForLink = managerSelectForLink.options[managerSelectForLink.selectedIndex];
-                    const managerRegLink = selectedManagerOptionForLink.getAttribute('data-link');
-
-                    // FIX: Embedding links directly into the text for better PDF export
-                    const instructionTextDiv = document.createElement('div');
-                    instructionTextDiv.className = 'instruction-text';
-                    instructionTextDiv.innerHTML = `
-                        1. Зарегистрироваться <a href="${managerRegLink}" target="_blank" style="color: inherit; text-decoration: none;" class="highlight">по ссылке</a>.<br><br>
-                        2. Установить приложение на <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" style="color: inherit; text-decoration: none;" class="highlight">компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" style="color: inherit; text-decoration: none;" class="highlight">смартфон</a>.<br><br>
-                        3. С вами свяжется менеджер в течение 1-2 часов.<br><br>
-                        4. Протестировать в течение 7 дней, оформить подписку.
-                    `;
-                    slideContainer.appendChild(instructionTextDiv);
-                    break;
-                    
-                case 'creative':
-                    bgImg.src = 'images/createbanner.webp';
-                    slideContainer.appendChild(bgImg);
-                    
-                    const creativeLinkContainer = document.createElement('a');
-                    creativeLinkContainer.href = 'https://zvuk-b2b.com/audio_ads';
-                    creativeLinkContainer.target = '_blank';
-                    creativeLinkContainer.style.position = 'absolute';
-                    creativeLinkContainer.style.top = '0';
-                    creativeLinkContainer.style.right = '0';
-                    creativeLinkContainer.style.width = '35%';
-                    creativeLinkContainer.style.height = '100%';
-                    slideContainer.appendChild(creativeLinkContainer);
-                    
-                    const imageContainerWidthPercent = 6.77;
-                    const imageContainerHeightPercent = 12.04;
-                    const gapPercent = 2;
-                    const firstImageLeftPercent = 3;
-
-                    const coffeImg = document.createElement('img');
-                    coffeImg.src = 'images/coffeoneprice.webp';
-                    coffeImg.style.width = '100%';
-                    coffeImg.style.height = '100%';
-                    coffeImg.style.objectFit = 'contain';
-
-                    const coffeLink = document.createElement('a');
-                    coffeLink.id = 'creative-case-1';
-                    coffeLink.href = 'https://zvuk-b2b.com/blog/1price';
-                    coffeLink.target = '_blank';
-                    coffeLink.style.position = 'absolute';
-                    coffeLink.style.bottom = '6%';
-                    coffeLink.style.left = `${firstImageLeftPercent}%`;
-                    coffeLink.style.width = `${imageContainerWidthPercent}%`;
-                    coffeLink.style.height = `${imageContainerHeightPercent}%`;
-                    coffeLink.appendChild(coffeImg);
-                    slideContainer.appendChild(coffeLink);
-
-                    const letualImg = document.createElement('img');
-                    letualImg.src = 'images/letual.webp';
-                    letualImg.style.width = '100%';
-                    letualImg.style.height = '100%';
-                    letualImg.style.objectFit = 'contain';
-
-                    const letualLink = document.createElement('a');
-                    letualLink.id = 'creative-case-2';
-                    letualLink.href = 'https://zvuk-b2b.com/blog/letu';
-                    letualLink.target = '_blank';
-                    letualLink.style.position = 'absolute';
-                    letualLink.style.bottom = '6%';
-                    letualLink.style.left = `${firstImageLeftPercent + imageContainerWidthPercent + gapPercent}%`;
-                    letualLink.style.width = `${imageContainerWidthPercent}%`;
-                    letualLink.style.height = `${imageContainerHeightPercent}%`;
-                    letualLink.appendChild(letualImg);
-                    slideContainer.appendChild(letualLink);
-                    break;
-                
-                case 'app':
-                    bgImg.src = 'images/app.webp';
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'playlist':
-                    bgImg.src = document.getElementById('playlist').value;
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'partner':
-                    bgImg.src = 'images/parterprogram.webp';
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'premium':
-                    bgImg.src = 'images/premiumbanner.webp';
-                    slideContainer.appendChild(bgImg);
-                    
-                    const premiumPriceDiv1 = document.createElement('div');
-                    premiumPriceDiv1.className = 'preview-price-premium-1';
-                    premiumPriceDiv1.textContent = formatPrice(document.getElementById('premiumPrice1').value) + ` ${currency}/мес.`;
-                    slideContainer.appendChild(premiumPriceDiv1);
-
-                    const premiumPriceDiv2 = document.createElement('div');
-                    premiumPriceDiv2.className = 'preview-price-premium-2';
-                    premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ` ${currency}`; 
-                    slideContainer.appendChild(premiumPriceDiv2);
-                    
-                    const premiumCommentDiv = document.createElement('div');
-                    premiumCommentDiv.className = 'preview-comment';
-                    premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
-                    slideContainer.appendChild(premiumCommentDiv);
-                    
-                    const premiumBannerLink = document.createElement('a');
-                    premiumBannerLink.href = 'https://zvuk-b2b.com/premium';
-                    premiumBannerLink.target = '_blank';
-                    premiumBannerLink.style.position = 'absolute';
-                    premiumBannerLink.style.top = '0';
-                    premiumBannerLink.style.right = '0';
-                    premiumBannerLink.style.width = '35%';
-                    premiumBannerLink.style.height = '100%';
-                    slideContainer.appendChild(premiumBannerLink);
-                    break;
-                case 'bprofile':
-                    bgImg.src = 'images/bprofile.webp';
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'event':
-                    bgImg.src = 'images/event.webp';
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'artist':
-                    bgImg.src = 'images/artist.webp';
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'concept':
-                    bgImg.src = 'images/mus_concept.webp'; // Updated Concept Background
-                    slideContainer.appendChild(bgImg);
-
-                    // Add 3 clickable areas on the left
-                    // Card 1: Top
-                    const cLink1 = document.createElement('a');
-                    cLink1.href = 'https://zvuk-b2b.com/retro';
-                    cLink1.target = '_blank';
-                    cLink1.className = 'concept-link-area';
-                    cLink1.style.top = '15%'; // Approximate percentage based on layout
-                    cLink1.style.left = '10%';
-                    cLink1.style.width = '20%';
-                    cLink1.style.height = '20%';
-                    slideContainer.appendChild(cLink1);
-
-                    // Card 2: Middle
-                    const cLink2 = document.createElement('a');
-                    cLink2.href = 'https://zvuk-b2b.com/coffee-rave';
-                    cLink2.target = '_blank';
-                    cLink2.className = 'concept-link-area';
-                    cLink2.style.top = '40%';
-                    cLink2.style.left = '20%';
-                    cLink2.style.width = '20%';
-                    cLink2.style.height = '20%';
-                    slideContainer.appendChild(cLink2);
-
-                    // Card 3: Bottom
-                    const cLink3 = document.createElement('a');
-                    cLink3.href = 'https://zvuk-b2b.com/iv-int';
-                    cLink3.target = '_blank';
-                    cLink3.className = 'concept-link-area';
-                    cLink3.style.top = '65%';
-                    cLink3.style.left = '10%';
-                    cLink3.style.width = '20%';
-                    cLink3.style.height = '20%';
-                    slideContainer.appendChild(cLink3);
-                    break;
-
-                case 'web': // New Slide
-                    bgImg.src = 'images/www.webp';
-                    slideContainer.appendChild(bgImg);
-                    break;
-
-                case 'videokp':
-                    bgImg.src = 'images/atmvieo.webp';
-                    slideContainer.appendChild(bgImg);
-                    
-                    if (globalClientLogo) {
-                        const clientLogoImg = document.createElement('img');
-                        clientLogoImg.id = 'clientLogo';
-                        clientLogoImg.src = globalClientLogo;
-                        clientLogoImg.style.position = 'absolute';
-                        clientLogoImg.style.top = '5%';
-                        clientLogoImg.style.left = '17%';
-                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
-                        clientLogoImg.style.width = 'auto'; 
-                        clientLogoImg.style.maxWidth = '30%';
-                        clientLogoImg.style.objectFit = 'contain';
-                        slideContainer.appendChild(clientLogoImg);
-                    }
-                    const videoPriceDiv = document.createElement('div');
-                    videoPriceDiv.className = 'preview-price';
-                    videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ` ${currency}/мес.`;
-                    slideContainer.appendChild(videoPriceDiv);
-                    
-                    const videoCommentDiv = document.createElement('div');
-                    videoCommentDiv.className = 'preview-comment';
-                    videoCommentDiv.textContent = document.getElementById('videokpComment').value;
-                    slideContainer.appendChild(videoCommentDiv);
-                    break;
-            }
-        }
-        
-        function showSlide(index) {
-            if (slides.length === 0) {
-                currentSlideIndex = -1;
-                document.getElementById('currentSlide').innerHTML = '';
-                updateSlideNumbers();
-                return;
-            }
-            if (index < 1 || index > slides.length) return;
-            currentSlideIndex = index - 1;
-            document.querySelectorAll('.slide-number').forEach((btn, i) => {
-                btn.classList.toggle('active', i === currentSlideIndex);
-            });
-            updateCurrentSlide();
-        }
-        
-        function removeCurrentSlide() {
-            if (slides.length > 0 && currentSlideIndex > -1) {
-                removeSlide(slides[currentSlideIndex].type);
-            }
-        }
-        
-        function addSlide(type) {
-            const existingSlideIndex = slides.findIndex(slide => slide.type === type);
-            if (existingSlideIndex !== -1) {
-                showSlide(existingSlideIndex + 1);
-                const slideNumEl = document.querySelector(`.slide-number[data-index="${existingSlideIndex}"]`);
-                if(slideNumEl) {
-                    slideNumEl.classList.add('highlight');
-                    setTimeout(() => slideNumEl.classList.remove('highlight'), 500);
-                }
-                return;
-            }
-            let newSlide;
-            switch(type) {
-                case 'general': newSlide = { type: 'general' }; break;
-                case 'pricing': newSlide = { type: 'pricing' }; break;
-                case 'instruction': newSlide = { type: 'instruction' }; break;
-                case 'app': newSlide = { type: 'app' }; break;
-                case 'creative': newSlide = { type: 'creative' }; break;
-                case 'playlist': newSlide = { type: 'playlist' }; break;
-                case 'partner': newSlide = { type: 'partner' }; break;
-                case 'premium': newSlide = { type: 'premium' }; break;
-                case 'bprofile': newSlide = { type: 'bprofile' }; break;
-                case 'event': newSlide = { type: 'event' }; break;
-                case 'artist': newSlide = { type: 'artist' }; break;
-                case 'concept': newSlide = { type: 'concept' }; break;
-                case 'web': newSlide = { type: 'web' }; break;
-                case 'videokp': newSlide = { type: 'videokp' }; break;
-                default: return;
-            }
-            // Logic to insert 'web' after 'concept' if concept exists
-            if (type === 'web') {
-                const conceptIndex = slides.findIndex(s => s.type === 'concept');
-                if (conceptIndex !== -1) {
-                    slides.splice(conceptIndex + 1, 0, newSlide);
-                } else {
-                     slides.push(newSlide);
-                }
-            } else {
-                 slides.push(newSlide);
-            }
-
-            updateSlideNumbers();
-            // Find the index of the newly added slide to show it
-            const newIndex = slides.indexOf(newSlide);
-            showSlide(newIndex + 1);
-        }
-        
-        function removeSlide(type) {
-            const indexToRemove = slides.findIndex(slide => slide.type === type);
-            if (indexToRemove > -1) {
-                slides.splice(indexToRemove, 1);
-                
-                if (slides.length === 0) {
-                    currentSlideIndex = -1;
-                    document.getElementById('currentSlide').innerHTML = ''; // Очистить превью
-                } else {
-                    if (currentSlideIndex >= slides.length) {
-                        currentSlideIndex = slides.length - 1; // Перейти к последнему слайду
-                    }
-                    showSlide(currentSlideIndex + 1); 
-                }
-                updateSlideNumbers();
-            }
-        }
-        
-        function updateSlideNumbers() {
-            const slideNumbers = document.getElementById('slideNumbers');
-            slideNumbers.innerHTML = '';
-            slides.forEach((slide, i) => {
-                const number = document.createElement('div');
-                number.className = `slide-number ${i === currentSlideIndex ? 'active' : ''}`;
-                number.textContent = i + 1;
-                number.draggable = true;
-                number.dataset.index = i;
-                number.addEventListener('dragstart', handleDragStart);
-                number.addEventListener('dragover', handleDragOver);
-                number.addEventListener('drop', handleDrop);
-                number.addEventListener('dragend', handleDragEnd);
-                number.addEventListener('dragenter', handleDragEnter);
-                number.addEventListener('dragleave', handleDragLeave);
-                number.onclick = () => showSlide(i + 1);
-                slideNumbers.appendChild(number);
-            });
-        }
-        
-        function handleDragStart(e) {
-            draggedSlideIndex = parseInt(e.target.dataset.index);
-            e.target.classList.add('dragging');
-        }
-        
-        function handleDragOver(e) {
-            e.preventDefault();
-        }
-        
-        function handleDrop(e) {
-            e.preventDefault();
-            const targetIndex = parseInt(e.target.dataset.index);
-            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) {
-                const [draggedItem] = slides.splice(draggedSlideIndex, 1);
-                slides.splice(targetIndex, 0, draggedItem);
-                currentSlideIndex = targetIndex;
-                updateSlideNumbers();
-                updateCurrentSlide();
-            }
-             e.target.classList.remove('drop-target', 'dragging');
-        }
-        
-        function handleDragEnd(e) {
-            document.querySelectorAll('.slide-number').forEach(el => {
-                el.classList.remove('dragging', 'drop-target');
-            });
-            draggedSlideIndex = null;
-        }
-        
-        function handleDragEnter(e) {
-            const targetIndex = parseInt(e.target.dataset.index);
-            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) {
-                e.target.classList.add('drop-target');
-            }
-        }
-        
-        function handleDragLeave(e) {
-            e.target.classList.remove('drop-target');
-        }
-        
-        function formatPrice(price) {
-            return String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-        }
-        
-        function getFileName() {
-            const managerSelect = document.getElementById('manager');
-            const managerName = managerSelect.options[managerSelect.selectedIndex].text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
-            const companyName = document.getElementById('companyName').value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
-            return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
-        }
-
-        async function saveAsPDF() {
-            if (slides.length === 0) {
-                alert('Нет слайдов для сохранения в PDF.');
-                return;
-            }
-
-            const popup = document.getElementById('pdf-popup');
-            const blurOverlay = document.querySelector('.blur-overlay');
-            blurOverlay.style.display = 'block';
-            popup.style.display = 'block';
-            
-            const fileName = getFileName() + '.pdf';
-            const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
-
-            const tempContainer = document.createElement('div');
-            tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px';
-            tempContainer.style.top = '0px';
-            tempContainer.style.width = '1920px';
-            tempContainer.style.height = '1080px';
-            document.body.appendChild(tempContainer);
-            
-            const originalSlideIndex = currentSlideIndex; 
-            
-            const onScreenSlide = document.getElementById('currentSlide');
-            let onScreenWidth = onScreenSlide.offsetWidth;
-            let onScreenHeight = onScreenSlide.offsetHeight;
-            
-            if (onScreenWidth === 0 || onScreenHeight === 0) {
-                const previewWrapper = document.querySelector('.preview-wrapper');
-                onScreenWidth = previewWrapper.offsetWidth; 
-                onScreenHeight = onScreenWidth * (9 / 16);
-            }
-            
-            const scaleFactor = 1920 / onScreenWidth;
-
-            for (let i = 0; i < slides.length; i++) {
-                showSlide(i + 1); 
-                
-                const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                
-                if (window.innerWidth <= 768) {
-                    slideContent.classList.add('pdf-render-mode');
-                }
-
-                slideContent.style.transform = 'none';
-                slideContent.classList.remove('zoomed');
-                slideContent.style.margin = '0'; 
-                
-                slideContent.style.width = onScreenWidth + 'px';
-                slideContent.style.height = onScreenHeight + 'px';
-                
-                slideContent.style.transform = `scale(${scaleFactor})`;
-                slideContent.style.transformOrigin = 'top left';
-
-                tempContainer.innerHTML = '';
-                tempContainer.appendChild(slideContent);
-                
-                const images = tempContainer.querySelectorAll('img');
-                const promises = Array.from(images).map(img => {
-                    if (!img.complete) {
-                        return new Promise(resolve => { img.onload = img.onerror = resolve; });
-                    }
-                    return Promise.resolve();
-                });
-                await Promise.all(promises);
-                await new Promise(resolve => setTimeout(resolve, 300));
-
-                const canvas = await html2canvas(tempContainer, {
-                    width: 1920,
-                    height: 1080,
-                    scale: 1,
-                    logging: false,
-                    useCORS: true,
-                    letterRendering: true
-                });
-
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                
-                if (i > 0) pdf.addPage([1920, 1080], 'landscape');
-                
-                pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
-                
-                addLinksToPDF(pdf, slideContent, i, scaleFactor);
-            }
-            
-            showSlide(originalSlideIndex + 1);
-            
-            document.body.removeChild(tempContainer);
-            pdf.save(fileName);
-            
-            setTimeout(() => {
-                popup.style.display = 'none';
-                blurOverlay.style.display = 'none';
-            }, 2000);
-        }
-
-        function addLinksToPDF(pdf, slideContent, pageIndex, scaleFactor) {
-            pdf.setPage(pageIndex + 1);
-            const links = slideContent.querySelectorAll('a');
-            
-            const getTrueOffset = (element) => {
-                let top = 0, left = 0;
-                let current = element;
-                while(current && current !== slideContent) {
-                    top += current.offsetTop;
-                    left += current.offsetLeft;
-                    current = current.offsetParent;
-                }
-                return { top, left };
-            };
-
-            links.forEach(link => {
-                if (!link.href || link.href.trim() === '' || link.href.endsWith('#')) return;
-
-                const offset = getTrueOffset(link);
-                
-                const x = offset.left * scaleFactor;
-                const y = offset.top * scaleFactor;
-                const width = link.offsetWidth * scaleFactor;
-                const height = link.offsetHeight * scaleFactor;
-                
-                if (width > 0 && height > 0) {
-                    try {
-                        pdf.link(x, y, width, height, { url: link.href });
-                    } catch (e) {
-                        console.error('Ошибка при добавлении ссылки:', e, {url: link.href, x, y, width, height});
-                    }
-                }
-            });
-        }
-
-        function setClientLogo(logoSrc) {
-            globalClientLogo = logoSrc;
-            
-            const previewContainer = document.getElementById('clientLogoPreviewContainer');
-            if (logoSrc) {
-                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain;">`;
-            } else {
-                previewContainer.innerHTML = '';
-            }
-            
-            if (slides[currentSlideIndex] && (slides[currentSlideIndex].type === 'general' || slides[currentSlideIndex].type === 'videokp')) {
-                updateCurrentSlide();
-            }
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
-                let text = option.textContent.replace(/Статистика\s*/i, '').trim();
-                option.textContent = text.charAt(0).toUpperCase() + text.slice(1);
-            });
-            const inputsToUpdate = [
-                'banner', 'logos', 'manager', 'personalPhone', 'price1Value', 
-                'price3Value1', 'price3Value2', 'price3Value3', 'comment', 
-                'priceBanner', 'instructionBanner', 'playlist', 'premiumPrice1', 
-                'premiumPrice2', 'premiumComment', 'videokpPrice', 'videokpComment',
-                'price1Label', 'price10plusHeader1', 'price10plusValue1',
-                'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3'
-            ];
-            inputsToUpdate.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', updateCurrentSlide);
-                }
-            });
-            document.getElementById('logos').addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const bannerValue = selectedOption.getAttribute('data-banner');
-                if (bannerValue) {
-                    const bannerSelect = document.getElementById('banner');
-                    bannerSelect.value = bannerValue;
-                    bannerSelect.dispatchEvent(new Event('change'));
-                }
-            });
-            document.getElementById('companyName').addEventListener('input', function() {});
-
-            document.getElementById('clientLogoUpload').addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        setClientLogo(e.target.result);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // --- Логика для поиска по менеджерам ---
-            const managerSelect = document.getElementById('manager');
-            const managerSearch = document.getElementById('manager-search');
-            const managerOptionsContainer = document.getElementById('manager-options');
-
-            const options = Array.from(managerSelect.options);
-            options.forEach(option => {
-                const optionDiv = document.createElement('div');
-                optionDiv.classList.add('option');
-                optionDiv.textContent = option.textContent;
-                optionDiv.dataset.value = option.value;
-                optionDiv.dataset.number = option.dataset.number;
-                managerOptionsContainer.appendChild(optionDiv);
-            });
-            managerSearch.value = managerSelect.options[managerSelect.selectedIndex].text;
-
-            managerSearch.addEventListener('focus', () => {
-                managerOptionsContainer.style.display = 'block';
-                managerSearch.value = ''; 
-                managerSearch.dispatchEvent(new Event('input')); 
-            });
-
-            managerSearch.addEventListener('blur', () => {
-                setTimeout(() => {
-                    managerOptionsContainer.style.display = 'none';
-                    if (!managerSearch.value) {
-                         managerSearch.value = managerSelect.options[managerSelect.selectedIndex].text;
-                    }
-                }, 150);
-            });
-
-            managerSearch.addEventListener('input', () => {
-                const filter = managerSearch.value.toLowerCase();
-                const customOptions = managerOptionsContainer.querySelectorAll('.option');
-                customOptions.forEach(option => {
-                    const nameMatch = option.textContent.toLowerCase().includes(filter);
-                    const numberMatch = option.dataset.number && option.dataset.number.includes(filter);
-
-                    if (nameMatch || numberMatch) {
-                        option.style.display = '';
-                    } else {
-                        option.style.display = 'none';
-                    }
-                });
-            });
-
-            managerOptionsContainer.addEventListener('mousedown', (e) => {
-                if (e.target.classList.contains('option')) {
-                    const selectedText = e.target.textContent;
-                    const selectedValue = e.target.dataset.value;
-
-                    managerSearch.value = selectedText;
-                    managerSelect.value = selectedValue;
-                    
-                    managerSelect.dispatchEvent(new Event('change'));
-                    managerOptionsContainer.style.display = 'none';
-                }
-            });
-            // --- Конец логики для поиска ---
-
-            updateSlideNumbers();
-            if (slides.length > 0) {
-                showSlide(1); 
-            }
-            if (document.querySelector('.menu-header')) {
-                document.querySelector('.menu-header').click();
-            }
-        });
-    </script>
-</body>
-</html>
+            'images/sbbeauty.webp': 'https://zv
