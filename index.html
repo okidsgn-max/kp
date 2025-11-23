@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Генератор коммерческого предложения</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="128x128" href="zvb2bsale.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -994,7 +991,7 @@
         }
 
         .region-btn.active {
-            background-color: var(--primary); /* Green for active */
+            background-color: var(--primary);
             color: white;
             border-color: var(--primary);
         }
@@ -1035,9 +1032,8 @@
             }
             
             .preview-page {
-                /* Dynamic scale will be set by JS, but fallback here */
-                --element-scale: 0.58; 
-                --qr-size: calc(60px * var(--element-scale));
+                --element-scale: 0.58; /* Увеличено для пропорции ~1/17 на мобильных */
+                --qr-size: calc(60px * 0.58);
                 width: 100%; /* Force width on mobile */
             }
 
@@ -1081,9 +1077,8 @@
         }
         
         .preview-page.pdf-render-mode {
-             /* PDF Mode enforces desktop scale */
-            --element-scale: 1.5;
-            --qr-size: calc(60px * 1.5);
+            --element-scale: 2.5;
+            --qr-size: calc(60px * 2.5);
         }
 
         /* Стиль для кликабельных областей концепций */
@@ -1683,11 +1678,7 @@
             'cloth': { logo: 'images/clotheslogo.webp', banner: 'images/sbmall.webp' },
             'kids': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
             'baby': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
-            'hotel': { logo: 'images/hotellogo.webp', banner: 'images/sbhotel.webp' },
-            // Новые ключи
-            'pekar': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
-            'xleb': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
-            'bakery': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' }
+            'hotel': { logo: 'images/hotellogo.webp', banner: 'images/sbhotel.webp' }
         };
         
         let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
@@ -1695,8 +1686,8 @@
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
         let globalClientLogo = null;
-        // По умолчанию инверсия включена всегда для логотипов клиентов (монохром)
-        const isLogoInverted = true; 
+        // По умолчанию инверсия включена всегда для логотипов клиентов
+        let isLogoInverted = true; 
         let currentRegion = 'ru';
 
         function isSectionRestricted(type) {
@@ -1763,29 +1754,6 @@
             slide.classList.toggle('zoomed');
             isZoomed = !isZoomed;
         }
-
-        // Обновляем CSS переменную масштаба для мобильных устройств
-        function updateMobileScale() {
-            if (window.innerWidth <= 768) {
-                const previewContainer = document.querySelector('.preview-container');
-                // Базовая ширина десктопа для расчета пропорций (примерно 900-1000px рабочей области превью)
-                const baseDesktopWidth = 1200; 
-                // Текущая ширина контейнера
-                const currentWidth = previewContainer.offsetWidth;
-                // Рассчитываем масштаб, чтобы сохранить пропорцию "как на десктопе"
-                // 1/17 соотношение шрифта к артборду
-                let scale = currentWidth / baseDesktopWidth;
-                // Ограничиваем минимум, чтобы совсем не исчезло
-                if(scale < 0.3) scale = 0.3;
-                
-                document.documentElement.style.setProperty('--element-scale', scale);
-            } else {
-                document.documentElement.style.setProperty('--element-scale', 1);
-            }
-        }
-        
-        window.addEventListener('resize', updateMobileScale);
-        window.addEventListener('load', updateMobileScale);
         
         document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
             radio.addEventListener('change', function() {
@@ -1819,20 +1787,21 @@
 
             options.forEach(option => {
                 if (option.getAttribute('data-region') === region) {
+                    // Важно: в селекте нельзя просто скрыть option через display:none в Safari/Mobile
+                    // Но мы используем это для выборки. 
+                    // Для полной корректности лучше перестраивать селект, но здесь оставим логику переключения.
                     if (!firstVisibleOption) firstVisibleOption = option;
                 }
             });
 
-            // Обновляем кастомный поиск менеджеров
+            // Обновляем кастомный поиск менеджеров (тут фильтрация работает через display)
             const managerSearch = document.getElementById('manager-search');
-            managerSearch.value = ''; 
+            managerSearch.value = ''; // Сброс поиска
             
             // Принудительно выбираем первого менеджера из региона
             if (firstVisibleOption) {
                 managerSelect.value = firstVisibleOption.value;
                 managerSearch.value = firstVisibleOption.text;
-                // Важно: диспатчим событие change, чтобы обновился слайд
-                managerSelect.dispatchEvent(new Event('change'));
             }
 
             // Обновляем доступность разделов и перерисовываем
@@ -1939,18 +1908,17 @@
             const inputVal = document.getElementById('logoLinkInput').value.trim();
             if (!inputVal) return;
 
-            // 1. Поиск ключевых слов для настройки темы (SEO keys)
+            // 1. Поиск ключевых слов для настройки темы
             let topicFound = false;
-            const lowerVal = inputVal.toLowerCase();
-            
             for (const [key, settings] of Object.entries(seoKeys)) {
-                if (lowerVal.includes(key)) {
+                if (inputVal.toLowerCase().includes(key)) {
                     // Устанавливаем логотип категории
                     const logoSelect = document.getElementById('logos');
                     const bannerSelect = document.getElementById('banner');
                     
                     // Найти опцию с таким значением и выбрать её
                     if (settings.logo) {
+                        // Попытка найти точное совпадение значения
                         Array.from(logoSelect.options).forEach(opt => {
                             if (opt.value === settings.logo) logoSelect.value = settings.logo;
                         });
@@ -1961,7 +1929,7 @@
                         });
                     }
                     topicFound = true;
-                    // Не делаем break, так как могут быть уточняющие ключи, берем последний
+                    break;
                 }
             }
 
@@ -1971,7 +1939,6 @@
                 setClientLogo(inputVal);
             } 
             // Если это ссылка на сайт - пробуем достать лого через Clearbit API
-            // (Имитация поведения "взять из хедера", так как прямой парсинг невозможен на клиенте)
             else {
                 try {
                     // Извлекаем домен
@@ -2006,7 +1973,7 @@
             
             // Apply monochrome and invert filter by default (makes logo white)
             const applyLogoFilter = (imgElement) => {
-                // Всегда монохром и инверсия (белый логотип)
+                // Используем brightness(0) invert(1) для превращения любого лого в белый монохром
                 imgElement.style.filter = 'brightness(0) invert(1)';
             };
 
@@ -2586,37 +2553,31 @@
             let onScreenWidth = onScreenSlide.offsetWidth;
             let onScreenHeight = onScreenSlide.offsetHeight;
             
-            // Если мы на мобильном, размеры могут быть маленькими, но нам нужен 1920 для PDF
             if (onScreenWidth === 0 || onScreenHeight === 0) {
                 const previewWrapper = document.querySelector('.preview-wrapper');
                 onScreenWidth = previewWrapper.offsetWidth; 
                 onScreenHeight = onScreenWidth * (9 / 16);
             }
             
-            // Корректируем scaleFactor для PDF (1920px canvas)
-            // Если на мобильном, используем фиксированный скейл, иначе вычисляем
-            const isMobile = window.innerWidth <= 768;
-            const scaleFactor = isMobile ? (1920 / onScreenWidth) : (1920 / onScreenWidth);
+            const scaleFactor = 1920 / onScreenWidth;
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
                 
                 const slideContent = document.getElementById('currentSlide').cloneNode(true);
                 
-                // ВАЖНО: Принудительно ставим класс для рендера PDF, который увеличивает шрифты
-                // чтобы они соответствовали масштабу 1920px
-                slideContent.classList.add('pdf-render-mode');
+                if (window.innerWidth <= 768) {
+                    slideContent.classList.add('pdf-render-mode');
+                }
 
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
                 slideContent.style.margin = '0'; 
                 
-                // Фиксируем размеры для html2canvas
-                slideContent.style.width = '1920px';
-                slideContent.style.height = '1080px';
+                slideContent.style.width = onScreenWidth + 'px';
+                slideContent.style.height = onScreenHeight + 'px';
                 
-                // Сбрасываем скейл для html2canvas, так как мы задали размеры явно
-                slideContent.style.transform = `scale(1)`; 
+                slideContent.style.transform = `scale(${scaleFactor})`;
                 slideContent.style.transformOrigin = 'top left';
 
                 tempContainer.innerHTML = '';
@@ -2635,7 +2596,7 @@
                 const canvas = await html2canvas(tempContainer, {
                     width: 1920,
                     height: 1080,
-                    scale: 1, // Важно: scale 1, так как мы уже задали контейнеру 1920px
+                    scale: 1,
                     logging: false,
                     useCORS: true,
                     letterRendering: true
@@ -2647,11 +2608,7 @@
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
                 
-                // Для ссылок нужно использовать оригинальный scaleFactor относительно экрана
-                // Но так как мы рендерим из tempContainer (1920), координаты уже правильные
-                // Единственное но: ссылки берутся из slideContent (клона), у которого width=1920
-                // Значит scaleFactor должен быть 1
-                addLinksToPDF(pdf, slideContent, i, 1);
+                addLinksToPDF(pdf, slideContent, i, scaleFactor);
             }
             
             showSlide(originalSlideIndex + 1);
@@ -2706,8 +2663,8 @@
             
             const previewContainer = document.getElementById('clientLogoPreviewContainer');
             if (logoSrc) {
-                // Показываем в превью инвертированный логотип (принудительно белый/монохром)
-                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain; filter: brightness(0) invert(1);">`;
+                // Показываем в превью инвертированный логотип, чтобы пользователь понимал, как это будет выглядеть
+                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain; filter: invert(1);">`;
             } else {
                 previewContainer.innerHTML = '';
             }
@@ -2775,6 +2732,7 @@
                 const options = Array.from(managerSelect.options);
                 options.forEach(option => {
                     // Добавляем в поиск только те, что сейчас видимы (прошли фильтр региона)
+                    // Но так как option.style.display не всегда надежен в JS при инициализации, проверяем регион вручную
                     if (option.getAttribute('data-region') === currentRegion) {
                         const optionDiv = document.createElement('div');
                         optionDiv.classList.add('option');
@@ -2786,15 +2744,16 @@
                 });
             };
 
-            // Первичная инициализация (RU)
-            setRegion('ru'); 
-            updateMobileScale(); // Инициализация масштаба для мобильных
+            // Первичная инициализация
+            setRegion('ru'); // Это запустит updateSectionAvailability и первичную фильтрацию
 
             managerSearch.addEventListener('focus', () => {
                 // Обновляем список перед показом, чтобы он соответствовал текущему региону
                 updateManagerSearchOptions();
                 managerOptionsContainer.style.display = 'block';
                 managerSearch.value = ''; 
+                // Триггерим input чтобы показать все варианты региона
+                const filter = '';
                 const customOptions = managerOptionsContainer.querySelectorAll('.option');
                 customOptions.forEach(option => option.style.display = '');
             });
@@ -2848,3 +2807,4 @@
     </script>
 </body>
 </html>
+
