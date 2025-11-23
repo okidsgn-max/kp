@@ -112,6 +112,82 @@
             max-width: 80%;
         }
 
+        /* Dark Link Input Popup */
+        .popup-input-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-content-dark {
+            background-color: #1A1D1F;
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .popup-content-dark h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .popup-content-dark input {
+            width: 100%;
+            padding: 12px;
+            background: #2B2B2B;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box; 
+        }
+
+        .popup-content-dark input:focus {
+            border-color: var(--primary);
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .popup-buttons button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .popup-buttons button:first-child {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .popup-buttons button:last-child {
+            background-color: transparent;
+            color: #9A9FA5;
+            border: 1px solid #444;
+        }
+
         .popup.loading::after {
             content: "...";
             animation: dots 1.5s steps(5, end) infinite;
@@ -822,7 +898,7 @@
         }
 
         .instruction-text .highlight {
-            color: #04C9B0; /* Новый цвет по запросу */
+            color: #04C9B0; 
             text-decoration: none;
             font-weight: 500;
         }
@@ -862,6 +938,89 @@
             background-color: var(--background-light);
             color: var(--primary);
         }
+        
+        /* Dark container for Logo Preview in Settings */
+        #clientLogoPreviewContainer {
+            background-color: #2b2b2b;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: -8px;
+            margin-bottom: 16px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-link-trigger {
+            font-size: 13px;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+        
+        .logo-link-trigger:hover {
+            color: var(--primary-hover);
+        }
+
+        /* Checkbox for Inverting Logo */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            user-select: none;
+            margin-bottom: 16px;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            height: 18px;
+            width: 18px;
+            background-color: #fff;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            margin-right: 10px;
+            transition: all 0.2s;
+        }
+
+        .checkbox-container:hover input ~ .checkmark {
+            border-color: var(--primary-hover);
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+            left: 6px;
+            top: 2px;
+            width: 4px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
 
         /* --- MOBILE STYLES --- */
         @media (max-width: 768px) {
@@ -900,6 +1059,7 @@
             .preview-page {
                 --element-scale: 0.5;
                 --qr-size: calc(60px * 0.5);
+                width: 100%; /* Force width on mobile */
             }
 
             .preview-wrapper {
@@ -974,9 +1134,16 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <label class="menu-label">Логотип клиента (файл):</label>
+                    <label class="menu-label">Загрузите логотип клиента в *png? *svg</label>
                     <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
-                    <div id="clientLogoPreviewContainer" style="margin-top: -8px; margin-bottom: 16px; min-height: 40px;"></div>
+                    <div id="clientLogoPreviewContainer"></div>
+                    <div class="logo-link-trigger" onclick="openLogoLinkPopup()">или укажите ссылку на лого</div>
+                    
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="invertLogoCheckbox" onchange="toggleLogoInversion()">
+                        <span class="checkmark"></span>
+                        Инвертировать цвет (для светлых лого)
+                    </label>
                 </div>
             </div>
             <div class="menu-section">
@@ -1436,6 +1603,18 @@
         </div>
     </div>
 
+    <!-- Popup for Link Input -->
+    <div id="logo-link-popup" class="popup-input-container">
+        <div class="popup-content-dark">
+            <h3>Укажите ссылку на логотип</h3>
+            <input type="text" id="logoLinkInput" placeholder="https://example.com/logo.png">
+            <div class="popup-buttons">
+                <button onclick="saveLogoLink()">ОК</button>
+                <button onclick="closeLogoLinkPopup()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
     <div id="pdf-popup" class="popup">PDF уже сохраняется! Удачной сделки!</div>
     <div id="restriction-popup" class="popup">Данная услуга пока недоступна в вашей стране</div>
 
@@ -1506,6 +1685,7 @@
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
         let globalClientLogo = null;
+        let isLogoInverted = false;
 
         function isSectionRestricted(type) {
             const { region } = getRegionInfo();
@@ -1648,18 +1828,10 @@
             });
         }
 
-        // Обновление UI валюты в меню (только для визуализации на артборде, в меню теперь текст "валюта")
         function updateCurrencyLabels() {
             const { currency } = getRegionInfo();
-            // В сайдбаре мы теперь используем статичный текст "валюта" по запросу, 
-            // поэтому здесь обновлять DOM .currency-label-text не нужно, или можно, если хотим "₽/мес"
-            // Пользователь просил: "заменить знак валют- на “Стоимость 1, валюта/мес”"
-            
-            // Обновляем заголовок цены на артборде
             const priceLabel = document.getElementById('price1Label');
-            // Если текст дефолтный, меняем валюту, сохраняя структуру
             if (priceLabel.value.includes('Стоимость за 1 помещение')) {
-                // Пытаемся сохранить пользовательский ввод, если он просто меняет валюту
                  if (currency === '₽') priceLabel.value = 'Стоимость за 1 помещение, ₽ в т.ч. 20%';
                  else priceLabel.value = `Стоимость за 1 помещение, ${currency}`;
             }
@@ -1684,6 +1856,29 @@
             
             return link;
         }
+
+        // --- Logo Link Logic ---
+        function openLogoLinkPopup() {
+            document.getElementById('logo-link-popup').style.display = 'flex';
+        }
+
+        function closeLogoLinkPopup() {
+            document.getElementById('logo-link-popup').style.display = 'none';
+        }
+
+        function saveLogoLink() {
+            const link = document.getElementById('logoLinkInput').value;
+            if (link) {
+                setClientLogo(link);
+                closeLogoLinkPopup();
+            }
+        }
+        
+        function toggleLogoInversion() {
+            isLogoInverted = document.getElementById('invertLogoCheckbox').checked;
+            updateCurrentSlide();
+        }
+
         
         function updateCurrentSlide() {
             if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
@@ -1701,6 +1896,15 @@
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
             
+            // Helper to apply inverted filter if checked
+            const applyLogoFilter = (imgElement) => {
+                if (isLogoInverted) {
+                    imgElement.style.filter = 'invert(1)';
+                } else {
+                    imgElement.style.filter = 'none';
+                }
+            };
+
             switch(currentSlide.type) {
                 case 'general':
                     bgImg.src = bgImage; // Локализованный фон
@@ -1741,6 +1945,7 @@
                         clientLogoImg.style.width = 'auto'; 
                         clientLogoImg.style.maxWidth = '30%'; 
                         clientLogoImg.style.objectFit = 'contain';
+                        applyLogoFilter(clientLogoImg);
                         slideContainer.appendChild(clientLogoImg);
                     }
                     break;
@@ -1894,12 +2099,12 @@
                     const selectedManagerOptionForLink = managerSelectForLink.options[managerSelectForLink.selectedIndex];
                     const managerRegLink = selectedManagerOptionForLink.getAttribute('data-link');
 
-                    // FIX: Embedding links directly into the text for better PDF export
+                    // Highlight words: "по ссылке", "на компьютер", "смартфон"
                     const instructionTextDiv = document.createElement('div');
                     instructionTextDiv.className = 'instruction-text';
                     instructionTextDiv.innerHTML = `
-                        1. Зарегистрироваться <a href="${managerRegLink}" target="_blank" style="color: inherit; text-decoration: none;" class="highlight">по ссылке</a>.<br><br>
-                        2. Установить приложение на <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" style="color: inherit; text-decoration: none;" class="highlight">компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" style="color: inherit; text-decoration: none;" class="highlight">смартфон</a>.<br><br>
+                        1. Зарегистрироваться <a href="${managerRegLink}" target="_blank" class="highlight">по ссылке</a>.<br><br>
+                        2. Установить приложение <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" class="highlight">на компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" class="highlight">смартфон</a>.<br><br>
                         3. С вами свяжется менеджер в течение 1-2 часов.<br><br>
                         4. Протестировать в течение 7 дней, оформить подписку.
                     `;
@@ -1989,29 +2194,30 @@
                     break;
                 case 'event':
                     bgImg.src = 'images/event.webp';
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
                     slideContainer.appendChild(bgImg);
                     break;
                 case 'artist':
                     bgImg.src = 'images/artist.webp';
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
                     slideContainer.appendChild(bgImg);
                     break;
                 case 'concept':
-                    bgImg.src = 'images/mus_concept.webp'; // Updated Concept Background
+                    bgImg.src = 'images/mus_concept.webp';
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
                     slideContainer.appendChild(bgImg);
 
                     // Add 3 clickable areas on the left
-                    // Card 1: Top
                     const cLink1 = document.createElement('a');
                     cLink1.href = 'https://zvuk-b2b.com/retro';
                     cLink1.target = '_blank';
                     cLink1.className = 'concept-link-area';
-                    cLink1.style.top = '15%'; // Approximate percentage based on layout
+                    cLink1.style.top = '15%'; 
                     cLink1.style.left = '55%';
                     cLink1.style.width = '25%';
                     cLink1.style.height = '25%';
                     slideContainer.appendChild(cLink1);
 
-                    // Card 2: Middle
                     const cLink2 = document.createElement('a');
                     cLink2.href = 'https://zvuk-b2b.com/coffee-rave';
                     cLink2.target = '_blank';
@@ -2022,7 +2228,6 @@
                     cLink2.style.height = '25%';
                     slideContainer.appendChild(cLink2);
 
-                    // Card 3: Bottom
                     const cLink3 = document.createElement('a');
                     cLink3.href = 'https://zvuk-b2b.com/iv-int';
                     cLink3.target = '_blank';
@@ -2034,8 +2239,9 @@
                     slideContainer.appendChild(cLink3);
                     break;
 
-                case 'web': // New Slide
+                case 'web':
                     bgImg.src = 'images/www.webp';
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
                     slideContainer.appendChild(bgImg);
                     break;
 
@@ -2054,10 +2260,13 @@
                         clientLogoImg.style.width = 'auto'; 
                         clientLogoImg.style.maxWidth = '30%';
                         clientLogoImg.style.objectFit = 'contain';
+                        applyLogoFilter(clientLogoImg);
                         slideContainer.appendChild(clientLogoImg);
                     }
                     const videoPriceDiv = document.createElement('div');
                     videoPriceDiv.className = 'preview-price';
+                    // Special positioning for video KP: 10% lower (56% + 10% = 66%)
+                    videoPriceDiv.style.top = '66%';
                     videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ` ${currency}/мес.`;
                     slideContainer.appendChild(videoPriceDiv);
                     
