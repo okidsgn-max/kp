@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Генератор коммерческого предложения</title>
+    <!-- Favicon -->
+    <link rel="icon" href="zvb2bsale.png" type="image/png" sizes="128x128">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1678,7 +1680,12 @@
             'cloth': { logo: 'images/clotheslogo.webp', banner: 'images/sbmall.webp' },
             'kids': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
             'baby': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
-            'hotel': { logo: 'images/hotellogo.webp', banner: 'images/sbhotel.webp' }
+            'hotel': { logo: 'images/hotellogo.webp', banner: 'images/sbhotel.webp' },
+            'bakery': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
+            'xleb': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
+            'hleb': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
+            'pekar': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
+            'boulangerie': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' }
         };
         
         let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
@@ -1686,7 +1693,7 @@
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
         let globalClientLogo = null;
-        // По умолчанию инверсия включена всегда для логотипов клиентов
+        // По умолчанию инверсия включена всегда для логотипов клиентов (белый на темном)
         let isLogoInverted = true; 
         let currentRegion = 'ru';
 
@@ -1787,14 +1794,11 @@
 
             options.forEach(option => {
                 if (option.getAttribute('data-region') === region) {
-                    // Важно: в селекте нельзя просто скрыть option через display:none в Safari/Mobile
-                    // Но мы используем это для выборки. 
-                    // Для полной корректности лучше перестраивать селект, но здесь оставим логику переключения.
                     if (!firstVisibleOption) firstVisibleOption = option;
                 }
             });
 
-            // Обновляем кастомный поиск менеджеров (тут фильтрация работает через display)
+            // Обновляем кастомный поиск менеджеров
             const managerSearch = document.getElementById('manager-search');
             managerSearch.value = ''; // Сброс поиска
             
@@ -1809,7 +1813,7 @@
             updateCurrentSlide();
         }
 
-        // Функция для определения региона (теперь берет из state)
+        // Функция для определения региона
         function getRegionInfo() {
             const region = currentRegion;
             
@@ -1908,33 +1912,35 @@
             const inputVal = document.getElementById('logoLinkInput').value.trim();
             if (!inputVal) return;
 
-            // 1. Поиск ключевых слов для настройки темы
+            // 1. Поиск ключевых слов для настройки темы (SEO)
             let topicFound = false;
+            const lowerInput = inputVal.toLowerCase();
+            
             for (const [key, settings] of Object.entries(seoKeys)) {
-                if (inputVal.toLowerCase().includes(key)) {
-                    // Устанавливаем логотип категории
+                if (lowerInput.includes(key)) {
+                    // Устанавливаем логотип категории (Header logos)
                     const logoSelect = document.getElementById('logos');
                     const bannerSelect = document.getElementById('banner');
                     
-                    // Найти опцию с таким значением и выбрать её
                     if (settings.logo) {
-                        // Попытка найти точное совпадение значения
                         Array.from(logoSelect.options).forEach(opt => {
                             if (opt.value === settings.logo) logoSelect.value = settings.logo;
                         });
                     }
+                    // Устанавливаем баннер
                     if (settings.banner) {
                         Array.from(bannerSelect.options).forEach(opt => {
                              if (opt.value === settings.banner) bannerSelect.value = settings.banner;
                         });
                     }
                     topicFound = true;
+                    // Прерываем цикл после первого совпадения, чтобы не перебивать более точные
                     break;
                 }
             }
 
-            // 2. Обработка самой ссылки для логотипа клиента
-            // Если это ссылка на картинку (заканчивается на расширение)
+            // 2. Обработка самой ссылки для Логотипа Клиента
+            // Если это прямая ссылка на картинку
             if (inputVal.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
                 setClientLogo(inputVal);
             } 
@@ -1947,7 +1953,7 @@
                     const logoApiUrl = `https://logo.clearbit.com/${domain}`;
                     setClientLogo(logoApiUrl);
                 } catch (e) {
-                    console.log('Не удалось извлечь домен для логотипа');
+                    console.log('Не удалось извлечь домен для логотипа, возможно введена не ссылка');
                 }
             }
             
@@ -1974,6 +1980,7 @@
             // Apply monochrome and invert filter by default (makes logo white)
             const applyLogoFilter = (imgElement) => {
                 // Используем brightness(0) invert(1) для превращения любого лого в белый монохром
+                // Это решает задачу "если светлый - монохром, если темный - инверсия" для темного фона
                 imgElement.style.filter = 'brightness(0) invert(1)';
             };
 
@@ -2807,4 +2814,3 @@
     </script>
 </body>
 </html>
-
