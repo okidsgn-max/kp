@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Генератор коммерческого предложения</title>
-    <!-- Favicon -->
     <link rel="icon" href="zvb2bsale.png" type="image/png" sizes="128x128">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -1076,6 +1075,27 @@
                 max-height: 100%;
                 box-shadow: 0 0 10px rgba(0,0,0,0.2);
             }
+
+            /* SPECIAL MOBILE PRICING SCALING 
+               Applies only when NOT rendering to PDF.
+               Reduces font size by ~3-4x visually relative to standard mobile scale.
+            */
+            .preview-page:not(.pdf-render-mode) .preview-price,
+            .preview-page:not(.pdf-render-mode) .preview-price-premium-1,
+            .preview-page:not(.pdf-render-mode) .preview-price-premium-2 {
+                font-size: calc(6px * var(--element-scale)) !important;
+                width: 80%; /* Expand width to prevent wrapping */
+            }
+            .preview-page:not(.pdf-render-mode) .price-table {
+                font-size: calc(5px * var(--element-scale)) !important;
+            }
+            .preview-page:not(.pdf-render-mode) .preview-price-label {
+                font-size: calc(5px * var(--element-scale)) !important;
+            }
+            .preview-page:not(.pdf-render-mode) .price-table th, 
+            .preview-page:not(.pdf-render-mode) .price-table td {
+                padding: calc(4px * var(--element-scale)) !important;
+            }
         }
         
         .preview-page.pdf-render-mode {
@@ -1114,6 +1134,12 @@
                     <label class="menu-label">Загрузите логотип клиента</label>
                     <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
                     <div id="clientLogoPreviewContainer"></div>
+                    
+                    <div style="margin-top: 10px; margin-bottom: 16px; display: flex; align-items: center;">
+                        <input type="checkbox" id="logoInvert" checked style="width: auto; margin-right: 8px; cursor: pointer;">
+                        <label for="logoInvert" style="font-size: 14px; color: var(--text-secondary); cursor: pointer; user-select: none;">Инвертировать (белый)</label>
+                    </div>
+
                     <div class="logo-link-trigger" onclick="openLogoLinkPopup()">или укажите ссылку на лого</div>
                 </div>
             </div>
@@ -1206,7 +1232,6 @@
                         <input type="text" id="manager-search" class="zvuk-input" placeholder="Поиск по имени или доб.номеру...">
                         <div id="manager-options" class="custom-options"></div>
                         <select class="zvuk-select" id="manager" style="display: none;">
-                            <!-- RU Managers -->
                             <option value="images/ivanova.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=ivanova" data-number="16">Мария Иванова</option>
                             <option value="images/mankova.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=mankova" data-number="22">Яна Манькова</option>
                             <option value="images/sidikov.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov" data-number="26">Темур Сидиков</option>
@@ -1223,12 +1248,10 @@
                             <option value="images/chugunov.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=chugunov">Дмитрий Чугунов</option>
                             <option value="images/chubak.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=chubak">Сергей Чубак</option>
                             
-                            <!-- KZ Managers -->
                             <option value="images/grigoryev-kz.webp" data-region="kz" data-link="https://app.zvuk-b2b.com/register?promocode=grigoryev">Сергей Григорьев (KZ)</option>
                             <option value="images/antakova-kz.webp" data-region="kz" data-link="https://app.zvuk-b2b.com/register?promocode=antakova">Алина Антакова (KZ)</option>
                             <option value="images/schepochkina-kz.webp" data-region="kz" data-link="https://app.zvuk-b2b.com/register?promocode=schepochkina">Анастасия Щепочкина (KZ)</option>
 
-                            <!-- RB Managers -->
                             <option value="images/tanasevich-rb.webp" data-region="rb" data-link="https://app.zvuk-b2b.com/register?promocode=tanasevich">Наталья Танасевич (RB)</option>
                             <option value="images/korol-rb.webp" data-region="rb" data-link="https://app.zvuk-b2b.com/register?promocode=korol">Валерия Король (RB)</option>
                         </select>
@@ -1579,7 +1602,6 @@
         </div>
     </div>
 
-    <!-- Popup for Link Input -->
     <div id="logo-link-popup" class="popup-input-container">
         <div class="popup-content-dark">
             <h3>Укажите ссылку на логотип или сайт</h3>
@@ -1655,45 +1677,13 @@
             kz: ['partner', 'premium', 'artist', 'web'],
             rb: ['partner', 'premium', 'artist', 'web', 'videokp']
         };
-
-        // SEO Keys Mapping for Auto-Select
-        const seoKeys = {
-            'fitnes': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
-            'sport': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
-            'gym': { logo: 'images/fitnesslogo.webp', banner: 'images/sbfitnes.webp' },
-            'cafe': { logo: 'images/coffeelogo.webp', banner: 'images/sbcafe.webp' },
-            'coffee': { logo: 'images/coffeelogo.webp', banner: 'images/sbcafe.webp' },
-            'rest': { logo: 'images/sbrest.webp', banner: 'images/sbrest.webp' },
-            'pizza': { logo: 'images/pizzalogo.webp', banner: 'images/sbpizza.webp' },
-            'sushi': { logo: 'images/sushilogo.webp', banner: 'images/sbsushi.webp' },
-            'food': { logo: 'images/fastfoodlogo.webp', banner: 'images/sbfastfood.webp' },
-            'burger': { logo: 'images/grillplovlogo.webp', banner: 'images/sbgrill.webp' },
-            'grill': { logo: 'images/grillplovlogo.webp', banner: 'images/sbgrill.webp' },
-            'auto': { logo: 'images/autologo.webp', banner: 'images/sbauto.webp' },
-            'car': { logo: 'images/autologo.webp', banner: 'images/sbauto.webp' },
-            'salon': { logo: 'images/beautylogo.webp', banner: 'images/sbbeauty.webp' },
-            'beauty': { logo: 'images/beautylogo.webp', banner: 'images/sbbeauty.webp' },
-            'hair': { logo: 'images/barberlogo.webp', banner: 'images/sbbarber.webp' },
-            'barber': { logo: 'images/barberlogo.webp', banner: 'images/sbbarber.webp' },
-            'shop': { logo: 'images/Retaillogo.webp', banner: 'images/sbretail.webp' },
-            'store': { logo: 'images/Retaillogo.webp', banner: 'images/sbretail.webp' },
-            'cloth': { logo: 'images/clotheslogo.webp', banner: 'images/sbmall.webp' },
-            'kids': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
-            'baby': { logo: 'images/kidslogo.webp', banner: 'images/sbkids.webp' },
-            'hotel': { logo: 'images/hotellogo.webp', banner: 'images/sbhotel.webp' },
-            'bakery': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
-            'xleb': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
-            'hleb': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
-            'pekar': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' },
-            'boulangerie': { logo: 'images/pekarnilogo.webp', banner: 'images/sbbakery.webp' }
-        };
         
         let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
         let isZoomed = false;
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
         let globalClientLogo = null;
-        // По умолчанию инверсия включена всегда для логотипов клиентов (белый на темном)
+        // По умолчанию инверсия включена
         let isLogoInverted = true; 
         let currentRegion = 'ru';
 
@@ -1912,34 +1902,7 @@
             const inputVal = document.getElementById('logoLinkInput').value.trim();
             if (!inputVal) return;
 
-            // 1. Поиск ключевых слов для настройки темы (SEO)
-            let topicFound = false;
-            const lowerInput = inputVal.toLowerCase();
-            
-            for (const [key, settings] of Object.entries(seoKeys)) {
-                if (lowerInput.includes(key)) {
-                    // Устанавливаем логотип категории (Header logos)
-                    const logoSelect = document.getElementById('logos');
-                    const bannerSelect = document.getElementById('banner');
-                    
-                    if (settings.logo) {
-                        Array.from(logoSelect.options).forEach(opt => {
-                            if (opt.value === settings.logo) logoSelect.value = settings.logo;
-                        });
-                    }
-                    // Устанавливаем баннер
-                    if (settings.banner) {
-                        Array.from(bannerSelect.options).forEach(opt => {
-                             if (opt.value === settings.banner) bannerSelect.value = settings.banner;
-                        });
-                    }
-                    topicFound = true;
-                    // Прерываем цикл после первого совпадения, чтобы не перебивать более точные
-                    break;
-                }
-            }
-
-            // 2. Обработка самой ссылки для Логотипа Клиента
+            // Обработка самой ссылки для Логотипа Клиента
             // Если это прямая ссылка на картинку
             if (inputVal.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
                 setClientLogo(inputVal);
@@ -1977,11 +1940,14 @@
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
             
-            // Apply monochrome and invert filter by default (makes logo white)
+            // Function to apply logo filter based on checkbox
             const applyLogoFilter = (imgElement) => {
-                // Используем brightness(0) invert(1) для превращения любого лого в белый монохром
-                // Это решает задачу "если светлый - монохром, если темный - инверсия" для темного фона
-                imgElement.style.filter = 'brightness(0) invert(1)';
+                const isInverted = document.getElementById('logoInvert').checked;
+                if (isInverted) {
+                    imgElement.style.filter = 'brightness(0) invert(1)'; // White
+                } else {
+                    imgElement.style.filter = 'none'; // Original
+                }
             };
 
             switch(currentSlide.type) {
@@ -2706,6 +2672,12 @@
                     });
                 }
             });
+
+            // Слушатель чекбокса инверсии
+            document.getElementById('logoInvert').addEventListener('change', function() {
+                updateCurrentSlide();
+            });
+
             document.getElementById('logos').addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
                 const bannerValue = selectedOption.getAttribute('data-banner');
