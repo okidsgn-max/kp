@@ -2160,16 +2160,7 @@
                         commentDiv.textContent = commentText;
                         commentDiv.classList.add('visible');
                     }
-                    // Позиционирование комментария
-                    if (priceFormat === '1') {
-                        // Для тарифа 1 точка: стоимость примерно на 56%, высота текста небольшая. 
-                        // Ставим комментарий под стоимостью.
-                        commentDiv.style.top = '65%';
-                    } else {
-                        // Для таблиц: таблица начинается на 50%.
-                        // Ставим комментарий под таблицей.
-                        commentDiv.style.top = '75%';
-                    }
+                    
                     slideContainer.appendChild(commentDiv);
 
                     if (priceFormat === '1') {
@@ -2227,6 +2218,16 @@
                             </tbody>
                         `;
                         slideContainer.appendChild(table);
+                    }
+
+                    // Динамическое позиционирование комментария
+                    const targetEl = priceFormat === '1' ? 
+                        slideContainer.querySelector('.preview-price') : 
+                        slideContainer.querySelector('.price-table');
+                        
+                    if (targetEl && commentDiv.classList.contains('visible')) {
+                        const bottomPercent = ((targetEl.offsetTop + targetEl.offsetHeight) / slideContainer.offsetHeight) * 100;
+                        commentDiv.style.top = (bottomPercent + 2) + '%';
                     }
                     break;
                     
