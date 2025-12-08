@@ -2018,10 +2018,10 @@
                     const prefixedSrc = parts.join('/') + '/' + prefix + fileName;
                     
                     img.src = prefixedSrc;
-                    img.onerror = function() {
-                        this.onerror = null;
-                        this.src = originalPath;
-                    };
+                    
+                    // Используем setAttribute для обработчика ошибки, чтобы он сохранялся при клонировании (cloneNode)
+                    // Это критично для корректной генерации PDF, если картинка не найдена
+                    img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${originalPath}';`);
                 } else {
                     img.src = originalPath;
                 }
