@@ -1425,6 +1425,7 @@
                 <div class="menu-content">
                     <label class="menu-label">Баннер:</label>
                     <select class="zvuk-select" id="instructionBanner">
+                        <option value="images/deviceall.webp" selected>Все устройства</option>
                         <option value="images/sbcafe.webp">Кафе</option>
                         <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbcafe.webp">Пекарня</option>
@@ -1682,6 +1683,7 @@
         
         // Ссылки для баннеров
         const bannerLinks = {
+            'images/deviceall.webp': 'https://help.zvuk-b2b.com/onair',
             'images/sbcafe.webp': 'https://zvuk-b2b.com/cafe',
             'images/sbfastfood.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
             'images/sbgrill.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
@@ -1976,12 +1978,15 @@
             } 
             
             // Если это ссылка на сайт - парсим
-            btn.textContent = 'Поиск...';
+            btn.textContent = 'идет поиск по SEO-ключам...'; // Changed text as requested
             btn.disabled = true;
 
             try {
-                let url = inputVal;
-                if (!url.startsWith('http')) url = 'https://' + url;
+                let url = inputVal.trim();
+                // Improved URL handling: ensure protocol exists
+                if (!/^https?:\/\//i.test(url)) {
+                    url = 'https://' + url;
+                }
 
                 // Используем прокси для обхода CORS и получения HTML
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
@@ -2044,7 +2049,10 @@
                 console.error('Ошибка при анализе сайта:', e);
                 // Fallback на Clearbit при ошибке
                 try {
-                     const urlObj = new URL(inputVal.startsWith('http') ? inputVal : 'https://' + inputVal);
+                     // Still try to fix URL for fallback
+                     let cleanUrl = inputVal.trim();
+                     if (!/^https?:\/\//i.test(cleanUrl)) cleanUrl = 'https://' + cleanUrl;
+                     const urlObj = new URL(cleanUrl);
                      setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`);
                 } catch(err) {}
             } finally {
@@ -2059,8 +2067,21 @@
             // Собираем текст из заголовка, описания и тела
             const title = doc.title ? doc.title.toLowerCase() : '';
             const description = doc.querySelector('meta[name="description"]')?.content.toLowerCase() || '';
+            const keywords = doc.querySelector('meta[name="keywords"]')?.content.toLowerCase() || '';
+            const ogDescription = doc.querySelector('meta[property="og:description"]')?.content.toLowerCase() || '';
+            
+            // Get text from headers
+            const headers = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+                                .map(h => h.innerText.toLowerCase()).join(' ');
+            
+            // Get text from nav
+            const navText = Array.from(doc.querySelectorAll('nav, header, .menu'))
+                                .map(el => el.innerText.toLowerCase()).join(' ');
+
+            // Combine all sources for better matching
             const bodyText = doc.body.innerText.toLowerCase().substring(0, 5000); // Первые 5000 символов
-            const fullText = `${title} ${description} ${bodyText}`;
+            
+            const fullText = `${title} ${description} ${keywords} ${ogDescription} ${headers} ${navText} ${bodyText}`;
 
             // Словарь соответствий
             const keywordMap = [
@@ -2114,7 +2135,7 @@
                     logo: 'images/azslogo.webp'
                 },
                 {
-                    keys: ['авто', 'auto', 'car', 'дилер', 'автосалон'],
+                    keys: ['авто', 'auto', 'car', 'дилер', 'автосалон', 'lada'],
                     logo: 'images/autologo.webp'
                 },
                 {
