@@ -2042,7 +2042,7 @@
                     }
 
                     // 2. SEO Анализ и подбор темы
-                    analyzeSiteContent(doc);
+                    analyzeSiteContent(doc, url);
 
                 }
             } catch (e) {
@@ -2063,7 +2063,7 @@
         }
 
         // Функция анализа контента для авто-подбора
-        function analyzeSiteContent(doc) {
+        function analyzeSiteContent(doc, url = '') {
             // Собираем текст из заголовка, описания и тела
             const title = doc.title ? doc.title.toLowerCase() : '';
             const description = doc.querySelector('meta[name="description"]')?.content.toLowerCase() || '';
@@ -2074,17 +2074,32 @@
             const headers = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
                                 .map(h => h.innerText.toLowerCase()).join(' ');
             
-            // Get text from nav
-            const navText = Array.from(doc.querySelectorAll('nav, header, .menu'))
+            // Get text from nav and buttons (important for CTAs like "Test Drive")
+            const navText = Array.from(doc.querySelectorAll('nav, header, .menu, a, button'))
                                 .map(el => el.innerText.toLowerCase()).join(' ');
 
             // Combine all sources for better matching
-            const bodyText = doc.body.innerText.toLowerCase().substring(0, 5000); // Первые 5000 символов
+            const bodyText = doc.body.innerText.toLowerCase().substring(0, 10000); 
             
-            const fullText = `${title} ${description} ${keywords} ${ogDescription} ${headers} ${navText} ${bodyText}`;
+            const urlString = url.toLowerCase();
+
+            const fullText = `${urlString} ${title} ${description} ${keywords} ${ogDescription} ${headers} ${navText} ${bodyText}`;
 
             // Словарь соответствий
             const keywordMap = [
+                {
+                    keys: [
+                        'авто', 'auto', 'car', 'дилер', 'автосалон', 'lada', 'hyundai', 'kia', 'toyota', 
+                        'nissan', 'renault', 'volkswagen', 'skoda', 'bmw', 'mercedes', 'audi', 'lexus', 
+                        'volvo', 'mazda', 'geely', 'haval', 'chery', 'exeed', 'omoda', 'tank', 'jetour', 
+                        'jaecoo', 'moskvich', 'uaz', 'gaz', 'belgee', 'solaris', 'creta', 'rio', 'polo', 
+                        'rapid', 'camry', 'rav4', 'tiguan', 'sportage', 'tucson', 'duster', 'vesta', 
+                        'granta', 'niva', 'largus', 'тест-драйв', 'test drive', 'test-drive', 'конфигуратор', 
+                        'модельный ряд', 'model range', 'купить автомобиль', 'пробегом', 'trade-in', 'трейд-ин',
+                        'sedan', 'suv', 'crossover', 'седан', 'кроссовер', 'внедорожник'
+                    ],
+                    logo: 'images/autologo.webp'
+                },
                 {
                     keys: ['фитнес', 'тренажерный', 'спортзал', 'fitness', 'gym', 'crossfit', 'йога', 'единоборств', 'функциональные тренировки'],
                     logo: 'images/fitnesslogo.webp',
@@ -2133,10 +2148,6 @@
                 {
                     keys: ['азс', 'заправка', 'бензин', 'fuel'],
                     logo: 'images/azslogo.webp'
-                },
-                {
-                    keys: ['авто', 'auto', 'car', 'дилер', 'автосалон', 'lada'],
-                    logo: 'images/autologo.webp'
                 },
                 {
                     keys: ['детский', 'kids', 'игрушки', 'развлечения'],
