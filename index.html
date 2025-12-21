@@ -472,7 +472,7 @@
             bottom: 6%;
             left: 2%;
             width: 50%;
-            max-height: 50%;
+            max-height: 40%;
             object-fit: contain;
             transition: all var(--transition-medium);
         }
@@ -1425,7 +1425,7 @@
                 <div class="menu-content">
                     <label class="menu-label">Баннер:</label>
                     <select class="zvuk-select" id="instructionBanner">
-                        <option value="images/deviceall.webp" selected>Все устройства</option>
+                        <option value="images/base.webp" selected>Стандартный</option>
                         <option value="images/sbcafe.webp">Кафе</option>
                         <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbcafe.webp">Пекарня</option>
@@ -2088,77 +2088,78 @@
             // Словарь соответствий
             const keywordMap = [
                 {
+                    keys: ['фитнес', 'тренажерный', 'спортзал', 'fitness', 'gym', 'crossfit', 'йога', 'единоборств', 'функциональные тренировки', 'stretching', 'pilates', 'sport', 'trainer', 'workout', 'абонемент', 'зал', 'тренировка', 'растяжка', 'пилатес', 'бассейн', 'swimming', 'pool', 'coach', 'wellness', 'спа-зона', 'персональный тренер', 'групповые программы', 'cycle', 'сайкл', 'фитнес-клуб'],
+                    logo: 'images/fitnesslogo.webp',
+                },
+                {
+                    keys: ['пекарня', 'хлеб', 'булочная', 'bakery', 'выпечка', 'круассан', 'bread', 'croissant', 'pastry', 'flour', 'cake', 'pie', 'bun', 'baking', 'торт', 'пирог', 'булка', 'кондитерская', 'десерт', 'сладости', 'свежий хлеб', 'печь'],
+                    logo: 'images/pekarnilogo.webp' 
+                },
+                {
+                    keys: ['салон красоты', 'маникюр', 'beauty', 'парикмахерская', 'стрижка', 'окрашивание', 'nail', 'hair', 'salon', 'manicure', 'pedicure', 'eyebrows', 'lashes', 'makeup', 'spa', 'massage', 'педикюр', 'брови', 'ресницы', 'визаж', 'спа', 'массаж', 'косметолог', 'эпиляция', 'лазер', 'шугаринг', 'botox', 'кератин', 'укладка'],
+                    logo: 'images/beautylogo.webp'
+                },
+                {
+                    keys: ['кофе', 'кофейня', 'coffee', 'капучино', 'бариста', 'barista', 'cappuccino', 'latte', 'espresso', 'bean', 'cafe', 'латте', 'эспрессо', 'зерно', 'завтрак', 'кофе с собой', 'раф', 'мокка', 'кофемашина', 'обжарка'],
+                    logo: 'images/coffeelogo.webp'
+                },
+                {
+                    keys: ['бургер', 'фастфуд', 'шаурма', 'fast food', 'фри', 'бистро', 'burger', 'fries', 'nuggets', 'shawarma', 'doner', 'hotdog', 'street food', 'картошка', 'наггетсы', 'донер', 'хот-дог', 'стритфуд', 'гиро', 'кебаб'],
+                    logo: 'images/fastfoodlogo.webp'
+                },
+                {
+                    keys: ['суши', 'роллы', 'sushi', 'wok', 'roll', 'sashimi', 'wasabi', 'ginger', 'salmon', 'eel', 'rice', 'сашими', 'васаби', 'имбирь', 'лосось', 'угорь', 'рис', 'вок', 'паназия', 'сеты', 'филадельфия', 'калифорния', 'том ям', 'поке'],
+                    logo: 'images/sushilogo.webp'
+                },
+                {
+                    keys: ['пицца', 'pizza', 'пиццерия', 'pepperoni', 'margarita', 'dough', 'cheese', 'slice', 'пепперони', 'маргарита', 'тесто', 'сыр', 'кусок', 'италия', 'italian', 'четыре сыра', 'доставка пиццы'],
+                    logo: 'images/pizzalogo.webp'
+                },
+                {
+                    keys: ['ресторан', 'restaurant', 'банкет', 'кухня', 'шеф', 'ужин', 'menu', 'chef', 'wine', 'dining', 'dish', 'gourmet', 'меню', 'вино', 'блюдо', 'авторская кухня', 'гастропаб', 'стейк', 'морепродукты', 'устрицы', 'бар', 'bar', 'cocktail', 'коктейль'],
+                    logo: 'images/cafe&restaurantlogo.webp'
+                },
+                {
+                    keys: ['одежда', 'fashion', 'магазин', 'бутик', 'платья', 'style', 'dress', 'shirt', 'pants', 'shoes', 'boutique', 'wear', 'collection', 'мода', 'стиль', 'платье', 'рубашка', 'брюки', 'обувь', 'коллекция', 'бренд', 'шопинг', 'одежды', 'lookbook', 'аксессуары', 'сумки'],
+                    logo: 'images/clotheslogo.webp'
+                },
+                {
+                    keys: ['барбер', 'barber', 'бритье', 'shave', 'beard', 'fade', 'cut', 'mens', 'борода', 'мужская', 'мужские стрижки', 'опасная бритва'],
+                    logo: 'images/barberlogo.webp'
+                },
+                {
+                    keys: ['отель', 'гостиница', 'hotel', 'хостел', 'номер', 'room', 'booking', 'hostel', 'inn', 'accommodation', 'бронирование', 'проживание', 'ресепшн', 'check-in', 'выезд', 'заезд', 'апартаменты'],
+                    logo: 'images/hotellogo.webp'
+                },
+                {
+                    keys: ['азс', 'заправка', 'бензин', 'fuel', 'gas', 'petrol', 'oil', 'station', 'топливо', 'масло', 'дизель', '95', '92', 'заправить'],
+                    logo: 'images/azslogo.webp'
+                },
+                {
+                    keys: ['детский', 'kids', 'игрушки', 'развлечения', 'child', 'toy', 'game', 'park', 'playground', 'baby', 'school', 'kindergarten', 'дети', 'ребенок', 'игрушка', 'игра', 'парк', 'площадка', 'малыш', 'школа', 'сад', 'развивающий', 'центр', 'аниматор', 'день рождения'],
+                    logo: 'images/kidslogo.webp'
+                },
+                {
+                    keys: ['застройщик', 'жк', 'квартира', 'дом', 'недвижимость', 'ипотека', 'developer', 'building', 'apartment', 'flat', 'house', 'estate', 'новостройка', 'жилой комплекс', 'метр', 'планировка'],
+                    logo: 'images/nlogo.webp'
+                },
+                {
+                    keys: ['торговый центр', 'тц', 'трк', 'молл', 'mall', 'center', 'shopping', 'gallery', 'галерея', 'магазины', 'фудкорт', 'кинотеатр', 'парковка'],
+                    logo: 'images/tclogo.webp'
+                },
+                {
                     keys: [
-                        'авто', 'auto', 'car', 'дилер', 'автосалон', 'lada', 'hyundai', 'kia', 'toyota', 
+                        'автодилер', 'автосалон', 'lada', 'hyundai', 'kia', 'toyota', 
                         'nissan', 'renault', 'volkswagen', 'skoda', 'bmw', 'mercedes', 'audi', 'lexus', 
                         'volvo', 'mazda', 'geely', 'haval', 'chery', 'exeed', 'omoda', 'tank', 'jetour', 
                         'jaecoo', 'moskvich', 'uaz', 'gaz', 'belgee', 'solaris', 'creta', 'rio', 'polo', 
                         'rapid', 'camry', 'rav4', 'tiguan', 'sportage', 'tucson', 'duster', 'vesta', 
                         'granta', 'niva', 'largus', 'тест-драйв', 'test drive', 'test-drive', 'конфигуратор', 
                         'модельный ряд', 'model range', 'купить автомобиль', 'пробегом', 'trade-in', 'трейд-ин',
-                        'sedan', 'suv', 'crossover', 'седан', 'кроссовер', 'внедорожник'
+                        'sedan', 'suv', 'crossover', 'седан', 'кроссовер', 'внедорожник', 'service', 'сервис', 'запчасти',
+                        'автомобиль'
                     ],
                     logo: 'images/autologo.webp'
-                },
-                {
-                    keys: ['фитнес', 'тренажерный', 'спортзал', 'fitness', 'gym', 'crossfit', 'йога', 'единоборств', 'функциональные тренировки', 'stretching', 'pilates', 'sport', 'trainer', 'workout', 'абонемент', 'зал', 'тренировка', 'растяжка', 'пилатес'],
-                    logo: 'images/fitnesslogo.webp',
-                },
-                {
-                    keys: ['пекарня', 'хлеб', 'булочная', 'bakery', 'выпечка', 'круассан', 'bread', 'croissant', 'pastry', 'flour', 'cake', 'pie', 'bun', 'baking', 'торт', 'пирог', 'булка', 'кондитерская'],
-                    logo: 'images/pekarnilogo.webp' 
-                },
-                {
-                    keys: ['салон красоты', 'маникюр', 'beauty', 'парикмахерская', 'стрижка', 'окрашивание', 'nail', 'hair', 'salon', 'manicure', 'pedicure', 'eyebrows', 'lashes', 'makeup', 'spa', 'massage', 'педикюр', 'брови', 'ресницы', 'визаж', 'спа', 'массаж'],
-                    logo: 'images/beautylogo.webp'
-                },
-                {
-                    keys: ['кофе', 'кофейня', 'coffee', 'капучино', 'бариста', 'barista', 'cappuccino', 'latte', 'espresso', 'bean', 'cafe', 'латте', 'эспрессо', 'зерно', 'завтрак'],
-                    logo: 'images/coffeelogo.webp'
-                },
-                {
-                    keys: ['бургер', 'фастфуд', 'шаурма', 'fast food', 'фри', 'бистро', 'burger', 'fries', 'nuggets', 'shawarma', 'doner', 'hotdog', 'street food', 'картошка', 'наггетсы', 'донер', 'хот-дог', 'стритфуд'],
-                    logo: 'images/fastfoodlogo.webp'
-                },
-                {
-                    keys: ['суши', 'роллы', 'sushi', 'wok', 'roll', 'sashimi', 'wasabi', 'ginger', 'salmon', 'eel', 'rice', 'сашими', 'васаби', 'имбирь', 'лосось', 'угорь', 'рис', 'вок', 'паназия'],
-                    logo: 'images/sushilogo.webp'
-                },
-                {
-                    keys: ['пицца', 'pizza', 'пиццерия', 'pepperoni', 'margarita', 'dough', 'cheese', 'slice', 'пепперони', 'маргарита', 'тесто', 'сыр', 'кусок', 'италия', 'italian'],
-                    logo: 'images/pizzalogo.webp'
-                },
-                {
-                    keys: ['ресторан', 'restaurant', 'банкет', 'кухня', 'шеф', 'ужин', 'menu', 'chef', 'wine', 'dining', 'dish', 'gourmet', 'меню', 'вино', 'блюдо'],
-                    logo: 'images/cafe&restaurantlogo.webp'
-                },
-                {
-                    keys: ['одежда', 'fashion', 'магазин', 'бутик', 'платья', 'style', 'dress', 'shirt', 'pants', 'shoes', 'boutique', 'wear', 'collection', 'мода', 'стиль', 'платье', 'рубашка', 'брюки', 'обувь', 'коллекция', 'бренд', 'шопинг', 'одежды'],
-                    logo: 'images/clotheslogo.webp'
-                },
-                {
-                    keys: ['барбер', 'barber', 'бритье', 'shave', 'beard', 'fade', 'cut', 'mens', 'борода', 'мужская'],
-                    logo: 'images/barberlogo.webp'
-                },
-                {
-                    keys: ['отель', 'гостиница', 'hotel', 'хостел', 'номер', 'room', 'booking', 'hostel', 'inn', 'accommodation', 'бронирование', 'проживание'],
-                    logo: 'images/hotellogo.webp'
-                },
-                {
-                    keys: ['азс', 'заправка', 'бензин', 'fuel', 'gas', 'petrol', 'oil', 'station', 'топливо', 'масло'],
-                    logo: 'images/azslogo.webp'
-                },
-                {
-                    keys: ['детский', 'kids', 'игрушки', 'развлечения', 'child', 'toy', 'game', 'park', 'playground', 'baby', 'school', 'kindergarten', 'дети', 'ребенок', 'игрушка', 'игра', 'парк', 'площадка', 'малыш', 'школа', 'сад'],
-                    logo: 'images/kidslogo.webp'
-                },
-                {
-                    keys: ['застройщик', 'жк', 'квартира', 'дом', 'недвижимость', 'ипотека', 'developer', 'building', 'apartment', 'flat', 'house', 'estate'],
-                    logo: 'images/nlogo.webp'
-                },
-                {
-                    keys: ['торговый центр', 'тц', 'трк', 'молл', 'mall', 'center', 'shopping', 'gallery', 'галерея'],
-                    logo: 'images/tclogo.webp'
                 }
             ];
 
