@@ -222,6 +222,7 @@
             display: flex;
             flex-direction: column;
             transition: all var(--transition-medium);
+            scroll-behavior: smooth;
         }
         
         .menu-header-container {
@@ -1772,6 +1773,11 @@
                 const section = targetHeader.parentElement;
                 if (!section.classList.contains('active')) {
                     targetHeader.click();
+                } else {
+                    // Если уже активна, просто скроллим к ней
+                     setTimeout(() => {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
                 }
             }
         }
@@ -1807,9 +1813,10 @@
                 button.textContent = '-';
                 headerText.classList.add('active');
                 
-                // При клике вручную (не из syncSidebar) мы не должны менять слайд насильно,
-                // так как пользователь может просто настраивать меню.
-                // Но если это добавление нового слайда - то это обрабатывается в addSlide
+                // Автоматическая прокрутка к активному разделу
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
             }
         }
         
@@ -2220,7 +2227,8 @@
             };
             
             // Helper to handle Prefixed images (RB/KZ) with fallback
-            const createPrefixedImage = (originalPath, className, forceRegion = null) => {
+            // Added secondaryFallback parameter for Price Banners (to fall back from '2.webp' to '.webp')
+            const createPrefixedImage = (originalPath, className, forceRegion = null, secondaryFallback = null) => {
                 const img = document.createElement('img');
                 img.className = className;
                 const activeRegion = forceRegion || currentRegion;
@@ -2233,11 +2241,29 @@
                     
                     img.src = prefixedSrc;
                     
-                    // Используем setAttribute для обработчика ошибки, чтобы он сохранялся при клонировании (cloneNode)
-                    // Это критично для корректной генерации PDF, если картинка не найдена
-                    img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${originalPath}';`);
+                    // Construct fallback logic:
+                    // 1. Try prefixedSrc (KZ/RB).
+                    // 2. OnError -> Try originalPath (Standard).
+                    // 3. OnError (if secondaryFallback exists) -> Try secondaryFallback (Base).
+                    
+                    let onerrorStr = `this.removeAttribute('onerror');`; // Clear self to prevent loop
+                    
+                    if (secondaryFallback) {
+                        // If falling back to original, and THAT fails, go to secondaryFallback
+                        // Escape quotes carefully for HTML attribute
+                        onerrorStr += `this.setAttribute('onerror', "this.removeAttribute('onerror'); this.src='${secondaryFallback}';");`;
+                    }
+                    onerrorStr += `this.src='${originalPath}';`;
+                    
+                    img.setAttribute('onerror', onerrorStr);
+
                 } else {
+                    // Standard region (RU)
                     img.src = originalPath;
+                    if (secondaryFallback) {
+                        // If original fails, try secondary
+                         img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${secondaryFallback}';`);
+                    }
                 }
                 return img;
             }
@@ -2314,9 +2340,12 @@
                     }
                     slideContainer.appendChild(bgImg);
                     
-                    const priceBannerVal = document.getElementById('priceBanner').value;
-                    // Здесь тоже применяем префиксную логику для баннера
-                    const priceBannerImg = createPrefixedImage(priceBannerVal, 'preview-banner');
+                    const priceBannerVal = document.getElementById('priceBanner').value; // e.g., images/sbfitnes2.webp
+                    // Calculate base fallback (remove '2' before extension)
+                    const baseBannerVal = priceBannerVal.replace('2.webp', '.webp');
+                    
+                    // Pass baseBannerVal as secondary fallback to ensure if "2" is missing, we show base
+                    const priceBannerImg = createPrefixedImage(priceBannerVal, 'preview-banner', null, baseBannerVal);
                     
                     const priceBannerLinkUrl = getLocalizedBannerLink(bannerLinks[priceBannerVal], domainSuffix);
                     const priceBannerLink = document.createElement('a');
@@ -2332,12 +2361,20 @@
                     
                     const managerSelect = document.getElementById('manager');
                     const selectedManagerOption = managerSelect.options[managerSelect.selectedIndex];
-                    const managerValue = selectedManagerOption.value;
+                    const managerValue = selectedManagerOption.value; // e.g. images/grigoryev-kz.webp
                     const managerDataLink = selectedManagerOption.getAttribute('data-link');
 
                     const managerImg = document.createElement('img');
                     managerImg.className = 'preview-manager';
                     managerImg.src = managerValue;
+                    
+                    // Manager Fallback Logic:
+                    // If managerValue has -kz or -rb, try to fallback to base name if specific fails
+                    const fallbackManager = managerValue.replace(/-kz.webp|-rb.webp/g, '.webp');
+                    if (fallbackManager !== managerValue) {
+                         // Set inline onerror to switch to fallback
+                         managerImg.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${fallbackManager}';`);
+                    }
                     
                     const managerLinkContainer = document.createElement('a');
                     managerLinkContainer.href = managerDataLink;
