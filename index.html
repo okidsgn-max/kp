@@ -3,392 +3,3119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор КП 2.0</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Vue 3 -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Библиотеки для экспорта (сохранены, как требовалось) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+    <title>Генератор коммерческого предложения</title>
+    <link rel="icon" href="zvb2bsale.png" type="image/png" sizes="128x128">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Стили для скроллбара и превью */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        :root {
+            --primary: #00b398;
+            --primary-hover: #008f79;
+            --primary-active: #005c4e;
+            --primary-light: #e0f2f0;
+            --text-main: #1A1D1F;
+            --text-secondary: #3d435c;
+            --text-inactive: #667099;
+            --border: #e8e8f0;
+            --background-light: #f6f6f9;
+            --background-dark: #f0f0f5;
+            --placeholder: #9A9FA5;
+            --sidebar-width: 30vw;
+            --preview-width: 70vw;
+            --qr-size: 60px;
+            --control-icon-size: 30px;
+            --scrollbar-thumb: #d1d1d1;
+            --scrollbar-track: #f6f6f9;
+            --border-radius: 8px;
+            --transition-fast: 0.15s;
+            --transition-medium: 0.3s;
+            --transition-slow: 0.5s;
+        }
         
-        .slide-preview {
-            width: 100%;
-            aspect-ratio: 16/9;
-            position: relative;
-            background-size: cover;
-            background-position: center;
+        /* Стили скроллбара */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 8px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 8px;
+            transition: background var(--transition-medium);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-hover);
+        }
+        
+        /* Для Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-color: #f5f5f5;
+            height: 100vh;
             overflow: hidden;
-            border: 2px solid transparent;
-            transition: all 0.2s;
+            color: var(--text-main);
+            transition: background-color var(--transition-medium);
         }
-        .slide-preview.active {
-            border-color: #3b82f6; /* Blue-500 */
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        /* Имитация A4/Слайда для экспорта */
-        .export-canvas {
-            width: 800px; /* Фиксированная ширина для корректного экспорта */
-            height: 450px; /* 16:9 */
-            background-color: white;
-            position: relative;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            flex-shrink: 0;
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-        /* Стили текста на слайдах */
-        .slide-content {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            padding: 40px;
+
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60% { content: "..."; }
+            80%, 100% { content: ""; }
+        }
+
+        @keyframes slideHighlight {
+            0% { background-color: var(--primary-hover); }
+            100% { background-color: var(--primary); }
+        }
+
+        /* Pop-up for PDF generation and Restrictions */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 16px 32px;
+            border-radius: var(--border-radius);
+            z-index: 1001;
+            font-size: 16px;
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 80%;
+        }
+
+        /* Dark Link Input Popup */
+        .popup-input-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-content-dark {
+            background-color: #1A1D1F;
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
+            gap: 16px;
         }
-        .text-shadow { text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+
+        .popup-content-dark h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .popup-content-dark input {
+            width: 100%;
+            padding: 12px;
+            background: #2B2B2B;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box; 
+        }
+
+        .popup-content-dark input:focus {
+            border-color: var(--primary);
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .popup-buttons button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .popup-buttons button:first-child {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .popup-buttons button:first-child:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+        
+        .popup-buttons button:last-child {
+            background-color: transparent;
+            color: #9A9FA5;
+            border: 1px solid #444;
+        }
+
+        .popup.loading::after {
+            content: "...";
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        
+        /* Blur effect */
+        .blur-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .menu-container {
+            width: var(--sidebar-width);
+            background-color: white;
+            padding: 16px;
+            height: 97%;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            transition: all var(--transition-medium);
+        }
+        
+        .menu-header-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2px;
+        }
+        
+        .menu-logo {
+            height: 24px;
+            width: auto;
+            object-fit: contain;
+            align-self: flex-start;
+            margin-bottom: 16px;
+            transition: transform var(--transition-fast);
+        }
+        
+        .menu-logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .company-name-input {
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            padding: 0 0 4px 0;
+            margin-bottom: 16px;
+            width: 100%;
+            outline: none;
+            background: transparent;
+            color: var(--text-main);
+            transition: border-color var(--transition-fast);
+        }
+        
+        .company-name-input::placeholder {
+            color: #E0E0E0;
+        }
+        
+        .company-name-input:focus {
+            border-bottom-color: var(--primary);
+        }
+        
+        .menu-sections {
+            flex-grow: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+        
+        .menu-section-header {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 16px;
+            margin: 0;
+            transition: color var(--transition-fast);
+        }
+        
+        .menu-section-header:hover {
+            color: var(--primary);
+        }
+        
+        .menu-section-header.active {
+            color: var(--primary);
+        }
+        
+        .menu-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+            transition: color var(--transition-fast);
+        }
+        
+        .preview-container {
+            width: var(--preview-width);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            overflow: hidden;
+            position: relative;
+            background-color: var(--background-light);
+            transition: all var(--transition-medium);
+        }
+        
+        .preview-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            height: 90%;
+        }
+        
+        .preview-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+        
+        .slide-controls-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .slide-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background: transparent;
+            transition: all var(--transition-medium);
+        }
+        
+        #slideNumbers {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .control-icon {
+            width: var(--control-icon-size);
+            height: var(--control-icon-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: transparent;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-medium);
+        }
+        
+        .control-icon:hover {
+            background: var(--background-light);
+            transform: translateY(-2px);
+        }
+        
+        .control-icon:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .control-icon img {
+            width: 20px;
+            height: 20px;
+            transition: transform var(--transition-fast);
+        }
+        
+        .control-icon:hover img {
+            transform: scale(1.1);
+        }
+        
+        .slide-number {
+            width: var(--control-icon-size);
+            height: var(--control-icon-size);
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            user-select: none;
+            transition: all var(--transition-medium);
+        }
+        
+        .slide-number:hover {
+            transform: scale(1.1);
+            background-color: var(--primary-hover);
+            color: white;
+        }
+        
+        .slide-number.active {
+            background-color: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .slide-number.dragging {
+            opacity: 0.5;
+            transform: scale(1.2);
+        }
+        
+        .slide-number.drop-target {
+            transform: scale(1.1);
+            background-color: var(--primary-hover);
+            color: white;
+        }
+        
+        .slide-number.highlight {
+            animation: slideHighlight 0.5s ease forwards;
+        }
+        
+        .preview-page {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: all var(--transition-medium);
+            transform-origin: center center;
+            cursor: pointer;
+            aspect-ratio: 16 / 9;
+            margin: auto;
+            background-color: #16151A;
+            --element-scale: 1;
+        }
+        
+        .preview-page.zoomed {
+            transform: scale(1.5);
+            z-index: 100;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.4);
+            max-width: 70vw;
+            max-height: 70vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .preview-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity var(--transition-medium);
+        }
+        
+        .preview-banner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            object-fit: fill;
+            transition: all var(--transition-medium);
+        }
+        
+        .preview-logos {
+            position: absolute;
+            bottom: 6%;
+            left: 2%;
+            width: 50%;
+            max-height: 40%;
+            object-fit: contain;
+            transition: all var(--transition-medium);
+        }
+
+        .snow-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            z-index: 15; /* Above banners and logos */
+        }
+        
+        /* Mobile responsive font sizing variable */
+        .preview-price {
+            position: absolute;
+            top: 56%;
+            left: 3%;
+            color: white;
+            font-weight: bold;
+            width: 50%;
+            /* Proportional sizing logic */
+            font-size: calc(20px * var(--element-scale));
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition-medium);
+        }
+        
+        .preview-price-label {
+            position: absolute;
+            top: 51%;
+            left: 3%;
+            color: #D9D9D9;
+            width: 50%;
+            font-weight: 400;
+            font-size: calc(12px * var(--element-scale));
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition-medium);
+        }
+
+        .preview-price-premium-1 {
+            position: absolute;
+            top: 63%;
+            left: 3%;
+            color: white;
+            font-weight: bold;
+            width: 30%;
+            font-size: calc(20px * var(--element-scale));
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition-medium);
+        }
+
+        .preview-price-premium-2 {
+            position: absolute;
+            top: 38%;
+            left: 65%;
+            color: white;
+            font-weight: bold;
+            width: 50%;
+            font-size: calc(20px * var(--element-scale));
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition-medium);
+        }
+        
+        .preview-comment {
+            position: absolute;
+            left: 3%;
+            /* Background and Styling */
+            background-color: #00B399;
+            color: white;
+            padding: calc(6px * var(--element-scale)) calc(12px * var(--element-scale));
+            border-radius: calc(8px * var(--element-scale));
+            font-weight: 500;
+            font-size: calc(12px * var(--element-scale)); /* Шрифт как у заголовка стоимости - чуть крупнее обычного коммента */
+            font-family: 'Inter', sans-serif;
+            
+            width: auto;
+            max-width: 60%;
+            display: none; /* Hidden by default if empty */
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .preview-comment.visible {
+            display: block;
+        }
+
+        .price-table {
+            position: absolute;
+            top: 50%;
+            left: 3%;
+            width:60%;
+            color: white;
+            border-collapse: collapse;
+            font-size: calc(12px * var(--element-scale));
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition-medium);
+        }
+        
+        .price-table th, .price-table td {
+            padding: calc(10px * var(--element-scale));
+            text-align: left;
+            border: 1px solid #303030;
+            transition: background-color var(--transition-fast);
+        }
+        
+        .price-table th {
+            background-color: rgba(0,0,0,0.3);
+        }
+        
+        .preview-manager {
+            position: absolute;
+            bottom: 4%;
+            left: 0%;
+            width: 100%;
+            object-fit: contain;
+            transition: all var(--transition-medium);
+        }
+        
+        .preview-phone {
+            position: absolute;
+            bottom: 13%;
+            left: 32%;
+            color: #D9D9D9;
+            font-weight: 400;
+            font-size: calc(8px * var(--element-scale));
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition-medium);
+        }
+        
+        .preview-qr {
+            position: absolute;
+            bottom: 8%;
+            right: 39%;
+            width: var(--qr-size);
+            height: var(--qr-size);
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: calc(7px * var(--element-scale));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-medium);
+        }
+        
+        .preview-qr:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .preview-qr img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: all var(--transition-fast);
+        }
+        
+        .menu-section {
+            margin-bottom: 8px;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-medium);
+        }
+        
+        .menu-section.active {
+            background-color: var(--background-light);
+        }
+        
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            transition: all var(--transition-medium);
+        }
+        
+        .menu-header:hover {
+            background-color: var(--background-light);
+        }
+        
+        /* Restricted section style: Hidden completely */
+        .menu-section.restricted {
+            display: none !important;
+        }
+
+        .menu-content {
+            display: none;
+            padding: 0 12px 12px;
+            animation: fadeIn var(--transition-medium) ease forwards;
+        }
+        
+        .menu-content.active {
+            display: block;
+        }
+        
+        .toggle-button {
+            font-size: 20px;
+            color: var(--text-secondary);
+            transition: all var(--transition-medium);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .menu-header:hover .toggle-button {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .menu-header.active .toggle-button {
+            transform: rotate(45deg);
+        }
+        
+        .zvuk-select, .zvuk-input {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            padding: 10px 12px;
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius);
+            background-color: var(--background-light);
+            color: var(--text-secondary);
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all var(--transition-medium);
+            margin-bottom: 16px;
+        }
+        
+        .zvuk-select:hover, .zvuk-input:hover {
+            border-color: var(--primary-hover);
+        }
+        
+        .zvuk-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%239A9FA5' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            cursor: pointer;
+        }
+        
+        .zvuk-select:focus, .zvuk-input:focus {
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 2px rgba(0, 179, 152, 0.1);
+        }
+        
+        .zvuk-input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        
+        .zvuk-input[type="number"]::-webkit-outer-spin-button,
+        .zvuk-input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .zvuk-input[type="file"] {
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .zvuk-input[type="file"]::-webkit-file-upload-button {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 13px;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            border: none;
+            background-color: var(--primary-light);
+            color: var(--primary-active);
+            margin-right: 12px;
+        }
+
+        .zvuk-input[type="file"]::-webkit-file-upload-button:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .radio-group {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .radio-option input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            margin-right: 8px;
+            cursor: pointer;
+            position: relative;
+            transition: all var(--transition-fast);
+        }
+        
+        .radio-option input[type="radio"]:checked {
+            border-color: var(--primary);
+            background-color: var(--primary);
+        }
+        
+        .radio-option input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: white;
+        }
+        
+        .radio-option label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color var(--transition-fast);
+        }
+        
+        .radio-option:hover label {
+            color: var(--primary);
+        }
+        
+        .radio-option:hover input[type="radio"] {
+            border-color: var(--primary-hover);
+        }
+        
+        .price-columns {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .price-column {
+            flex: 1;
+            transition: all var(--transition-medium);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0px;
+            margin-top: auto;
+            padding-top: 20px;
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+            transition: all var(--transition-medium);
+        }
+        
+        .zvuk-button {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 20px;
+            border-radius: var(--border-radius);
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        
+        .zvuk-button--primary {
+            background-color: var(--primary);
+            color: #FFFFFF;
+        }
+        
+        .zvuk-button--primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(0px);
+            box-shadow: 0 0px 0px rgba(0,0,0,0.15);
+        }
+        
+        .zvuk-button--primary:active {
+            background-color: var(--primary-active);
+            transform: translateY(0);
+            box-shadow: 0 0px 0px rgba(0,0,0,0.1);
+        }
+        
+        .zvuk-button--secondary {
+            background-color: var(--background-light);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        
+        .zvuk-button--secondary:hover {
+            background-color: #e8e8f0;
+            transform: translateY(0px);
+            box-shadow: 0 0px 0px rgba(0,0,0,0.1);
+        }
+        
+        .zvuk-button--secondary:active {
+            transform: translateY(0);
+            box-shadow: 0 0px 0px rgba(0,0,0,0.05);
+        }
+
+        .zvuk-button--snow {
+            background-color: #E3F2FD;
+            color: #1976D2;
+            border: 1px solid #BBDEFB;
+            margin-bottom: 16px;
+            width: 100%;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .zvuk-button--snow:hover {
+            background-color: #BBDEFB;
+        }
+        
+        .slide-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .slide-buttons .zvuk-button {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+
+        .instruction-text {
+            position: absolute;
+            top: 35%;
+            left: 3%;
+            color: #BAB9BE;
+            font-weight: 300;
+            width: 60%;
+            line-height: 1.2;
+            font-size: calc(12px * var(--element-scale));
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition-medium);
+        }
+
+        .instruction-text .highlight {
+            color: #04C9B0; 
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Стили для поиска в списке менеджеров */
+        .custom-select-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        #manager-search {
+            margin-bottom: 0;
+        }
+
+        .custom-options {
+            display: none;
+            position: absolute;
+            border: 2px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            background-color: white;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            box-sizing: border-box;
+        }
+
+        .custom-options .option {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .custom-options .option:hover {
+            background-color: var(--background-light);
+            color: var(--primary);
+        }
+        
+        /* Dark container for Logo Preview in Settings */
+        #clientLogoPreviewContainer {
+            background-color: #2b2b2b;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: -8px;
+            margin-bottom: 16px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-link-trigger {
+            font-size: 13px;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+        
+        .logo-link-trigger:hover {
+            color: var(--primary-hover);
+        }
+
+        /* Region Selection Buttons */
+        .region-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .region-btn {
+            flex: 1;
+            padding: 6px 0;
+            border: 1px solid var(--border);
+            background-color: white;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .region-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .region-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+
+        /* --- MOBILE STYLES --- */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                height: auto;
+                overflow: auto;
+            }
+
+            .menu-container, .preview-container {
+                width: 100%;
+                box-sizing: border-box;
+                box-shadow: none;
+            }
+
+            .preview-container {
+                order: 1;
+                padding: 16px 16px 0;
+                position: sticky;
+                top: 0;
+                z-index: 50;
+                background-color: #f5f5f5;
+                height: auto;
+                overflow-y: visible;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .menu-container {
+                order: 2;
+                padding-bottom: 100px; /* Space for fixed bottom button */
+                height: auto;
+                overflow-y: visible;
+            }
+            
+            .preview-page {
+                --element-scale: 0.58; /* Увеличено для пропорции ~1/17 на мобильных */
+                --qr-size: calc(60px * 0.58);
+                width: 100%; /* Force width on mobile */
+            }
+
+            .preview-wrapper {
+                height: auto;
+                margin-bottom: 10px;
+            }
+
+            .slide-controls-container {
+                margin-top: 10px;
+            }
+
+            /* Hide zoom button on mobile */
+            .control-icon:first-child {
+                display: none; 
+            }
+
+            .action-buttons {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                background: white;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+                padding: 16px;
+                box-sizing: border-box;
+                margin-top: 0;
+                z-index: 100;
+            }
+
+            .preview-page.zoomed {
+                transform: none;
+                position: relative;
+                top: auto;
+                left: auto;
+                max-width: 100%;
+                max-height: 100%;
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            }
+
+            /* SPECIAL MOBILE PRICING SCALING 
+               Applies only when NOT rendering to PDF.
+            */
+            .preview-page:not(.pdf-render-mode) .preview-price,
+            .preview-page:not(.pdf-render-mode) .preview-price-premium-1,
+            .preview-page:not(.pdf-render-mode) .preview-price-premium-2 {
+                font-size: calc(6px * var(--element-scale)) !important;
+                width: 80%; /* Expand width to prevent wrapping */
+            }
+            .preview-page:not(.pdf-render-mode) .price-table {
+                font-size: calc(5px * var(--element-scale)) !important;
+            }
+            .preview-page:not(.pdf-render-mode) .preview-price-label {
+                font-size: calc(5px * var(--element-scale)) !important;
+            }
+            .preview-page:not(.pdf-render-mode) .price-table th, 
+            .preview-page:not(.pdf-render-mode) .price-table td {
+                padding: calc(4px * var(--element-scale)) !important;
+            }
+        }
+        
+        .preview-page.pdf-render-mode {
+            --element-scale: 2.5;
+            --qr-size: calc(60px * 2.5);
+        }
+
+        /* Стиль для кликабельных областей концепций */
+        .concept-link-area {
+            position: absolute;
+            cursor: pointer;
+            z-index: 5;
+        }
+        .concept-link-area:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
     </style>
 </head>
-<body class="bg-gray-100 h-screen overflow-hidden text-slate-800">
-
-    <div id="app" class="flex h-full">
+<body>
+    <div class="blur-overlay"></div>
+    
+    <div class="menu-container">
+        <div class="menu-header-container">
+            <img class="menu-logo" src="logo.png" alt="Logo">
+            <input type="text" class="company-name-input" id="companyName" placeholder="Впишите имя клиента" value="">
+        </div>
         
-        <!-- ЛЕВАЯ ПАНЕЛЬ: НАСТРОЙКИ -->
-        <aside class="w-1/3 min-w-[350px] bg-white border-r border-gray-200 flex flex-col h-full shadow-lg z-10">
-            <div class="p-4 border-b border-gray-200 bg-slate-50">
-                <h1 class="text-xl font-bold text-slate-700"><i class="fa-solid fa-sliders mr-2"></i>Настройки КП</h1>
-                <p class="text-xs text-slate-400 mt-1">Выберите слайд справа для редактирования</p>
-            </div>
-
-            <div class="flex-1 overflow-y-auto p-6" v-if="currentSlide">
-                
-                <div class="mb-6 pb-4 border-b border-gray-100">
-                    <h2 class="text-lg font-semibold text-blue-600 mb-2">
-                        Слайд {{ activeSlideIndex + 1 }}: {{ getSlideTypeName(currentSlide.type) }}
-                    </h2>
+        <div class="menu-sections">
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'clientLogoSection')">
+                    <span class="menu-section-header">Логотип клиента</span>
+                    <span class="toggle-button">+</span>
                 </div>
+                <div class="menu-content">
+                    <label class="menu-label">Загрузите логотип клиента</label>
+                    <input class="zvuk-input" type="file" id="clientLogoUpload" accept="image/png, image/jpeg, image/svg+xml, image/webp">
+                    <div id="clientLogoPreviewContainer"></div>
+                    
+                    <div style="margin-top: 10px; margin-bottom: 16px; display: flex; align-items: center;">
+                        <input type="checkbox" id="logoInvert" checked style="width: auto; margin-right: 8px; cursor: pointer;">
+                        <label for="logoInvert" style="font-size: 14px; color: var(--text-secondary); cursor: pointer; user-select: none;">Инвертировать (белый)</label>
+                    </div>
 
-                <!-- ОБЩИЕ НАСТРОЙКИ (ТЕКСТ) -->
-                <div class="space-y-4">
-                    <div v-if="currentSlide.title !== undefined">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Заголовок</label>
-                        <input type="text" v-model="currentSlide.title" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                    <div class="logo-link-trigger" onclick="openLogoLinkPopup()">или укажите ссылку на лого</div>
+
+                    <button class="zvuk-button zvuk-button--snow" onclick="toggleSnow()">
+                        ❄️ Новогодняя атмосфера
+                    </button>
+                </div>
+            </div>
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'general')">
+                    <span class="menu-section-header">Общая+лого</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <label class="menu-label">Логотипы клиентов:</label>
+                    <select class="zvuk-select" id="logos">
+                        <option value="images/mainlogo.webp">Главные клиенты</option>
+                        <option value="images/beautylogo.webp" data-banner="images/sbbeauty.webp">Салоны красоты</option>            
+                        <option value="images/coffeelogo.webp" data-banner="images/sbcafe.webp">Кофейни</option>
+                        <option value="images/fastfoodlogo.webp" data-banner="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/pekarnilogo.webp" data-banner="images/sbbakery.webp">Пекарни</option>
+                        <option value="images/cafe&restaurantlogo.webp" data-banner="images/sbcafe.webp">Кафе</option>
+                        <option value="images/grillplovlogo.webp" data-banner="images/sbfastfood.webp">Бургеры и грильбар</option>
+                        <option value="images/luxrestlogo.webp" data-banner="images/sbluxrest.webp">Рестораны премиум</option>
+                        <option value="images/restsetilogo.webp" data-banner="images/sbluxrest.webp">Ресторанные сети</option>
+                        <option value="images/sushilogo.webp" data-banner="images/sbsushi.webp">Суши</option>
+                        <option value="images/pizzalogo.webp" data-banner="images/sbpizza.webp">Пиццерии</option>
+                        <option value="images/clotheslogo.webp" data-banner="images/sbmall.webp">Одежда</option>
+                        <option value="images/barberlogo.webp" data-banner="images/sbbarber.webp">Барбершопы</option>
+                        <option value="images/Retaillogo.webp" data-banner="images/sbretail.webp">Ритейл сети</option> 
+                        <option value="images/hotellogo.webp" data-banner="images/sbhotel.webp">Отели</option>
+                        <option value="images/azslogo.webp" data-banner="images/sbazs.webp">АЗС</option>
+                        <option value="images/fitnesslogo.webp" data-banner="images/sbfitnes.webp">Фитнес</option>
+                        <option value="images/tclogo.webp" data-banner="images/sbtc.webp">Торговые центры</option>
+                        <option value="images/kidslogo.webp" data-banner="images/sbkids.webp">Развлекательные центры</option>
+                        <option value="images/socobjlogo.webp" data-banner="images/sbsocobj.webp">Общественные пространства</option>
+                        <option value="images/nlogo.webp" data-banner="images/sbned.webp">Недвижимость</option>
+                        <option value="images/autologo.webp" data-banner="images/sbauto.webp">Автосалоны</option>
+                
+                    </select>
+
+                    <label class="menu-label">Баннер:</label>
+                    <select class="zvuk-select" id="banner"> 
+                        <option value="images/sbbeauty.webp">Салон красоты</option>
+                        <option value="images/sbbeauty-laser.webp">Салон лазерной эпиляции</option>
+                        <option value="images/sbbeauty-nail.webp">Маникюрный салон</option>
+                        <option value="images/sbspa.webp">Спа</option>
+                        <option value="images/sbstom.webp">Стоматология</option>
+                        <option value="images/sbcowork.webp">Коворкинг</option>
+                        <option value="images/sbrest.webp">Ресторан#1</option>
+                        <option value="images/sbluxrest.webp">Ресторан#2</option>
+                        <option value="images/sbrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbcafe.webp">Кафе</option>
+                        <option value="images/sbcafe.webp">Кофейня</option>
+                        <option value="images/sbbakery.webp">Пекарня</option>
+                        <option value="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/sbgrill.webp">Грильбар</option>                        
+                        <option value="images/sbpizza.webp">Пицца</option>
+                        <option value="images/sbsushi.webp">Суши</option>
+                        <option value="images/sbretail.webp">Магазин</option>
+                        <option value="images/sbmall.webp">Одежда</option>
+                        <option value="images/sbtc.webp">Торговый центр</option>
+                        <option value="images/sbkids.webp">Детский центр</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
+                        <option value="images/sbbarber.webp">Барбершоп</option>
+                        <option value="images/sbjew.webp">Ювелирный салон</option>
+                        <option value="images/sbned.webp">Недвижимость</option>
+                        <option value="images/sbauto.webp">Автодилеры</option>
+                        <option value="images/sbazs.webp">АЗС</option>
+                        <option value="images/sbhotel.webp">Отели</option>
+                        <option value="images/sbcowork.webp">Общ. пространства</option>
+                        <option value="images/sbexb.webp">Выставочное пространство</option>
+                        <option value="images/play.webp">Плеер</option>
+                        <option value="images/action.webp">Акция</option>
+                        <option value="images/alldevice.webp">Девайсы</option>
+                        <option value="images/nostalgia.webp">Ностальгия</option> 
+                        <option value="images/bkids.webp">Детский тариф</option>
+                        <option value="images/ny26.webp">Новогодняя атмосфера</option> </select>
+
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('general')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('general')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'pricing')">
+                    <span class="menu-section-header">Менеджер+стоимость</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="region-buttons">
+                        <button class="region-btn active" onclick="setRegion('ru')" id="btn-ru">RU</button>
+                        <button class="region-btn" onclick="setRegion('kz')" id="btn-kz">KZ</button>
+                        <button class="region-btn" onclick="setRegion('rb')" id="btn-rb">RB</button>
+                    </div>
+                    <label class="menu-label">Сотрудник:</label>
+                    <div class="custom-select-wrapper">
+                        <input type="text" id="manager-search" class="zvuk-input" placeholder="Поиск по имени или доб.номеру...">
+                        <div id="manager-options" class="custom-options"></div>
+                        <select class="zvuk-select" id="manager" style="display: none;">
+                            <option value="images/ivanova.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=ivanova" data-number="16">Мария Иванова</option>
+                            <option value="images/mankova.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=mankova" data-number="22">Яна Манькова</option>
+                            <option value="images/sidikov.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=sidikov" data-number="26">Темур Сидиков</option>
+                            <option value="images/piliptsov.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=pilipcev" data-number="13">Герман Пилипцов</option>
+                            <option value="images/kropachev.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=kropachev" data-number="23">Виктор Кропачев</option>
+                            <option value="images/likashina.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=likashina" data-number="20">Татьяна Лукашина</option>
+                            <option value="images/nikulina.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=nikulina" data-number="33">Анна Никулина</option>
+                            <option value="images/khlebnikova.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=khlebnikova" data-number="31">Дарья Хлебникова</option>
+                            <option value="images/kim.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=kim" data-number="125">Оксана Ким</option>
+                            <option value="images/meleshko.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=meleshko" data-number="121">Роман Мелешко</option>
+                            <option value="images/pershina.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=pershina" data-number="120">Дарья Першина</option>
+                            <option value="images/umnov.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=umnov" data-number="122">Иван Умнов</option>
+                            <option value="images/farmonov.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=farmonov" data-number="126">Тимур Фармонов</option>
+                            <option value="images/chugunov.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=chugunov">Дмитрий Чугунов</option>
+                            <option value="images/chubak.webp" data-region="ru" data-link="https://app.zvuk-b2b.com/register?promocode=chubak">Сергей Чубак</option>
+                            
+                            <option value="images/grigoryev-kz.webp" data-region="kz" data-link="https://app.zvuk-b2b.com/register?promocode=grigoryev">Сергей Григорьев (KZ)</option>
+                            <option value="images/antakova-kz.webp" data-region="kz" data-link="https://app.zvuk-b2b.com/register?promocode=antakova">Алина Антакова (KZ)</option>
+                            <option value="images/schepochkina-kz.webp" data-region="kz" data-link="https://app.zvuk-b2b.com/register?promocode=schepochkina">Анастасия Щепочкина (KZ)</option>
+
+                            <option value="images/tanasevich-rb.webp" data-region="rb" data-link="https://app.zvuk-b2b.by/register?promocode=tanasevich">Наталья Танасевич (RB)</option>
+                            <option value="images/korol-rb.webp" data-region="rb" data-link="https://app.zvuk-b2b.by/register?promocode=korol">Валерия Король (RB)</option>
+                            <option value="images/zasimovich-rb.webp" data-region="rb" data-link="https://app.zvuk-b2b.by/register?promocode=zasimovich">Засимович Инна (RB)</option>
+                        </select>
+                    </div>
+
+                    <div id="personalPhoneContainer">
+                        <label class="menu-label">Добавить номер:</label>
+                        <input class="zvuk-input" type="text" id="personalPhone" placeholder="Введите номер телефона">
                     </div>
                     
-                    <div v-if="currentSlide.subtitle !== undefined">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Подзаголовок</label>
-                        <textarea v-model="currentSlide.subtitle" rows="2" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
-                    </div>
-
-                    <!-- 1. & 4. ВЫБОР БАННЕРА (НИШЕВЫЕ) -->
-                    <!-- Показываем для Общих, Менеджеров и других стандартных типов -->
-                    <div v-if="['general', 'manager', 'intro'].includes(currentSlide.type)">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Фоновый баннер
-                            <span v-if="currentSlide.type === 'manager'" class="text-xs text-orange-500 block font-normal">
-                                (Автоматически подбирается дочерний баннер, если есть)
-                            </span>
-                        </label>
-                        <select 
-                            v-model="currentSlide.bgImage" 
-                            @change="handleBannerChange(currentSlide)"
-                            class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
-                        >
-                            <option value="">Без фона</option>
-                            <!-- Фильтруем список: убираем base, play, action, alldevice -->
-                            <option v-for="banner in nicheBanners" :key="banner" :value="banner">
-                                {{ banner }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- 2. ВЫБОР БАННЕРА (ИНСТРУКЦИЯ) -->
-                    <!-- Специальный список только для слайда Инструкция -->
-                    <div v-if="currentSlide.type === 'instruction'">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Тип инструкции (Фон)</label>
-                        <select v-model="currentSlide.bgImage" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none bg-blue-50">
-                            <!-- Только разрешенные: base, play, action, alldevice -->
-                            <option v-for="banner in instructionBanners" :key="banner" :value="banner">
-                                {{ formatBannerName(banner) }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Дополнительные поля для Менеджера -->
-                    <div v-if="currentSlide.type === 'manager'" class="p-4 bg-gray-50 rounded border border-gray-200 mt-4">
-                        <h3 class="font-bold text-sm text-gray-600 mb-2">Контакты менеджера</h3>
-                        <div class="space-y-3">
-                            <input placeholder="Имя" type="text" v-model="currentSlide.managerName" class="w-full p-2 border rounded text-sm">
-                            <input placeholder="Телефон" type="text" v-model="currentSlide.managerPhone" class="w-full p-2 border rounded text-sm">
-                            <input placeholder="Email" type="text" v-model="currentSlide.managerEmail" class="w-full p-2 border rounded text-sm">
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="price1" name="priceColumns" value="1" checked>
+                            <label for="price1">1 точка</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="price3" name="priceColumns" value="3">
+                            <label for="price3">3 точки</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="price10plus" name="priceColumns" value="10plus">
+                            <label for="price10plus">10+</label>
                         </div>
                     </div>
-                </div>
-
-            </div>
-            <div v-else class="flex-1 flex items-center justify-center text-gray-400">
-                Выберите слайд
-            </div>
-
-            <!-- КНОПКИ ДЕЙСТВИЙ -->
-            <div class="p-4 border-t border-gray-200 bg-gray-50">
-                <button @click="generatePDF" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded transition flex items-center justify-center shadow">
-                    <i class="fa-solid fa-file-pdf mr-2"></i> Скачать КП (PDF)
-                </button>
-            </div>
-        </aside>
-
-        <!-- ПРАВАЯ ПАНЕЛЬ: АРТБОРД (СПИСОК СЛАЙДОВ) -->
-        <main class="w-2/3 bg-gray-200 h-full overflow-y-auto p-8 flex flex-col items-center">
-            
-            <div class="mb-4 flex justify-between w-[800px] items-center">
-                <h2 class="text-xl font-bold text-gray-700">Предпросмотр</h2>
-                <span class="text-sm text-gray-500">Нажмите на слайд для редактирования (Пункт 3)</span>
-            </div>
-
-            <!-- Рендеринг слайдов -->
-            <div id="export-container">
-                <div 
-                    v-for="(slide, index) in slides" 
-                    :key="index"
-                    class="export-canvas cursor-pointer group transition transform hover:scale-[1.01]"
-                    :class="{'ring-4 ring-blue-500': activeSlideIndex === index}"
-                    @click="activeSlideIndex = index"
-                    :style="getSlideStyle(slide)"
-                >
-                    <!-- Внутренний контент слайда -->
-                    <div class="slide-content text-white">
-                        
-                        <!-- Логотип (статичный пример) -->
-                        <div class="absolute top-8 right-8 font-bold text-2xl tracking-widest uppercase opacity-80">LOGO</div>
-
-                        <!-- Контент в зависимости от типа -->
-                        <div class="mt-auto mb-10" v-if="slide.type !== 'manager'">
-                            <h2 class="text-4xl font-bold mb-4 uppercase drop-shadow-lg leading-tight" style="white-space: pre-line;">{{ slide.title }}</h2>
-                            <p class="text-xl opacity-90 drop-shadow-md max-w-2xl" style="white-space: pre-line;">{{ slide.subtitle }}</p>
-                        </div>
-
-                        <!-- Разметка для менеджера -->
-                        <div v-if="slide.type === 'manager'" class="flex h-full items-center">
-                            <div class="w-1/2"></div> <!-- Spacer for banner layout -->
-                            <div class="w-1/2 pl-8 pt-20">
-                                <h2 class="text-3xl font-bold mb-6 text-white drop-shadow-lg">{{ slide.title }}</h2>
-                                <div class="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20">
-                                    <p class="text-xl font-bold mb-1">{{ slide.managerName }}</p>
-                                    <p class="text-sm opacity-80 mb-4">Персональный менеджер</p>
-                                    <div class="space-y-2 text-sm">
-                                        <div class="flex items-center"><i class="fa-solid fa-phone mr-3 w-4"></i> {{ slide.managerPhone }}</div>
-                                        <div class="flex items-center"><i class="fa-solid fa-envelope mr-3 w-4"></i> {{ slide.managerEmail }}</div>
-                                    </div>
-                                </div>
+                    
+                    <div id="price1Container">
+                        <label class="menu-label">Заголовок стоимости:</label>
+                        <input class="zvuk-input" type="text" id="price1Label" value="Стоимость за 1 помещение, ₽ в т.ч. 20%">
+                        <label class="menu-label">Стоимость 1, <span class="currency-label-text">валюта</span>/мес:</label>
+                        <input class="zvuk-input" type="number" id="price1Value" value="1390">
+                    </div>
+                    
+                    <div id="price3Container" class="hidden">
+                        <div class="price-columns">
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price3Header1" value="1-3">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price3Value1" value="1390">
+                            </div>
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price3Header2" value="4-9">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price3Value2" value="1990">
+                            </div>
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price3Header3" value="10+">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price3Value3" value="2590">
                             </div>
                         </div>
-
                     </div>
 
-                    <!-- Индикатор выделения (UI only) -->
-                    <div class="absolute inset-0 bg-blue-500/10 hidden group-hover:block pointer-events-none" v-if="activeSlideIndex !== index"></div>
+                    <div id="price10plusContainer" class="hidden">
+                        <div class="price-columns">
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price10plusHeader1" value="10-19">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price10plusValue1" value="1190">
+                            </div>
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price10plusHeader2" value="20-49">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price10plusValue2" value="990">
+                            </div>
+                            <div class="price-column">
+                                <label class="menu-label">Кол-во точек:</label>
+                                <input class="zvuk-input" type="text" id="price10plusHeader3" value="50+">
+                                <label class="menu-label">Цена:</label>
+                                <input class="zvuk-input" type="number" id="price10plusValue3" value="890">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <label class="menu-label">Комментарий:</label>
+                    <input class="zvuk-input" type="text" id="comment" placeholder="Введите комментарий">
+                    
+                    <label class="menu-label">Баннер:</label>
+                    <select class="zvuk-select" id="priceBanner">
+                        <option value="images/sbcafe.webp">Кафе</option>
+                        <option value="images/sbcafe.webp">Кофейня</option>
+                        <option value="images/sbcafe.webp">Пекарня</option>
+                        <option value="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/sbgrill.webp">Грильбар</option>                        
+                        <option value="images/sbpizza.webp">Пицца</option>
+                        <option value="images/sbsushi.webp">Суши</option>
+                        <option value="images/sbrest.webp">Ресторан</option>
+                        <option value="images/sbrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbretail.webp">Магазин</option>
+                        <option value="images/sbmall.webp">Одежда</option>
+                        <option value="images/sbtc.webp">Торговый центр</option>
+                        <option value="images/sbkids.webp">Детский центр</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
+                        <option value="images/sbbeauty.webp">Салон красоты</option>
+                        <option value="images/sbbarber.webp">Барбершоп</option>
+                        <option value="images/sbspa.webp">Спа</option>
+                        <option value="images/sbjew.webp">Ювелирный салон</option>
+                        <option value="images/sbned.webp">Недвижимость</option>
+                        <option value="images/sbauto.webp">Автодилеры</option>
+                        <option value="images/sbazs.webp">АЗС</option>
+                        <option value="images/sbhotel.webp">Отели</option>
+                        <option value="images/sbsocobj.webp">Общ. пространства</option>
+                        <option value="images/play.webp">Плеер</option>
+                        <option value="images/action.webp">Акция</option>
+                        <option value="images/autumn.webp">Осенний плейлист</option>
+                        <option value="images/nostalgia.webp">Ностальгия</option> 
+                        <option value="images/bkids.webp">Детский тариф</option>
+                        <option value="images/veranda.webp">Веранда</option>
+                        <option value="images/ny26.webp">Новогодняя атмосфера</option> </select>
+
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('pricing')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('pricing')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'instruction')">
+                    <span class="menu-section-header">Инструкция по подключению</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <label class="menu-label">Баннер:</label>
+                    <select class="zvuk-select" id="instructionBanner">
+                        <option value="images/base.webp" selected>Стандартный</option>
+                        <option value="images/sbcafe.webp">Кафе</option>
+                        <option value="images/sbcafe.webp">Кофейня</option>
+                        <option value="images/sbcafe.webp">Пекарня</option>
+                        <option value="images/sbfastfood.webp">Фастфуд</option>
+                        <option value="images/sbgrill.webp">Грильбар</option>                        
+                        <option value="images/sbpizza.webp">Пицца</option>
+                        <option value="images/sbsushi.webp">Суши</option>
+                        <option value="images/sbrest.webp">Ресторан</option>
+                        <option value="images/sbrest.webp">Дорогой ресторан</option>
+                        <option value="images/sbretail.webp">Магазин</option>
+                        <option value="images/sbmall.webp">Одежда</option>
+                        <option value="images/sbtc.webp">Торговый центр</option>
+                        <option value="images/sbkids.webp">Детский центр</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
+                        <option value="images/sbbeauty.webp">Салон красоты</option>
+                        <option value="images/sbbarber.webp">Барбершоп</option>
+                        <option value="images/sbspa.webp">Спа</option>
+                        <option value="images/sbned.webp">Недвижимость</option>
+                        <option value="images/sbauto.webp">Автодилеры</option>
+                        <option value="images/sbazs.webp">АЗС</option>
+                        <option value="images/sbhotel.webp">Отели</option>
+                        <option value="images/sbsocobj.webp">Общ. пространства</option>
+                        <option value="images/play.webp">Плеер</option>
+                        <option value="images/action.webp">Акция</option>
+                        <option value="images/alldevice.webp">Девайсы</option>
+                        <option value="images/autumn.webp">Осенний плейлист</option>
+                        <option value="images/nostalgia.webp">Ностальгия</option> 
+                        <option value="images/bkids.webp">Детский тариф</option>
+                        <option value="images/veranda.webp">Веранда</option>
+                        <option value="images/ny26.webp">Новогодняя атмосфера</option> </select>
+
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('instruction')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('instruction')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'app')">
+                    <span class="menu-section-header">Мобильное приложение</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('app')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('app')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section" id="section-creative">
+                <div class="menu-header" onclick="toggleMenu(this, 'creative')">
+                    <span class="menu-section-header">Креативные аудиоролики</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('creative')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('creative')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" onclick="toggleMenu(this, 'playlist')">
+                    <span class="menu-section-header">Тематические плейлисты</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <label class="menu-label">Тематика:</label>
+                    <select class="zvuk-select" id="playlist">
+                        <option value="images/georgia-audio.webp">Грузинский плейлист</option>
+                        <option value="images/barber-audio.webp">Barber плейлист</option>
+                        <option value="images/rawe.webp">Рейв</option>
+                    </select>
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('playlist')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('playlist')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section" id="section-partner">
+                <div class="menu-header" onclick="toggleMenu(this, 'partner')">
+                    <span class="menu-section-header">Партнерская программа</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('partner')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('partner')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section" id="section-premium">
+                <div class="menu-header" onclick="toggleMenu(this, 'premium')">
+                    <span class="menu-section-header">Премиум тариф</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <label class="menu-label">Стоимость 1, <span class="currency-label-text">валюта</span>/мес:</label>
+                    <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
+                    
+                    <label class="menu-label">Стоимость 2, <span class="currency-label-text">валюта</span>:</label> <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
+                    
+                    <label class="menu-label">Комментарий:</label>
+                    <input class="zvuk-input" type="text" id="premiumComment" placeholder="Введите комментарий">
+                    
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('premium')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('premium')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section" id="section-bprofile">
+                <div class="menu-header" onclick="toggleMenu(this, 'bprofile')">
+                    <span class="menu-section-header">Бизнес-профиль</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('bprofile')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('bprofile')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section" id="section-event">
+                <div class="menu-header" onclick="toggleMenu(this, 'event')">
+                    <span class="menu-section-header">Мероприятия</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('event')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('event')">Удалить</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="h-20"></div> <!-- Spacer -->
-        </main>
+            <div class="menu-section" id="section-artist">
+                <div class="menu-header" onclick="toggleMenu(this, 'artist')">
+                    <span class="menu-section-header">Артисты на мероприятие</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('artist')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('artist')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section" id="section-concept">
+                <div class="menu-header" onclick="toggleMenu(this, 'concept')">
+                    <span class="menu-section-header">Концепции</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('concept')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('concept')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section" id="section-web">
+                <div class="menu-header" onclick="toggleMenu(this, 'web')">
+                    <span class="menu-section-header">Музыка для веба</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('web')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('web')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section" id="section-videokp">
+                <div class="menu-header" onclick="toggleMenu(this, 'videokp')">
+                    <span class="menu-section-header">Видео КП</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <label class="menu-label">Стоимость, <span class="currency-label-text">валюта</span>/мес:</label>
+                    <input class="zvuk-input" type="number" id="videokpPrice" value="1990">
+                    
+                    <label class="menu-label">Комментарий:</label>
+                    <input class="zvuk-input" type="text" id="videokpComment" placeholder="Введите комментарий">
+                    
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('videokp')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('videokp')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="action-buttons">
+            <button class="zvuk-button zvuk-button--primary" onclick="saveAsPDF()">в PDF</button>
+        </div>
+    </div>
+    
+    <div class="preview-container">
+        <div class="preview-wrapper">
+            <div id="slideContainer">
+                <div class="preview-page" id="currentSlide" onclick="toggleZoom()"></div>
+            </div>
+            
+            <div class="slide-controls-container">
+                <div class="slide-controls">
+                    <div class="control-icon" onclick="toggleZoom()">
+                        <img src="zoom.svg" alt="Zoom">
+                    </div>
+                    <div id="slideNumbers"></div>
+                    <div class="control-icon" onclick="removeCurrentSlide()">
+                        <img src="delete.svg" alt="Delete">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <div id="logo-link-popup" class="popup-input-container">
+        <div class="popup-content-dark">
+            <h3>Укажите ссылку на логотип или сайт</h3>
+            <input type="text" id="logoLinkInput" placeholder="https://fitnesshouse.ru или ссылка на картинку">
+            <div class="popup-buttons">
+                <button id="logoLinkBtn" onclick="saveLogoLink()">ОК</button>
+                <button onclick="closeLogoLinkPopup()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pdf-popup" class="popup">PDF уже сохраняется! Удачной сделки!</div>
+    <div id="restriction-popup" class="popup">Данная услуга пока недоступна в вашей стране</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    
     <script>
-        const { createApp, ref, computed, watch } = Vue;
+        // Инициализация jsPDF
+        const { jsPDF } = window.jspdf;
+        
+           // Массив для хранения слайдов
+        const slides = [
+            { type: 'general' } // Начинаем с одного слайда "general"
+        ];
+        
+        // Ссылки для баннеров
+        const bannerLinks = {
+            'images/deviceall.webp': 'https://help.zvuk-b2b.com/onair',
+            'images/sbcafe.webp': 'https://zvuk-b2b.com/cafe',
+            'images/sbfastfood.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbgrill.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbpizza.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbsushi.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbrest.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
+            'images/sbretail.webp': 'https://zvuk-b2b.com/shop',
+            'images/sbmall.webp': 'https://zvuk-b2b.com/odezhda',
+            'images/sbtc.webp': 'https://zvuk-b2b.com/torgovyj-centr',
+            'images/sbkids.webp': 'https://zvuk-b2b.com/prazdnik',
+            'images/sbfitnes.webp': 'https://zvuk-b2b.com/fitness',
+            'images/sbbeauty.webp': 'https://zvuk-b2b.com/salon-krasoty',
+            'images/sbbarber.webp': 'https://zvuk-b2b.com/barbershop',
+            'images/sbspa.webp': 'https://zvuk-b2b.com/spa-salon',
+            'images/sbned.webp': 'https://zvuk-b2b.com/loft?ab_redir=1758811215599',
+            'images/sbauto.webp': 'https://zvuk-b2b.com/avtosalon',
+            'images/sbazs.webp': 'https://zvuk-b2b.com/avtosalon',
+            'images/sbhotel.webp': 'https://zvuk-b2b.com/hotel',
+            'images/sbsocobj.webp': 'https://zvuk-b2b.com/socobj', 
+            'images/bkids.webp': 'https://zvuk-b2b.com/music_for_kids',
+            'images/veranda.webp': 'https://zvuk-b2b.com/rest',
+            'images/play.webp': 'https://zvuk-b2b.com/player',
+            'images/action.webp': 'https://zvuk-b2b.com',
+            'images/autumn.webp': 'https://zvuk-b2b.com',
+            'images/nostalgia.webp': 'https://zvuk-b2b.com',
+            'images/creative-audio.webp': 'https://zvuk-b2b.com/blog/1price',
+            'images/georgia-audio.webp': 'https://zvuk-b2b.com/gastrobar#menu1',
+            'images/barber-audio.webp': 'https://zvuk-b2b.com/barbershop',
+            'images/parterprogram.webp': 'https://zvuk-b2b.com/partners',
+            'images/app.webp': 'https://zvuk-b2b.com/blog/1price',
+            'images/premium.webp': 'https://zvuk-b2b.com/premium/',
+            'images/bprofile.webp': 'https://zvuk-b2b.com/bprofile',
+            'images/videokp.webp': 'https://zvuk-b2b.com/video',
+            'images/rawe.webp': 'https://zvuk-b2b.com/rawe',
+            'images/event.webp': 'https://zvuk-b2b.com',
+            'images/concept.webp': 'https://zvuk-b2b.com',
+            'images/artist.webp': 'https://zvuk-b2b.com',
+            'images/ny26.webp': 'https://zvuk-b2b.com/newyear_concept'
+        };
 
-        createApp({
-            setup() {
-                // Данные состояния
-                const activeSlideIndex = ref(0);
+        // Конфигурация ограничений
+        const restrictedSections = {
+            // KZ: оставить Премиум. Убрать Бизнес-профиль, Мероприятия, Артисты, Концепции, Креатив.
+            kz: ['partner', 'bprofile', 'event', 'artist', 'concept', 'creative', 'web', 'videokp'],
+            // RB: Убрать Артисты, Премиум, Бизнес-профиль, Веб. Оставить Мероприятия и Концепции.
+            rb: ['partner', 'premium', 'artist', 'web', 'bprofile', 'videokp']
+        };
+        
+        let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
+        let isZoomed = false;
+        let draggedSlideIndex = null;
+        let dropTargetIndex = null;
+        let globalClientLogo = null;
+        // По умолчанию инверсия включена
+        let isLogoInverted = true; 
+        let currentRegion = 'ru';
+        let isSnowEnabled = false;
 
-                // Полный список всех файлов (как если бы они лежали в папке)
-                // Примечание: Использую placeholder-изображения для демо, но логика имен сохранена.
-                // В вашем проекте просто замените путь в getImgUrl
-                const allBanners = [
-                    'sbfitnes.webp', 'sbfitnes2.webp', // Пример пары (Родитель - Дочерний)
-                    'auto.webp', 'auto2.webp',
-                    'beauty.webp', 'beauty2.webp',
-                    'base.webp', 'play.webp', 'action.webp', 'alldevice.webp', // Специальные
-                    'default.webp'
-                ];
+        function isSectionRestricted(type) {
+            const { region } = getRegionInfo();
+            const restrictions = restrictedSections[region];
+            return restrictions && restrictions.includes(type);
+        }
 
-                // Структура слайдов
-                const slides = ref([
-                    { 
-                        type: 'intro', 
-                        title: 'Коммерческое\nпредложение', 
-                        subtitle: 'Индивидуальные решения для вашего бизнеса', 
-                        bgImage: 'sbfitnes.webp' 
-                    },
-                    { 
-                        type: 'general', 
-                        title: 'О нашей компании', 
-                        subtitle: 'Лидеры рынка с 2010 года', 
-                        bgImage: 'default.webp' 
-                    },
-                    { 
-                        type: 'instruction', 
-                        title: 'Как подключиться', 
-                        subtitle: 'Простые шаги для старта', 
-                        bgImage: 'base.webp' // Default for instruction
-                    },
-                    { 
-                        type: 'manager', 
-                        title: 'Ваш менеджер (РФ)', 
-                        managerName: 'Алексей Иванов',
-                        managerPhone: '+7 (999) 000-00-00',
-                        managerEmail: 'alex@company.com',
-                        bgImage: 'sbfitnes2.webp' // Should auto-sync
-                    },
-                    { 
-                        type: 'manager', 
-                        title: 'Ваш менеджер (КЗ)', 
-                        managerName: 'Серик Ахметов',
-                        managerPhone: '+7 (777) 111-11-11',
-                        managerEmail: 'serik@company.kz',
-                        bgImage: 'sbfitnes2.webp' 
-                    }
-                ]);
+        function showRestrictionPopup() {
+            const popup = document.getElementById('restriction-popup');
+            const blurOverlay = document.querySelector('.blur-overlay');
+            blurOverlay.style.display = 'block';
+            popup.style.display = 'block';
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                blurOverlay.style.display = 'none';
+            }, 2000);
+        }
+        
+        function toggleSnow() {
+            isSnowEnabled = !isSnowEnabled;
+            // Force redraw of slide if it's general
+            updateCurrentSlide();
+        }
 
-                // --- 1. & 2. Логика списков баннеров ---
-                
-                // Список "Исключенные" (эти нельзя в Общих, но можно в Инструкции)
-                const specialBanners = ['base.webp', 'play.webp', 'action.webp', 'alldevice.webp'];
-
-                // Вычисляемый список для Общих и Менеджеров (Change 1)
-                const nicheBanners = computed(() => {
-                    return allBanners.filter(b => !specialBanners.includes(b));
-                });
-
-                // Вычисляемый список только для Инструкции (Change 2)
-                const instructionBanners = computed(() => {
-                    return specialBanners;
-                });
-
-                const currentSlide = computed(() => slides.value[activeSlideIndex.value]);
-
-                // Helper: Генерация пути к картинке
-                // В реальном проекте это просто: return `./img/${filename}`;
-                // Здесь я использую заглушки, чтобы вы видели результат
-                const getSlideStyle = (slide) => {
-                    let url = '';
-                    // Эмуляция путей. В вашем коде оставьте просто папку.
-                    // Для демо я использую цвета/плейсхолдеры, если файла нет, но логика имен сохранена.
-                    
-                    // ВАЖНО: Раскомментируйте эту строку в своем проекте:
-                    // return { backgroundImage: `url(img/${slide.bgImage})` };
-
-                    // ДЕМО РЕЖИМ (Генерация цвета на основе имени файла для наглядности)
-                    const seed = slide.bgImage ? slide.bgImage.length : 0;
-                    const hue = (seed * 50) % 360;
-                    
-                    // Если это 'base', 'play' и т.д. используем специфичные цвета
-                    let color = `hsl(${hue}, 60%, 30%)`;
-                    if(slide.bgImage === 'base.webp') color = '#2c3e50';
-                    if(slide.bgImage === 'play.webp') color = '#e74c3c';
-                    if(slide.bgImage === 'action.webp') color = '#f1c40f';
-                    if(slide.bgImage === 'alldevice.webp') color = '#8e44ad';
-
-                    return { 
-                        backgroundColor: color,
-                        backgroundImage: `url('https://placehold.co/800x450/${color.replace('#','')}/FFFFFF?text=${slide.bgImage}')` 
-                    };
-                };
-
-                const getSlideTypeName = (type) => {
-                    const map = {
-                        'intro': 'Главная',
-                        'general': 'Общий',
-                        'instruction': 'Инструкция',
-                        'manager': 'Менеджер'
-                    };
-                    return map[type] || type;
-                };
-
-                const formatBannerName = (name) => {
-                    return name.replace('.webp', '').toUpperCase();
-                };
-
-                // --- 4. Логика Умных Баннеров (Parent -> Child) ---
-                
-                const handleBannerChange = (changedSlide) => {
-                    // Если мы меняем баннер на слайде, который НЕ является инструкцией
-                    // Нам нужно проверить, есть ли "дочерняя" версия этого баннера (с цифрой 2)
-                    
-                    if (changedSlide.type === 'instruction') return;
-
-                    const mainBanner = changedSlide.bgImage;
-                    if (!mainBanner) return;
-
-                    // Попытка найти версию "2" (например sbfitnes.webp -> sbfitnes2.webp)
-                    const namePart = mainBanner.replace('.webp', '');
-                    const childBannerName = namePart + '2.webp';
-
-                    // Проверяем, существует ли такой файл в нашем списке всех баннеров
-                    const hasChildBanner = allBanners.includes(childBannerName);
-
-                    if (hasChildBanner) {
-                        // Если есть, обновляем ВСЕ слайды типа 'manager'
-                        slides.value.forEach(slide => {
-                            if (slide.type === 'manager') {
-                                slide.bgImage = childBannerName;
-                            }
-                        });
-                        console.log(`Updated managers to use ${childBannerName}`);
-                    } else {
-                        // Если дочернего нет, можно либо оставить старый, либо ставить родительский.
-                        // По логике задачи: "если он есть". Если нет - ничего не делаем или ставим родительский.
-                        // Обычно лучше ничего не ломать.
-                    }
-                };
-
-                // --- Экспорт PDF (как было, не меняем логику, только интеграция) ---
-                const generatePDF = async () => {
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF('l', 'px', [800, 450]); // Альбомная, под размер слайда
-                    
-                    const container = document.getElementById('export-container');
-                    const slideElements = container.children;
-
-                    for (let i = 0; i < slideElements.length; i++) {
-                        if (i > 0) doc.addPage();
-                        
-                        // Используем html2canvas
-                        const canvas = await html2canvas(slideElements[i], {
-                            scale: 2, // Улучшаем качество
-                            useCORS: true
-                        });
-                        
-                        const imgData = canvas.toDataURL('image/jpeg', 0.9);
-                        doc.addImage(imgData, 'JPEG', 0, 0, 800, 450);
-                    }
-
-                    doc.save('Commercial_Proposal.pdf');
-                };
-
-                return {
-                    slides,
-                    activeSlideIndex,
-                    currentSlide,
-                    nicheBanners,
-                    instructionBanners,
-                    handleBannerChange,
-                    getSlideStyle,
-                    getSlideTypeName,
-                    formatBannerName,
-                    generatePDF
-                };
+        function toggleMenu(header, type) {
+            if (isSectionRestricted(type)) {
+                showRestrictionPopup();
+                return;
             }
-        }).mount('#app');
+
+            const section = header.parentElement;
+            const content = header.nextElementSibling;
+            const button = header.querySelector('.toggle-button');
+            const headerText = header.querySelector('.menu-section-header');
+            
+            document.querySelectorAll('.menu-section').forEach(s => {
+                if (s !== section) {
+                    s.classList.remove('active');
+                    s.querySelector('.menu-content').classList.remove('active');
+                    s.querySelector('.toggle-button').textContent = '+';
+                    s.querySelector('.menu-section-header').classList.remove('active');
+                }
+            });
+            
+            if (content.classList.contains('active')) {
+                section.classList.remove('active');
+                content.classList.remove('active');
+                button.textContent = '+';
+                headerText.classList.remove('active');
+            } else {
+                section.classList.add('active');
+                content.classList.add('active');
+                button.textContent = '-';
+                headerText.classList.add('active');
+                
+                const slideIndex = slides.findIndex(slide => slide.type === type);
+                if (slideIndex !== -1) {
+                    showSlide(slideIndex + 1);
+                }
+            }
+        }
+        
+        function toggleZoom() {
+            if (window.innerWidth <= 768) { 
+                return;
+            }
+            const slide = document.getElementById('currentSlide');
+            slide.classList.toggle('zoomed');
+            isZoomed = !isZoomed;
+        }
+        
+        document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('price1Container').classList.add('hidden');
+                document.getElementById('price3Container').classList.add('hidden');
+                document.getElementById('price10plusContainer').classList.add('hidden');
+                
+                if (this.value === '1') {
+                    document.getElementById('price1Container').classList.remove('hidden');
+                } else if (this.value === '3') {
+                    document.getElementById('price3Container').classList.remove('hidden');
+                } else if (this.value === '10plus') {
+                    document.getElementById('price10plusContainer').classList.remove('hidden');
+                }
+                updateCurrentSlide();
+            });
+        });
+
+        // Функция установки региона
+        function setRegion(region) {
+            currentRegion = region;
+            
+            // Обновляем кнопки
+            document.querySelectorAll('.region-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${region}`).classList.add('active');
+
+            // Фильтруем список менеджеров
+            const managerSelect = document.getElementById('manager');
+            const options = Array.from(managerSelect.options);
+            let firstVisibleOption = null;
+
+            options.forEach(option => {
+                if (option.getAttribute('data-region') === region) {
+                    if (!firstVisibleOption) firstVisibleOption = option;
+                }
+            });
+
+            // Обновляем кастомный поиск менеджеров
+            const managerSearch = document.getElementById('manager-search');
+            managerSearch.value = ''; // Сброс поиска
+            
+            // Принудительно выбираем первого менеджера из региона
+            if (firstVisibleOption) {
+                managerSelect.value = firstVisibleOption.value;
+                managerSearch.value = firstVisibleOption.text;
+            }
+
+            // Обновляем доступность разделов и перерисовываем
+            updateSectionAvailability();
+            updateCurrentSlide();
+        }
+
+        // Функция для определения региона
+        function getRegionInfo() {
+            const region = currentRegion;
+            
+            let currency = '₽';
+            let bgImage = 'images/Backprice1.webp';
+            let mainLogo = 'images/mainlogo.webp';
+            let domainSuffix = '.com';
+
+            if (region === 'kz') {
+                currency = '₸';
+                bgImage = 'images/Backprice1-kz.webp';
+                mainLogo = 'images/mainlogokz.webp';
+                domainSuffix = '.kz';
+            } else if (region === 'rb') {
+                currency = 'Br';
+                bgImage = 'images/Backprice1-rb.webp';
+                mainLogo = 'images/mainlogorb.webp';
+                domainSuffix = '.by';
+            }
+
+            return { region, currency, bgImage, mainLogo, domainSuffix };
+        }
+
+        // Функция обновления доступности разделов в зависимости от региона
+        function updateSectionAvailability() {
+            const { region } = getRegionInfo();
+            const restrictions = restrictedSections[region] || [];
+
+            // Сначала сбрасываем все ограничения
+            document.querySelectorAll('.menu-section').forEach(section => {
+                section.classList.remove('restricted');
+            });
+
+            // Применяем ограничения
+            restrictions.forEach(type => {
+                let sectionId = '';
+                // Сопоставление type и ID разделов в HTML
+                if (type === 'partner') sectionId = 'section-partner';
+                if (type === 'premium') sectionId = 'section-premium';
+                if (type === 'artist') sectionId = 'section-artist';
+                if (type === 'web') sectionId = 'section-web';
+                if (type === 'videokp') sectionId = 'section-videokp';
+                if (type === 'bprofile') sectionId = 'section-bprofile';
+                if (type === 'event') sectionId = 'section-event';
+                if (type === 'concept') sectionId = 'section-concept';
+                if (type === 'creative') sectionId = 'section-creative';
+
+                if (sectionId) {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.classList.add('restricted');
+                        // Если раздел открыт - закрываем его
+                        if (section.classList.contains('active')) {
+                            section.querySelector('.menu-header').click(); 
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCurrencyLabels() {
+            const { currency } = getRegionInfo();
+            const priceLabel = document.getElementById('price1Label');
+            if (priceLabel.value.includes('Стоимость за 1 помещение')) {
+                 if (currency === '₽') priceLabel.value = 'Стоимость за 1 помещение, ₽ в т.ч. 20%';
+                 else priceLabel.value = `Стоимость за 1 помещение, ${currency}`;
+            }
+        }
+
+        // Получение локализованной ссылки баннера
+        function getLocalizedBannerLink(originalLink, domainSuffix) {
+            if (!originalLink) return '#';
+            
+            // Список баннеров, требующих локализации ссылки
+            const bannersToLocalize = [
+                '/rest', '/cafe', '/shop', '/barbershop', '/fitness', '/hotel', '/coffee'
+            ];
+            
+            let link = originalLink;
+            // Проверяем, содержит ли ссылка один из путей для локализации
+            const needsLocalization = bannersToLocalize.some(path => link.includes(path));
+
+            if (needsLocalization && domainSuffix !== '.com') {
+                link = link.replace('.com', domainSuffix);
+            }
+            
+            return link;
+        }
+
+        // --- Logo Link Logic ---
+        function openLogoLinkPopup() {
+            document.getElementById('logo-link-popup').style.display = 'flex';
+        }
+
+        function closeLogoLinkPopup() {
+            document.getElementById('logo-link-popup').style.display = 'none';
+        }
+
+        async function saveLogoLink() {
+            const inputVal = document.getElementById('logoLinkInput').value.trim();
+            if (!inputVal) return;
+
+            const btn = document.getElementById('logoLinkBtn');
+            const originalBtnText = btn.textContent;
+            
+            // Проверка на прямую ссылку изображения
+            if (inputVal.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
+                setClientLogo(inputVal);
+                closeLogoLinkPopup();
+                return;
+            } 
+            
+            // Если это ссылка на сайт - парсим
+            btn.textContent = 'идет поиск по SEO-ключам...'; // Changed text as requested
+            btn.disabled = true;
+
+            try {
+                let url = inputVal.trim();
+                // Improved URL handling: ensure protocol exists
+                if (!/^https?:\/\//i.test(url)) {
+                    url = 'https://' + url;
+                }
+
+                // Используем прокси для обхода CORS и получения HTML
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+
+                if (data.contents) {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data.contents, 'text/html');
+                    
+                    // 1. Поиск логотипа
+                    let logoSrc = null;
+                    const logoSelectors = [
+                        '.logo img', 
+                        'header .logo img',
+                        '[class*="logo"] img',
+                        '.tn-atom[src]', // Tilda
+                        '.footer__logo img',
+                        'header img',
+                        'footer img'
+                    ];
+
+                    for (let selector of logoSelectors) {
+                        const img = doc.querySelector(selector);
+                        if (img && img.src) {
+                            // Пропускаем data:image и очень маленькие иконки если это возможно
+                            if (img.src.startsWith('data:') && img.src.length < 1000) continue;
+                            logoSrc = img.getAttribute('src'); // Берем атрибут, чтобы обработать относительные пути
+                            break;
+                        }
+                    }
+
+                    if (logoSrc) {
+                        // Обработка относительных путей
+                        if (!logoSrc.startsWith('http') && !logoSrc.startsWith('data:')) {
+                            const urlObj = new URL(url);
+                            // Убираем слеш если он есть и там и там
+                            if (logoSrc.startsWith('/') && urlObj.origin.endsWith('/')) {
+                                logoSrc = urlObj.origin + logoSrc.substring(1);
+                            } else if (!logoSrc.startsWith('/') && !urlObj.origin.endsWith('/')) {
+                                logoSrc = urlObj.origin + '/' + logoSrc;
+                            } else {
+                                logoSrc = urlObj.origin + logoSrc;
+                            }
+                        }
+                        setClientLogo(logoSrc);
+                    } else {
+                        // Fallback: пробуем Clearbit если парсинг не нашел img
+                        try {
+                            const urlObj = new URL(url);
+                            setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`);
+                        } catch(e) {}
+                    }
+
+                    // 2. SEO Анализ и подбор темы
+                    analyzeSiteContent(doc, url);
+
+                }
+            } catch (e) {
+                console.error('Ошибка при анализе сайта:', e);
+                // Fallback на Clearbit при ошибке
+                try {
+                     // Still try to fix URL for fallback
+                     let cleanUrl = inputVal.trim();
+                     if (!/^https?:\/\//i.test(cleanUrl)) cleanUrl = 'https://' + cleanUrl;
+                     const urlObj = new URL(cleanUrl);
+                     setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`);
+                } catch(err) {}
+            } finally {
+                btn.textContent = originalBtnText;
+                btn.disabled = false;
+                closeLogoLinkPopup();
+            }
+        }
+
+        // Функция анализа контента для авто-подбора
+        function analyzeSiteContent(doc, url = '') {
+            // Собираем текст из заголовка, описания и тела
+            const title = doc.title ? doc.title.toLowerCase() : '';
+            const description = doc.querySelector('meta[name="description"]')?.content.toLowerCase() || '';
+            const keywords = doc.querySelector('meta[name="keywords"]')?.content.toLowerCase() || '';
+            const ogDescription = doc.querySelector('meta[property="og:description"]')?.content.toLowerCase() || '';
+            
+            // Get text from headers
+            const headers = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+                                .map(h => h.innerText.toLowerCase()).join(' ');
+            
+            // Get text from nav and buttons (important for CTAs like "Test Drive")
+            const navText = Array.from(doc.querySelectorAll('nav, header, .menu, a, button'))
+                                .map(el => el.innerText.toLowerCase()).join(' ');
+
+            // Combine all sources for better matching
+            const bodyText = doc.body.innerText.toLowerCase().substring(0, 10000); 
+            
+            const urlString = url.toLowerCase();
+
+            const fullText = `${urlString} ${title} ${description} ${keywords} ${ogDescription} ${headers} ${navText} ${bodyText}`;
+
+            // Словарь соответствий
+            const keywordMap = [
+                {
+                    keys: ['фитнес', 'тренажерный', 'спортзал', 'fitness', 'gym', 'crossfit', 'йога', 'единоборств', 'функциональные тренировки', 'stretching', 'pilates', 'sport', 'trainer', 'workout', 'абонемент', 'зал', 'тренировка', 'растяжка', 'пилатес', 'бассейн', 'swimming', 'pool', 'coach', 'wellness', 'спа-зона', 'персональный тренер', 'групповые программы', 'cycle', 'сайкл','тренеры', 'фитнес-клуб'],
+                    logo: 'images/fitnesslogo.webp',
+                },
+                {
+                    keys: ['пекарня', 'хлеб', 'булочная', 'bakery', 'выпечка', 'круассан', 'bread', 'croissant', 'pastry', 'flour', 'cake', 'pie', 'bun', 'baking', 'торт', 'пирог', 'булка', 'кондитерская', 'десерт', 'сладости', 'свежий хлеб', 'печь'],
+                    logo: 'images/pekarnilogo.webp' 
+                },
+                {
+                    keys: ['салон красоты', 'маникюр', 'beauty', 'парикмахерская', 'стрижка', 'окрашивание', 'nail', 'hair', 'salon', 'manicure', 'pedicure', 'eyebrows', 'lashes', 'makeup', 'spa', 'massage', 'педикюр', 'брови', 'ресницы', 'визаж', 'спа', 'массаж', 'косметолог', 'эпиляция', 'лазер', 'шугаринг', 'botox', 'кератин', 'укладка'],
+                    logo: 'images/beautylogo.webp'
+                },
+                {
+                    keys: ['кофе', 'кофейня', 'coffee', 'капучино', 'бариста', 'barista', 'cappuccino', 'latte', 'espresso', 'bean', 'cafe', 'латте', 'эспрессо', 'зерно', 'завтрак', 'кофе с собой', 'раф', 'мокка', 'кофемашина', 'обжарка'],
+                    logo: 'images/coffeelogo.webp'
+                },
+                {
+                    keys: ['бургер', 'фастфуд', 'шаурма', 'fast food', 'фри', 'бистро', 'burger', 'fries', 'nuggets', 'shawarma', 'doner', 'hotdog', 'street food', 'картошка', 'наггетсы', 'донер', 'хот-дог', 'стритфуд', 'гиро', 'кебаб'],
+                    logo: 'images/fastfoodlogo.webp'
+                },
+                {
+                    keys: ['суши', 'роллы', 'sushi', 'wok', 'roll', 'sashimi', 'wasabi', 'ginger', 'salmon', 'eel', 'rice', 'сашими', 'васаби', 'имбирь', 'лосось', 'угорь', 'рис', 'вок', 'паназия', 'сеты', 'филадельфия', 'калифорния', 'том ям', 'поке'],
+                    logo: 'images/sushilogo.webp'
+                },
+                {
+                    keys: ['пицца', 'pizza', 'пиццерия', 'pepperoni', 'margarita', 'dough', 'cheese', 'slice', 'пепперони', 'маргарита', 'тесто', 'сыр', 'кусок', 'италия', 'italian', 'четыре сыра', 'доставка пиццы'],
+                    logo: 'images/pizzalogo.webp'
+                },
+                {
+                    keys: ['ресторан', 'restaurant', 'банкет', 'кухня', 'шеф', 'ужин', 'menu', 'chef', 'wine', 'dining', 'dish', 'gourmet', 'меню', 'вино', 'блюдо', 'авторская кухня', 'гастропаб', 'стейк', 'морепродукты', 'устрицы', 'бар', 'bar', 'cocktail', 'коктейль'],
+                    logo: 'images/cafe&restaurantlogo.webp'
+                },
+                {
+                    keys: ['одежда', 'fashion', 'магазин', 'бутик', 'платья', 'style', 'dress', 'shirt', 'pants', 'shoes', 'boutique', 'wear', 'collection', 'мода', 'стиль', 'платье', 'рубашка', 'брюки', 'обувь', 'коллекция', 'бренд', 'шопинг', 'одежды', 'lookbook', 'аксессуары', 'сумки'],
+                    logo: 'images/clotheslogo.webp'
+                },
+                {
+                    keys: ['барбер', 'barber', 'бритье', 'shave', 'beard', 'fade', 'cut', 'mens', 'борода', 'мужская', 'мужские стрижки', 'опасная бритва'],
+                    logo: 'images/barberlogo.webp'
+                },
+                {
+                    keys: ['отель', 'гостиница', 'hotel', 'хостел', 'номер', 'room', 'booking', 'hostel', 'inn', 'accommodation', 'бронирование', 'проживание', 'ресепшн', 'check-in', 'выезд', 'заезд', 'апартаменты'],
+                    logo: 'images/hotellogo.webp'
+                },
+                {
+                    keys: ['азс', 'заправка', 'бензин', 'fuel', 'gas', 'petrol', 'oil', 'station', 'топливо', 'масло', 'дизель', '95', '92', 'заправить'],
+                    logo: 'images/azslogo.webp'
+                },
+                {
+                    keys: ['детский', 'kids', 'игрушки', 'развлечения', 'child', 'toy', 'game', 'park', 'playground', 'baby', 'school', 'kindergarten', 'дети', 'ребенок', 'игрушка', 'игра', 'парк', 'площадка', 'малыш', 'школа', 'сад', 'развивающий', 'центр', 'аниматор', 'день рождения'],
+                    logo: 'images/kidslogo.webp'
+                },
+                {
+                    keys: ['застройщик', 'жк', 'квартира', 'дом', 'недвижимость', 'ипотека', 'developer', 'building', 'apartment', 'flat', 'house', 'estate', 'новостройка', 'жилой комплекс', 'метр', 'планировка'],
+                    logo: 'images/nlogo.webp'
+                },
+                {
+                    keys: ['торговый центр', 'тц', 'трк', 'молл', 'mall', 'center', 'shopping', 'gallery', 'галерея', 'магазины', 'фудкорт', 'кинотеатр', 'парковка'],
+                    logo: 'images/tclogo.webp'
+                },
+                {
+                    keys: [
+                        'автодилер', 'автосалон', 'lada', 'hyundai', 'kia', 'toyota', 
+                        'nissan', 'renault', 'volkswagen', 'skoda', 'bmw', 'mercedes', 'audi', 'lexus', 
+                        'volvo', 'mazda', 'geely', 'haval', 'chery', 'exeed', 'omoda', 'tank', 'jetour', 
+                        'jaecoo', 'moskvich', 'uaz', 'gaz', 'belgee', 'solaris', 'creta', 'rio', 'polo', 
+                        'rapid', 'camry', 'rav4', 'tiguan', 'sportage', 'tucson', 'duster', 'vesta', 
+                        'granta', 'niva', 'largus', 'тест-драйв', 'test drive', 'test-drive', 'конфигуратор', 
+                        'модельный ряд', 'model range', 'купить автомобиль', 'пробегом', 'trade-in', 'трейд-ин',
+                        'sedan', 'suv', 'crossover', 'седан', 'кроссовер', 'внедорожник', 'service', 'сервис', 'запчасти',
+                        'автомобиль'
+                    ],
+                    logo: 'images/autologo.webp'
+                }
+            ];
+
+            let bestMatch = null;
+
+            for (let item of keywordMap) {
+                for (let key of item.keys) {
+                    if (fullText.includes(key)) {
+                        bestMatch = item;
+                        break; 
+                    }
+                }
+                if (bestMatch) break;
+            }
+
+            if (bestMatch) {
+                const logoSelect = document.getElementById('logos');
+                logoSelect.value = bestMatch.logo;
+                // Триггерим событие change, чтобы сработал существующий обработчик
+                // который выставит нужный баннер из data-banner атрибута опции
+                logoSelect.dispatchEvent(new Event('change'));
+            }
+        }
+
+        function updateCurrentSlide() {
+            if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
+                document.getElementById('currentSlide').innerHTML = ''; 
+                return;
+            }
+
+            updateCurrencyLabels(); // Обновляем логику валют
+            const { currency, bgImage, mainLogo, domainSuffix } = getRegionInfo();
+
+            const currentSlide = slides[currentSlideIndex];
+            const slideContainer = document.getElementById('currentSlide');
+            slideContainer.innerHTML = '';
+            
+            const bgImg = document.createElement('img');
+            bgImg.className = 'preview-bg';
+            
+            // Function to apply logo filter based on checkbox
+            const applyLogoFilter = (imgElement) => {
+                const isInverted = document.getElementById('logoInvert').checked;
+                if (isInverted) {
+                    imgElement.style.filter = 'brightness(0) invert(1)'; // White
+                } else {
+                    imgElement.style.filter = 'none'; // Original
+                }
+            };
+            
+            // Helper to handle Prefixed images (RB/KZ) with fallback
+            const createPrefixedImage = (originalPath, className, forceRegion = null) => {
+                const img = document.createElement('img');
+                img.className = className;
+                const activeRegion = forceRegion || currentRegion;
+
+                if (activeRegion === 'rb' || activeRegion === 'kz') {
+                    const parts = originalPath.split('/');
+                    const fileName = parts.pop();
+                    const prefix = activeRegion + '-';
+                    const prefixedSrc = parts.join('/') + '/' + prefix + fileName;
+                    
+                    img.src = prefixedSrc;
+                    
+                    // Используем setAttribute для обработчика ошибки, чтобы он сохранялся при клонировании (cloneNode)
+                    // Это критично для корректной генерации PDF, если картинка не найдена
+                    img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${originalPath}';`);
+                } else {
+                    img.src = originalPath;
+                }
+                return img;
+            }
+
+            switch(currentSlide.type) {
+                case 'general':
+                    bgImg.src = bgImage; // Локализованный фон
+                    slideContainer.appendChild(bgImg);
+                    
+                    if (isSnowEnabled) {
+                        const snowImg = document.createElement('img');
+                        snowImg.className = 'snow-overlay';
+                        snowImg.src = 'images/snow.webp';
+                        slideContainer.appendChild(snowImg);
+                    }
+
+                    const bannerVal = document.getElementById('banner').value;
+                    const bannerImg = createPrefixedImage(bannerVal, 'preview-banner');
+                    
+                    const bannerLinkUrl = getLocalizedBannerLink(bannerLinks[bannerVal], domainSuffix);
+                    const bannerLink = document.createElement('a');
+                    bannerLink.href = bannerLinkUrl;
+                    bannerLink.target = '_blank';
+                    bannerLink.style.position = 'absolute';
+                    bannerLink.style.top = '0';
+                    bannerLink.style.right = '0';
+                    bannerLink.style.width = '35%';
+                    bannerLink.style.height = '100%';
+                    bannerLink.appendChild(bannerImg);
+                    slideContainer.appendChild(bannerLink);
+                    
+                    const logosVal = document.getElementById('logos').value;
+                    // Особая логика для логотипов: если выбран "Главные клиенты", то берем mainLogo (он уже локализован в getRegionInfo)
+                    // Для остальных категорий применяем префиксную логику
+                    let logosImg;
+                    if (logosVal === 'images/mainlogo.webp') {
+                         logosImg = document.createElement('img');
+                         logosImg.className = 'preview-logos';
+                         logosImg.src = mainLogo;
+                    } else {
+                         logosImg = createPrefixedImage(logosVal, 'preview-logos');
+                    }
+                    slideContainer.appendChild(logosImg);
+
+                    if (globalClientLogo) {
+                        const clientLogoImg = document.createElement('img');
+                        clientLogoImg.id = 'clientLogo';
+                        clientLogoImg.src = globalClientLogo;
+                        clientLogoImg.style.position = 'absolute';
+                        clientLogoImg.style.top = '5%';
+                        clientLogoImg.style.left = '17%';
+                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
+                        clientLogoImg.style.width = 'auto'; 
+                        clientLogoImg.style.maxWidth = '30%'; 
+                        clientLogoImg.style.objectFit = 'contain';
+                        
+                        // Error handling for auto-fetched logos
+                        clientLogoImg.onerror = function() {
+                            this.style.display = 'none';
+                        };
+                        
+                        applyLogoFilter(clientLogoImg);
+                        slideContainer.appendChild(clientLogoImg);
+                    }
+                    break;
+                    
+                case 'pricing':
+                    const priceFormat = document.querySelector('input[name="priceColumns"]:checked').value;
+                    
+                    if (priceFormat === '1') {
+                        bgImg.src = 'images/1price.webp';
+                    } else {
+                        bgImg.src = 'images/3price.webp';
+                    }
+                    slideContainer.appendChild(bgImg);
+                    
+                    const priceBannerVal = document.getElementById('priceBanner').value;
+                    // Здесь тоже применяем префиксную логику для баннера
+                    const priceBannerImg = createPrefixedImage(priceBannerVal, 'preview-banner');
+                    
+                    const priceBannerLinkUrl = getLocalizedBannerLink(bannerLinks[priceBannerVal], domainSuffix);
+                    const priceBannerLink = document.createElement('a');
+                    priceBannerLink.href = priceBannerLinkUrl;
+                    priceBannerLink.target = '_blank';
+                    priceBannerLink.style.position = 'absolute';
+                    priceBannerLink.style.top = '0';
+                    priceBannerLink.style.right = '0';
+                    priceBannerLink.style.width = '35%';
+                    priceBannerLink.style.height = '100%';
+                    priceBannerLink.appendChild(priceBannerImg);
+                    slideContainer.appendChild(priceBannerLink);
+                    
+                    const managerSelect = document.getElementById('manager');
+                    const selectedManagerOption = managerSelect.options[managerSelect.selectedIndex];
+                    const managerValue = selectedManagerOption.value;
+                    const managerDataLink = selectedManagerOption.getAttribute('data-link');
+
+                    const managerImg = document.createElement('img');
+                    managerImg.className = 'preview-manager';
+                    managerImg.src = managerValue;
+                    
+                    const managerLinkContainer = document.createElement('a');
+                    managerLinkContainer.href = managerDataLink;
+                    managerLinkContainer.target = '_blank';
+                    managerLinkContainer.style.position = 'absolute';
+                    managerLinkContainer.style.bottom = '8%';
+                    managerLinkContainer.style.left = '3%';
+                    managerLinkContainer.style.width = '57%';
+                    managerLinkContainer.style.height = '25%';
+                    slideContainer.appendChild(managerLinkContainer);
+                    
+                    const managerLink = document.createElement('a');
+                    managerLink.href = managerDataLink;
+                    managerLink.target = '_blank';
+                    managerLink.style.position = 'absolute';
+                    managerLink.style.bottom = '8%';
+                    managerLink.style.left = '3%';
+                    managerLink.style.width = '58%';
+                    managerLink.style.height = 'auto';
+                    managerLink.appendChild(managerImg);
+                    slideContainer.appendChild(managerLink);
+                    
+                    if (document.getElementById('personalPhone').value) {
+                        const phoneDiv = document.createElement('div');
+                        phoneDiv.className = 'preview-phone';
+                        phoneDiv.textContent = document.getElementById('personalPhone').value;
+                        slideContainer.appendChild(phoneDiv);
+                    }
+                    
+                    const commentText = document.getElementById('comment').value;
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'preview-comment';
+                    if (commentText.trim() !== '') {
+                        commentDiv.textContent = commentText;
+                        commentDiv.classList.add('visible');
+                    }
+                    
+                    slideContainer.appendChild(commentDiv);
+
+                    if (priceFormat === '1') {
+                        const priceLabelDiv = document.createElement('div');
+                        priceLabelDiv.className = 'preview-price-label';
+                        priceLabelDiv.textContent = document.getElementById('price1Label').value;
+                        slideContainer.appendChild(priceLabelDiv);
+
+                        const priceDiv = document.createElement('div');
+                        priceDiv.className = 'preview-price';
+                        priceDiv.textContent = formatPrice(document.getElementById('price1Value').value) + ` ${currency}/мес.`;
+                        slideContainer.appendChild(priceDiv);
+
+                    } else if (priceFormat === '3') {
+                        const table = document.createElement('table');
+                        table.className = 'price-table';
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Количество точек</th>
+                                    <th>${document.getElementById('price3Header1').value}</th>
+                                    <th>${document.getElementById('price3Header2').value}</th>
+                                    <th>${document.getElementById('price3Header3').value}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Стоимость за точку</td>
+                                    <td>${formatPrice(document.getElementById('price3Value1').value)} ${currency}</td>
+                                    <td>${formatPrice(document.getElementById('price3Value2').value)} ${currency}</td>
+                                    <td>${formatPrice(document.getElementById('price3Value3').value)} ${currency}</td>
+                                </tr>
+                            </tbody>
+                        `;
+                        slideContainer.appendChild(table);
+                    } else if (priceFormat === '10plus') {
+                        const table = document.createElement('table');
+                        table.className = 'price-table';
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Количество точек</th>
+                                    <th>${document.getElementById('price10plusHeader1').value}</th>
+                                    <th>${document.getElementById('price10plusHeader2').value}</th>
+                                    <th>${document.getElementById('price10plusHeader3').value}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Стоимость за точку</td>
+                                    <td>${formatPrice(document.getElementById('price10plusValue1').value)} ${currency}</td>
+                                    <td>${formatPrice(document.getElementById('price10plusValue2').value)} ${currency}</td>
+                                    <td>${formatPrice(document.getElementById('price10plusValue3').value)} ${currency}</td>
+                                </tr>
+                            </tbody>
+                        `;
+                        slideContainer.appendChild(table);
+                    }
+
+                    // Динамическое позиционирование комментария
+                    const targetEl = priceFormat === '1' ? 
+                        slideContainer.querySelector('.preview-price') : 
+                        slideContainer.querySelector('.price-table');
+                        
+                    if (targetEl && commentDiv.classList.contains('visible')) {
+                        const bottomPercent = ((targetEl.offsetTop + targetEl.offsetHeight) / slideContainer.offsetHeight) * 100;
+                        commentDiv.style.top = (bottomPercent + 2) + '%';
+                    }
+                    break;
+                    
+                case 'instruction':
+                    bgImg.src = 'images/instruct.webp';
+                    slideContainer.appendChild(bgImg);
+
+                    const instructionBannerVal = document.getElementById('instructionBanner').value;
+                    const instructionBannerImg = createPrefixedImage(instructionBannerVal, 'preview-banner');
+                    
+                    const instructionBannerLinkUrl = getLocalizedBannerLink(bannerLinks[instructionBannerVal], domainSuffix);
+                    const instructionBannerLink = document.createElement('a');
+                    instructionBannerLink.href = instructionBannerLinkUrl;
+                    instructionBannerLink.target = '_blank';
+                    instructionBannerLink.style.position = 'absolute';
+                    instructionBannerLink.style.top = '0';
+                    instructionBannerLink.style.right = '0';
+                    instructionBannerLink.style.width = '35%';
+                    instructionBannerLink.style.height = '100%';
+                    instructionBannerLink.appendChild(instructionBannerImg);
+                    slideContainer.appendChild(instructionBannerLink);
+
+                    const managerSelectForLink = document.getElementById('manager');
+                    const selectedManagerOptionForLink = managerSelectForLink.options[managerSelectForLink.selectedIndex];
+                    const managerRegLink = selectedManagerOptionForLink.getAttribute('data-link');
+
+                    // Highlight words: "по ссылке", "на компьютер", "смартфон"
+                    const instructionTextDiv = document.createElement('div');
+                    instructionTextDiv.className = 'instruction-text';
+                    instructionTextDiv.innerHTML = `
+                        1. Зарегистрироваться <a href="${managerRegLink}" target="_blank" class="highlight">по ссылке</a>.<br><br>
+                        2. Установить приложение <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" class="highlight">на компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" class="highlight">смартфон</a>.<br><br>
+                        3. С вами свяжется менеджер в течение 1-2 часов.<br><br>
+                        4. Протестировать в течение 7 дней, оформить подписку.
+                    `;
+                    slideContainer.appendChild(instructionTextDiv);
+                    break;
+                    
+                case 'creative':
+                    bgImg.src = 'images/createbanner.webp';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const creativeLinkContainer = document.createElement('a');
+                    creativeLinkContainer.href = 'https://zvuk-b2b.com/audio_ads';
+                    creativeLinkContainer.target = '_blank';
+                    creativeLinkContainer.style.position = 'absolute';
+                    creativeLinkContainer.style.top = '0';
+                    creativeLinkContainer.style.right = '0';
+                    creativeLinkContainer.style.width = '35%';
+                    creativeLinkContainer.style.height = '100%';
+                    slideContainer.appendChild(creativeLinkContainer);
+                    
+                    // Invisible clickable areas based on user request (no duplicated images)
+                    const cCardLink1 = document.createElement('a');
+                    cCardLink1.href = 'https://zvuk-b2b.com/blog/1price';
+                    cCardLink1.target = '_blank';
+                    cCardLink1.className = 'concept-link-area';
+                    cCardLink1.style.bottom = '6%';
+                    cCardLink1.style.left = '3%';
+                    cCardLink1.style.width = '7%';
+                    cCardLink1.style.height = '12%';
+                    slideContainer.appendChild(cCardLink1);
+
+                    const cCardLink2 = document.createElement('a');
+                    cCardLink2.href = 'https://zvuk-b2b.com/blog/letu';
+                    cCardLink2.target = '_blank';
+                    cCardLink2.className = 'concept-link-area';
+                    cCardLink2.style.bottom = '6%';
+                    cCardLink2.style.left = '12%'; // 3% + 7% + 2% gap roughly
+                    cCardLink2.style.width = '7%';
+                    cCardLink2.style.height = '12%';
+                    slideContainer.appendChild(cCardLink2);
+                    break;
+                
+                case 'app':
+                    bgImg.src = 'images/app.webp';
+                    slideContainer.appendChild(bgImg);
+                    break;
+                case 'playlist':
+                    bgImg.src = document.getElementById('playlist').value;
+                    slideContainer.appendChild(bgImg);
+                    break;
+                case 'partner':
+                    bgImg.src = 'images/parterprogram.webp';
+                    slideContainer.appendChild(bgImg);
+                    break;
+                case 'premium':
+                    bgImg.src = 'images/premiumbanner.webp';
+                    slideContainer.appendChild(bgImg);
+                    
+                    const premiumPriceDiv1 = document.createElement('div');
+                    premiumPriceDiv1.className = 'preview-price-premium-1';
+                    premiumPriceDiv1.textContent = formatPrice(document.getElementById('premiumPrice1').value) + ` ${currency}/мес.`;
+                    slideContainer.appendChild(premiumPriceDiv1);
+
+                    const premiumPriceDiv2 = document.createElement('div');
+                    premiumPriceDiv2.className = 'preview-price-premium-2';
+                    premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ` ${currency}`; 
+                    slideContainer.appendChild(premiumPriceDiv2);
+                    
+                    const premiumCommentDiv = document.createElement('div');
+                    premiumCommentDiv.className = 'preview-comment';
+                    // Комментарий премиума использует стандартный стиль, но может требовать отдельного позиционирования?
+                    // По умолчанию ставим видимым если есть текст
+                    if (document.getElementById('premiumComment').value.trim() !== '') {
+                        premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
+                        premiumCommentDiv.classList.add('visible');
+                        premiumCommentDiv.style.bottom = '5%'; // Стандартное положение
+                        premiumCommentDiv.style.left = '3%';
+                    }
+                    slideContainer.appendChild(premiumCommentDiv);
+                    
+                    const premiumBannerLink = document.createElement('a');
+                    premiumBannerLink.href = 'https://zvuk-b2b.com/premium';
+                    premiumBannerLink.target = '_blank';
+                    premiumBannerLink.style.position = 'absolute';
+                    premiumBannerLink.style.top = '0';
+                    premiumBannerLink.style.right = '0';
+                    premiumBannerLink.style.width = '35%';
+                    premiumBannerLink.style.height = '100%';
+                    slideContainer.appendChild(premiumBannerLink);
+                    break;
+                case 'bprofile':
+                    bgImg.src = 'images/bprofile.webp';
+                    slideContainer.appendChild(bgImg);
+                    break;
+                case 'event':
+                    bgImg.src = 'images/event.webp';
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
+                    slideContainer.appendChild(bgImg);
+                    break;
+                case 'artist':
+                    bgImg.src = 'images/artist.webp';
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
+                    slideContainer.appendChild(bgImg);
+                    break;
+                case 'concept':
+                    bgImg.src = 'images/mus_concept.webp';
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
+                    slideContainer.appendChild(bgImg);
+
+                    // Add 3 clickable areas on the left
+                    const cLink1 = document.createElement('a');
+                    cLink1.href = 'https://zvuk-b2b.com/retro';
+                    cLink1.target = '_blank';
+                    cLink1.className = 'concept-link-area';
+                    cLink1.style.top = '15%'; 
+                    cLink1.style.left = '55%';
+                    cLink1.style.width = '25%';
+                    cLink1.style.height = '25%';
+                    slideContainer.appendChild(cLink1);
+
+                    const cLink2 = document.createElement('a');
+                    cLink2.href = 'https://zvuk-b2b.com/coffee-rave';
+                    cLink2.target = '_blank';
+                    cLink2.className = 'concept-link-area';
+                    cLink2.style.top = '35%';
+                    cLink2.style.left = '75%';
+                    cLink2.style.width = '25%';
+                    cLink2.style.height = '25%';
+                    slideContainer.appendChild(cLink2);
+
+                    const cLink3 = document.createElement('a');
+                    cLink3.href = 'https://zvuk-b2b.com/iv-int';
+                    cLink3.target = '_blank';
+                    cLink3.className = 'concept-link-area';
+                    cLink3.style.top = '60%';
+                    cLink3.style.left = '53%';
+                    cLink3.style.width = '25%';
+                    cLink3.style.height = '25%';
+                    slideContainer.appendChild(cLink3);
+                    break;
+
+                case 'web':
+                    bgImg.src = 'images/www.webp';
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
+                    slideContainer.appendChild(bgImg);
+                    break;
+
+                case 'videokp':
+                    bgImg.src = 'images/atmvieo.webp';
+                    slideContainer.appendChild(bgImg);
+                    
+                    if (globalClientLogo) {
+                        const clientLogoImg = document.createElement('img');
+                        clientLogoImg.id = 'clientLogo';
+                        clientLogoImg.src = globalClientLogo;
+                        clientLogoImg.style.position = 'absolute';
+                        clientLogoImg.style.top = '5%';
+                        clientLogoImg.style.left = '17%';
+                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
+                        clientLogoImg.style.width = 'auto'; 
+                        clientLogoImg.style.maxWidth = '30%';
+                        clientLogoImg.style.objectFit = 'contain';
+                        
+                        clientLogoImg.onerror = function() {
+                            this.style.display = 'none';
+                        };
+
+                        applyLogoFilter(clientLogoImg);
+                        slideContainer.appendChild(clientLogoImg);
+                    }
+                    const videoPriceDiv = document.createElement('div');
+                    videoPriceDiv.className = 'preview-price';
+                    // Special positioning for video KP: 10% lower (56% + 10% = 66%)
+                    videoPriceDiv.style.top = '66%';
+                    videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ` ${currency}/мес.`;
+                    slideContainer.appendChild(videoPriceDiv);
+                    
+                    const videoCommentDiv = document.createElement('div');
+                    videoCommentDiv.className = 'preview-comment';
+                    if (document.getElementById('videokpComment').value.trim() !== '') {
+                        videoCommentDiv.textContent = document.getElementById('videokpComment').value;
+                        videoCommentDiv.classList.add('visible');
+                        videoCommentDiv.style.top = '72%'; // Чуть ниже цены
+                    }
+                    slideContainer.appendChild(videoCommentDiv);
+                    break;
+            }
+        }
+        
+        function showSlide(index) {
+            if (slides.length === 0) {
+                currentSlideIndex = -1;
+                document.getElementById('currentSlide').innerHTML = '';
+                updateSlideNumbers();
+                return;
+            }
+            if (index < 1 || index > slides.length) return;
+            currentSlideIndex = index - 1;
+            document.querySelectorAll('.slide-number').forEach((btn, i) => {
+                btn.classList.toggle('active', i === currentSlideIndex);
+            });
+            updateCurrentSlide();
+        }
+        
+        function removeCurrentSlide() {
+            if (slides.length > 0 && currentSlideIndex > -1) {
+                removeSlide(slides[currentSlideIndex].type);
+            }
+        }
+        
+        function addSlide(type) {
+            // Check restriction before adding
+            if (isSectionRestricted(type)) {
+                showRestrictionPopup();
+                return;
+            }
+
+            const existingSlideIndex = slides.findIndex(slide => slide.type === type);
+            if (existingSlideIndex !== -1) {
+                showSlide(existingSlideIndex + 1);
+                const slideNumEl = document.querySelector(`.slide-number[data-index="${existingSlideIndex}"]`);
+                if(slideNumEl) {
+                    slideNumEl.classList.add('highlight');
+                    setTimeout(() => slideNumEl.classList.remove('highlight'), 500);
+                }
+                return;
+            }
+            let newSlide;
+            switch(type) {
+                case 'general': newSlide = { type: 'general' }; break;
+                case 'pricing': newSlide = { type: 'pricing' }; break;
+                case 'instruction': newSlide = { type: 'instruction' }; break;
+                case 'app': newSlide = { type: 'app' }; break;
+                case 'creative': newSlide = { type: 'creative' }; break;
+                case 'playlist': newSlide = { type: 'playlist' }; break;
+                case 'partner': newSlide = { type: 'partner' }; break;
+                case 'premium': newSlide = { type: 'premium' }; break;
+                case 'bprofile': newSlide = { type: 'bprofile' }; break;
+                case 'event': newSlide = { type: 'event' }; break;
+                case 'artist': newSlide = { type: 'artist' }; break;
+                case 'concept': newSlide = { type: 'concept' }; break;
+                case 'web': newSlide = { type: 'web' }; break;
+                case 'videokp': newSlide = { type: 'videokp' }; break;
+                default: return;
+            }
+            // Logic to insert 'web' after 'concept' if concept exists
+            if (type === 'web') {
+                const conceptIndex = slides.findIndex(s => s.type === 'concept');
+                if (conceptIndex !== -1) {
+                    slides.splice(conceptIndex + 1, 0, newSlide);
+                } else {
+                     slides.push(newSlide);
+                }
+            } else {
+                 slides.push(newSlide);
+            }
+
+            updateSlideNumbers();
+            // Find the index of the newly added slide to show it
+            const newIndex = slides.indexOf(newSlide);
+            showSlide(newIndex + 1);
+        }
+        
+        function removeSlide(type) {
+            const indexToRemove = slides.findIndex(slide => slide.type === type);
+            if (indexToRemove > -1) {
+                slides.splice(indexToRemove, 1);
+                
+                if (slides.length === 0) {
+                    currentSlideIndex = -1;
+                    document.getElementById('currentSlide').innerHTML = ''; // Очистить превью
+                } else {
+                    if (currentSlideIndex >= slides.length) {
+                        currentSlideIndex = slides.length - 1; // Перейти к последнему слайду
+                    }
+                    showSlide(currentSlideIndex + 1); 
+                }
+                updateSlideNumbers();
+            }
+        }
+        
+        function updateSlideNumbers() {
+            const slideNumbers = document.getElementById('slideNumbers');
+            slideNumbers.innerHTML = '';
+            slides.forEach((slide, i) => {
+                const number = document.createElement('div');
+                number.className = `slide-number ${i === currentSlideIndex ? 'active' : ''}`;
+                number.textContent = i + 1;
+                number.draggable = true;
+                number.dataset.index = i;
+                number.addEventListener('dragstart', handleDragStart);
+                number.addEventListener('dragover', handleDragOver);
+                number.addEventListener('drop', handleDrop);
+                number.addEventListener('dragend', handleDragEnd);
+                number.addEventListener('dragenter', handleDragEnter);
+                number.addEventListener('dragleave', handleDragLeave);
+                number.onclick = () => showSlide(i + 1);
+                slideNumbers.appendChild(number);
+            });
+        }
+        
+        function handleDragStart(e) {
+            draggedSlideIndex = parseInt(e.target.dataset.index);
+            e.target.classList.add('dragging');
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            const targetIndex = parseInt(e.target.dataset.index);
+            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) {
+                const [draggedItem] = slides.splice(draggedSlideIndex, 1);
+                slides.splice(targetIndex, 0, draggedItem);
+                currentSlideIndex = targetIndex;
+                updateSlideNumbers();
+                updateCurrentSlide();
+            }
+             e.target.classList.remove('drop-target', 'dragging');
+        }
+        
+        function handleDragEnd(e) {
+            document.querySelectorAll('.slide-number').forEach(el => {
+                el.classList.remove('dragging', 'drop-target');
+            });
+            draggedSlideIndex = null;
+        }
+        
+        function handleDragEnter(e) {
+            const targetIndex = parseInt(e.target.dataset.index);
+            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) {
+                e.target.classList.add('drop-target');
+            }
+        }
+        
+        function handleDragLeave(e) {
+            e.target.classList.remove('drop-target');
+        }
+        
+        function formatPrice(price) {
+            return String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        }
+        
+        function getFileName() {
+            const managerSelect = document.getElementById('manager');
+            const managerName = managerSelect.options[managerSelect.selectedIndex].text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
+            const companyName = document.getElementById('companyName').value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
+            return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
+        }
+
+        async function saveAsPDF() {
+            if (slides.length === 0) {
+                alert('Нет слайдов для сохранения в PDF.');
+                return;
+            }
+
+            const popup = document.getElementById('pdf-popup');
+            popup.classList.add('loading');
+            const blurOverlay = document.querySelector('.blur-overlay');
+            blurOverlay.style.display = 'block';
+            popup.style.display = 'block';
+            
+            const fileName = getFileName() + '.pdf';
+            const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
+
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '0px';
+            tempContainer.style.width = '1920px';
+            tempContainer.style.height = '1080px';
+            document.body.appendChild(tempContainer);
+            
+            const originalSlideIndex = currentSlideIndex; 
+            
+            const onScreenSlide = document.getElementById('currentSlide');
+            let onScreenWidth = onScreenSlide.offsetWidth;
+            let onScreenHeight = onScreenSlide.offsetHeight;
+            
+            if (onScreenWidth === 0 || onScreenHeight === 0) {
+                const previewWrapper = document.querySelector('.preview-wrapper');
+                onScreenWidth = previewWrapper.offsetWidth; 
+                onScreenHeight = onScreenWidth * (9 / 16);
+            }
+            
+            const scaleFactor = 1920 / onScreenWidth;
+
+            for (let i = 0; i < slides.length; i++) {
+                showSlide(i + 1); 
+                
+                const slideContent = document.getElementById('currentSlide').cloneNode(true);
+                
+                if (window.innerWidth <= 768) {
+                    slideContent.classList.add('pdf-render-mode');
+                }
+
+                slideContent.style.transform = 'none';
+                slideContent.classList.remove('zoomed');
+                slideContent.style.margin = '0'; 
+                
+                slideContent.style.width = onScreenWidth + 'px';
+                slideContent.style.height = onScreenHeight + 'px';
+                
+                slideContent.style.transform = `scale(${scaleFactor})`;
+                slideContent.style.transformOrigin = 'top left';
+
+                tempContainer.innerHTML = '';
+                tempContainer.appendChild(slideContent);
+                
+                const images = tempContainer.querySelectorAll('img');
+                const promises = Array.from(images).map(img => {
+                    if (!img.complete) {
+                        return new Promise(resolve => { img.onload = img.onerror = resolve; });
+                    }
+                    return Promise.resolve();
+                });
+                await Promise.all(promises);
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                const canvas = await html2canvas(tempContainer, {
+                    width: 1920,
+                    height: 1080,
+                    scale: 1,
+                    logging: false,
+                    useCORS: true,
+                    letterRendering: true
+                });
+
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                
+                if (i > 0) pdf.addPage([1920, 1080], 'landscape');
+                
+                pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
+                
+                addLinksToPDF(pdf, slideContent, i, scaleFactor);
+            }
+            
+            showSlide(originalSlideIndex + 1);
+            
+            document.body.removeChild(tempContainer);
+            pdf.save(fileName);
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                popup.classList.remove('loading');
+                blurOverlay.style.display = 'none';
+            }, 2000);
+        }
+
+        function addLinksToPDF(pdf, slideContent, pageIndex, scaleFactor) {
+            pdf.setPage(pageIndex + 1);
+            const links = slideContent.querySelectorAll('a');
+            
+            const getTrueOffset = (element) => {
+                let top = 0, left = 0;
+                let current = element;
+                while(current && current !== slideContent) {
+                    top += current.offsetTop;
+                    left += current.offsetLeft;
+                    current = current.offsetParent;
+                }
+                return { top, left };
+            };
+
+            links.forEach(link => {
+                if (!link.href || link.href.trim() === '' || link.href.endsWith('#')) return;
+
+                const offset = getTrueOffset(link);
+                
+                const x = offset.left * scaleFactor;
+                const y = offset.top * scaleFactor;
+                const width = link.offsetWidth * scaleFactor;
+                const height = link.offsetHeight * scaleFactor;
+                
+                if (width > 0 && height > 0) {
+                    try {
+                        pdf.link(x, y, width, height, { url: link.href });
+                    } catch (e) {
+                        console.error('Ошибка при добавлении ссылки:', e, {url: link.href, x, y, width, height});
+                    }
+                }
+            });
+        }
+
+        function setClientLogo(logoSrc) {
+            globalClientLogo = logoSrc;
+            
+            const previewContainer = document.getElementById('clientLogoPreviewContainer');
+            if (logoSrc) {
+                // Показываем в превью инвертированный логотип, чтобы пользователь понимал, как это будет выглядеть
+                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain; filter: invert(1);">`;
+            } else {
+                previewContainer.innerHTML = '';
+            }
+            
+            if (slides[currentSlideIndex] && (slides[currentSlideIndex].type === 'general' || slides[currentSlideIndex].type === 'videokp')) {
+                updateCurrentSlide();
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
+                let text = option.textContent.replace(/Статистика\s*/i, '').trim();
+                option.textContent = text.charAt(0).toUpperCase() + text.slice(1);
+            });
+            const inputsToUpdate = [
+                'banner', 'logos', 'manager', 'personalPhone', 'price1Value', 
+                'price3Value1', 'price3Value2', 'price3Value3', 'comment', 
+                'priceBanner', 'instructionBanner', 'playlist', 'premiumPrice1', 
+                'premiumPrice2', 'premiumComment', 'videokpPrice', 'videokpComment',
+                'price1Label', 'price10plusHeader1', 'price10plusValue1',
+                'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3',
+                'price3Header1', 'price3Header2', 'price3Header3'
+            ];
+            inputsToUpdate.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', function() {
+                        updateCurrentSlide();
+                        // Если поменялся менеджер, проверяем доступность разделов
+                        if (id === 'manager') {
+                            updateSectionAvailability();
+                        }
+                    });
+                }
+            });
+
+            // Слушатель чекбокса инверсии
+            document.getElementById('logoInvert').addEventListener('change', function() {
+                updateCurrentSlide();
+            });
+
+            document.getElementById('logos').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const bannerValue = selectedOption.getAttribute('data-banner');
+                if (bannerValue) {
+                    const bannerSelect = document.getElementById('banner');
+                    bannerSelect.value = bannerValue;
+                    bannerSelect.dispatchEvent(new Event('change'));
+                }
+            });
+            document.getElementById('companyName').addEventListener('input', function() {});
+
+            document.getElementById('clientLogoUpload').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        setClientLogo(e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // --- Логика для поиска по менеджерам ---
+            const managerSelect = document.getElementById('manager');
+            const managerSearch = document.getElementById('manager-search');
+            const managerOptionsContainer = document.getElementById('manager-options');
+
+            // Инициализируем опции поиска
+            const updateManagerSearchOptions = () => {
+                managerOptionsContainer.innerHTML = '';
+                const options = Array.from(managerSelect.options);
+                options.forEach(option => {
+                    // Добавляем в поиск только те, что сейчас видимы (прошли фильтр региона)
+                    // Но так как option.style.display не всегда надежен в JS при инициализации, проверяем регион вручную
+                    if (option.getAttribute('data-region') === currentRegion) {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.classList.add('option');
+                        optionDiv.textContent = option.textContent;
+                        optionDiv.dataset.value = option.value;
+                        optionDiv.dataset.number = option.dataset.number;
+                        managerOptionsContainer.appendChild(optionDiv);
+                    }
+                });
+            };
+
+            // Первичная инициализация
+            setRegion('ru'); // Это запустит updateSectionAvailability и первичную фильтрацию
+
+            managerSearch.addEventListener('focus', () => {
+                // Обновляем список перед показом, чтобы он соответствовал текущему региону
+                updateManagerSearchOptions();
+                managerOptionsContainer.style.display = 'block';
+                managerSearch.value = ''; 
+                // Триггерим input чтобы показать все варианты региона
+                const filter = '';
+                const customOptions = managerOptionsContainer.querySelectorAll('.option');
+                customOptions.forEach(option => option.style.display = '');
+            });
+
+            managerSearch.addEventListener('blur', () => {
+                setTimeout(() => {
+                    managerOptionsContainer.style.display = 'none';
+                    if (!managerSearch.value) {
+                         managerSearch.value = managerSelect.options[managerSelect.selectedIndex].text;
+                    }
+                }, 150);
+            });
+
+            managerSearch.addEventListener('input', () => {
+                const filter = managerSearch.value.toLowerCase();
+                const customOptions = managerOptionsContainer.querySelectorAll('.option');
+                customOptions.forEach(option => {
+                    const nameMatch = option.textContent.toLowerCase().includes(filter);
+                    const numberMatch = option.dataset.number && option.dataset.number.includes(filter);
+
+                    if (nameMatch || numberMatch) {
+                        option.style.display = '';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            });
+
+            managerOptionsContainer.addEventListener('mousedown', (e) => {
+                if (e.target.classList.contains('option')) {
+                    const selectedText = e.target.textContent;
+                    const selectedValue = e.target.dataset.value;
+
+                    managerSearch.value = selectedText;
+                    managerSelect.value = selectedValue;
+                    
+                    managerSelect.dispatchEvent(new Event('change'));
+                    managerOptionsContainer.style.display = 'none';
+                }
+            });
+            // --- Конец логики для поиска ---
+
+            updateSlideNumbers();
+            if (slides.length > 0) {
+                showSlide(1); 
+            }
+            if (document.querySelector('.menu-header')) {
+                document.querySelector('.menu-header').click();
+            }
+        });
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
