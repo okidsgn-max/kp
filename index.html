@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор КП (Романтика)</title>
+    <title>Генератор коммерческого предложения</title>
     <link rel="icon" href="zvb2bsale.png" type="image/png" sizes="128x128">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -478,7 +478,7 @@
             transition: all var(--transition-medium);
         }
 
-        .snow-overlay {
+        .romance-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -892,18 +892,17 @@
             box-shadow: 0 0px 0px rgba(0,0,0,0.05);
         }
 
-        /* Заменили снег на романтику - стиль кнопки */
-        .zvuk-button--love {
-            background-color: #fff0f6; /* Розоватый фон */
-            color: #d6336c; /* Малиновый текст */
-            border: 1px solid #fcc2d7;
+        .zvuk-button--snow {
+            background-color: #ffeef2;
+            color: #d6336c;
+            border: 1px solid #ffdeeb;
             margin-bottom: 16px;
             width: 100%;
             justify-content: center;
             gap: 8px;
         }
         
-        .zvuk-button--love:hover {
+        .zvuk-button--snow:hover {
             background-color: #fcc2d7;
         }
         
@@ -1181,8 +1180,7 @@
 
                     <div class="logo-link-trigger" onclick="openLogoLinkPopup()">или укажите ссылку на лого</div>
 
-                    <!-- Изменена кнопка на Романтическую атмосферу -->
-                    <button class="zvuk-button zvuk-button--love" onclick="toggleLove()">
+                    <button class="zvuk-button zvuk-button--snow" onclick="toggleRomance()">
                         ❤️ Романтическая атмосфера
                     </button>
                 </div>
@@ -1217,43 +1215,49 @@
                         <option value="images/socobjlogo.webp" data-banner="images/sbsocobj.webp">Общественные пространства</option>
                         <option value="images/nlogo.webp" data-banner="images/sbned.webp">Недвижимость</option>
                         <option value="images/autologo.webp" data-banner="images/sbauto.webp">Автосалоны</option>
+                
                     </select>
 
                     <label class="menu-label">Баннер:</label>
                     <select class="zvuk-select" id="banner"> 
-                        <!-- Объединенный список всех баннеров -->
-                        <option value="images/romantica.webp">Романтическая атмосфера</option> <!-- Новый баннер -->
-                        <option value="images/ny26.webp">Новогодняя атмосфера</option>
                         <option value="images/sbbeauty.webp">Салон красоты</option>
                         <option value="images/sbbeauty-laser.webp">Салон лазерной эпиляции</option>
                         <option value="images/sbbeauty-nail.webp">Маникюрный салон</option>
                         <option value="images/sbspa.webp">Спа</option>
                         <option value="images/sbstom.webp">Стоматология</option>
-                        <option value="images/sbcowork.webp">Коворкинг</option>
-                        <option value="images/sbrest.webp">Ресторан#1</option>
-                        <option value="images/sbluxrest.webp">Ресторан#2</option>
-                        <option value="images/sbcafe.webp">Кафе/Кофейня</option>
+                        <option value="images/sbbarber.webp">Барбершоп</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
+                        
+                        <option value="images/sbrest.webp">Ресторан</option>
+                        <option value="images/sbluxrest.webp">Ресторан премиум</option>
+                        <option value="images/sbcafe.webp">Кафе</option>
+                        <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbbakery.webp">Пекарня</option>
                         <option value="images/sbfastfood.webp">Фастфуд</option>
                         <option value="images/sbgrill.webp">Грильбар</option>                        
                         <option value="images/sbpizza.webp">Пицца</option>
                         <option value="images/sbsushi.webp">Суши</option>
+                        
                         <option value="images/sbretail.webp">Магазин</option>
                         <option value="images/sbmall.webp">Одежда</option>
                         <option value="images/sbtc.webp">Торговый центр</option>
-                        <option value="images/sbkids.webp">Детский центр</option>
-                        <option value="images/sbfitnes.webp">Фитнес</option> 
-                        <option value="images/sbbarber.webp">Барбершоп</option>
                         <option value="images/sbjew.webp">Ювелирный салон</option>
-                        <option value="images/sbned.webp">Недвижимость</option>
                         <option value="images/sbauto.webp">Автодилеры</option>
+                        
+                        <option value="images/sbcowork.webp">Коворкинг</option>
+                        <option value="images/sbsocobj.webp">Общественные пространства</option>
+                        <option value="images/sbexb.webp">Выставочное пространство</option>
+                        <option value="images/sbned.webp">Недвижимость</option>
                         <option value="images/sbazs.webp">АЗС</option>
                         <option value="images/sbhotel.webp">Отели</option>
-                        <option value="images/sbexb.webp">Выставочное пространство</option>
+                        <option value="images/sbkids.webp">Детский центр</option>
+                        
+                        <option value="images/autumn.webp">Осенний плейлист</option>
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>
-                        <option value="images/autumn.webp">Осенний плейлист</option>
+                        <option value="images/ny26.webp">Новогодняя атмосфера</option>
+                        <option value="images/romantica.webp">Романтическая атмосфера</option>
                     </select>
 
                     <div class="slide-buttons">
@@ -1381,41 +1385,46 @@
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="comment" placeholder="Введите комментарий">
                     
-                    <label class="menu-label">Баннер (ниши):</label>
+                    <label class="menu-label">Баннер (дочерний):</label>
                     <select class="zvuk-select" id="priceBanner">
-                         <!-- Объединенный список всех баннеров (дублирует первый селект) -->
-                        <option value="images/romantica.webp">Романтическая атмосфера</option> <!-- Новый баннер -->
-                        <option value="images/ny26.webp">Новогодняя атмосфера</option>
                         <option value="images/sbbeauty.webp">Салон красоты</option>
                         <option value="images/sbbeauty-laser.webp">Салон лазерной эпиляции</option>
                         <option value="images/sbbeauty-nail.webp">Маникюрный салон</option>
                         <option value="images/sbspa.webp">Спа</option>
                         <option value="images/sbstom.webp">Стоматология</option>
-                        <option value="images/sbcowork.webp">Коворкинг</option>
-                        <option value="images/sbrest.webp">Ресторан#1</option>
-                        <option value="images/sbluxrest.webp">Ресторан#2</option>
-                        <option value="images/sbcafe.webp">Кафе/Кофейня</option>
+                        <option value="images/sbbarber.webp">Барбершоп</option>
+                        <option value="images/sbfitnes.webp">Фитнес</option> 
+                        
+                        <option value="images/sbrest.webp">Ресторан</option>
+                        <option value="images/sbluxrest.webp">Ресторан премиум</option>
+                        <option value="images/sbcafe.webp">Кафе</option>
+                        <option value="images/sbcafe.webp">Кофейня</option>
                         <option value="images/sbbakery.webp">Пекарня</option>
                         <option value="images/sbfastfood.webp">Фастфуд</option>
                         <option value="images/sbgrill.webp">Грильбар</option>                        
                         <option value="images/sbpizza.webp">Пицца</option>
                         <option value="images/sbsushi.webp">Суши</option>
+                        
                         <option value="images/sbretail.webp">Магазин</option>
                         <option value="images/sbmall.webp">Одежда</option>
                         <option value="images/sbtc.webp">Торговый центр</option>
-                        <option value="images/sbkids.webp">Детский центр</option>
-                        <option value="images/sbfitnes.webp">Фитнес</option> 
-                        <option value="images/sbbarber.webp">Барбершоп</option>
                         <option value="images/sbjew.webp">Ювелирный салон</option>
-                        <option value="images/sbned.webp">Недвижимость</option>
                         <option value="images/sbauto.webp">Автодилеры</option>
+                        
+                        <option value="images/sbcowork.webp">Коворкинг</option>
+                        <option value="images/sbsocobj.webp">Общественные пространства</option>
+                        <option value="images/sbexb.webp">Выставочное пространство</option>
+                        <option value="images/sbned.webp">Недвижимость</option>
                         <option value="images/sbazs.webp">АЗС</option>
                         <option value="images/sbhotel.webp">Отели</option>
-                        <option value="images/sbexb.webp">Выставочное пространство</option>
+                        <option value="images/sbkids.webp">Детский центр</option>
+                        
+                        <option value="images/autumn.webp">Осенний плейлист</option>
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/veranda.webp">Веранда</option>
-                        <option value="images/autumn.webp">Осенний плейлист</option>
+                        <option value="images/ny26.webp">Новогодняя атмосфера</option>
+                        <option value="images/romantica.webp">Романтическая атмосфера</option>
                     </select>
 
                     <div class="slide-buttons">
@@ -1638,8 +1647,8 @@
 
     <div id="logo-link-popup" class="popup-input-container">
         <div class="popup-content-dark">
-            <h3>Укажите ссылку или название бренда</h3>
-            <input type="text" id="logoLinkInput" placeholder="ddx fitness или ссылка на сайт/VK">
+            <h3>Укажите ссылку на логотип или сайт</h3>
+            <input type="text" id="logoLinkInput" placeholder="https://fitnesshouse.ru или ссылка на картинку">
             <div class="popup-buttons">
                 <button id="logoLinkBtn" onclick="saveLogoLink()">ОК</button>
                 <button onclick="closeLogoLinkPopup()">Отмена</button>
@@ -1667,7 +1676,6 @@
         // Ссылки для баннеров
         // Автоматически добавляем версии с "2" на конце для нишевых баннеров
         let bannerLinks = {
-            'images/romantica.webp': 'https://zvuk-b2b.com', /* Добавлено */
             'images/deviceall.webp': 'https://help.zvuk-b2b.com/onair',
             'images/sbcafe.webp': 'https://zvuk-b2b.com/cafe',
             'images/sbfastfood.webp': 'https://zvuk-b2b.com/rest?ab_redir=1758811215599',
@@ -1692,7 +1700,7 @@
             'images/veranda.webp': 'https://zvuk-b2b.com/rest',
             'images/play.webp': 'https://zvuk-b2b.com/player',
             'images/action.webp': 'https://zvuk-b2b.com',
-            'images/base.webp': 'https://zvuk-b2b.com',
+            'images/base.webp': 'https://zvuk-b2b.com', /* Добавлено */
             'images/alldevice.webp': 'https://help.zvuk-b2b.com/onair',
             'images/autumn.webp': 'https://zvuk-b2b.com',
             'images/nostalgia.webp': 'https://zvuk-b2b.com',
@@ -1708,7 +1716,8 @@
             'images/event.webp': 'https://zvuk-b2b.com',
             'images/concept.webp': 'https://zvuk-b2b.com',
             'images/artist.webp': 'https://zvuk-b2b.com',
-            'images/ny26.webp': 'https://zvuk-b2b.com/newyear_concept'
+            'images/ny26.webp': 'https://zvuk-b2b.com/newyear_concept',
+            'images/romantica.webp': 'https://zvuk-b2b.com'
         };
 
         // Заполнение версий "2" для ссылок
@@ -1737,7 +1746,7 @@
         // По умолчанию инверсия включена
         let isLogoInverted = true; 
         let currentRegion = 'ru';
-        let isLoveEnabled = false; // Заменили Snow на Love
+        let isRomanceEnabled = false;
 
         function isSectionRestricted(type) {
             const { region } = getRegionInfo();
@@ -1757,8 +1766,8 @@
             }, 2000);
         }
         
-        function toggleLove() {
-            isLoveEnabled = !isLoveEnabled;
+        function toggleRomance() {
+            isRomanceEnabled = !isRomanceEnabled;
             // Force redraw of slide if it's general
             updateCurrentSlide();
         }
@@ -1990,7 +1999,7 @@
         }
 
         async function saveLogoLink() {
-            let inputVal = document.getElementById('logoLinkInput').value.trim();
+            const inputVal = document.getElementById('logoLinkInput').value.trim();
             if (!inputVal) return;
 
             const btn = document.getElementById('logoLinkBtn');
@@ -2001,32 +2010,15 @@
                 setClientLogo(inputVal);
                 closeLogoLinkPopup();
                 return;
-            }
-
-            // Логика обработки "просто названия" (например ddx fitness)
-            if (!inputVal.includes('.') && !inputVal.includes('http')) {
-                // Если нет точки и http, считаем это названием бренда.
-                // Пробуем эвристику Clearbit
-                const cleanName = inputVal.replace(/\s+/g, '');
-                // Пробуем .ru и .com
-                const logoUrlRu = `https://logo.clearbit.com/${cleanName}.ru`;
-                
-                // Просто ставим лого и закрываем. Если не загрузится - сработает onerror в img теге (который скроет его)
-                // Но мы можем попытаться сделать умнее - установить URL. 
-                // Для надежности, если это "бренд", лучше попробовать найти сайт.
-                // Но так как бэкенда нет, пробуем Clearbit .com как самое вероятное
-                setClientLogo(`https://logo.clearbit.com/${cleanName}.com`);
-                closeLogoLinkPopup();
-                return;
-            }
+            } 
             
-            // Если это ссылка на сайт/VK
-            btn.textContent = 'идет поиск...'; 
+            // Если это ссылка на сайт - парсим
+            btn.textContent = 'идет поиск по SEO-ключам...'; // Changed text as requested
             btn.disabled = true;
 
             try {
                 let url = inputVal.trim();
-                // Ensure protocol exists
+                // Improved URL handling: ensure protocol exists
                 if (!/^https?:\/\//i.test(url)) {
                     url = 'https://' + url;
                 }
@@ -2040,37 +2032,25 @@
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(data.contents, 'text/html');
                     
-                    // 1. Поиск логотипа (Расширенный список)
+                    // 1. Поиск логотипа
                     let logoSrc = null;
                     const logoSelectors = [
-                        '.page-header__logo img',   // requested
-                        '.page-header img',         // requested
-                        '.logo.logo3 img',          // requested (footer)
                         '.logo img', 
                         'header .logo img',
                         '[class*="logo"] img',
-                        '.tn-atom[src]', 
+                        '.tn-atom[src]', // Tilda
                         '.footer__logo img',
                         'header img',
-                        // VK Specific selectors for avatar
-                        '.page_avatar img',
-                        '.pp_img',
-                        '.page_cover_image', 
-                        '.EntityAvatar-image', // new vk design sometimes
                         'footer img'
                     ];
 
                     for (let selector of logoSelectors) {
                         const img = doc.querySelector(selector);
-                        if (img) {
-                            // Check src or sometimes data-src or styling background
-                            let src = img.getAttribute('src') || img.getAttribute('data-src');
-                            
-                            if (src) {
-                                if (src.startsWith('data:') && src.length < 1000) continue;
-                                logoSrc = src;
-                                break;
-                            }
+                        if (img && img.src) {
+                            // Пропускаем data:image и очень маленькие иконки если это возможно
+                            if (img.src.startsWith('data:') && img.src.length < 1000) continue;
+                            logoSrc = img.getAttribute('src'); // Берем атрибут, чтобы обработать относительные пути
+                            break;
                         }
                     }
 
@@ -2078,6 +2058,7 @@
                         // Обработка относительных путей
                         if (!logoSrc.startsWith('http') && !logoSrc.startsWith('data:')) {
                             const urlObj = new URL(url);
+                            // Убираем слеш если он есть и там и там
                             if (logoSrc.startsWith('/') && urlObj.origin.endsWith('/')) {
                                 logoSrc = urlObj.origin + logoSrc.substring(1);
                             } else if (!logoSrc.startsWith('/') && !urlObj.origin.endsWith('/')) {
@@ -2088,7 +2069,7 @@
                         }
                         setClientLogo(logoSrc);
                     } else {
-                        // Fallback: Clearbit
+                        // Fallback: пробуем Clearbit если парсинг не нашел img
                         try {
                             const urlObj = new URL(url);
                             setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`);
@@ -2103,6 +2084,7 @@
                 console.error('Ошибка при анализе сайта:', e);
                 // Fallback на Clearbit при ошибке
                 try {
+                     // Still try to fix URL for fallback
                      let cleanUrl = inputVal.trim();
                      if (!/^https?:\/\//i.test(cleanUrl)) cleanUrl = 'https://' + cleanUrl;
                      const urlObj = new URL(cleanUrl);
@@ -2264,6 +2246,7 @@
             };
             
             // Helper to handle Prefixed images (RB/KZ) with fallback
+            // Added secondaryFallback parameter for Price Banners (to fall back from '2.webp' to '.webp')
             const createPrefixedImage = (originalPath, className, forceRegion = null, secondaryFallback = null) => {
                 const img = document.createElement('img');
                 img.className = className;
@@ -2277,9 +2260,16 @@
                     
                     img.src = prefixedSrc;
                     
-                    let onerrorStr = `this.removeAttribute('onerror');`; 
+                    // Construct fallback logic:
+                    // 1. Try prefixedSrc (KZ/RB).
+                    // 2. OnError -> Try originalPath (Standard).
+                    // 3. OnError (if secondaryFallback exists) -> Try secondaryFallback (Base).
+                    
+                    let onerrorStr = `this.removeAttribute('onerror');`; // Clear self to prevent loop
                     
                     if (secondaryFallback) {
+                        // If falling back to original, and THAT fails, go to secondaryFallback
+                        // Escape quotes carefully for HTML attribute
                         onerrorStr += `this.setAttribute('onerror', "this.removeAttribute('onerror'); this.src='${secondaryFallback}';");`;
                     }
                     onerrorStr += `this.src='${originalPath}';`;
@@ -2290,6 +2280,7 @@
                     // Standard region (RU)
                     img.src = originalPath;
                     if (secondaryFallback) {
+                        // If original fails, try secondary
                          img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${secondaryFallback}';`);
                     }
                 }
@@ -2301,10 +2292,10 @@
                     bgImg.src = bgImage; // Локализованный фон
                     slideContainer.appendChild(bgImg);
                     
-                    if (isLoveEnabled) {
+                    if (isRomanceEnabled) {
                         const loveImg = document.createElement('img');
-                        loveImg.className = 'snow-overlay';
-                        loveImg.src = 'love.webp'; // Используем love.webp
+                        loveImg.className = 'romance-overlay';
+                        loveImg.src = 'images/love.webp';
                         slideContainer.appendChild(loveImg);
                     }
 
@@ -2324,6 +2315,8 @@
                     slideContainer.appendChild(bannerLink);
                     
                     const logosVal = document.getElementById('logos').value;
+                    // Особая логика для логотипов: если выбран "Главные клиенты", то берем mainLogo (он уже локализован в getRegionInfo)
+                    // Для остальных категорий применяем префиксную логику
                     let logosImg;
                     if (logosVal === 'images/mainlogo.webp') {
                          logosImg = document.createElement('img');
@@ -2346,6 +2339,7 @@
                         clientLogoImg.style.maxWidth = '30%'; 
                         clientLogoImg.style.objectFit = 'contain';
                         
+                        // Error handling for auto-fetched logos
                         clientLogoImg.onerror = function() {
                             this.style.display = 'none';
                         };
@@ -2365,30 +2359,17 @@
                     }
                     slideContainer.appendChild(bgImg);
                     
-                    const priceBannerVal = document.getElementById('priceBanner').value; 
+                    // --- CHANGED LOGIC FOR PRICING BANNER ---
+                    // Try to load the niche version (with '2') first, then fallback to base.
+                    const baseBannerVal = document.getElementById('priceBanner').value; // e.g. images/sbbeauty.webp
+                    // Construct potential niche name: images/sbbeauty2.webp
+                    const nicheBannerVal = baseBannerVal.replace('.webp', '2.webp');
                     
-                    // Логика фоллбэка:
-                    // 1. Пробуем добавить '2' к имени файла (например, sbcafe2.webp) для нишевых
-                    // 2. Если такого файла нет, onerror переключит на оригинальное имя (sbcafe.webp)
+                    // Use niche as primary, base as fallback
+                    const priceBannerImg = createPrefixedImage(nicheBannerVal, 'preview-banner', null, baseBannerVal);
                     
-                    let targetBannerVal = priceBannerVal;
-                    // Если это не специальные баннеры (типа ny26, romantica), пробуем добавить '2'
-                    // Но так как список теперь общий, нам нужно аккуратно обработать это.
-                    // Простая эвристика: если файл в папке images и не имеет цифры в конце (кроме 26) - добавляем 2.
-                    // Но проще всегда пробовать с 2, а фоллбэк делать на без 2.
-                    
-                    let preferredPriceBannerVal = priceBannerVal.replace('.webp', '2.webp');
-                    // Исключения, где '2' не нужно или уже есть в логике имен
-                    if (priceBannerVal.includes('romantica') || priceBannerVal.includes('ny26') || priceBannerVal.includes('autumn') || priceBannerVal.includes('nostalgia')) {
-                        preferredPriceBannerVal = priceBannerVal;
-                    }
-
-                    // Фоллбэк - это значение, которое выбрано в селекте (без 2)
-                    const baseBannerVal = priceBannerVal;
-                    
-                    const priceBannerImg = createPrefixedImage(preferredPriceBannerVal, 'preview-banner', null, baseBannerVal);
-                    
-                    const priceBannerLinkUrl = getLocalizedBannerLink(bannerLinks[priceBannerVal], domainSuffix);
+                    // Use base value for link lookup (keys are base names)
+                    const priceBannerLinkUrl = getLocalizedBannerLink(bannerLinks[baseBannerVal], domainSuffix);
                     const priceBannerLink = document.createElement('a');
                     priceBannerLink.href = priceBannerLinkUrl;
                     priceBannerLink.target = '_blank';
@@ -2402,15 +2383,18 @@
                     
                     const managerSelect = document.getElementById('manager');
                     const selectedManagerOption = managerSelect.options[managerSelect.selectedIndex];
-                    const managerValue = selectedManagerOption.value; 
+                    const managerValue = selectedManagerOption.value; // e.g. images/grigoryev-kz.webp
                     const managerDataLink = selectedManagerOption.getAttribute('data-link');
 
                     const managerImg = document.createElement('img');
                     managerImg.className = 'preview-manager';
                     managerImg.src = managerValue;
                     
+                    // Manager Fallback Logic:
+                    // If managerValue has -kz or -rb, try to fallback to base name if specific fails
                     const fallbackManager = managerValue.replace(/-kz.webp|-rb.webp/g, '.webp');
                     if (fallbackManager !== managerValue) {
+                         // Set inline onerror to switch to fallback
                          managerImg.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${fallbackManager}';`);
                     }
                     
@@ -2569,6 +2553,7 @@
                     creativeLinkContainer.style.height = '100%';
                     slideContainer.appendChild(creativeLinkContainer);
                     
+                    // Invisible clickable areas based on user request (no duplicated images)
                     const cCardLink1 = document.createElement('a');
                     cCardLink1.href = 'https://zvuk-b2b.com/blog/1price';
                     cCardLink1.target = '_blank';
@@ -2584,7 +2569,7 @@
                     cCardLink2.target = '_blank';
                     cCardLink2.className = 'concept-link-area';
                     cCardLink2.style.bottom = '6%';
-                    cCardLink2.style.left = '12%'; 
+                    cCardLink2.style.left = '12%'; // 3% + 7% + 2% gap roughly
                     cCardLink2.style.width = '7%';
                     cCardLink2.style.height = '12%';
                     slideContainer.appendChild(cCardLink2);
@@ -2618,10 +2603,12 @@
                     
                     const premiumCommentDiv = document.createElement('div');
                     premiumCommentDiv.className = 'preview-comment';
+                    // Комментарий премиума использует стандартный стиль, но может требовать отдельного позиционирования?
+                    // По умолчанию ставим видимым если есть текст
                     if (document.getElementById('premiumComment').value.trim() !== '') {
                         premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
                         premiumCommentDiv.classList.add('visible');
-                        premiumCommentDiv.style.bottom = '5%'; 
+                        premiumCommentDiv.style.bottom = '5%'; // Стандартное положение
                         premiumCommentDiv.style.left = '3%';
                     }
                     slideContainer.appendChild(premiumCommentDiv);
@@ -2642,19 +2629,20 @@
                     break;
                 case 'event':
                     bgImg.src = 'images/event.webp';
-                    bgImg.style.objectFit = 'fill'; 
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
                     slideContainer.appendChild(bgImg);
                     break;
                 case 'artist':
                     bgImg.src = 'images/artist.webp';
-                    bgImg.style.objectFit = 'fill'; 
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
                     slideContainer.appendChild(bgImg);
                     break;
                 case 'concept':
                     bgImg.src = 'images/mus_concept.webp';
-                    bgImg.style.objectFit = 'fill'; 
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
                     slideContainer.appendChild(bgImg);
 
+                    // Add 3 clickable areas on the left
                     const cLink1 = document.createElement('a');
                     cLink1.href = 'https://zvuk-b2b.com/retro';
                     cLink1.target = '_blank';
@@ -2688,7 +2676,7 @@
 
                 case 'web':
                     bgImg.src = 'images/www.webp';
-                    bgImg.style.objectFit = 'fill'; 
+                    bgImg.style.objectFit = 'fill'; // Force 100% fill
                     slideContainer.appendChild(bgImg);
                     break;
 
@@ -2717,6 +2705,7 @@
                     }
                     const videoPriceDiv = document.createElement('div');
                     videoPriceDiv.className = 'preview-price';
+                    // Special positioning for video KP: 10% lower (56% + 10% = 66%)
                     videoPriceDiv.style.top = '66%';
                     videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ` ${currency}/мес.`;
                     slideContainer.appendChild(videoPriceDiv);
@@ -2726,7 +2715,7 @@
                     if (document.getElementById('videokpComment').value.trim() !== '') {
                         videoCommentDiv.textContent = document.getElementById('videokpComment').value;
                         videoCommentDiv.classList.add('visible');
-                        videoCommentDiv.style.top = '72%'; 
+                        videoCommentDiv.style.top = '72%'; // Чуть ниже цены
                     }
                     slideContainer.appendChild(videoCommentDiv);
                     break;
@@ -3082,7 +3071,8 @@
             document.getElementById('banner').addEventListener('change', function() {
                 const generalVal = this.value; // например images/sbcafe.webp
                 
-                // Проверяем, есть ли такой опшн в priceBanner (теперь там полный список)
+                // Проверяем, есть ли такой опшн в priceBanner
+                // Так как списки теперь одинаковые, мы можем просто поставить то же значение
                 const priceSelect = document.getElementById('priceBanner');
                 const option = priceSelect.querySelector(`option[value="${generalVal}"]`);
                 
@@ -3090,6 +3080,7 @@
                     priceSelect.value = generalVal;
                 }
             });
+
 
             // Слушатель чекбокса инверсии
             document.getElementById('logoInvert').addEventListener('change', function() {
@@ -3129,6 +3120,7 @@
                 const options = Array.from(managerSelect.options);
                 options.forEach(option => {
                     // Добавляем в поиск только те, что сейчас видимы (прошли фильтр региона)
+                    // Но так как option.style.display не всегда надежен в JS при инициализации, проверяем регион вручную
                     if (option.getAttribute('data-region') === currentRegion) {
                         const optionDiv = document.createElement('div');
                         optionDiv.classList.add('option');
@@ -3144,10 +3136,12 @@
             setRegion('ru'); // Это запустит updateSectionAvailability и первичную фильтрацию
 
             managerSearch.addEventListener('focus', () => {
+                // Обновляем список перед показом, чтобы он соответствовал текущему региону
                 updateManagerSearchOptions();
                 managerOptionsContainer.style.display = 'block';
                 managerSearch.value = ''; 
                 // Триггерим input чтобы показать все варианты региона
+                const filter = '';
                 const customOptions = managerOptionsContainer.querySelectorAll('.option');
                 customOptions.forEach(option => option.style.display = '');
             });
