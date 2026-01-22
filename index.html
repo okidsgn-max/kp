@@ -1329,7 +1329,7 @@
                     
                     <div id="price1Container">
                         <label class="menu-label">Заголовок стоимости:</label>
-                        <input class="zvuk-input" type="text" id="price1Label" value="Стоимость за 1 помещение, ₽ в т.ч. 20%">
+                        <input class="zvuk-input" type="text" id="price1Label" value="Стоимость за 1 помещение, ₽ в т.ч. 22%">
                         <label class="menu-label">Стоимость 1, <span class="currency-label-text">валюта</span>/мес:</label>
                         <input class="zvuk-input" type="number" id="price1Value" value="1390">
                     </div>
@@ -1992,7 +1992,7 @@
             const { currency } = getRegionInfo();
             const priceLabel = document.getElementById('price1Label');
             if (priceLabel.value.includes('Стоимость за 1 помещение')) {
-                 if (currency === '₽') priceLabel.value = 'Стоимость за 1 помещение, ₽ в т.ч. 20%';
+                 if (currency === '₽') priceLabel.value = 'Стоимость за 1 помещение, ₽ в т.ч. 22%';
                  else priceLabel.value = `Стоимость за 1 помещение, ${currency}`;
             }
         }
@@ -3223,4 +3223,5 @@
     </script>
 </body>
 </html>
+
 
