@@ -542,18 +542,16 @@
         .preview-comment {
             position: absolute;
             left: 3%;
-            /* Background and Styling */
             background-color: #00B399;
             color: white;
             padding: calc(6px * var(--element-scale)) calc(12px * var(--element-scale));
             border-radius: calc(8px * var(--element-scale));
             font-weight: 500;
-            font-size: calc(12px * var(--element-scale)); /* Шрифт как у заголовка стоимости - чуть крупнее обычного коммента */
+            font-size: calc(12px * var(--element-scale)); 
             font-family: 'Inter', sans-serif;
-            
             width: auto;
             max-width: 60%;
-            display: none; /* Hidden by default if empty */
+            display: none; 
             z-index: 10;
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
@@ -1036,6 +1034,62 @@
             border-color: var(--primary);
         }
 
+        /* --- Styles for the New Itogo Slide --- */
+        .itogo-wrapper {
+            position: absolute;
+            top: 5%;
+            left: 3%;
+            width: 94%;
+            height: 90%;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            z-index: 20;
+        }
+
+        .itogo-title {
+            font-size: calc(24px * var(--element-scale));
+            font-weight: 600;
+            margin-bottom: calc(20px * var(--element-scale));
+            color: white;
+        }
+
+        .itogo-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: calc(12px * var(--element-scale));
+            margin-bottom: calc(20px * var(--element-scale));
+        }
+
+        .itogo-table th {
+            background-color: rgba(0, 179, 152, 0.8);
+            color: white;
+            padding: calc(12px * var(--element-scale));
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid #444;
+        }
+
+        .itogo-table td {
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: calc(12px * var(--element-scale));
+            border: 1px solid #444;
+            color: #eee;
+        }
+
+        .itogo-summary {
+            font-size: calc(14px * var(--element-scale));
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .editable-val {
+            color: #00b398;
+            border-bottom: 1px dashed #00b398;
+            cursor: pointer;
+            padding: 0 2px;
+        }
 
         /* --- MOBILE STYLES --- */
         @media (max-width: 768px) {
@@ -1066,15 +1120,15 @@
 
             .menu-container {
                 order: 2;
-                padding-bottom: 100px; /* Space for fixed bottom button */
+                padding-bottom: 100px;
                 height: auto;
                 overflow-y: visible;
             }
             
             .preview-page {
-                --element-scale: 0.58; /* Увеличено для пропорции ~1/17 на мобильных */
+                --element-scale: 0.58; 
                 --qr-size: calc(60px * 0.58);
-                width: 100%; /* Force width on mobile */
+                width: 100%; 
             }
 
             .preview-wrapper {
@@ -1086,7 +1140,6 @@
                 margin-top: 10px;
             }
 
-            /* Hide zoom button on mobile */
             .control-icon:first-child {
                 display: none; 
             }
@@ -1115,14 +1168,11 @@
                 box-shadow: 0 0 10px rgba(0,0,0,0.2);
             }
 
-            /* SPECIAL MOBILE PRICING SCALING 
-               Applies only when NOT rendering to PDF.
-            */
             .preview-page:not(.pdf-render-mode) .preview-price,
             .preview-page:not(.pdf-render-mode) .preview-price-premium-1,
             .preview-page:not(.pdf-render-mode) .preview-price-premium-2 {
                 font-size: calc(6px * var(--element-scale)) !important;
-                width: 80%; /* Expand width to prevent wrapping */
+                width: 80%;
             }
             .preview-page:not(.pdf-render-mode) .price-table {
                 font-size: calc(5px * var(--element-scale)) !important;
@@ -1141,7 +1191,6 @@
             --qr-size: calc(60px * 2.5);
         }
 
-        /* Стиль для кликабельных областей концепций */
         .concept-link-area {
             position: absolute;
             cursor: pointer;
@@ -1195,7 +1244,7 @@
                     <select class="zvuk-select" id="logos">
                         <option value="images/mainlogo.webp">Главные клиенты</option>
                         <option value="images/beautylogo.webp" data-banner="images/sbbeauty.webp">Салоны красоты</option>            
-                        <option value="images/coffeelogo.webp" data-banner="images/sbcafe.webp">Кофейни</option>
+                        <option value="images/coffeelogo.webp" data-banner="images/sbcoshop.webp">Кофейня</option>
                         <option value="images/fastfoodlogo.webp" data-banner="images/sbfastfood.webp">Фастфуд</option>
                         <option value="images/pekarnilogo.webp" data-banner="images/sbbakery.webp">Пекарни</option>
                         <option value="images/cafe&restaurantlogo.webp" data-banner="images/sbcafe.webp">Кафе</option>
@@ -1212,7 +1261,7 @@
                         <option value="images/fitnesslogo.webp" data-banner="images/sbfitnes.webp">Фитнес</option>
                         <option value="images/tclogo.webp" data-banner="images/sbtc.webp">Торговые центры</option>
                         <option value="images/kidslogo.webp" data-banner="images/sbkids.webp">Развлекательные центры</option>
-                        <option value="images/socobjlogo.webp" data-banner="images/sbsocobj.webp">Общественные пространства</option>
+                        <option value="images/socobjlogo.webp" data-banner="images/sbsocp.webp">Общественные пространства</option>
                         <option value="images/nlogo.webp" data-banner="images/sbned.webp">Недвижимость</option>
                         <option value="images/autologo.webp" data-banner="images/sbauto.webp">Автосалоны</option>
                 
@@ -1630,7 +1679,32 @@
                     </div>
                 </div>
             </div>
-            
+
+            <div class="menu-section" id="section-devices">
+                <div class="menu-header" onclick="toggleMenu(this, 'devices')">
+                    <span class="menu-section-header">Девайсы</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('devices')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('devices')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section" id="section-vkluchay">
+                <div class="menu-header" onclick="toggleMenu(this, 'vkluchay')">
+                    <span class="menu-section-header">Включай</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('vkluchay')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('vkluchay')">Удалить</button>
+                    </div>
+                </div>
+            </div>
 
             <div class="menu-section" id="section-videokp">
                 <div class="menu-header" onclick="toggleMenu(this, 'videokp')">
@@ -1647,6 +1721,19 @@
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('videokp')">Добавить</button>
                         <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('videokp')">Удалить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section" id="section-itogo">
+                <div class="menu-header" onclick="toggleMenu(this, 'itogo')">
+                    <span class="menu-section-header">Итоговое предложение</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="slide-buttons">
+                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('itogo')">Добавить</button>
+                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('itogo')">Удалить</button>
                     </div>
                 </div>
             </div>
@@ -1698,16 +1785,9 @@
     
     
     <script>
-        // Инициализация jsPDF
         const { jsPDF } = window.jspdf;
+        const slides = [{ type: 'general' }];
         
-           // Массив для хранения слайдов
-        const slides = [
-            { type: 'general' } // Начинаем с одного слайда "general"
-        ];
-        
-        // Ссылки для баннеров
-        // Автоматически добавляем версии с "2" на конце для нишевых баннеров
         let bannerLinks = {
             'images/deviceall.webp': 'https://help.zvuk-b2b.com/onair',
             'images/sbcafe.webp': 'https://zvuk-b2b.com/cafe',
@@ -1736,7 +1816,7 @@
             'images/veranda.webp': 'https://zvuk-b2b.com/rest',
             'images/play.webp': 'https://zvuk-b2b.com/player',
             'images/action.webp': 'https://zvuk-b2b.com',
-            'images/base.webp': 'https://zvuk-b2b.com', /* Добавлено */
+            'images/base.webp': 'https://zvuk-b2b.com',
             'images/alldevice.webp': 'https://help.zvuk-b2b.com/onair',
             'images/autumn.webp': 'https://zvuk-b2b.com',
             'images/nostalgia.webp': 'https://zvuk-b2b.com/retro',
@@ -1756,33 +1836,31 @@
             'images/romantica.webp': 'https://zvuk-b2b.com'
         };
 
-        // Заполнение версий "2" для ссылок
         Object.keys(bannerLinks).forEach(key => {
             if (key.endsWith('.webp')) {
                 const childKey = key.replace('.webp', '2.webp');
-                if (!bannerLinks[childKey]) {
-                    bannerLinks[childKey] = bannerLinks[key];
-                }
+                if (!bannerLinks[childKey]) bannerLinks[childKey] = bannerLinks[key];
             }
         });
 
-        // Конфигурация ограничений
         const restrictedSections = {
-            // KZ: оставить Премиум. Убрать Бизнес-профиль, Мероприятия, Артисты, Концепции, Креатив.
-            kz: ['partner', 'bprofile', 'event', 'artist', 'concept', 'creative', 'web', 'videokp'],
-            // RB: Убрать Артисты, Премиум, Бизнес-профиль, Веб. Оставить Мероприятия и Концепции.
-            rb: ['partner', 'premium', 'artist', 'web', 'bprofile', 'videokp']
+            kz: ['partner', 'bprofile', 'event', 'artist', 'concept', 'creative', 'web', 'videokp', 'devices', 'vkluchay'],
+            rb: ['partner', 'premium', 'artist', 'web', 'bprofile', 'videokp', 'devices', 'vkluchay']
         };
         
-        let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
+        let currentSlideIndex = 0; 
         let isZoomed = false;
         let draggedSlideIndex = null;
-        let dropTargetIndex = null;
         let globalClientLogo = null;
-        // По умолчанию инверсия включена
         let isLogoInverted = true; 
         let currentRegion = 'ru';
         let isRomanceEnabled = false;
+
+        // Editable Global Values for Itogo Slide
+        let itogoZones = 4;
+        let itogoHardwarePrice = 31200;
+        let itogoStartDate = new Date().toLocaleDateString('ru-RU');
+        let itogoEndDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toLocaleDateString('ru-RU');
 
         function isSectionRestricted(type) {
             const { region } = getRegionInfo();
@@ -1795,59 +1873,36 @@
             const blurOverlay = document.querySelector('.blur-overlay');
             blurOverlay.style.display = 'block';
             popup.style.display = 'block';
-            
-            setTimeout(() => {
-                popup.style.display = 'none';
-                blurOverlay.style.display = 'none';
-            }, 2000);
+            setTimeout(() => { popup.style.display = 'none'; blurOverlay.style.display = 'none'; }, 2000);
         }
         
         function toggleRomance() {
             isRomanceEnabled = !isRomanceEnabled;
-            // Force redraw of slide if it's general
             updateCurrentSlide();
         }
 
-        // Функция синхронизации бокового меню с текущим слайдом
         function syncSidebar(type) {
             if (isSectionRestricted(type)) return;
-            
-            // Находим заголовок меню для данного типа слайда
             const headers = document.querySelectorAll('.menu-header');
             let targetHeader = null;
-            
             for (let h of headers) {
                 if (h.getAttribute('onclick') && h.getAttribute('onclick').includes(`'${type}'`)) {
-                    targetHeader = h;
-                    break;
+                    targetHeader = h; break;
                 }
             }
-            
             if (targetHeader) {
-                // Если секция еще не активна - активируем её
                 const section = targetHeader.parentElement;
-                if (!section.classList.contains('active')) {
-                    targetHeader.click();
-                } else {
-                    // Если уже активна, просто скроллим к ней
-                     setTimeout(() => {
-                        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 100);
-                }
+                if (!section.classList.contains('active')) targetHeader.click();
+                else setTimeout(() => { section.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
             }
         }
 
         function toggleMenu(header, type) {
-            if (isSectionRestricted(type)) {
-                showRestrictionPopup();
-                return;
-            }
-
+            if (isSectionRestricted(type)) { showRestrictionPopup(); return; }
             const section = header.parentElement;
             const content = header.nextElementSibling;
             const button = header.querySelector('.toggle-button');
             const headerText = header.querySelector('.menu-section-header');
-            
             document.querySelectorAll('.menu-section').forEach(s => {
                 if (s !== section) {
                     s.classList.remove('active');
@@ -1856,29 +1911,18 @@
                     s.querySelector('.menu-section-header').classList.remove('active');
                 }
             });
-            
             if (content.classList.contains('active')) {
-                section.classList.remove('active');
-                content.classList.remove('active');
-                button.textContent = '+';
-                headerText.classList.remove('active');
+                section.classList.remove('active'); content.classList.remove('active');
+                button.textContent = '+'; headerText.classList.remove('active');
             } else {
-                section.classList.add('active');
-                content.classList.add('active');
-                button.textContent = '-';
-                headerText.classList.add('active');
-                
-                // Автоматическая прокрутка к активному разделу
-                setTimeout(() => {
-                    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
+                section.classList.add('active'); content.classList.add('active');
+                button.textContent = '-'; headerText.classList.add('active');
+                setTimeout(() => { section.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
             }
         }
         
         function toggleZoom() {
-            if (window.innerWidth <= 768) { 
-                return;
-            }
+            if (window.innerWidth <= 768) return;
             const slide = document.getElementById('currentSlide');
             slide.classList.toggle('zoomed');
             isZoomed = !isZoomed;
@@ -1889,109 +1933,48 @@
                 document.getElementById('price1Container').classList.add('hidden');
                 document.getElementById('price3Container').classList.add('hidden');
                 document.getElementById('price10plusContainer').classList.add('hidden');
-                
-                if (this.value === '1') {
-                    document.getElementById('price1Container').classList.remove('hidden');
-                } else if (this.value === '3') {
-                    document.getElementById('price3Container').classList.remove('hidden');
-                } else if (this.value === '10plus') {
-                    document.getElementById('price10plusContainer').classList.remove('hidden');
-                }
+                if (this.value === '1') document.getElementById('price1Container').classList.remove('hidden');
+                else if (this.value === '3') document.getElementById('price3Container').classList.remove('hidden');
+                else if (this.value === '10plus') document.getElementById('price10plusContainer').classList.remove('hidden');
                 updateCurrentSlide();
             });
         });
 
-        // Функция установки региона
         function setRegion(region) {
             currentRegion = region;
-            
-            // Обновляем кнопки
             document.querySelectorAll('.region-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`btn-${region}`).classList.add('active');
-
-            // Фильтруем список менеджеров
             const managerSelect = document.getElementById('manager');
             const options = Array.from(managerSelect.options);
             let firstVisibleOption = null;
-
             options.forEach(option => {
-                if (option.getAttribute('data-region') === region) {
-                    if (!firstVisibleOption) firstVisibleOption = option;
-                }
+                if (option.getAttribute('data-region') === region && !firstVisibleOption) firstVisibleOption = option;
             });
-
-            // Обновляем кастомный поиск менеджеров
             const managerSearch = document.getElementById('manager-search');
-            managerSearch.value = ''; // Сброс поиска
-            
-            // Принудительно выбираем первого менеджера из региона
-            if (firstVisibleOption) {
-                managerSelect.value = firstVisibleOption.value;
-                managerSearch.value = firstVisibleOption.text;
-            }
-
-            // Обновляем доступность разделов и перерисовываем
+            managerSearch.value = ''; 
+            if (firstVisibleOption) { managerSelect.value = firstVisibleOption.value; managerSearch.value = firstVisibleOption.text; }
             updateSectionAvailability();
             updateCurrentSlide();
         }
 
-        // Функция для определения региона
         function getRegionInfo() {
             const region = currentRegion;
-            
-            let currency = '₽';
-            let bgImage = 'images/Backprice1.webp';
-            let mainLogo = 'images/mainlogo.webp';
-            let domainSuffix = '.com';
-
-            if (region === 'kz') {
-                currency = '₸';
-                bgImage = 'images/Backprice1-kz.webp';
-                mainLogo = 'images/mainlogokz.webp';
-                domainSuffix = '.kz';
-            } else if (region === 'rb') {
-                currency = 'Br';
-                bgImage = 'images/Backprice1-rb.webp';
-                mainLogo = 'images/mainlogorb.webp';
-                domainSuffix = '.by';
-            }
-
+            let currency = '₽'; let bgImage = 'images/Backprice1.webp'; let mainLogo = 'images/mainlogo.webp'; let domainSuffix = '.com';
+            if (region === 'kz') { currency = '₸'; bgImage = 'images/Backprice1-kz.webp'; mainLogo = 'images/mainlogokz.webp'; domainSuffix = '.kz'; }
+            else if (region === 'rb') { currency = 'Br'; bgImage = 'images/Backprice1-rb.webp'; mainLogo = 'images/mainlogorb.webp'; domainSuffix = '.by'; }
             return { region, currency, bgImage, mainLogo, domainSuffix };
         }
 
-        // Функция обновления доступности разделов в зависимости от региона
         function updateSectionAvailability() {
             const { region } = getRegionInfo();
             const restrictions = restrictedSections[region] || [];
-
-            // Сначала сбрасываем все ограничения
-            document.querySelectorAll('.menu-section').forEach(section => {
-                section.classList.remove('restricted');
-            });
-
-            // Применяем ограничения
+            document.querySelectorAll('.menu-section').forEach(section => { section.classList.remove('restricted'); });
             restrictions.forEach(type => {
-                let sectionId = '';
-                // Сопоставление type и ID разделов в HTML
-                if (type === 'partner') sectionId = 'section-partner';
-                if (type === 'premium') sectionId = 'section-premium';
-                if (type === 'artist') sectionId = 'section-artist';
-                if (type === 'web') sectionId = 'section-web';
-                if (type === 'videokp') sectionId = 'section-videokp';
-                if (type === 'bprofile') sectionId = 'section-bprofile';
-                if (type === 'event') sectionId = 'section-event';
-                if (type === 'concept') sectionId = 'section-concept';
-                if (type === 'creative') sectionId = 'section-creative';
-
-                if (sectionId) {
-                    const section = document.getElementById(sectionId);
-                    if (section) {
-                        section.classList.add('restricted');
-                        // Если раздел открыт - закрываем его
-                        if (section.classList.contains('active')) {
-                            section.querySelector('.menu-header').click(); 
-                        }
-                    }
+                let sectionId = 'section-' + type;
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.classList.add('restricted');
+                    if (section.classList.contains('active')) section.querySelector('.menu-header').click(); 
                 }
             });
         }
@@ -2005,1239 +1988,440 @@
             }
         }
 
-        // Получение локализованной ссылки баннера
         function getLocalizedBannerLink(originalLink, domainSuffix) {
             if (!originalLink) return '#';
-            
-            // Список баннеров, требующих локализации ссылки
-            const bannersToLocalize = [
-                '/rest', '/cafe', '/shop', '/barbershop', '/fitness', '/hotel', '/coffee'
-            ];
-            
+            const bannersToLocalize = ['/rest', '/cafe', '/shop', '/barbershop', '/fitness', '/hotel', '/coffee'];
             let link = originalLink;
-            // Проверяем, содержит ли ссылка один из путей для локализации
             const needsLocalization = bannersToLocalize.some(path => link.includes(path));
-
-            if (needsLocalization && domainSuffix !== '.com') {
-                link = link.replace('.com', domainSuffix);
-            }
-            
+            if (needsLocalization && domainSuffix !== '.com') link = link.replace('.com', domainSuffix);
             return link;
         }
 
-        // --- Logo Link Logic ---
-        function openLogoLinkPopup() {
-            document.getElementById('logo-link-popup').style.display = 'flex';
-        }
-
-        function closeLogoLinkPopup() {
-            document.getElementById('logo-link-popup').style.display = 'none';
-        }
+        function openLogoLinkPopup() { document.getElementById('logo-link-popup').style.display = 'flex'; }
+        function closeLogoLinkPopup() { document.getElementById('logo-link-popup').style.display = 'none'; }
 
         async function saveLogoLink() {
             const inputVal = document.getElementById('logoLinkInput').value.trim();
             if (!inputVal) return;
-
             const btn = document.getElementById('logoLinkBtn');
             const originalBtnText = btn.textContent;
-            
-            // Проверка на прямую ссылку изображения
-            if (inputVal.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
-                setClientLogo(inputVal);
-                closeLogoLinkPopup();
-                return;
-            } 
-            
-            // Если это ссылка на сайт - парсим
-            btn.textContent = 'идет поиск по SEO-ключам...'; // Changed text as requested
+            if (inputVal.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) { setClientLogo(inputVal); closeLogoLinkPopup(); return; } 
+            btn.textContent = 'идет поиск по SEO-ключам...';
             btn.disabled = true;
-
             try {
                 let url = inputVal.trim();
-                // Improved URL handling: ensure protocol exists
-                if (!/^https?:\/\//i.test(url)) {
-                    url = 'https://' + url;
-                }
-
-                // Используем прокси для обхода CORS и получения HTML
+                if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
                 const response = await fetch(proxyUrl);
                 const data = await response.json();
-
                 if (data.contents) {
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(data.contents, 'text/html');
-                    
-                    // 1. Поиск логотипа
                     let logoSrc = null;
-                    const logoSelectors = [
-                        '.logo img', 
-                        'header .logo img',
-                        '[class*="logo"] img',
-                        '.tn-atom[src]', // Tilda
-                        '.footer__logo img',
-                        'header img',
-                        'footer img'
-                    ];
-
+                    const logoSelectors = ['.logo img', 'header .logo img', '[class*="logo"] img', '.tn-atom[src]', '.footer__logo img', 'header img', 'footer img'];
                     for (let selector of logoSelectors) {
                         const img = doc.querySelector(selector);
-                        if (img && img.src) {
-                            // Пропускаем data:image и очень маленькие иконки если это возможно
-                            if (img.src.startsWith('data:') && img.src.length < 1000) continue;
-                            logoSrc = img.getAttribute('src'); // Берем атрибут, чтобы обработать относительные пути
-                            break;
-                        }
+                        if (img && img.src) { if (img.src.startsWith('data:') && img.src.length < 1000) continue; logoSrc = img.getAttribute('src'); break; }
                     }
-
                     if (logoSrc) {
-                        // Обработка относительных путей
                         if (!logoSrc.startsWith('http') && !logoSrc.startsWith('data:')) {
                             const urlObj = new URL(url);
-                            // Убираем слеш если он есть и там и там
-                            if (logoSrc.startsWith('/') && urlObj.origin.endsWith('/')) {
-                                logoSrc = urlObj.origin + logoSrc.substring(1);
-                            } else if (!logoSrc.startsWith('/') && !urlObj.origin.endsWith('/')) {
-                                logoSrc = urlObj.origin + '/' + logoSrc;
-                            } else {
-                                logoSrc = urlObj.origin + logoSrc;
-                            }
+                            logoSrc = urlObj.origin + (logoSrc.startsWith('/') ? '' : '/') + logoSrc;
                         }
                         setClientLogo(logoSrc);
                     } else {
-                        // Fallback: пробуем Clearbit если парсинг не нашел img
-                        try {
-                            const urlObj = new URL(url);
-                            setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`);
-                        } catch(e) {}
+                        try { const urlObj = new URL(url); setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`); } catch(e) {}
                     }
-
-                    // 2. SEO Анализ и подбор темы
                     analyzeSiteContent(doc, url);
-
                 }
             } catch (e) {
-                console.error('Ошибка при анализе сайта:', e);
-                // Fallback на Clearbit при ошибке
-                try {
-                     // Still try to fix URL for fallback
-                     let cleanUrl = inputVal.trim();
-                     if (!/^https?:\/\//i.test(cleanUrl)) cleanUrl = 'https://' + cleanUrl;
-                     const urlObj = new URL(cleanUrl);
-                     setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`);
-                } catch(err) {}
-            } finally {
-                btn.textContent = originalBtnText;
-                btn.disabled = false;
-                closeLogoLinkPopup();
-            }
+                try { let cleanUrl = inputVal.trim(); if (!/^https?:\/\//i.test(cleanUrl)) cleanUrl = 'https://' + cleanUrl; const urlObj = new URL(cleanUrl); setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`); } catch(err) {}
+            } finally { btn.textContent = originalBtnText; btn.disabled = false; closeLogoLinkPopup(); }
         }
 
-        // Функция анализа контента для авто-подбора
         function analyzeSiteContent(doc, url = '') {
-            // Собираем текст из заголовка, описания и тела
             const title = doc.title ? doc.title.toLowerCase() : '';
             const description = doc.querySelector('meta[name="description"]')?.content.toLowerCase() || '';
             const keywords = doc.querySelector('meta[name="keywords"]')?.content.toLowerCase() || '';
-            const ogDescription = doc.querySelector('meta[property="og:description"]')?.content.toLowerCase() || '';
-            
-            // Get text from headers
-            const headers = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
-                                .map(h => h.innerText.toLowerCase()).join(' ');
-            
-            // Get text from nav and buttons (important for CTAs like "Test Drive")
-            const navText = Array.from(doc.querySelectorAll('nav, header, .menu, a, button'))
-                                .map(el => el.innerText.toLowerCase()).join(' ');
-
-            // Combine all sources for better matching
-            const bodyText = doc.body.innerText.toLowerCase().substring(0, 10000); 
-            
-            const urlString = url.toLowerCase();
-
-            const fullText = `${urlString} ${title} ${description} ${keywords} ${ogDescription} ${headers} ${navText} ${bodyText}`;
-
-            // Словарь соответствий
+            const fullText = `${url} ${title} ${description} ${keywords} ${doc.body.innerText.toLowerCase().substring(0, 5000)}`;
             const keywordMap = [
-                {
-                    keys: ['фитнес', 'тренажерный', 'спортзал', 'fitness', 'gym', 'crossfit', 'йога', 'единоборств', 'функциональные тренировки', 'stretching', 'pilates', 'sport', 'trainer', 'workout', 'абонемент', 'зал', 'тренировка', 'растяжка', 'пилатес', 'бассейн', 'swimming', 'pool', 'coach', 'wellness', 'спа-зона', 'персональный тренер', 'групповые программы', 'cycle', 'сайкл','тренеры', 'фитнес-клуб'],
-                    logo: 'images/fitnesslogo.webp',
-                },
-                {
-                    keys: ['пекарня', 'хлеб', 'булочная', 'bakery', 'выпечка', 'круассан', 'bread', 'croissant', 'pastry', 'flour', 'cake', 'pie', 'bun', 'baking', 'торт', 'пирог', 'булка', 'кондитерская', 'десерт', 'сладости', 'свежий хлеб', 'печь'],
-                    logo: 'images/pekarnilogo.webp' 
-                },
-                {
-                    keys: ['салон красоты', 'маникюр', 'beauty', 'парикмахерская', 'стрижка', 'окрашивание', 'nail', 'hair', 'salon', 'manicure', 'pedicure', 'eyebrows', 'lashes', 'makeup', 'spa', 'massage', 'педикюр', 'брови', 'ресницы', 'визаж', 'спа', 'массаж', 'косметолог', 'эпиляция', 'лазер', 'шугаринг', 'botox', 'кератин', 'укладка'],
-                    logo: 'images/beautylogo.webp'
-                },
-                {
-                    keys: ['кофе', 'кофейня', 'coffee', 'капучино', 'бариста', 'barista', 'cappuccino', 'latte', 'espresso', 'bean', 'cafe', 'латте', 'эспрессо', 'зерно', 'завтрак', 'кофе с собой', 'раф', 'мокка', 'кофемашина', 'обжарка'],
-                    logo: 'images/coffeelogo.webp'
-                },
-                {
-                    keys: ['бургер', 'фастфуд', 'шаурма', 'fast food', 'фри', 'бистро', 'burger', 'fries', 'nuggets', 'shawarma', 'doner', 'hotdog', 'street food', 'картошка', 'наггетсы', 'донер', 'хот-дог', 'стритфуд', 'гиро', 'кебаб'],
-                    logo: 'images/fastfoodlogo.webp'
-                },
-                {
-                    keys: ['суши', 'роллы', 'sushi', 'wok', 'roll', 'sashimi', 'wasabi', 'ginger', 'salmon', 'eel', 'rice', 'сашими', 'васаби', 'имбирь', 'лосось', 'угорь', 'рис', 'вок', 'паназия', 'сеты', 'филадельфия', 'калифорния', 'том ям', 'поке'],
-                    logo: 'images/sushilogo.webp'
-                },
-                {
-                    keys: ['пицца', 'pizza', 'пиццерия', 'pepperoni', 'margarita', 'dough', 'cheese', 'slice', 'пепперони', 'маргарита', 'тесто', 'сыр', 'кусок', 'италия', 'italian', 'четыре сыра', 'доставка пиццы'],
-                    logo: 'images/pizzalogo.webp'
-                },
-                {
-                    keys: ['ресторан', 'restaurant', 'банкет', 'кухня', 'шеф', 'ужин', 'menu', 'chef', 'wine', 'dining', 'dish', 'gourmet', 'меню', 'вино', 'блюдо', 'авторская кухня', 'гастропаб', 'стейк', 'морепродукты', 'устрицы', 'бар', 'bar', 'cocktail', 'коктейль'],
-                    logo: 'images/cafe&restaurantlogo.webp'
-                },
-                {
-                    keys: ['одежда', 'fashion', 'магазин', 'бутик', 'платья', 'style', 'dress', 'shirt', 'pants', 'shoes', 'boutique', 'wear', 'collection', 'мода', 'стиль', 'платье', 'рубашка', 'брюки', 'обувь', 'коллекция', 'бренд', 'шопинг', 'одежды', 'lookbook', 'аксессуары', 'сумки'],
-                    logo: 'images/clotheslogo.webp'
-                },
-                {
-                    keys: ['барбер', 'barber', 'бритье', 'shave', 'beard', 'fade', 'cut', 'mens', 'борода', 'мужская', 'мужские стрижки', 'опасная бритва'],
-                    logo: 'images/barberlogo.webp'
-                },
-                {
-                    keys: ['отель', 'гостиница', 'hotel', 'хостел', 'номер', 'room', 'booking', 'hostel', 'inn', 'accommodation', 'бронирование', 'проживание', 'ресепшн', 'check-in', 'выезд', 'заезд', 'апартаменты'],
-                    logo: 'images/hotellogo.webp'
-                },
-                {
-                    keys: ['азс', 'заправка', 'бензин', 'fuel', 'gas', 'petrol', 'oil', 'station', 'топливо', 'масло', 'дизель', '95', '92', 'заправить'],
-                    logo: 'images/azslogo.webp'
-                },
-                {
-                    keys: ['детский', 'kids', 'игрушки', 'развлечения', 'child', 'toy', 'game', 'park', 'playground', 'baby', 'school', 'kindergarten', 'дети', 'ребенок', 'игрушка', 'игра', 'парк', 'площадка', 'малыш', 'школа', 'сад', 'развивающий', 'центр', 'аниматор', 'день рождения'],
-                    logo: 'images/kidslogo.webp'
-                },
-                {
-                    keys: ['застройщик', 'жк', 'квартира', 'дом', 'недвижимость', 'ипотека', 'developer', 'building', 'apartment', 'flat', 'house', 'estate', 'новостройка', 'жилой комплекс', 'метр', 'планировка'],
-                    logo: 'images/nlogo.webp'
-                },
-                {
-                    keys: ['торговый центр', 'тц', 'трк', 'молл', 'mall', 'center', 'shopping', 'gallery', 'галерея', 'магазины', 'фудкорт', 'кинотеатр', 'парковка'],
-                    logo: 'images/tclogo.webp'
-                },
-                {
-                    keys: [
-                        'автодилер', 'автосалон', 'lada', 'hyundai', 'kia', 'toyota', 
-                        'nissan', 'renault', 'volkswagen', 'skoda', 'bmw', 'mercedes', 'audi', 'lexus', 
-                        'volvo', 'mazda', 'geely', 'haval', 'chery', 'exeed', 'omoda', 'tank', 'jetour', 
-                        'jaecoo', 'moskvich', 'uaz', 'gaz', 'belgee', 'solaris', 'creta', 'rio', 'polo', 
-                        'rapid', 'camry', 'rav4', 'tiguan', 'sportage', 'tucson', 'duster', 'vesta', 
-                        'granta', 'niva', 'largus', 'тест-драйв', 'test drive', 'test-drive', 'конфигуратор', 
-                        'модельный ряд', 'model range', 'купить автомобиль', 'пробегом', 'trade-in', 'трейд-ин',
-                        'sedan', 'suv', 'crossover', 'седан', 'кроссовер', 'внедорожник', 'service', 'сервис', 'запчасти',
-                        'автомобиль'
-                    ],
-                    logo: 'images/autologo.webp'
-                }
+                { keys: ['фитнес', 'fitness', 'gym', 'спорт'], logo: 'images/fitnesslogo.webp' },
+                { keys: ['пекарня', 'bakery', 'хлеб'], logo: 'images/pekarnilogo.webp' },
+                { keys: ['салон красоты', 'beauty', 'маникюр'], logo: 'images/beautylogo.webp' },
+                { keys: ['кофе', 'кофейня', 'coffee'], logo: 'images/coffeelogo.webp' },
+                { keys: ['бургер', 'фастфуд', 'burger'], logo: 'images/fastfoodlogo.webp' },
+                { keys: ['суши', 'sushi', 'роллы'], logo: 'images/sushilogo.webp' },
+                { keys: ['пицца', 'pizza'], logo: 'images/pizzalogo.webp' },
+                { keys: ['ресторан', 'restaurant', 'кухня'], logo: 'images/cafe&restaurantlogo.webp' },
+                { keys: ['одежда', 'fashion', 'магазин'], logo: 'images/clotheslogo.webp' },
+                { keys: ['барбер', 'barber'], logo: 'images/barberlogo.webp' },
+                { keys: ['отель', 'hotel'], logo: 'images/hotellogo.webp' },
+                { keys: ['детский', 'kids', 'игрушки'], logo: 'images/kidslogo.webp' },
+                { keys: ['автосалон', 'автодилер', 'lada', 'kia', 'hyundai'], logo: 'images/autologo.webp' }
             ];
-
             let bestMatch = null;
-
             for (let item of keywordMap) {
-                for (let key of item.keys) {
-                    if (fullText.includes(key)) {
-                        bestMatch = item;
-                        break; 
-                    }
-                }
+                for (let key of item.keys) { if (fullText.includes(key)) { bestMatch = item; break; } }
                 if (bestMatch) break;
             }
-
             if (bestMatch) {
                 const logoSelect = document.getElementById('logos');
                 logoSelect.value = bestMatch.logo;
-                // Триггерим событие change, чтобы сработал существующий обработчик
-                // который выставит нужный баннер из data-banner атрибута опции
                 logoSelect.dispatchEvent(new Event('change'));
             }
         }
 
         function updateCurrentSlide() {
-            if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
-                document.getElementById('currentSlide').innerHTML = ''; 
-                return;
-            }
-
-            updateCurrencyLabels(); // Обновляем логику валют
-            const { currency, bgImage, mainLogo, domainSuffix } = getRegionInfo();
-
+            if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) return;
+            updateCurrencyLabels();
+            const { currency, bgImage, mainLogo, domainSuffix, region } = getRegionInfo();
             const currentSlide = slides[currentSlideIndex];
             const slideContainer = document.getElementById('currentSlide');
             slideContainer.innerHTML = '';
-            
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
             
-            // Function to apply logo filter based on checkbox
             const applyLogoFilter = (imgElement) => {
-                const isInverted = document.getElementById('logoInvert').checked;
-                if (isInverted) {
-                    imgElement.style.filter = 'brightness(0) invert(1)'; // White
-                } else {
-                    imgElement.style.filter = 'none'; // Original
-                }
+                if (document.getElementById('logoInvert').checked) imgElement.style.filter = 'brightness(0) invert(1)';
+                else imgElement.style.filter = 'none';
             };
             
-            // Helper to handle Prefixed images (RB/KZ) with fallback
-            // Added secondaryFallback parameter for Price Banners (to fall back from '2.webp' to '.webp')
             const createPrefixedImage = (originalPath, className, forceRegion = null, secondaryFallback = null) => {
                 const img = document.createElement('img');
                 img.className = className;
                 const activeRegion = forceRegion || currentRegion;
-
                 if (activeRegion === 'rb' || activeRegion === 'kz') {
-                    const parts = originalPath.split('/');
-                    const fileName = parts.pop();
-                    const prefix = activeRegion + '-';
-                    const prefixedSrc = parts.join('/') + '/' + prefix + fileName;
-                    
+                    const parts = originalPath.split('/'); const fileName = parts.pop();
+                    const prefixedSrc = parts.join('/') + '/' + activeRegion + '-' + fileName;
                     img.src = prefixedSrc;
-                    
-                    // Construct fallback logic:
-                    // 1. Try prefixedSrc (KZ/RB).
-                    // 2. OnError -> Try originalPath (Standard).
-                    // 3. OnError (if secondaryFallback exists) -> Try secondaryFallback (Base).
-                    
-                    let onerrorStr = `this.removeAttribute('onerror');`; // Clear self to prevent loop
-                    
-                    if (secondaryFallback) {
-                        // If falling back to original, and THAT fails, go to secondaryFallback
-                        // Escape quotes carefully for HTML attribute
-                        onerrorStr += `this.setAttribute('onerror', "this.removeAttribute('onerror'); this.src='${secondaryFallback}';");`;
-                    }
-                    onerrorStr += `this.src='${originalPath}';`;
-                    
-                    img.setAttribute('onerror', onerrorStr);
-
+                    img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${originalPath}';${secondaryFallback ? "this.setAttribute('onerror', \\"this.src='${secondaryFallback}'\\");" : ""}`);
                 } else {
-                    // Standard region (RU)
                     img.src = originalPath;
-                    if (secondaryFallback) {
-                        // If original fails, try secondary
-                         img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${secondaryFallback}';`);
-                    }
+                    if (secondaryFallback) img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${secondaryFallback}';`);
                 }
                 return img;
             }
 
             switch(currentSlide.type) {
                 case 'general':
-                    bgImg.src = bgImage; // Локализованный фон
-                    slideContainer.appendChild(bgImg);
-                    
+                    bgImg.src = bgImage; slideContainer.appendChild(bgImg);
                     if (isRomanceEnabled) {
-                        const loveImg = document.createElement('img');
-                        loveImg.className = 'romance-overlay';
-                        loveImg.src = 'images/love2.webp';
-                        slideContainer.appendChild(loveImg);
+                        const loveImg = document.createElement('img'); loveImg.className = 'romance-overlay';
+                        loveImg.src = 'images/love2.webp'; slideContainer.appendChild(loveImg);
                     }
-
                     const bannerVal = document.getElementById('banner').value;
                     const bannerImg = createPrefixedImage(bannerVal, 'preview-banner');
-                    
-                    const bannerLinkUrl = getLocalizedBannerLink(bannerLinks[bannerVal], domainSuffix);
                     const bannerLink = document.createElement('a');
-                    bannerLink.href = bannerLinkUrl;
-                    bannerLink.target = '_blank';
-                    bannerLink.style.position = 'absolute';
-                    bannerLink.style.top = '0';
-                    bannerLink.style.right = '0';
-                    bannerLink.style.width = '35%';
-                    bannerLink.style.height = '100%';
-                    bannerLink.appendChild(bannerImg);
-                    slideContainer.appendChild(bannerLink);
-                    
+                    bannerLink.href = getLocalizedBannerLink(bannerLinks[bannerVal], domainSuffix);
+                    bannerLink.target = '_blank'; bannerLink.style = 'position:absolute;top:0;right:0;width:35%;height:100%';
+                    bannerLink.appendChild(bannerImg); slideContainer.appendChild(bannerLink);
                     const logosVal = document.getElementById('logos').value;
-                    // Особая логика для логотипов: если выбран "Главные клиенты", то берем mainLogo (он уже локализован в getRegionInfo)
-                    // Для остальных категорий применяем префиксную логику
                     let logosImg;
                     if (logosVal === 'images/mainlogo.webp') {
-                         logosImg = document.createElement('img');
-                         logosImg.className = 'preview-logos';
-                         logosImg.src = mainLogo;
-                    } else {
-                         logosImg = createPrefixedImage(logosVal, 'preview-logos');
-                    }
+                         logosImg = document.createElement('img'); logosImg.className = 'preview-logos'; logosImg.src = mainLogo;
+                    } else { logosImg = createPrefixedImage(logosVal, 'preview-logos'); }
                     slideContainer.appendChild(logosImg);
-
                     if (globalClientLogo) {
-                        const clientLogoImg = document.createElement('img');
-                        clientLogoImg.id = 'clientLogo';
-                        clientLogoImg.src = globalClientLogo;
-                        clientLogoImg.style.position = 'absolute';
-                        clientLogoImg.style.top = '5%';
-                        clientLogoImg.style.left = '17%';
-                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
-                        clientLogoImg.style.width = 'auto'; 
-                        clientLogoImg.style.maxWidth = '30%'; 
-                        clientLogoImg.style.objectFit = 'contain';
-                        
-                        // Error handling for auto-fetched logos
-                        clientLogoImg.onerror = function() {
-                            this.style.display = 'none';
-                        };
-                        
-                        applyLogoFilter(clientLogoImg);
-                        slideContainer.appendChild(clientLogoImg);
+                        const clientLogoImg = document.createElement('img'); clientLogoImg.src = globalClientLogo;
+                        clientLogoImg.style = 'position:absolute;top:5%;left:17%;height:calc(24px*var(--element-scale));width:auto;max-width:30%;object-fit:contain';
+                        clientLogoImg.onerror = function() { this.style.display = 'none'; };
+                        applyLogoFilter(clientLogoImg); slideContainer.appendChild(clientLogoImg);
                     }
                     break;
                     
                 case 'pricing':
                     const priceFormat = document.querySelector('input[name="priceColumns"]:checked').value;
-                    
-                    if (priceFormat === '1') {
-                        bgImg.src = 'images/1price.webp';
-                    } else {
-                        bgImg.src = 'images/3price.webp';
-                    }
+                    bgImg.src = priceFormat === '1' ? 'images/1price.webp' : 'images/3price.webp';
                     slideContainer.appendChild(bgImg);
-                    
-                    // --- CHANGED LOGIC FOR PRICING BANNER ---
-                    // Try to load the niche version (with '2') first, then fallback to base.
-                    const baseBannerVal = document.getElementById('priceBanner').value; // e.g. images/sbbeauty.webp
-                    // Construct potential niche name: images/sbbeauty2.webp
+                    const baseBannerVal = document.getElementById('priceBanner').value;
                     const nicheBannerVal = baseBannerVal.replace('.webp', '2.webp');
-                    
-                    // Use niche as primary, base as fallback
                     const priceBannerImg = createPrefixedImage(nicheBannerVal, 'preview-banner', null, baseBannerVal);
-                    
-                    // Use base value for link lookup (keys are base names)
-                    const priceBannerLinkUrl = getLocalizedBannerLink(bannerLinks[baseBannerVal], domainSuffix);
                     const priceBannerLink = document.createElement('a');
-                    priceBannerLink.href = priceBannerLinkUrl;
-                    priceBannerLink.target = '_blank';
-                    priceBannerLink.style.position = 'absolute';
-                    priceBannerLink.style.top = '0';
-                    priceBannerLink.style.right = '0';
-                    priceBannerLink.style.width = '35%';
-                    priceBannerLink.style.height = '100%';
-                    priceBannerLink.appendChild(priceBannerImg);
-                    slideContainer.appendChild(priceBannerLink);
-                    
+                    priceBannerLink.href = getLocalizedBannerLink(bannerLinks[baseBannerVal], domainSuffix);
+                    priceBannerLink.target = '_blank'; priceBannerLink.style = 'position:absolute;top:0;right:0;width:35%;height:100%';
+                    priceBannerLink.appendChild(priceBannerImg); slideContainer.appendChild(priceBannerLink);
                     const managerSelect = document.getElementById('manager');
-                    const selectedManagerOption = managerSelect.options[managerSelect.selectedIndex];
-                    const managerValue = selectedManagerOption.value; // e.g. images/grigoryev-kz.webp
-                    const managerDataLink = selectedManagerOption.getAttribute('data-link');
-
-                    const managerImg = document.createElement('img');
-                    managerImg.className = 'preview-manager';
-                    managerImg.src = managerValue;
-                    
-                    // Manager Fallback Logic:
-                    // If managerValue has -kz or -rb, try to fallback to base name if specific fails
-                    const fallbackManager = managerValue.replace(/-kz.webp|-rb.webp/g, '.webp');
-                    if (fallbackManager !== managerValue) {
-                         // Set inline onerror to switch to fallback
-                         managerImg.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${fallbackManager}';`);
-                    }
-                    
-                    const managerLinkContainer = document.createElement('a');
-                    managerLinkContainer.href = managerDataLink;
-                    managerLinkContainer.target = '_blank';
-                    managerLinkContainer.style.position = 'absolute';
-                    managerLinkContainer.style.bottom = '8%';
-                    managerLinkContainer.style.left = '3%';
-                    managerLinkContainer.style.width = '57%';
-                    managerLinkContainer.style.height = '25%';
-                    slideContainer.appendChild(managerLinkContainer);
-                    
-                    const managerLink = document.createElement('a');
-                    managerLink.href = managerDataLink;
-                    managerLink.target = '_blank';
-                    managerLink.style.position = 'absolute';
-                    managerLink.style.bottom = '8%';
-                    managerLink.style.left = '3%';
-                    managerLink.style.width = '58%';
-                    managerLink.style.height = 'auto';
-                    managerLink.appendChild(managerImg);
-                    slideContainer.appendChild(managerLink);
-                    
+                    const selMan = managerSelect.options[managerSelect.selectedIndex];
+                    const managerImg = document.createElement('img'); managerImg.className = 'preview-manager'; managerImg.src = selMan.value;
+                    const fallbackManager = selMan.value.replace(/-kz.webp|-rb.webp/g, '.webp');
+                    if (fallbackManager !== selMan.value) managerImg.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${fallbackManager}';`);
+                    const managerLink = document.createElement('a'); managerLink.href = selMan.getAttribute('data-link'); managerLink.target = '_blank';
+                    managerLink.style = 'position:absolute;bottom:8%;left:3%;width:58%;height:auto;z-index:10';
+                    managerLink.appendChild(managerImg); slideContainer.appendChild(managerLink);
                     if (document.getElementById('personalPhone').value) {
-                        const phoneDiv = document.createElement('div');
-                        phoneDiv.className = 'preview-phone';
-                        phoneDiv.textContent = document.getElementById('personalPhone').value;
-                        slideContainer.appendChild(phoneDiv);
+                        const phoneDiv = document.createElement('div'); phoneDiv.className = 'preview-phone';
+                        phoneDiv.textContent = document.getElementById('personalPhone').value; slideContainer.appendChild(phoneDiv);
                     }
-                    
                     const commentText = document.getElementById('comment').value;
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'preview-comment';
-                    if (commentText.trim() !== '') {
-                        commentDiv.textContent = commentText;
-                        commentDiv.classList.add('visible');
-                    }
-                    
+                    const commentDiv = document.createElement('div'); commentDiv.className = 'preview-comment';
+                    if (commentText.trim() !== '') { commentDiv.textContent = commentText; commentDiv.classList.add('visible'); }
                     slideContainer.appendChild(commentDiv);
-
                     if (priceFormat === '1') {
-                        const priceLabelDiv = document.createElement('div');
-                        priceLabelDiv.className = 'preview-price-label';
-                        priceLabelDiv.textContent = document.getElementById('price1Label').value;
-                        slideContainer.appendChild(priceLabelDiv);
-
-                        const priceDiv = document.createElement('div');
-                        priceDiv.className = 'preview-price';
-                        priceDiv.textContent = formatPrice(document.getElementById('price1Value').value) + ` ${currency}/мес.`;
-                        slideContainer.appendChild(priceDiv);
-
-                    } else if (priceFormat === '3') {
-                        const table = document.createElement('table');
-                        table.className = 'price-table';
-                        table.innerHTML = `
-                            <thead>
-                                <tr>
-                                    <th>Количество точек</th>
-                                    <th>${document.getElementById('price3Header1').value}</th>
-                                    <th>${document.getElementById('price3Header2').value}</th>
-                                    <th>${document.getElementById('price3Header3').value}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Стоимость за точку</td>
-                                    <td>${formatPrice(document.getElementById('price3Value1').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price3Value2').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price3Value3').value)} ${currency}</td>
-                                </tr>
-                            </tbody>
-                        `;
+                        const priceLabelDiv = document.createElement('div'); priceLabelDiv.className = 'preview-price-label';
+                        priceLabelDiv.textContent = document.getElementById('price1Label').value; slideContainer.appendChild(priceLabelDiv);
+                        const priceDiv = document.createElement('div'); priceDiv.className = 'preview-price';
+                        priceDiv.textContent = formatPrice(document.getElementById('price1Value').value) + ` ${currency}/мес.`; slideContainer.appendChild(priceDiv);
+                    } else {
+                        const is10 = priceFormat === '10plus';
+                        const table = document.createElement('table'); table.className = 'price-table';
+                        const h1 = is10 ? 'price10plusHeader1' : 'price3Header1'; const h2 = is10 ? 'price10plusHeader2' : 'price3Header2'; const h3 = is10 ? 'price10plusHeader3' : 'price3Header3';
+                        const v1 = is10 ? 'price10plusValue1' : 'price3Value1'; const v2 = is10 ? 'price10plusValue2' : 'price3Value2'; const v3 = is10 ? 'price10plusValue3' : 'price3Value3';
+                        table.innerHTML = `<thead><tr><th>Количество точек</th><th>${document.getElementById(h1).value}</th><th>${document.getElementById(h2).value}</th><th>${document.getElementById(h3).value}</th></tr></thead><tbody><tr><td>Стоимость за точку</td><td>${formatPrice(document.getElementById(v1).value)} ${currency}</td><td>${formatPrice(document.getElementById(v2).value)} ${currency}</td><td>${formatPrice(document.getElementById(v3).value)} ${currency}</td></tr></tbody>`;
                         slideContainer.appendChild(table);
-                    } else if (priceFormat === '10plus') {
-                        const table = document.createElement('table');
-                        table.className = 'price-table';
-                        table.innerHTML = `
-                            <thead>
-                                <tr>
-                                    <th>Количество точек</th>
-                                    <th>${document.getElementById('price10plusHeader1').value}</th>
-                                    <th>${document.getElementById('price10plusHeader2').value}</th>
-                                    <th>${document.getElementById('price10plusHeader3').value}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Стоимость за точку</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue1').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue2').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue3').value)} ${currency}</td>
-                                </tr>
-                            </tbody>
-                        `;
-                        slideContainer.appendChild(table);
-                    }
-
-                    // Динамическое позиционирование комментария
-                    const targetEl = priceFormat === '1' ? 
-                        slideContainer.querySelector('.preview-price') : 
-                        slideContainer.querySelector('.price-table');
-                        
-                    if (targetEl && commentDiv.classList.contains('visible')) {
-                        const bottomPercent = ((targetEl.offsetTop + targetEl.offsetHeight) / slideContainer.offsetHeight) * 100;
-                        commentDiv.style.top = (bottomPercent + 2) + '%';
                     }
                     break;
                     
                 case 'instruction':
-                    bgImg.src = 'images/instruct.webp';
-                    slideContainer.appendChild(bgImg);
-
-                    const instructionBannerVal = document.getElementById('instructionBanner').value;
-                    const instructionBannerImg = createPrefixedImage(instructionBannerVal, 'preview-banner');
-                    
-                    const instructionBannerLinkUrl = getLocalizedBannerLink(bannerLinks[instructionBannerVal], domainSuffix);
-                    const instructionBannerLink = document.createElement('a');
-                    instructionBannerLink.href = instructionBannerLinkUrl;
-                    instructionBannerLink.target = '_blank';
-                    instructionBannerLink.style.position = 'absolute';
-                    instructionBannerLink.style.top = '0';
-                    instructionBannerLink.style.right = '0';
-                    instructionBannerLink.style.width = '35%';
-                    instructionBannerLink.style.height = '100%';
-                    instructionBannerLink.appendChild(instructionBannerImg);
-                    slideContainer.appendChild(instructionBannerLink);
-
-                    const managerSelectForLink = document.getElementById('manager');
-                    const selectedManagerOptionForLink = managerSelectForLink.options[managerSelectForLink.selectedIndex];
-                    const managerRegLink = selectedManagerOptionForLink.getAttribute('data-link');
-
-                    // Highlight words: "по ссылке", "на компьютер", "смартфон"
-                    const instructionTextDiv = document.createElement('div');
-                    instructionTextDiv.className = 'instruction-text';
-                    instructionTextDiv.innerHTML = `
-                        1. Зарегистрироваться <a href="${managerRegLink}" target="_blank" class="highlight">по ссылке</a>.<br><br>
-                        2. Установить приложение <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" class="highlight">на компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" class="highlight">смартфон</a>.<br><br>
-                        3. С вами свяжется менеджер в течение 1-2 часов.<br><br>
-                        4. Протестировать в течение 7 дней, оформить подписку.
-                    `;
-                    slideContainer.appendChild(instructionTextDiv);
+                    bgImg.src = 'images/instruct.webp'; slideContainer.appendChild(bgImg);
+                    const instBannerVal = document.getElementById('instructionBanner').value;
+                    const instBannerImg = createPrefixedImage(instBannerVal, 'preview-banner');
+                    const instBannerLink = document.createElement('a'); instBannerLink.href = getLocalizedBannerLink(bannerLinks[instBannerVal], domainSuffix);
+                    instBannerLink.target = '_blank'; instBannerLink.style = 'position:absolute;top:0;right:0;width:35%;height:100%';
+                    instBannerLink.appendChild(instBannerImg); slideContainer.appendChild(instBannerLink);
+                    const manSelect = document.getElementById('manager'); const manRegLink = manSelect.options[manSelect.selectedIndex].getAttribute('data-link');
+                    const instTextDiv = document.createElement('div'); instTextDiv.className = 'instruction-text';
+                    instTextDiv.innerHTML = `1. Зарегистрироваться <a href="${manRegLink}" target="_blank" class="highlight">по ссылке</a>.<br><br>2. Установить приложение <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" class="highlight">на компьютер</a> или <a href="https://help.zvuk-b2b.com/onair#desktop" target="_blank" class="highlight">смартфон</a>.<br><br>3. С вами свяжется менеджер в течение 1-2 часов.<br><br>4. Протестировать в течение 7 дней, оформить подписку.`;
+                    slideContainer.appendChild(instTextDiv);
                     break;
                     
                 case 'creative':
-                    bgImg.src = 'images/createbanner.webp';
-                    slideContainer.appendChild(bgImg);
-                    
-                    const creativeLinkContainer = document.createElement('a');
-                    creativeLinkContainer.href = 'https://zvuk-b2b.com/audio_ads';
-                    creativeLinkContainer.target = '_blank';
-                    creativeLinkContainer.style.position = 'absolute';
-                    creativeLinkContainer.style.top = '0';
-                    creativeLinkContainer.style.right = '0';
-                    creativeLinkContainer.style.width = '35%';
-                    creativeLinkContainer.style.height = '100%';
-                    slideContainer.appendChild(creativeLinkContainer);
-                    
-                    // Invisible clickable areas based on user request (no duplicated images)
-                    const cCardLink1 = document.createElement('a');
-                    cCardLink1.href = 'https://zvuk-b2b.com/blog/1price';
-                    cCardLink1.target = '_blank';
-                    cCardLink1.className = 'concept-link-area';
-                    cCardLink1.style.bottom = '6%';
-                    cCardLink1.style.left = '3%';
-                    cCardLink1.style.width = '7%';
-                    cCardLink1.style.height = '12%';
-                    slideContainer.appendChild(cCardLink1);
-
-                    const cCardLink2 = document.createElement('a');
-                    cCardLink2.href = 'https://zvuk-b2b.com/blog/letu';
-                    cCardLink2.target = '_blank';
-                    cCardLink2.className = 'concept-link-area';
-                    cCardLink2.style.bottom = '6%';
-                    cCardLink2.style.left = '12%'; // 3% + 7% + 2% gap roughly
-                    cCardLink2.style.width = '7%';
-                    cCardLink2.style.height = '12%';
-                    slideContainer.appendChild(cCardLink2);
+                    bgImg.src = 'images/createbanner.webp'; slideContainer.appendChild(bgImg);
                     break;
-                
-                case 'app':
-                    bgImg.src = 'images/app.webp';
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'playlist':
-                    bgImg.src = document.getElementById('playlist').value;
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'partner':
-                    bgImg.src = 'images/parterprogram.webp';
-                    slideContainer.appendChild(bgImg);
-                    break;
+                case 'app': bgImg.src = 'images/app.webp'; slideContainer.appendChild(bgImg); break;
+                case 'playlist': bgImg.src = document.getElementById('playlist').value; slideContainer.appendChild(bgImg); break;
+                case 'partner': bgImg.src = 'images/parterprogram.webp'; slideContainer.appendChild(bgImg); break;
                 case 'premium':
-                    bgImg.src = 'images/premiumbanner.webp';
-                    slideContainer.appendChild(bgImg);
-                    
-                    const premiumPriceDiv1 = document.createElement('div');
-                    premiumPriceDiv1.className = 'preview-price-premium-1';
-                    premiumPriceDiv1.textContent = formatPrice(document.getElementById('premiumPrice1').value) + ` ${currency}/мес.`;
-                    slideContainer.appendChild(premiumPriceDiv1);
-
-                    const premiumPriceDiv2 = document.createElement('div');
-                    premiumPriceDiv2.className = 'preview-price-premium-2';
-                    premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ` ${currency}`; 
-                    slideContainer.appendChild(premiumPriceDiv2);
-                    
-                    const premiumCommentDiv = document.createElement('div');
-                    premiumCommentDiv.className = 'preview-comment';
-                    // Комментарий премиума использует стандартный стиль, но может требовать отдельного позиционирования?
-                    // По умолчанию ставим видимым если есть текст
-                    if (document.getElementById('premiumComment').value.trim() !== '') {
-                        premiumCommentDiv.textContent = document.getElementById('premiumComment').value;
-                        premiumCommentDiv.classList.add('visible');
-                        premiumCommentDiv.style.bottom = '5%'; // Стандартное положение
-                        premiumCommentDiv.style.left = '3%';
-                    }
-                    slideContainer.appendChild(premiumCommentDiv);
-                    
-                    const premiumBannerLink = document.createElement('a');
-                    premiumBannerLink.href = 'https://zvuk-b2b.com/premium';
-                    premiumBannerLink.target = '_blank';
-                    premiumBannerLink.style.position = 'absolute';
-                    premiumBannerLink.style.top = '0';
-                    premiumBannerLink.style.right = '0';
-                    premiumBannerLink.style.width = '35%';
-                    premiumBannerLink.style.height = '100%';
-                    slideContainer.appendChild(premiumBannerLink);
+                    bgImg.src = 'images/premiumbanner.webp'; slideContainer.appendChild(bgImg);
+                    const pP1 = document.createElement('div'); pP1.className = 'preview-price-premium-1'; pP1.textContent = formatPrice(document.getElementById('premiumPrice1').value) + ` ${currency}/мес.`; slideContainer.appendChild(pP1);
+                    const pP2 = document.createElement('div'); pP2.className = 'preview-price-premium-2'; pP2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ` ${currency}`; slideContainer.appendChild(pP2);
                     break;
-                case 'bprofile':
-                    bgImg.src = 'images/bprofile.webp';
-                    slideContainer.appendChild(bgImg);
+                case 'bprofile': bgImg.src = 'images/bprofile.webp'; slideContainer.appendChild(bgImg); break;
+                case 'event': bgImg.src = 'images/event.webp'; bgImg.style.objectFit = 'fill'; slideContainer.appendChild(bgImg); break;
+                case 'artist': bgImg.src = 'images/artist.webp'; bgImg.style.objectFit = 'fill'; slideContainer.appendChild(bgImg); break;
+                case 'concept': bgImg.src = 'images/mus_concept.webp'; bgImg.style.objectFit = 'fill'; slideContainer.appendChild(bgImg); break;
+                case 'web': bgImg.src = 'images/www.webp'; bgImg.style.objectFit = 'fill'; slideContainer.appendChild(bgImg); break;
+                case 'devices': bgImg.src = 'images/allplayer.webp'; bgImg.style.objectFit = 'fill'; slideContainer.appendChild(bgImg); break;
+                case 'vkluchay':
+                    bgImg.src = 'images/phone-sberboom.webp'; bgImg.style.objectFit = 'fill'; slideContainer.appendChild(bgImg);
+                    const iconLinks = ['https://google.com', 'https://apple.com', 'https://huawei.com', 'https://windows.com', 'https://rutube.com'];
+                    const iconWidth = 7; const gap = 3;
+                    iconLinks.forEach((link, idx) => {
+                        const a = document.createElement('a'); a.href = link; a.target = '_blank';
+                        a.style = `position:absolute;bottom:5%;left:${15 + idx*(iconWidth+gap)}%;width:${iconWidth}%;height:12%;z-index:30;cursor:pointer`;
+                        slideContainer.appendChild(a);
+                    });
                     break;
-                case 'event':
-                    bgImg.src = 'images/event.webp';
-                    bgImg.style.objectFit = 'fill'; // Force 100% fill
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'artist':
-                    bgImg.src = 'images/artist.webp';
-                    bgImg.style.objectFit = 'fill'; // Force 100% fill
-                    slideContainer.appendChild(bgImg);
-                    break;
-                case 'concept':
-                    bgImg.src = 'images/mus_concept.webp';
-                    bgImg.style.objectFit = 'fill'; // Force 100% fill
-                    slideContainer.appendChild(bgImg);
-
-                    // Add 3 clickable areas on the left
-                    const cLink1 = document.createElement('a');
-                    cLink1.href = 'https://zvuk-b2b.com/retro';
-                    cLink1.target = '_blank';
-                    cLink1.className = 'concept-link-area';
-                    cLink1.style.top = '15%'; 
-                    cLink1.style.left = '55%';
-                    cLink1.style.width = '25%';
-                    cLink1.style.height = '25%';
-                    slideContainer.appendChild(cLink1);
-
-                    const cLink2 = document.createElement('a');
-                    cLink2.href = 'https://zvuk-b2b.com/coffee-rave';
-                    cLink2.target = '_blank';
-                    cLink2.className = 'concept-link-area';
-                    cLink2.style.top = '35%';
-                    cLink2.style.left = '75%';
-                    cLink2.style.width = '25%';
-                    cLink2.style.height = '25%';
-                    slideContainer.appendChild(cLink2);
-
-                    const cLink3 = document.createElement('a');
-                    cLink3.href = 'https://zvuk-b2b.com/iv-int';
-                    cLink3.target = '_blank';
-                    cLink3.className = 'concept-link-area';
-                    cLink3.style.top = '60%';
-                    cLink3.style.left = '53%';
-                    cLink3.style.width = '25%';
-                    cLink3.style.height = '25%';
-                    slideContainer.appendChild(cLink3);
-                    break;
-
-                case 'web':
-                    bgImg.src = 'images/www.webp';
-                    bgImg.style.objectFit = 'fill'; // Force 100% fill
-                    slideContainer.appendChild(bgImg);
-                    break;
-
                 case 'videokp':
-                    bgImg.src = 'images/atmvieo.webp';
-                    slideContainer.appendChild(bgImg);
-                    
-                    if (globalClientLogo) {
-                        const clientLogoImg = document.createElement('img');
-                        clientLogoImg.id = 'clientLogo';
-                        clientLogoImg.src = globalClientLogo;
-                        clientLogoImg.style.position = 'absolute';
-                        clientLogoImg.style.top = '5%';
-                        clientLogoImg.style.left = '17%';
-                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
-                        clientLogoImg.style.width = 'auto'; 
-                        clientLogoImg.style.maxWidth = '30%';
-                        clientLogoImg.style.objectFit = 'contain';
-                        
-                        clientLogoImg.onerror = function() {
-                            this.style.display = 'none';
-                        };
+                    bgImg.src = 'images/atmvieo.webp'; slideContainer.appendChild(bgImg);
+                    const vP = document.createElement('div'); vP.className = 'preview-price'; vP.style.top = '66%';
+                    vP.textContent = formatPrice(document.getElementById('videokpPrice').value) + ` ${currency}/мес.`; slideContainer.appendChild(vP);
+                    break;
 
-                        applyLogoFilter(clientLogoImg);
-                        slideContainer.appendChild(clientLogoImg);
-                    }
-                    const videoPriceDiv = document.createElement('div');
-                    videoPriceDiv.className = 'preview-price';
-                    // Special positioning for video KP: 10% lower (56% + 10% = 66%)
-                    videoPriceDiv.style.top = '66%';
-                    videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ` ${currency}/мес.`;
-                    slideContainer.appendChild(videoPriceDiv);
+                case 'itogo':
+                    bgImg.src = 'images/itogi.webp'; bgImg.style.objectFit = 'fill'; slideContainer.appendChild(bgImg);
+                    const wrapper = document.createElement('div'); wrapper.className = 'itogo-wrapper';
+                    const compName = document.getElementById('companyName').value || 'Вашей компании';
+                    const pricePerPoint = parseInt(document.getElementById('price1Value').value) || 0;
+                    const vatStr = region === 'ru' ? ' в т.ч. НДС 20%' : '';
                     
-                    const videoCommentDiv = document.createElement('div');
-                    videoCommentDiv.className = 'preview-comment';
-                    if (document.getElementById('videokpComment').value.trim() !== '') {
-                        videoCommentDiv.textContent = document.getElementById('videokpComment').value;
-                        videoCommentDiv.classList.add('visible');
-                        videoCommentDiv.style.top = '72%'; // Чуть ниже цены
-                    }
-                    slideContainer.appendChild(videoCommentDiv);
+                    wrapper.innerHTML = `
+                        <div class="itogo-title">Коммерческое предложение для <span class="editable-val" onclick="this.textContent=prompt('Название:', this.textContent)">${compName}</span></div>
+                        <table class="itogo-table">
+                            <thead>
+                                <tr>
+                                    <th>Пакет услуг</th>
+                                    <th>Стоимость за 1 зону 1 месяц, ${currency}${vatStr}</th>
+                                    <th>Стоимость за <span class="editable-val" onclick="updateItogoZones(this)">${itogoZones}</span> зону 1 месяц, ${currency}${vatStr}</th>
+                                    <th>Стоимость за ${itogoZones} зону на 12 месяцев с <span class="editable-val" onclick="this.textContent=prompt('Дата:', this.textContent)">${itogoStartDate}</span> по <span class="editable-val" onclick="this.textContent=prompt('Дата:', this.textContent)">${itogoEndDate}</span>, ${currency}${vatStr}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Сервис по управлению музыкой и лицензией</td>
+                                    <td>${formatPrice(pricePerPoint)} ${currency}</td>
+                                    <td>${formatPrice(pricePerPoint * itogoZones)} ${currency}</td>
+                                    <td>${formatPrice(pricePerPoint * itogoZones * 12)} ${currency}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="itogo-summary">
+                            Итого стоимость для ${itogoZones} зон вещания на период с <span class="editable-val" onclick="this.textContent=prompt('Дата:', this.textContent)">${itogoStartDate}</span> (с учетом бесплатного 12 месяца) составит <b>${formatPrice(pricePerPoint * itogoZones * 12)} ${currency}</b>.<br><br>
+                            Стоимость <span class="editable-val" onclick="updateItogoZones(this)">${itogoZones}</span> андроид плееров с учетом скидки и объема составит <span class="editable-val" onclick="itogoHardwarePrice=prompt('Цена:', itogoHardwarePrice); updateCurrentSlide()">${formatPrice(itogoHardwarePrice)}</span> ${currency}.
+                        </div>
+                    `;
+                    slideContainer.appendChild(wrapper);
                     break;
             }
+        }
+
+        function updateItogoZones(el) {
+            let val = prompt('Количество зон:', itogoZones);
+            if (val && !isNaN(val)) { itogoZones = parseInt(val); updateCurrentSlide(); }
         }
         
         function showSlide(index) {
-            if (slides.length === 0) {
-                currentSlideIndex = -1;
-                document.getElementById('currentSlide').innerHTML = '';
-                updateSlideNumbers();
-                return;
-            }
+            if (slides.length === 0) { currentSlideIndex = -1; document.getElementById('currentSlide').innerHTML = ''; updateSlideNumbers(); return; }
             if (index < 1 || index > slides.length) return;
             currentSlideIndex = index - 1;
-            document.querySelectorAll('.slide-number').forEach((btn, i) => {
-                btn.classList.toggle('active', i === currentSlideIndex);
-            });
+            document.querySelectorAll('.slide-number').forEach((btn, i) => { btn.classList.toggle('active', i === currentSlideIndex); });
             updateCurrentSlide();
-            
-            // Синхронизация меню с текущим слайдом
-            if (slides[currentSlideIndex]) {
-                syncSidebar(slides[currentSlideIndex].type);
-            }
+            if (slides[currentSlideIndex]) syncSidebar(slides[currentSlideIndex].type);
         }
         
-        function removeCurrentSlide() {
-            if (slides.length > 0 && currentSlideIndex > -1) {
-                removeSlide(slides[currentSlideIndex].type);
-            }
-        }
+        function removeCurrentSlide() { if (slides.length > 0 && currentSlideIndex > -1) removeSlide(slides[currentSlideIndex].type); }
         
         function addSlide(type) {
-            // Check restriction before adding
-            if (isSectionRestricted(type)) {
-                showRestrictionPopup();
-                return;
-            }
-
-            const existingSlideIndex = slides.findIndex(slide => slide.type === type);
-            if (existingSlideIndex !== -1) {
-                showSlide(existingSlideIndex + 1);
-                const slideNumEl = document.querySelector(`.slide-number[data-index="${existingSlideIndex}"]`);
-                if(slideNumEl) {
-                    slideNumEl.classList.add('highlight');
-                    setTimeout(() => slideNumEl.classList.remove('highlight'), 500);
-                }
-                return;
-            }
-            let newSlide;
-            switch(type) {
-                case 'general': newSlide = { type: 'general' }; break;
-                case 'pricing': newSlide = { type: 'pricing' }; break;
-                case 'instruction': newSlide = { type: 'instruction' }; break;
-                case 'app': newSlide = { type: 'app' }; break;
-                case 'creative': newSlide = { type: 'creative' }; break;
-                case 'playlist': newSlide = { type: 'playlist' }; break;
-                case 'partner': newSlide = { type: 'partner' }; break;
-                case 'premium': newSlide = { type: 'premium' }; break;
-                case 'bprofile': newSlide = { type: 'bprofile' }; break;
-                case 'event': newSlide = { type: 'event' }; break;
-                case 'artist': newSlide = { type: 'artist' }; break;
-                case 'concept': newSlide = { type: 'concept' }; break;
-                case 'web': newSlide = { type: 'web' }; break;
-                case 'videokp': newSlide = { type: 'videokp' }; break;
-                default: return;
-            }
-            // Logic to insert 'web' after 'concept' if concept exists
-            if (type === 'web') {
-                const conceptIndex = slides.findIndex(s => s.type === 'concept');
-                if (conceptIndex !== -1) {
-                    slides.splice(conceptIndex + 1, 0, newSlide);
-                } else {
-                     slides.push(newSlide);
-                }
-            } else {
-                 slides.push(newSlide);
-            }
+            if (isSectionRestricted(type)) { showRestrictionPopup(); return; }
+            const existingIdx = slides.findIndex(s => s.type === type);
+            if (existingIdx !== -1) { showSlide(existingIdx + 1); return; }
+            let newSlide = { type: type };
+            
+            // Logical placement
+            if (type === 'itogo') slides.push(newSlide);
+            else if (type === 'devices') {
+                const webIdx = slides.findIndex(s => s.type === 'web');
+                if (webIdx !== -1) slides.splice(webIdx + 1, 0, newSlide); else slides.push(newSlide);
+            } else if (type === 'vkluchay') {
+                const devIdx = slides.findIndex(s => s.type === 'devices');
+                if (devIdx !== -1) slides.splice(devIdx + 1, 0, newSlide); else slides.push(newSlide);
+            } else slides.push(newSlide);
 
             updateSlideNumbers();
-            // Find the index of the newly added slide to show it
-            const newIndex = slides.indexOf(newSlide);
-            showSlide(newIndex + 1);
+            showSlide(slides.indexOf(newSlide) + 1);
         }
         
         function removeSlide(type) {
-            const indexToRemove = slides.findIndex(slide => slide.type === type);
-            if (indexToRemove > -1) {
-                slides.splice(indexToRemove, 1);
-                
-                if (slides.length === 0) {
-                    currentSlideIndex = -1;
-                    document.getElementById('currentSlide').innerHTML = ''; // Очистить превью
-                } else {
-                    if (currentSlideIndex >= slides.length) {
-                        currentSlideIndex = slides.length - 1; // Перейти к последнему слайду
-                    }
-                    showSlide(currentSlideIndex + 1); 
-                }
+            const idx = slides.findIndex(s => s.type === type);
+            if (idx > -1) {
+                slides.splice(idx, 1);
+                if (slides.length === 0) { currentSlideIndex = -1; document.getElementById('currentSlide').innerHTML = ''; }
+                else { if (currentSlideIndex >= slides.length) currentSlideIndex = slides.length - 1; showSlide(currentSlideIndex + 1); }
                 updateSlideNumbers();
             }
         }
         
         function updateSlideNumbers() {
-            const slideNumbers = document.getElementById('slideNumbers');
-            slideNumbers.innerHTML = '';
+            const slideNumbers = document.getElementById('slideNumbers'); slideNumbers.innerHTML = '';
             slides.forEach((slide, i) => {
-                const number = document.createElement('div');
-                number.className = `slide-number ${i === currentSlideIndex ? 'active' : ''}`;
-                number.textContent = i + 1;
-                number.draggable = true;
-                number.dataset.index = i;
-                number.addEventListener('dragstart', handleDragStart);
-                number.addEventListener('dragover', handleDragOver);
-                number.addEventListener('drop', handleDrop);
-                number.addEventListener('dragend', handleDragEnd);
-                number.addEventListener('dragenter', handleDragEnter);
-                number.addEventListener('dragleave', handleDragLeave);
-                number.onclick = () => showSlide(i + 1);
-                slideNumbers.appendChild(number);
+                const number = document.createElement('div'); number.className = `slide-number ${i === currentSlideIndex ? 'active' : ''}`;
+                number.textContent = i + 1; number.draggable = true; number.dataset.index = i;
+                number.addEventListener('dragstart', handleDragStart); number.addEventListener('dragover', handleDragOver);
+                number.addEventListener('drop', handleDrop); number.addEventListener('dragend', handleDragEnd);
+                number.addEventListener('dragenter', handleDragEnter); number.addEventListener('dragleave', handleDragLeave);
+                number.onclick = () => showSlide(i + 1); slideNumbers.appendChild(number);
             });
         }
         
-        function handleDragStart(e) {
-            draggedSlideIndex = parseInt(e.target.dataset.index);
-            e.target.classList.add('dragging');
-        }
-        
-        function handleDragOver(e) {
-            e.preventDefault();
-        }
-        
+        function handleDragStart(e) { draggedSlideIndex = parseInt(e.target.dataset.index); e.target.classList.add('dragging'); }
+        function handleDragOver(e) { e.preventDefault(); }
         function handleDrop(e) {
-            e.preventDefault();
-            const targetIndex = parseInt(e.target.dataset.index);
+            e.preventDefault(); const targetIndex = parseInt(e.target.dataset.index);
             if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) {
-                const [draggedItem] = slides.splice(draggedSlideIndex, 1);
-                slides.splice(targetIndex, 0, draggedItem);
-                currentSlideIndex = targetIndex;
-                updateSlideNumbers();
-                updateCurrentSlide();
+                const [item] = slides.splice(draggedSlideIndex, 1); slides.splice(targetIndex, 0, item);
+                currentSlideIndex = targetIndex; updateSlideNumbers(); updateCurrentSlide();
             }
-             e.target.classList.remove('drop-target', 'dragging');
+            e.target.classList.remove('drop-target', 'dragging');
         }
-        
-        function handleDragEnd(e) {
-            document.querySelectorAll('.slide-number').forEach(el => {
-                el.classList.remove('dragging', 'drop-target');
-            });
-            draggedSlideIndex = null;
-        }
-        
-        function handleDragEnter(e) {
-            const targetIndex = parseInt(e.target.dataset.index);
-            if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) {
-                e.target.classList.add('drop-target');
-            }
-        }
-        
-        function handleDragLeave(e) {
-            e.target.classList.remove('drop-target');
-        }
-        
-        function formatPrice(price) {
-            return String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-        }
-        
+        function handleDragEnd(e) { document.querySelectorAll('.slide-number').forEach(el => el.classList.remove('dragging', 'drop-target')); draggedSlideIndex = null; }
+        function handleDragEnter(e) { const targetIndex = parseInt(e.target.dataset.index); if (draggedSlideIndex !== null && draggedSlideIndex !== targetIndex) e.target.classList.add('drop-target'); }
+        function handleDragLeave(e) { e.target.classList.remove('drop-target'); }
+        function formatPrice(price) { return String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
         function getFileName() {
-            const managerSelect = document.getElementById('manager');
-            const managerName = managerSelect.options[managerSelect.selectedIndex].text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
-            const companyName = document.getElementById('companyName').value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
-            return `zvuk-b2b-${companyName || 'company'}-${managerName}-kp`;
+            const mS = document.getElementById('manager'); const mN = mS.options[mS.selectedIndex].text.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
+            const cN = document.getElementById('companyName').value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-zа-яё0-9-]/g, '');
+            return `zvuk-b2b-${cN || 'company'}-${mN}-kp`;
         }
 
         async function saveAsPDF() {
-            if (slides.length === 0) {
-                alert('Нет слайдов для сохранения в PDF.');
-                return;
-            }
-
-            const popup = document.getElementById('pdf-popup');
-            popup.classList.add('loading');
-            const blurOverlay = document.querySelector('.blur-overlay');
-            blurOverlay.style.display = 'block';
-            popup.style.display = 'block';
-            
+            if (slides.length === 0) return;
+            const popup = document.getElementById('pdf-popup'); popup.classList.add('loading');
+            const blurOverlay = document.querySelector('.blur-overlay'); blurOverlay.style.display = 'block'; popup.style.display = 'block';
             const fileName = getFileName() + '.pdf';
             const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
-
-            const tempContainer = document.createElement('div');
-            tempContainer.style.position = 'absolute';
-            tempContainer.style.left = '-9999px';
-            tempContainer.style.top = '0px';
-            tempContainer.style.width = '1920px';
-            tempContainer.style.height = '1080px';
-            document.body.appendChild(tempContainer);
-            
-            const originalSlideIndex = currentSlideIndex; 
-            
-            const onScreenSlide = document.getElementById('currentSlide');
-            let onScreenWidth = onScreenSlide.offsetWidth;
-            let onScreenHeight = onScreenSlide.offsetHeight;
-            
-            if (onScreenWidth === 0 || onScreenHeight === 0) {
-                const previewWrapper = document.querySelector('.preview-wrapper');
-                onScreenWidth = previewWrapper.offsetWidth; 
-                onScreenHeight = onScreenWidth * (9 / 16);
-            }
-            
-            const scaleFactor = 1920 / onScreenWidth;
+            const temp = document.createElement('div'); temp.style = 'position:absolute;left:-9999px;top:0;width:1920px;height:1080px';
+            document.body.appendChild(temp);
+            const originalIdx = currentSlideIndex; 
+            const onScreen = document.getElementById('currentSlide');
+            let oW = onScreen.offsetWidth || document.querySelector('.preview-wrapper').offsetWidth;
+            const scale = 1920 / oW;
 
             for (let i = 0; i < slides.length; i++) {
                 showSlide(i + 1); 
-                
-                const slideContent = document.getElementById('currentSlide').cloneNode(true);
-                
-                if (window.innerWidth <= 768) {
-                    slideContent.classList.add('pdf-render-mode');
-                }
-
-                slideContent.style.transform = 'none';
-                slideContent.classList.remove('zoomed');
-                slideContent.style.margin = '0'; 
-                
-                slideContent.style.width = onScreenWidth + 'px';
-                slideContent.style.height = onScreenHeight + 'px';
-                
-                slideContent.style.transform = `scale(${scaleFactor})`;
-                slideContent.style.transformOrigin = 'top left';
-
-                tempContainer.innerHTML = '';
-                tempContainer.appendChild(slideContent);
-                
-                const images = tempContainer.querySelectorAll('img');
-                const promises = Array.from(images).map(img => {
-                    if (!img.complete) {
-                        return new Promise(resolve => { img.onload = img.onerror = resolve; });
-                    }
-                    return Promise.resolve();
-                });
-                await Promise.all(promises);
-                await new Promise(resolve => setTimeout(resolve, 300));
-
-                const canvas = await html2canvas(tempContainer, {
-                    width: 1920,
-                    height: 1080,
-                    scale: 1,
-                    logging: false,
-                    useCORS: true,
-                    letterRendering: true
-                });
-
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                
+                const clone = document.getElementById('currentSlide').cloneNode(true);
+                if (window.innerWidth <= 768) clone.classList.add('pdf-render-mode');
+                clone.style.transform = `scale(${scale})`; clone.style.transformOrigin = 'top left'; clone.style.width = oW + 'px'; clone.style.height = (oW*9/16) + 'px';
+                temp.innerHTML = ''; temp.appendChild(clone);
+                await Promise.all(Array.from(temp.querySelectorAll('img')).map(img => img.complete ? Promise.resolve() : new Promise(r => img.onload = img.onerror = r)));
+                await new Promise(r => setTimeout(r, 400));
+                const canvas = await html2canvas(temp, { width: 1920, height: 1080, scale: 1, useCORS: true });
                 if (i > 0) pdf.addPage([1920, 1080], 'landscape');
-                
-                pdf.addImage(imgData, 'JPEG', 0, 0, 1920, 1080);
-                
-                addLinksToPDF(pdf, slideContent, i, scaleFactor);
+                pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 1920, 1080);
+                addLinksToPDF(pdf, clone, i, scale);
             }
-            
-            showSlide(originalSlideIndex + 1);
-            
-            document.body.removeChild(tempContainer);
-            pdf.save(fileName);
-            
-            setTimeout(() => {
-                popup.style.display = 'none';
-                popup.classList.remove('loading');
-                blurOverlay.style.display = 'none';
-            }, 2000);
+            showSlide(originalIdx + 1); document.body.removeChild(temp); pdf.save(fileName);
+            setTimeout(() => { popup.style.display = 'none'; popup.classList.remove('loading'); blurOverlay.style.display = 'none'; }, 2000);
         }
 
-        function addLinksToPDF(pdf, slideContent, pageIndex, scaleFactor) {
-            pdf.setPage(pageIndex + 1);
-            const links = slideContent.querySelectorAll('a');
-            
-            const getTrueOffset = (element) => {
-                let top = 0, left = 0;
-                let current = element;
-                while(current && current !== slideContent) {
-                    top += current.offsetTop;
-                    left += current.offsetLeft;
-                    current = current.offsetParent;
-                }
-                return { top, left };
-            };
-
-            links.forEach(link => {
-                if (!link.href || link.href.trim() === '' || link.href.endsWith('#')) return;
-
-                const offset = getTrueOffset(link);
-                
-                const x = offset.left * scaleFactor;
-                const y = offset.top * scaleFactor;
-                const width = link.offsetWidth * scaleFactor;
-                const height = link.offsetHeight * scaleFactor;
-                
-                if (width > 0 && height > 0) {
-                    try {
-                        pdf.link(x, y, width, height, { url: link.href });
-                    } catch (e) {
-                        console.error('Ошибка при добавлении ссылки:', e, {url: link.href, x, y, width, height});
-                    }
-                }
+        function addLinksToPDF(pdf, content, pageIdx, scale) {
+            pdf.setPage(pageIdx + 1);
+            content.querySelectorAll('a').forEach(link => {
+                if (!link.href || link.href.endsWith('#')) return;
+                let top = 0, left = 0, curr = link;
+                while(curr && curr !== content) { top += curr.offsetTop; left += curr.offsetLeft; curr = curr.offsetParent; }
+                pdf.link(left * scale, top * scale, link.offsetWidth * scale, link.offsetHeight * scale, { url: link.href });
             });
         }
 
-        function setClientLogo(logoSrc) {
-            globalClientLogo = logoSrc;
-            
-            const previewContainer = document.getElementById('clientLogoPreviewContainer');
-            if (logoSrc) {
-                // Показываем в превью инвертированный логотип, чтобы пользователь понимал, как это будет выглядеть
-                previewContainer.innerHTML = `<img src="${logoSrc}" style="max-height: 40px; border: 1px solid var(--border); border-radius: 4px; object-fit: contain; filter: invert(1);">`;
-            } else {
-                previewContainer.innerHTML = '';
-            }
-            
-            if (slides[currentSlideIndex] && (slides[currentSlideIndex].type === 'general' || slides[currentSlideIndex].type === 'videokp')) {
-                updateCurrentSlide();
-            }
+        function setClientLogo(src) {
+            globalClientLogo = src;
+            const prev = document.getElementById('clientLogoPreviewContainer');
+            prev.innerHTML = src ? `<img src="${src}" style="max-height: 40px; filter: invert(1);">` : '';
+            if (slides[currentSlideIndex] && (['general', 'videokp', 'itogo'].includes(slides[currentSlideIndex].type))) updateCurrentSlide();
         }
         
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
-                let text = option.textContent.replace(/Статистика\s*/i, '').trim();
-                option.textContent = text.charAt(0).toUpperCase() + text.slice(1);
+            const inputs = ['banner', 'logos', 'manager', 'personalPhone', 'price1Value', 'price3Value1', 'price3Value2', 'price3Value3', 'comment', 'priceBanner', 'instructionBanner', 'playlist', 'premiumPrice1', 'premiumPrice2', 'premiumComment', 'videokpPrice', 'videokpComment', 'price1Label', 'price10plusHeader1', 'price10plusValue1', 'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3', 'price3Header1', 'price3Header2', 'price3Header3'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => { updateCurrentSlide(); if (id === 'manager') updateSectionAvailability(); });
             });
-            const inputsToUpdate = [
-                'banner', 'logos', 'manager', 'personalPhone', 'price1Value', 
-                'price3Value1', 'price3Value2', 'price3Value3', 'comment', 
-                'priceBanner', 'instructionBanner', 'playlist', 'premiumPrice1', 
-                'premiumPrice2', 'premiumComment', 'videokpPrice', 'videokpComment',
-                'price1Label', 'price10plusHeader1', 'price10plusValue1',
-                'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3',
-                'price3Header1', 'price3Header2', 'price3Header3'
-            ];
-            inputsToUpdate.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', function() {
-                        updateCurrentSlide();
-                        // Если поменялся менеджер, проверяем доступность разделов
-                        if (id === 'manager') {
-                            updateSectionAvailability();
-                        }
-                    });
-                }
-            });
-
-            // Автоматическая смена баннера в "Менеджере" при смене баннера в "Общем"
             document.getElementById('banner').addEventListener('change', function() {
-                const generalVal = this.value; // например images/sbcafe.webp
-                
-                // Проверяем, есть ли такой опшн в priceBanner
-                // Так как списки теперь одинаковые, мы можем просто поставить то же значение
-                const priceSelect = document.getElementById('priceBanner');
-                const option = priceSelect.querySelector(`option[value="${generalVal}"]`);
-                
-                if (option) {
-                    priceSelect.value = generalVal;
-                }
+                const pS = document.getElementById('priceBanner'); const opt = pS.querySelector(`option[value="${this.value}"]`);
+                if (opt) pS.value = this.value;
             });
-
-
-            // Слушатель чекбокса инверсии
-            document.getElementById('logoInvert').addEventListener('change', function() {
-                updateCurrentSlide();
-            });
-
+            document.getElementById('logoInvert').addEventListener('change', updateCurrentSlide);
             document.getElementById('logos').addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const bannerValue = selectedOption.getAttribute('data-banner');
-                if (bannerValue) {
-                    const bannerSelect = document.getElementById('banner');
-                    bannerSelect.value = bannerValue;
-                    bannerSelect.dispatchEvent(new Event('change'));
-                }
+                const bV = this.options[this.selectedIndex].getAttribute('data-banner');
+                if (bV) { const bS = document.getElementById('banner'); bS.value = bV; bS.dispatchEvent(new Event('change')); }
             });
-            document.getElementById('companyName').addEventListener('input', function() {});
-
-            document.getElementById('clientLogoUpload').addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        setClientLogo(e.target.result);
-                    };
-                    reader.readAsDataURL(file);
-                }
+            document.getElementById('clientLogoUpload').addEventListener('change', e => {
+                const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = ev => setClientLogo(ev.target.result); r.readAsDataURL(f); }
             });
-
-            // --- Логика для поиска по менеджерам ---
-            const managerSelect = document.getElementById('manager');
-            const managerSearch = document.getElementById('manager-search');
-            const managerOptionsContainer = document.getElementById('manager-options');
-
-            // Инициализируем опции поиска
-            const updateManagerSearchOptions = () => {
-                managerOptionsContainer.innerHTML = '';
-                const options = Array.from(managerSelect.options);
-                options.forEach(option => {
-                    // Добавляем в поиск только те, что сейчас видимы (прошли фильтр региона)
-                    // Но так как option.style.display не всегда надежен в JS при инициализации, проверяем регион вручную
-                    if (option.getAttribute('data-region') === currentRegion) {
-                        const optionDiv = document.createElement('div');
-                        optionDiv.classList.add('option');
-                        optionDiv.textContent = option.textContent;
-                        optionDiv.dataset.value = option.value;
-                        optionDiv.dataset.number = option.dataset.number;
-                        managerOptionsContainer.appendChild(optionDiv);
+            
+            // Search Manager logic
+            const mS = document.getElementById('manager'); const mSch = document.getElementById('manager-search'); const mOptC = document.getElementById('manager-options');
+            const updMS = () => {
+                mOptC.innerHTML = '';
+                Array.from(mS.options).forEach(o => {
+                    if (o.getAttribute('data-region') === currentRegion) {
+                        const d = document.createElement('div'); d.className = 'option'; d.textContent = o.textContent; d.dataset.value = o.value; d.dataset.number = o.dataset.number;
+                        mOptC.appendChild(d);
                     }
                 });
             };
-
-            // Первичная инициализация
-            setRegion('ru'); // Это запустит updateSectionAvailability и первичную фильтрацию
-
-            managerSearch.addEventListener('focus', () => {
-                // Обновляем список перед показом, чтобы он соответствовал текущему региону
-                updateManagerSearchOptions();
-                managerOptionsContainer.style.display = 'block';
-                managerSearch.value = ''; 
-                // Триггерим input чтобы показать все варианты региона
-                const filter = '';
-                const customOptions = managerOptionsContainer.querySelectorAll('.option');
-                customOptions.forEach(option => option.style.display = '');
+            setRegion('ru');
+            mSch.addEventListener('focus', () => { updMS(); mOptC.style.display = 'block'; mSch.value = ''; });
+            mSch.addEventListener('blur', () => setTimeout(() => { mOptC.style.display = 'none'; if (!mSch.value) mSch.value = mS.options[mS.selectedIndex].text; }, 150));
+            mSch.addEventListener('input', () => {
+                const f = mSch.value.toLowerCase();
+                mOptC.querySelectorAll('.option').forEach(o => { o.style.display = (o.textContent.toLowerCase().includes(f) || (o.dataset.number && o.dataset.number.includes(f))) ? '' : 'none'; });
             });
-
-            managerSearch.addEventListener('blur', () => {
-                setTimeout(() => {
-                    managerOptionsContainer.style.display = 'none';
-                    if (!managerSearch.value) {
-                         managerSearch.value = managerSelect.options[managerSelect.selectedIndex].text;
-                    }
-                }, 150);
+            mOptC.addEventListener('mousedown', e => {
+                if (e.target.classList.contains('option')) { mSch.value = e.target.textContent; mS.value = e.target.dataset.value; mS.dispatchEvent(new Event('change')); mOptC.style.display = 'none'; }
             });
-
-            managerSearch.addEventListener('input', () => {
-                const filter = managerSearch.value.toLowerCase();
-                const customOptions = managerOptionsContainer.querySelectorAll('.option');
-                customOptions.forEach(option => {
-                    const nameMatch = option.textContent.toLowerCase().includes(filter);
-                    const numberMatch = option.dataset.number && option.dataset.number.includes(filter);
-
-                    if (nameMatch || numberMatch) {
-                        option.style.display = '';
-                    } else {
-                        option.style.display = 'none';
-                    }
-                });
-            });
-
-            managerOptionsContainer.addEventListener('mousedown', (e) => {
-                if (e.target.classList.contains('option')) {
-                    const selectedText = e.target.textContent;
-                    const selectedValue = e.target.dataset.value;
-
-                    managerSearch.value = selectedText;
-                    managerSelect.value = selectedValue;
-                    
-                    managerSelect.dispatchEvent(new Event('change'));
-                    managerOptionsContainer.style.display = 'none';
-                }
-            });
-            // --- Конец логики для поиска ---
-
-            updateSlideNumbers();
-            if (slides.length > 0) {
-                showSlide(1); 
-            }
-            if (document.querySelector('.menu-header')) {
-                document.querySelector('.menu-header').click();
-            }
+            updateSlideNumbers(); if (slides.length > 0) showSlide(1);
+            if (document.querySelector('.menu-header')) document.querySelector('.menu-header').click();
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
