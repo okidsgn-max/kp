@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -1556,99 +1557,144 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'app')">
-                    <span class="menu-section-header">Мобильное приложение</span>
+
+            <!-- ПАПКА "МУЗЫКА" -->
+            <div class="menu-section" id="folder-music">
+                <div class="menu-header" onclick="toggleMenu(this, 'folder-music')">
+                    <span class="menu-section-header">Музыка</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('app')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('app')">Удалить</button>
+                    <div class="menu-section" id="section-creative">
+                        <div class="menu-header" onclick="toggleMenu(this, 'creative')">
+                            <span class="menu-section-header">Креативные аудиоролики</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('creative')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('creative')">Удалить</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
-            <div class="menu-section" id="section-creative">
-                <div class="menu-header" onclick="toggleMenu(this, 'creative')">
-                    <span class="menu-section-header">Креативные аудиоролики</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('creative')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('creative')">Удалить</button>
+
+                    <div class="menu-section" id="section-concept">
+                        <div class="menu-header" onclick="toggleMenu(this, 'concept')">
+                            <span class="menu-section-header">Концепции</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('concept')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('concept')">Удалить</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" onclick="toggleMenu(this, 'playlist')">
-                    <span class="menu-section-header">Тематические плейлисты</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <label class="menu-label">Тематика:</label>
-                    <select class="zvuk-select" id="playlist">
-                        <option value="images/georgia-audio.webp">Грузинский плейлист</option>
-                        <option value="images/barber-audio.webp">Barber плейлист</option>
-                        <option value="images/rawe.webp">Рейв</option>
-                    </select>
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('playlist')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('playlist')">Удалить</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="menu-section" id="section-partner">
-                <div class="menu-header" onclick="toggleMenu(this, 'partner')">
-                    <span class="menu-section-header">Партнерская программа</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('partner')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('partner')">Удалить</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="menu-section" id="section-premium">
-                <div class="menu-header" onclick="toggleMenu(this, 'premium')">
-                    <span class="menu-section-header">Премиум тариф</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <label class="menu-label">Стоимость 1, <span class="currency-label-text">валюта</span>/мес:</label>
-                    <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
                     
-                    <label class="menu-label">Стоимость 2, <span class="currency-label-text">валюта</span>:</label> <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
-                    
-                    <label class="menu-label">Комментарий:</label>
-                    <input class="zvuk-input" type="text" id="premiumComment" placeholder="Введите комментарий">
-                    
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('premium')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('premium')">Удалить</button>
+                    <div class="menu-section">
+                        <div class="menu-header" onclick="toggleMenu(this, 'playlist')">
+                            <span class="menu-section-header">Тематические плейлисты</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <label class="menu-label">Тематика:</label>
+                            <select class="zvuk-select" id="playlist">
+                                <option value="images/georgia-audio.webp">Грузинский плейлист</option>
+                                <option value="images/barber-audio.webp">Barber плейлист</option>
+                                <option value="images/rawe.webp">Рейв</option>
+                            </select>
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('playlist')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('playlist')">Удалить</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <div class="menu-section" id="section-bprofile">
-                <div class="menu-header" onclick="toggleMenu(this, 'bprofile')">
-                    <span class="menu-section-header">Бизнес-профиль</span>
+            <!-- ПАПКА "СЕРВИС" -->
+            <div class="menu-section" id="folder-service">
+                <div class="menu-header" onclick="toggleMenu(this, 'folder-service')">
+                    <span class="menu-section-header">Сервис</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('bprofile')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('bprofile')">Удалить</button>
+                     <div class="menu-section">
+                        <div class="menu-header" onclick="toggleMenu(this, 'app')">
+                            <span class="menu-section-header">Мобильное приложение</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('app')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('app')">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-section" id="section-turnon">
+                        <div class="menu-header" onclick="toggleMenu(this, 'turnon')">
+                            <span class="menu-section-header">Включай</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('turnon')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('turnon')">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="menu-section" id="section-devices">
+                        <div class="menu-header" onclick="toggleMenu(this, 'devices')">
+                            <span class="menu-section-header">Девайсы</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('devices')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('devices')">Удалить</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- ПАПКА "ДОПОЛНИТЕЛЬНО" -->
+            <div class="menu-section" id="folder-additional">
+                <div class="menu-header" onclick="toggleMenu(this, 'folder-additional')">
+                    <span class="menu-section-header">Дополнительно</span>
+                    <span class="toggle-button">+</span>
+                </div>
+                <div class="menu-content">
+                     <div class="menu-section" id="section-bprofile">
+                        <div class="menu-header" onclick="toggleMenu(this, 'bprofile')">
+                            <span class="menu-section-header">Бизнес-профиль</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('bprofile')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('bprofile')">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-section" id="section-partner">
+                        <div class="menu-header" onclick="toggleMenu(this, 'partner')">
+                            <span class="menu-section-header">Партнерская программа</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('partner')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('partner')">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ПАПКА "ЗА ДЕНЬГИ - ДА" -->
             <div class="menu-section" id="folder-money">
                 <div class="menu-header" onclick="toggleMenu(this, 'folder-money')">
@@ -1657,6 +1703,27 @@
                 </div>
                 <div class="menu-content">
                     
+                    <div class="menu-section" id="section-premium">
+                        <div class="menu-header" onclick="toggleMenu(this, 'premium')">
+                            <span class="menu-section-header">Премиум тариф</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <label class="menu-label">Стоимость 1, <span class="currency-label-text">валюта</span>/мес:</label>
+                            <input class="zvuk-input" type="number" id="premiumPrice1" value="1990">
+                            
+                            <label class="menu-label">Стоимость 2, <span class="currency-label-text">валюта</span>:</label> <input class="zvuk-input" type="number" id="premiumPrice2" value="50000">
+                            
+                            <label class="menu-label">Комментарий:</label>
+                            <input class="zvuk-input" type="text" id="premiumComment" placeholder="Введите комментарий">
+                            
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('premium')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('premium')">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="menu-section" id="section-event">
                         <div class="menu-header" onclick="toggleMenu(this, 'event')">
                             <span class="menu-section-header">Мероприятия</span>
@@ -1699,46 +1766,6 @@
                 </div>
             </div>
             <!-- КОНЕЦ ПАПКИ -->
-
-            <div class="menu-section" id="section-concept">
-                <div class="menu-header" onclick="toggleMenu(this, 'concept')">
-                    <span class="menu-section-header">Концепции</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('concept')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('concept')">Удалить</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-section" id="section-devices">
-                <div class="menu-header" onclick="toggleMenu(this, 'devices')">
-                    <span class="menu-section-header">Девайсы</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('devices')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('devices')">Удалить</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-section" id="section-turnon">
-                <div class="menu-header" onclick="toggleMenu(this, 'turnon')">
-                    <span class="menu-section-header">Включай</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('turnon')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('turnon')">Удалить</button>
-                    </div>
-                </div>
-            </div>
-            
 
             <div class="menu-section" id="section-videokp">
                 <div class="menu-header" onclick="toggleMenu(this, 'videokp')">
@@ -1788,7 +1815,13 @@
                     <label class="menu-label">Кол-во зон (по умолчанию):</label>
                     <input class="zvuk-input" type="number" id="summaryZoneCount" value="4" onchange="updateCurrentSlide()">
 
-                    <!-- Стоимость теперь рассчитывается автоматически, поле убрано из интерфейса во избежание путаницы -->
+                    <!-- Manual Addition fields -->
+                    <label class="menu-label" style="margin-top:16px;">Доп. услуга (название):</label>
+                    <input class="zvuk-input" type="text" id="summaryManualName" placeholder="Например: Монтаж" oninput="updateCurrentSlide()">
+                    
+                    <label class="menu-label">Доп. услуга (цена):</label>
+                    <input class="zvuk-input" type="number" id="summaryManualPrice" placeholder="0" oninput="updateCurrentSlide()">
+
 
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('summary')">Добавить</button>
@@ -2045,7 +2078,9 @@
                 
                 // Check if this slide exists in the list
                 // If it's a folder (like 'folder-money'), it doesn't represent a slide itself, so skip ghost logic
-                if (type !== 'folder-money') {
+                const isFolder = ['folder-money', 'folder-music', 'folder-service', 'folder-additional'].includes(type);
+                
+                if (!isFolder) {
                     const exists = slides.some(s => s.type === type);
                     
                     if (!exists) {
@@ -2453,25 +2488,16 @@
 
         // Helper date function for Summary
         function getSummaryDates() {
-            const now = new Date();
-            // Start date (e.g., 01.03.2025 - next month start or current? Logic: "Date + 1 month")
-            // Prompt says: "01.02.2025 to 31.03.2026 (dates automatically from creation + 12 months)". 
-            // Let's take current date, move to first day of next month.
-            
-            // Actually usually proposals are valid from "now" or "next month".
-            // Let's default to: Start = 1st of Next Month. End = Last day of (Start + 12 months).
-            
-            let start = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-            let end = new Date(start.getFullYear() + 1, start.getMonth(), 0); // Last day of previous month after adding year = exactly 12 months duration. 
-            // e.g. Start 01.02.2025. End 31.01.2026. This is 12 months.
-            // Prompt text: "with free 12th month".
+            const now = new Date(); // Start is current date (date of document creation)
+            const end = new Date(now);
+            end.setMonth(end.getMonth() + 12); // End is start + 12 months
             
             // Format DD.MM.YYYY
             const pad = (n) => n.toString().padStart(2, '0');
             const formatDate = (d) => `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
             
             return {
-                start: formatDate(start),
+                start: formatDate(now),
                 end: formatDate(end)
             };
         }
@@ -2489,7 +2515,9 @@
             } else if (currentSlideIndex >= 0 && currentSlideIndex < slides.length) {
                 slideToRender = slides[currentSlideIndex];
             } else {
-                slideContainer.innerHTML = '';
+                // Если слайдов нет, показываем 0start.webp
+                slideContainer.innerHTML = `<img src="0start.webp" style="width:100%; height:100%; object-fit:cover;">`;
+                slideContainer.classList.remove('ghost-mode');
                 return;
             }
 
@@ -3011,13 +3039,10 @@
 
                     const zCount = parseInt(document.getElementById('summaryZoneCount').value) || 4;
                     const onePrice = parseInt(document.getElementById('price1Value').value) || 0;
-                    const totalMonth = onePrice * zCount;
-                    const totalYear = totalMonth * 12;
                     
                     // Hardware logic
                     const includeHardware = document.getElementById('summaryIncludeHardware').checked;
                     const hardwareQty = parseInt(document.getElementById('summaryHardwareQty').value) || 4;
-                    
                     const playerType = document.querySelector('input[name="playerType"]:checked').value;
                     let unitPrice = 0;
                     let playerTypeName = '';
@@ -3029,18 +3054,86 @@
                         unitPrice = 14500;
                         playerTypeName = 'PRI плееров';
                     }
-
                     const hardCost = hardwareQty * unitPrice;
 
                     const dates = getSummaryDates();
                     
-                    let vatSuffix = 'в т.ч. НДС 20%';
-                    if (region === 'kz' || region === 'rb') {
-                        vatSuffix = '';
-                    }
+                    let vatSuffix = 'в т.ч. НДС 22%'; 
+                    
+                    // Расчет общей стоимости
+                    let totalMonth = onePrice * zCount;
+                    
+                    // Доп. услуги: Премиум
+                    const hasPremium = slides.some(s => s.type === 'premium');
+                    const premiumCost = hasPremium ? (parseInt(document.getElementById('premiumPrice1').value) || 0) : 0;
+                    
+                    // Доп. услуги: Видео КП
+                    const hasVideo = slides.some(s => s.type === 'videokp');
+                    const videoCost = hasVideo ? (parseInt(document.getElementById('videokpPrice').value) || 0) : 0;
+
+                    // Доп. услуги: Ручной ввод
+                    const manualName = document.getElementById('summaryManualName').value.trim();
+                    const manualCost = parseInt(document.getElementById('summaryManualPrice').value) || 0;
+
+                    // Общая сумма за месяц (для расчета года)
+                    // (предполагаем, что premium и video добавляются к месячной стоимости)
+                    // Уточнение: Premium может быть Flat fee или Per zone. 
+                    // Если Premium слайд имеет 2 цены (месяц и подключение), берем месячную (premiumPrice1).
+                    // Video тоже месячная.
+                    
+                    // Итого за год = (База * 12) + (Премиум * 12) + (Видео * 12) + (Ручное * 12)
+                    // "12-й месяц бесплатно" в тексте, но формула считает totalYear = totalMonth * 12 в оригинале.
+                    // Оставляем математику как сумму всех месячных платежей * 12.
+                    
+                    const grandTotalMonth = totalMonth + premiumCost + videoCost + manualCost;
+                    const grandTotalYear = grandTotalMonth * 12;
 
                     const table = document.createElement('table');
                     table.className = 'summary-table';
+                    
+                    // Build rows
+                    let rowsHtml = `
+                        <tr>
+                            <td>Сервис по управлению музыкой и лицензией</td>
+                            <td>${formatPrice(onePrice)}</td>
+                            <td>${formatPrice(onePrice * zCount)}</td>
+                            <td>${formatPrice(onePrice * zCount * 12)}</td>
+                        </tr>
+                    `;
+
+                    if (hasPremium) {
+                        rowsHtml += `
+                            <tr>
+                                <td>Премиум тариф (музыка)</td>
+                                <td>-</td>
+                                <td>${formatPrice(premiumCost)}</td>
+                                <td>${formatPrice(premiumCost * 12)}</td>
+                            </tr>
+                        `;
+                    }
+
+                    if (hasVideo) {
+                        rowsHtml += `
+                            <tr>
+                                <td>Видео оформление</td>
+                                <td>-</td>
+                                <td>${formatPrice(videoCost)}</td>
+                                <td>${formatPrice(videoCost * 12)}</td>
+                            </tr>
+                        `;
+                    }
+                    
+                    if (manualName && manualCost > 0) {
+                        rowsHtml += `
+                            <tr>
+                                <td>${manualName}</td>
+                                <td>-</td>
+                                <td>${formatPrice(manualCost)}</td>
+                                <td>${formatPrice(manualCost * 12)}</td>
+                            </tr>
+                        `;
+                    }
+
                     table.innerHTML = `
                         <thead>
                             <tr>
@@ -3051,19 +3144,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Сервис по управлению музыкой и лицензией</td>
-                                <td>${formatPrice(onePrice)}</td>
-                                <td>${formatPrice(totalMonth)}</td>
-                                <td>${formatPrice(totalYear)}</td>
-                            </tr>
+                            ${rowsHtml}
                         </tbody>
                     `;
                     slideContainer.appendChild(table);
 
                     const totalText = document.createElement('div');
                     totalText.className = 'summary-total-text';
-                    totalText.innerHTML = `Итого стоимость для ${zCount} зон вещания на период с ${dates.start} с учетом бесплатного 12 месяца составит <b>${formatPrice(totalYear)} ${currency}</b>`;
+                    totalText.innerHTML = `Итого стоимость для ${zCount} зон вещания на период с ${dates.start} с учетом бесплатного 12 месяца составит <b>${formatPrice(grandTotalYear)} ${currency}</b>`;
                     slideContainer.appendChild(totalText);
 
                     if (includeHardware) {
@@ -3102,7 +3190,7 @@
         function showSlide(index) {
             if (slides.length === 0) {
                 currentSlideIndex = -1;
-                document.getElementById('currentSlide').innerHTML = '';
+                updateCurrentSlide(); // Показывает заглушку
                 updateSlideNumbers();
                 return;
             }
@@ -3205,7 +3293,7 @@
                 
                 if (slides.length === 0) {
                     currentSlideIndex = -1;
-                    document.getElementById('currentSlide').innerHTML = ''; 
+                    updateCurrentSlide(); // покажет заглушку
                 } else {
                     if (currentSlideIndex >= slides.length) {
                         currentSlideIndex = slides.length - 1; 
@@ -3422,7 +3510,6 @@
                 }
             });
         }
-
         function setClientLogo(logoSrc) {
             globalClientLogo = logoSrc;
             
