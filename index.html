@@ -427,28 +427,23 @@
         
         .preview-page {
             position: relative;
-            max-width: 100%;
+            width: 100%;
+            /* Ограничение ширины для эффекта ноутбука (13-14 дюймов) */
+            max-width: 1280px; 
             max-height: 100%;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             transition: all var(--transition-medium);
             transform-origin: center center;
-            cursor: pointer;
             aspect-ratio: 16 / 9;
             margin: auto;
             background-color: #16151A;
             --element-scale: 1;
         }
         
-        .preview-page.zoomed {
-            transform: scale(1.5);
-            z-index: 100;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(1.4);
-            max-width: 70vw;
-            max-height: 70vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        /* Класс для режима предпросмотра (Ghost) */
+        .preview-page.ghost-mode {
+            opacity: 0.7;
+            pointer-events: none; /* Чтобы нельзя было кликать по ссылкам в превью */
         }
         
         .preview-bg {
@@ -665,6 +660,14 @@
             display: none;
             padding: 0 12px 12px;
             animation: fadeIn var(--transition-medium) ease forwards;
+        }
+        
+        /* Nested menu sections styling inside a folder */
+        .menu-content .menu-section {
+            margin-left: 12px;
+            border-left: 2px solid var(--border);
+            padding-left: 8px;
+            margin-bottom: 8px;
         }
         
         .menu-content.active {
@@ -1173,16 +1176,6 @@
                 z-index: 100;
             }
 
-            .preview-page.zoomed {
-                transform: none;
-                position: relative;
-                top: auto;
-                left: auto;
-                max-width: 100%;
-                max-height: 100%;
-                box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            }
-
             /* SPECIAL MOBILE PRICING SCALING 
                Applies only when NOT rendering to PDF.
             */
@@ -1656,31 +1649,56 @@
                 </div>
             </div>
             
-            <div class="menu-section" id="section-event">
-                <div class="menu-header" onclick="toggleMenu(this, 'event')">
-                    <span class="menu-section-header">Мероприятия</span>
+            <!-- ПАПКА "ЗА ДЕНЬГИ - ДА" -->
+            <div class="menu-section" id="folder-money">
+                <div class="menu-header" onclick="toggleMenu(this, 'folder-money')">
+                    <span class="menu-section-header">За деньги - да</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('event')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('event')">Удалить</button>
+                    
+                    <div class="menu-section" id="section-event">
+                        <div class="menu-header" onclick="toggleMenu(this, 'event')">
+                            <span class="menu-section-header">Мероприятия</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('event')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('event')">Удалить</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="menu-section" id="section-artist">
-                <div class="menu-header" onclick="toggleMenu(this, 'artist')">
-                    <span class="menu-section-header">Артисты на мероприятие</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('artist')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('artist')">Удалить</button>
+                    <div class="menu-section" id="section-artist">
+                        <div class="menu-header" onclick="toggleMenu(this, 'artist')">
+                            <span class="menu-section-header">Артисты на мероприятие</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('artist')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('artist')">Удалить</button>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="menu-section" id="section-web">
+                        <div class="menu-header" onclick="toggleMenu(this, 'web')">
+                            <span class="menu-section-header">Музыка для веба</span>
+                            <span class="toggle-button">+</span>
+                        </div>
+                        <div class="menu-content">
+                            <div class="slide-buttons">
+                                <button class="zvuk-button zvuk-button--primary" onclick="addSlide('web')">Добавить</button>
+                                <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('web')">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+            <!-- КОНЕЦ ПАПКИ -->
 
             <div class="menu-section" id="section-concept">
                 <div class="menu-header" onclick="toggleMenu(this, 'concept')">
@@ -1691,19 +1709,6 @@
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('concept')">Добавить</button>
                         <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('concept')">Удалить</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="menu-section" id="section-web">
-                <div class="menu-header" onclick="toggleMenu(this, 'web')">
-                    <span class="menu-section-header">Музыка для веба</span>
-                    <span class="toggle-button">+</span>
-                </div>
-                <div class="menu-content">
-                    <div class="slide-buttons">
-                        <button class="zvuk-button zvuk-button--primary" onclick="addSlide('web')">Добавить</button>
-                        <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('web')">Удалить</button>
                     </div>
                 </div>
             </div>
@@ -1760,11 +1765,30 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
+                    <div style="margin-bottom: 10px; display: flex; align-items: center;">
+                        <input type="checkbox" id="summaryIncludeHardware" onchange="updateCurrentSlide()" checked style="width: auto; margin-right: 8px; cursor: pointer;">
+                        <label for="summaryIncludeHardware" style="font-size: 14px; color: var(--text-secondary); cursor: pointer; user-select: none;">Включить оборудование</label>
+                    </div>
+
+                    <label class="menu-label">Кол-во плееров:</label>
+                    <input class="zvuk-input" type="number" id="summaryHardwareQty" value="4" onchange="updateCurrentSlide()">
+
+                    <div class="radio-group" style="margin-bottom: 16px;">
+                        <label class="menu-label" style="width: 100%; margin-bottom: 8px;">Тип плеера:</label>
+                        <div class="radio-option">
+                            <input type="radio" id="playerAndroid" name="playerType" value="android" checked onchange="updateCurrentSlide()">
+                            <label for="playerAndroid">Android (8 400 ₽)</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="playerPri" name="playerType" value="pri" onchange="updateCurrentSlide()">
+                            <label for="playerPri">PRI (14 500 ₽)</label>
+                        </div>
+                    </div>
+
                     <label class="menu-label">Кол-во зон (по умолчанию):</label>
                     <input class="zvuk-input" type="number" id="summaryZoneCount" value="4" onchange="updateCurrentSlide()">
 
-                    <label class="menu-label">Стоимость оборудования (4 плеера):</label>
-                    <input class="zvuk-input" type="number" id="summaryHardwareCost" value="31200" onchange="updateCurrentSlide()">
+                    <!-- Стоимость теперь рассчитывается автоматически, поле убрано из интерфейса во избежание путаницы -->
 
                     <div class="slide-buttons">
                         <button class="zvuk-button zvuk-button--primary" onclick="addSlide('summary')">Добавить</button>
@@ -1783,14 +1807,12 @@
     <div class="preview-container">
         <div class="preview-wrapper">
             <div id="slideContainer">
-                <div class="preview-page" id="currentSlide" onclick="toggleZoom()"></div>
+                <div class="preview-page" id="currentSlide"></div>
             </div>
             
             <div class="slide-controls-container">
                 <div class="slide-controls">
-                    <div class="control-icon" onclick="toggleZoom()">
-                        <img src="zoom.svg" alt="Zoom">
-                    </div>
+                    <!-- Zoom button removed -->
                     <div id="slideNumbers"></div>
                     <div class="control-icon" onclick="removeCurrentSlide()">
                         <img src="delete.svg" alt="Delete">
@@ -1908,6 +1930,9 @@
         let isLogoInverted = true; 
         let currentRegion = 'ru';
         let isRomanceEnabled = false;
+        
+        // Ghost slide variable
+        let ghostSlideType = null;
 
         function isSectionRestricted(type) {
             const { region } = getRegionInfo();
@@ -1949,12 +1974,19 @@
             }
             
             if (targetHeader) {
-                // Если секция еще не активна - активируем её
                 const section = targetHeader.parentElement;
+                
+                // Ensure parent folder is open if it exists
+                const parentSection = section.parentElement.closest('.menu-section');
+                if (parentSection && !parentSection.classList.contains('active')) {
+                     // Open parent folder first
+                     const parentHeader = parentSection.querySelector('.menu-header');
+                     if(parentHeader) parentHeader.click();
+                }
+
                 if (!section.classList.contains('active')) {
                     targetHeader.click();
                 } else {
-                    // Если уже активна, просто скроллим к ней
                      setTimeout(() => {
                         section.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }, 100);
@@ -1973,40 +2005,63 @@
             const button = header.querySelector('.toggle-button');
             const headerText = header.querySelector('.menu-section-header');
             
+            const wasActive = section.classList.contains('active');
+
+            // Close other sections BUT NOT PARENTS
             document.querySelectorAll('.menu-section').forEach(s => {
-                if (s !== section) {
+                if (s !== section && !s.contains(section)) {
                     s.classList.remove('active');
                     s.querySelector('.menu-content').classList.remove('active');
-                    s.querySelector('.toggle-button').textContent = '+';
-                    s.querySelector('.menu-section-header').classList.remove('active');
+                    const btn = s.querySelector('.toggle-button');
+                    if(btn) btn.textContent = '+';
+                    const hText = s.querySelector('.menu-section-header');
+                    if(hText) hText.classList.remove('active');
+                    
+                    // Clear ghost mode if we are closing the active ghost slide section
+                    if (ghostSlideType === type && s.contains(header)) {
+                       // logic handled below on specific close
+                    }
                 }
             });
             
-            if (content.classList.contains('active')) {
+            if (wasActive) {
+                // Closing the active section
                 section.classList.remove('active');
                 content.classList.remove('active');
                 button.textContent = '+';
                 headerText.classList.remove('active');
+                
+                // Clear ghost mode when closing
+                if (ghostSlideType === type) {
+                    ghostSlideType = null;
+                    updateCurrentSlide();
+                }
             } else {
+                // Opening a new section
                 section.classList.add('active');
                 content.classList.add('active');
                 button.textContent = '-';
                 headerText.classList.add('active');
+                
+                // Check if this slide exists in the list
+                // If it's a folder (like 'folder-money'), it doesn't represent a slide itself, so skip ghost logic
+                if (type !== 'folder-money') {
+                    const exists = slides.some(s => s.type === type);
+                    
+                    if (!exists) {
+                        ghostSlideType = type;
+                        updateCurrentSlide();
+                    } else {
+                        ghostSlideType = null;
+                        // If needed, we could scroll to the existing slide, but standard behavior is to just open menu
+                    }
+                }
                 
                 // Автоматическая прокрутка к активному разделу
                 setTimeout(() => {
                     section.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 300);
             }
-        }
-        
-        function toggleZoom() {
-            if (window.innerWidth <= 768) { 
-                return;
-            }
-            const slide = document.getElementById('currentSlide');
-            slide.classList.toggle('zoomed');
-            isZoomed = !isZoomed;
         }
         
         document.querySelectorAll('input[name="priceColumns"]').forEach(radio => {
@@ -2114,7 +2169,9 @@
                         section.classList.add('restricted');
                         // Если раздел открыт - закрываем его
                         if (section.classList.contains('active')) {
-                            section.querySelector('.menu-header').click(); 
+                            // Trigger toggleMenu to close it properly and update state
+                            const header = section.querySelector('.menu-header');
+                            if(header) toggleMenu(header, type);
                         }
                     }
                 }
@@ -2390,12 +2447,8 @@
         }
         
         function editHardwareCost() {
-            const currentVal = document.getElementById('summaryHardwareCost').value;
-             const newVal = prompt("Введите стоимость плееров:", currentVal);
-            if (newVal !== null && !isNaN(newVal) && newVal.trim() !== '') {
-                document.getElementById('summaryHardwareCost').value = newVal;
-                updateCurrentSlide();
-            }
+            // No longer editable directly as it's calculated
+            alert("Пожалуйста, измените настройки в меню слева для пересчета стоимости оборудования.");
         }
 
         // Helper date function for Summary
@@ -2424,17 +2477,33 @@
         }
 
         function updateCurrentSlide() {
-            if (currentSlideIndex < 0 || currentSlideIndex >= slides.length) {
-                document.getElementById('currentSlide').innerHTML = ''; 
+            const slideContainer = document.getElementById('currentSlide');
+            
+            // Determine what content to show: real slide or ghost slide
+            let slideToRender = null;
+            let isGhost = false;
+
+            if (ghostSlideType) {
+                slideToRender = { type: ghostSlideType };
+                isGhost = true;
+            } else if (currentSlideIndex >= 0 && currentSlideIndex < slides.length) {
+                slideToRender = slides[currentSlideIndex];
+            } else {
+                slideContainer.innerHTML = '';
                 return;
             }
 
             updateCurrencyLabels(); // Обновляем логику валют
             const { currency, bgImage, mainLogo, domainSuffix, region } = getRegionInfo();
 
-            const currentSlide = slides[currentSlideIndex];
-            const slideContainer = document.getElementById('currentSlide');
             slideContainer.innerHTML = '';
+            
+            // Apply ghost class if needed
+            if (isGhost) {
+                slideContainer.classList.add('ghost-mode');
+            } else {
+                slideContainer.classList.remove('ghost-mode');
+            }
             
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
@@ -2480,7 +2549,7 @@
                 return img;
             }
 
-            switch(currentSlide.type) {
+            switch(slideToRender.type) {
                 case 'general':
                     bgImg.src = bgImage; // Локализованный фон
                     slideContainer.appendChild(bgImg);
@@ -2944,7 +3013,24 @@
                     const onePrice = parseInt(document.getElementById('price1Value').value) || 0;
                     const totalMonth = onePrice * zCount;
                     const totalYear = totalMonth * 12;
-                    const hardCost = parseInt(document.getElementById('summaryHardwareCost').value) || 31200;
+                    
+                    // Hardware logic
+                    const includeHardware = document.getElementById('summaryIncludeHardware').checked;
+                    const hardwareQty = parseInt(document.getElementById('summaryHardwareQty').value) || 4;
+                    
+                    const playerType = document.querySelector('input[name="playerType"]:checked').value;
+                    let unitPrice = 0;
+                    let playerTypeName = '';
+
+                    if (playerType === 'android') {
+                        unitPrice = 8400;
+                        playerTypeName = 'андроид плееров';
+                    } else {
+                        unitPrice = 14500;
+                        playerTypeName = 'PRI плееров';
+                    }
+
+                    const hardCost = hardwareQty * unitPrice;
 
                     const dates = getSummaryDates();
                     
@@ -2980,14 +3066,38 @@
                     totalText.innerHTML = `Итого стоимость для ${zCount} зон вещания на период с ${dates.start} с учетом бесплатного 12 месяца составит <b>${formatPrice(totalYear)} ${currency}</b>`;
                     slideContainer.appendChild(totalText);
 
-                    const hardText = document.createElement('div');
-                    hardText.className = 'summary-hardware-text';
-                    hardText.innerHTML = `Стоимость 4 андроид плееров с учетом скидки и объем составит <span class="editable-highlight" onclick="editHardwareCost()"><b>${formatPrice(hardCost)} ${currency}</b></span>`;
-                    slideContainer.appendChild(hardText);
+                    if (includeHardware) {
+                        const hardText = document.createElement('div');
+                        hardText.className = 'summary-hardware-text';
+                        hardText.innerHTML = `Стоимость ${hardwareQty} ${playerTypeName} с учетом скидки и объем составит <span class="editable-highlight" onclick="editHardwareCost()"><b>${formatPrice(hardCost)} ${currency}</b></span>`;
+                        slideContainer.appendChild(hardText);
+                    }
 
                     break;
             }
+            
+            // Adjust scaling after rendering new content
+            adjustScale();
         }
+        
+        function adjustScale() {
+            const previewPage = document.getElementById('currentSlide');
+            if (!previewPage) return;
+            
+            // Base width used for design (approx laptop screen width for content)
+            // If the previewPage is smaller than this, elements scale down.
+            // If it is larger (up to max-width), elements scale up.
+            const baseWidth = 1200; 
+            const currentWidth = previewPage.offsetWidth;
+            
+            // We set the scale variable. CSS calculates fonts based on this.
+            // Ensure scale doesn't go too wild, though max-width on container handles the upper bound.
+            const scale = currentWidth / baseWidth;
+            previewPage.style.setProperty('--element-scale', scale);
+        }
+
+        // Add resize listener to keep scaling correct
+        window.addEventListener('resize', adjustScale);
         
         function showSlide(index) {
             if (slides.length === 0) {
@@ -2997,6 +3107,10 @@
                 return;
             }
             if (index < 1 || index > slides.length) return;
+            
+            // Exit ghost mode when explicitly selecting a slide
+            ghostSlideType = null;
+            
             currentSlideIndex = index - 1;
             document.querySelectorAll('.slide-number').forEach((btn, i) => {
                 btn.classList.toggle('active', i === currentSlideIndex);
@@ -3021,6 +3135,9 @@
                 showRestrictionPopup();
                 return;
             }
+            
+            // Clear ghost mode because we are adding it for real
+            ghostSlideType = null;
 
             const existingSlideIndex = slides.findIndex(slide => slide.type === type);
             if (existingSlideIndex !== -1) {
@@ -3218,6 +3335,8 @@
 
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
+                slideContent.classList.remove('ghost-mode'); // Ensure PDF renders fully opaque
+                slideContent.style.opacity = '1';
                 slideContent.style.margin = '0'; 
                 
                 slideContent.style.width = onScreenWidth + 'px';
@@ -3332,7 +3451,7 @@
                 'price1Label', 'price10plusHeader1', 'price10plusValue1',
                 'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3',
                 'price3Header1', 'price3Header2', 'price3Header3',
-                'summaryZoneCount', 'summaryHardwareCost'
+                'summaryZoneCount', 'summaryHardwareCost', 'summaryHardwareQty', 'summaryIncludeHardware'
             ];
             inputsToUpdate.forEach(id => {
                 const element = document.getElementById(id);
