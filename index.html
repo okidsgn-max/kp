@@ -1698,7 +1698,7 @@
             <!-- ПАПКА "ЗА ДЕНЬГИ - ДА" -->
             <div class="menu-section" id="folder-money">
                 <div class="menu-header" onclick="toggleMenu(this, 'folder-money')">
-                    <span class="menu-section-header">За деньги - да</span>
+                    <span class="menu-section-header">За деньги</span>
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
@@ -3034,7 +3034,7 @@
                     const company = document.getElementById('companyName').value || 'Ваша Компания';
                     const sHeader = document.createElement('div');
                     sHeader.className = 'summary-header';
-                    sHeader.textContent = `Коммерческое предложение для "${company}"`;
+                    sHeader.textContent = `для "${company}"`;
                     slideContainer.appendChild(sHeader);
 
                     const zCount = parseInt(document.getElementById('summaryZoneCount').value) || 4;
@@ -3671,3 +3671,4 @@
     </script>
 </body>
 </html>
+
