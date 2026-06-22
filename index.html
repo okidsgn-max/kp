@@ -1101,12 +1101,51 @@
             z-index: 10;
         }
         
-        .editable-highlight:hover {
-            background-color: rgba(0, 179, 152, 0.3);
+        .editable-highlight {
             cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+            padding: 2px 4px;
+            margin: -2px -4px;
             border-radius: 4px;
         }
 
+        .editable-highlight:hover {
+            background-color: rgba(0, 179, 152, 0.3);
+            outline: 1px dashed rgba(0, 179, 152, 0.8);
+        }
+
+        /* Draggable Logo Styles */
+        .logo-wrapper {
+            position: absolute;
+            cursor: move;
+            z-index: 50;
+        }
+        .logo-wrapper:hover {
+            outline: 2px dashed rgba(0, 179, 152, 0.5);
+        }
+        .resize-handle {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: var(--primary);
+            border-radius: 50%;
+            bottom: -7px;
+            right: -7px;
+            cursor: nwse-resize;
+            display: none;
+            box-shadow: 0 0 4px rgba(0,0,0,0.4);
+        }
+        .logo-wrapper:hover .resize-handle {
+            display: block;
+        }
+        /* Hide handles when generating PDF */
+        .pdf-render-mode .logo-wrapper {
+            outline: none !important;
+        }
+        .pdf-render-mode .resize-handle {
+            display: none !important;
+        }
 
         /* --- MOBILE STYLES --- */
         @media (max-width: 768px) {
@@ -1834,6 +1873,14 @@
                             <label for="playerPri" id="labelPlayerPri">PRI (14 500 ₽)</label>
                         </div>
                     </div>
+                    
+                    <!-- NEW FOR REQ 2 -->
+                    <label class="menu-label">Стоимость Android плеера в смете:</label>
+                    <input class="zvuk-input" type="number" id="summaryDevicePriceAndroid" value="8400">
+                    
+                    <label class="menu-label">Стоимость PRI плеера в смете:</label>
+                    <input class="zvuk-input" type="number" id="summaryDevicePricePri" value="14500">
+                    <!-- END NEW FOR REQ 2 -->
 
                     <label class="menu-label">Кол-во зон (по умолчанию):</label>
                     <input class="zvuk-input" type="number" id="summaryZoneCount" value="4" onchange="updateCurrentSlide()">
@@ -1987,6 +2034,52 @@
         
         // Ghost slide variable
         let ghostSlideType = null;
+
+        // Variables for Logo Dragging and Resizing
+        let logoState = { top: 5, left: 17, width: 20 }; // % values
+        let isLogoDragging = false;
+        let isLogoResizing = false;
+        let logoStartX = 0;
+        let logoStartY = 0;
+        let logoStartLeft = 0;
+        let logoStartTop = 0;
+        let logoStartWidth = 0;
+        let activeLogoWrapper = null;
+
+        // Global listeners for logo interactions
+        document.addEventListener('mousemove', (e) => {
+            if (!isLogoDragging && !isLogoResizing) return;
+            if (!activeLogoWrapper) return;
+            
+            const container = document.getElementById('currentSlide');
+            const rect = container.getBoundingClientRect();
+            
+            const dx = e.clientX - logoStartX;
+            const dy = e.clientY - logoStartY;
+
+            if (isLogoDragging) {
+                const dxPercent = (dx / rect.width) * 100;
+                const dyPercent = (dy / rect.height) * 100;
+                logoState.left = logoStartLeft + dxPercent;
+                logoState.top = logoStartTop + dyPercent;
+            } else if (isLogoResizing) {
+                const dxPercent = (dx / rect.width) * 100;
+                logoState.width = logoStartWidth + dxPercent;
+                // Constraints
+                if (logoState.width < 5) logoState.width = 5;
+                if (logoState.width > 90) logoState.width = 90;
+            }
+
+            activeLogoWrapper.style.left = logoState.left + '%';
+            activeLogoWrapper.style.top = logoState.top + '%';
+            activeLogoWrapper.style.width = logoState.width + '%';
+        });
+
+        document.addEventListener('mouseup', () => {
+            isLogoDragging = false;
+            isLogoResizing = false;
+            activeLogoWrapper = null;
+        });
 
         function isSectionRestricted(type) {
             const { region } = getRegionInfo();
@@ -2515,14 +2608,25 @@
             }
         }
 
-        window.editSpecificPrice = function(inputId) {
+        window.editSpecificPrice = function(inputId, event) {
+            if (event) {
+                event.stopPropagation();
+            }
             const inputEl = document.getElementById(inputId);
             if(inputEl) {
                 const newVal = prompt("Введите новую стоимость:", inputEl.value);
                 if (newVal !== null && !isNaN(newVal) && newVal.trim() !== '') {
                     inputEl.value = newVal;
+                    
+                    // Sync summary and device fields if applicable
+                    if (inputId === 'devicePriceAndroid') document.getElementById('summaryDevicePriceAndroid').value = newVal;
+                    if (inputId === 'devicePricePri') document.getElementById('summaryDevicePricePri').value = newVal;
+                    if (inputId === 'summaryDevicePriceAndroid') document.getElementById('devicePriceAndroid').value = newVal;
+                    if (inputId === 'summaryDevicePricePri') document.getElementById('devicePricePri').value = newVal;
+
                     // Trigger input event explicitly to ensure reactivity
                     inputEl.dispatchEvent(new Event('input'));
+                    if (typeof updatePlayerPrices === 'function') updatePlayerPrices();
                     updateCurrentSlide();
                 }
             }
@@ -2546,6 +2650,63 @@
                 start: formatDate(now),
                 end: formatDate(end)
             };
+        }
+
+        function renderDraggableLogo(slideContainer) {
+            if (!globalClientLogo) return;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'logo-wrapper';
+            wrapper.style.left = logoState.left + '%';
+            wrapper.style.top = logoState.top + '%';
+            wrapper.style.width = logoState.width + '%';
+            
+            const clientLogoImg = document.createElement('img');
+            clientLogoImg.id = 'clientLogo';
+            clientLogoImg.src = globalClientLogo;
+            clientLogoImg.style.width = '100%';
+            clientLogoImg.style.height = 'auto';
+            clientLogoImg.style.objectFit = 'contain';
+            clientLogoImg.style.display = 'block';
+
+            clientLogoImg.onerror = function() {
+                wrapper.style.display = 'none';
+            };
+
+            const applyLogoFilter = (imgElement) => {
+                const isInverted = document.getElementById('logoInvert').checked;
+                if (isInverted) {
+                    imgElement.style.filter = 'brightness(0) invert(1)';
+                } else {
+                    imgElement.style.filter = 'none';
+                }
+            };
+
+            applyLogoFilter(clientLogoImg);
+            wrapper.appendChild(clientLogoImg);
+
+            // Handle for resizing
+            const handle = document.createElement('div');
+            handle.className = 'resize-handle';
+            wrapper.appendChild(handle);
+
+            wrapper.onmousedown = (e) => {
+                if (e.target === handle) {
+                    isLogoResizing = true;
+                } else {
+                    isLogoDragging = true;
+                }
+                activeLogoWrapper = wrapper;
+                logoStartX = e.clientX;
+                logoStartY = e.clientY;
+                logoStartLeft = logoState.left;
+                logoStartTop = logoState.top;
+                logoStartWidth = logoState.width;
+                e.preventDefault();
+                e.stopPropagation();
+            };
+
+            slideContainer.appendChild(wrapper);
         }
 
         function updateCurrentSlide() {
@@ -2581,16 +2742,6 @@
             
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
-            
-            // Function to apply logo filter based on checkbox
-            const applyLogoFilter = (imgElement) => {
-                const isInverted = document.getElementById('logoInvert').checked;
-                if (isInverted) {
-                    imgElement.style.filter = 'brightness(0) invert(1)'; // White
-                } else {
-                    imgElement.style.filter = 'none'; // Original
-                }
-            };
             
             // Helper to handle Prefixed images (RB/KZ) with fallback
             const createPrefixedImage = (originalPath, className, forceRegion = null, secondaryFallback = null) => {
@@ -2661,25 +2812,7 @@
                     }
                     slideContainer.appendChild(logosImg);
 
-                    if (globalClientLogo) {
-                        const clientLogoImg = document.createElement('img');
-                        clientLogoImg.id = 'clientLogo';
-                        clientLogoImg.src = globalClientLogo;
-                        clientLogoImg.style.position = 'absolute';
-                        clientLogoImg.style.top = '5%';
-                        clientLogoImg.style.left = '17%';
-                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
-                        clientLogoImg.style.width = 'auto'; 
-                        clientLogoImg.style.maxWidth = '30%'; 
-                        clientLogoImg.style.objectFit = 'contain';
-                        
-                        clientLogoImg.onerror = function() {
-                            this.style.display = 'none';
-                        };
-                        
-                        applyLogoFilter(clientLogoImg);
-                        slideContainer.appendChild(clientLogoImg);
-                    }
+                    renderDraggableLogo(slideContainer);
                     break;
                     
                 case 'pricing':
@@ -2768,7 +2901,8 @@
                         slideContainer.appendChild(priceLabelDiv);
 
                         const priceDiv = document.createElement('div');
-                        priceDiv.className = 'preview-price';
+                        priceDiv.className = 'preview-price editable-highlight';
+                        priceDiv.onclick = (e) => editSpecificPrice('price1Value', e);
                         priceDiv.textContent = formatPrice(document.getElementById('price1Value').value) + ` ${currency}/мес.`;
                         slideContainer.appendChild(priceDiv);
 
@@ -2787,9 +2921,9 @@
                             <tbody>
                                 <tr>
                                     <td>Стоимость за точку</td>
-                                    <td>${formatPrice(document.getElementById('price3Value1').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price3Value2').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price3Value3').value)} ${currency}</td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('price3Value1', event)">${formatPrice(document.getElementById('price3Value1').value)} ${currency}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('price3Value2', event)">${formatPrice(document.getElementById('price3Value2').value)} ${currency}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('price3Value3', event)">${formatPrice(document.getElementById('price3Value3').value)} ${currency}</span></td>
                                 </tr>
                             </tbody>
                         `;
@@ -2809,9 +2943,9 @@
                             <tbody>
                                 <tr>
                                     <td>Стоимость за точку</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue1').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue2').value)} ${currency}</td>
-                                    <td>${formatPrice(document.getElementById('price10plusValue3').value)} ${currency}</td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('price10plusValue1', event)">${formatPrice(document.getElementById('price10plusValue1').value)} ${currency}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('price10plusValue2', event)">${formatPrice(document.getElementById('price10plusValue2').value)} ${currency}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('price10plusValue3', event)">${formatPrice(document.getElementById('price10plusValue3').value)} ${currency}</span></td>
                                 </tr>
                             </tbody>
                         `;
@@ -2916,12 +3050,14 @@
                     slideContainer.appendChild(bgImg);
                     
                     const premiumPriceDiv1 = document.createElement('div');
-                    premiumPriceDiv1.className = 'preview-price-premium-1';
+                    premiumPriceDiv1.className = 'preview-price-premium-1 editable-highlight';
+                    premiumPriceDiv1.onclick = (e) => editSpecificPrice('premiumPrice1', e);
                     premiumPriceDiv1.textContent = formatPrice(document.getElementById('premiumPrice1').value) + ` ${currency}/мес.`;
                     slideContainer.appendChild(premiumPriceDiv1);
 
                     const premiumPriceDiv2 = document.createElement('div');
-                    premiumPriceDiv2.className = 'preview-price-premium-2';
+                    premiumPriceDiv2.className = 'preview-price-premium-2 editable-highlight';
+                    premiumPriceDiv2.onclick = (e) => editSpecificPrice('premiumPrice2', e);
                     premiumPriceDiv2.textContent = formatPrice(document.getElementById('premiumPrice2').value) + ` ${currency}`; 
                     slideContainer.appendChild(premiumPriceDiv2);
                     
@@ -3004,6 +3140,40 @@
                 case 'devices':
                     bgImg.src = 'images/allplayer.webp';
                     slideContainer.appendChild(bgImg);
+
+                    // Android Text
+                    const deviceAndroidPrice = parseInt(document.getElementById('devicePriceAndroid').value) || 8400;
+                    const androidDiv = document.createElement('div');
+                    androidDiv.className = 'editable-highlight';
+                    androidDiv.style.position = 'absolute';
+                    androidDiv.style.bottom = '12%'; 
+                    androidDiv.style.left = '25%'; 
+                    androidDiv.style.color = 'white';
+                    androidDiv.style.fontWeight = 'bold';
+                    androidDiv.style.fontSize = 'calc(24px * var(--element-scale))';
+                    androidDiv.style.fontFamily = "'Inter', sans-serif";
+                    androidDiv.style.textAlign = 'center';
+                    androidDiv.style.transform = 'translateX(-50%)';
+                    androidDiv.innerHTML = formatPrice(deviceAndroidPrice) + ` ${currency}`;
+                    androidDiv.onclick = (e) => editSpecificPrice('devicePriceAndroid', e);
+                    slideContainer.appendChild(androidDiv);
+
+                    // PRI Text
+                    const devicePriPrice = parseInt(document.getElementById('devicePricePri').value) || 14500;
+                    const priDiv = document.createElement('div');
+                    priDiv.className = 'editable-highlight';
+                    priDiv.style.position = 'absolute';
+                    priDiv.style.bottom = '12%';
+                    priDiv.style.left = '75%';
+                    priDiv.style.color = 'white';
+                    priDiv.style.fontWeight = 'bold';
+                    priDiv.style.fontSize = 'calc(24px * var(--element-scale))';
+                    priDiv.style.fontFamily = "'Inter', sans-serif";
+                    priDiv.style.textAlign = 'center';
+                    priDiv.style.transform = 'translateX(-50%)';
+                    priDiv.innerHTML = formatPrice(devicePriPrice) + ` ${currency}`;
+                    priDiv.onclick = (e) => editSpecificPrice('devicePricePri', e);
+                    slideContainer.appendChild(priDiv);
                     break;
 
                 case 'turnon':
@@ -3028,8 +3198,6 @@
                         link.style.left = item.left;
                         link.style.width = '10%';
                         link.style.height = '10%';
-                        // Optional visualization for debugging or user clarity if no image has icons painted
-                        // link.style.backgroundColor = 'rgba(255,255,255,0.1)'; 
                         slideContainer.appendChild(link);
                     });
                     break;
@@ -3038,28 +3206,12 @@
                     bgImg.src = 'images/atmvieo.webp';
                     slideContainer.appendChild(bgImg);
                     
-                    if (globalClientLogo) {
-                        const clientLogoImg = document.createElement('img');
-                        clientLogoImg.id = 'clientLogo';
-                        clientLogoImg.src = globalClientLogo;
-                        clientLogoImg.style.position = 'absolute';
-                        clientLogoImg.style.top = '5%';
-                        clientLogoImg.style.left = '17%';
-                        clientLogoImg.style.height = 'calc(24px * var(--element-scale))';
-                        clientLogoImg.style.width = 'auto'; 
-                        clientLogoImg.style.maxWidth = '30%';
-                        clientLogoImg.style.objectFit = 'contain';
-                        
-                        clientLogoImg.onerror = function() {
-                            this.style.display = 'none';
-                        };
+                    renderDraggableLogo(slideContainer);
 
-                        applyLogoFilter(clientLogoImg);
-                        slideContainer.appendChild(clientLogoImg);
-                    }
                     const videoPriceDiv = document.createElement('div');
-                    videoPriceDiv.className = 'preview-price';
+                    videoPriceDiv.className = 'preview-price editable-highlight';
                     videoPriceDiv.style.top = '66%';
+                    videoPriceDiv.onclick = (e) => editSpecificPrice('videokpPrice', e);
                     videoPriceDiv.textContent = formatPrice(document.getElementById('videokpPrice').value) + ` ${currency}/мес.`;
                     slideContainer.appendChild(videoPriceDiv);
                     
@@ -3074,7 +3226,8 @@
                     break;
                 
                 case 'summary':
-                    bgImg.src = 'images/itogi.webp';
+                    const zCount = parseInt(document.getElementById('summaryZoneCount').value) || 4;
+                    bgImg.src = (zCount === 1) ? 'images/itog.webp' : 'images/itogi.webp';
                     slideContainer.appendChild(bgImg);
 
                     const company = document.getElementById('companyName').value || 'Ваша Компания';
@@ -3085,7 +3238,6 @@
 
                     const promoType = document.querySelector('input[name="promoType"]:checked') ? document.querySelector('input[name="promoType"]:checked').value : 'none';
 
-                    const zCount = parseInt(document.getElementById('summaryZoneCount').value) || 4;
                     const onePrice = parseInt(document.getElementById('price1Value').value) || 0;
                     
                     // Hardware logic
@@ -3096,10 +3248,10 @@
                     let playerTypeName = '';
 
                     if (playerType === 'android') {
-                        unitPrice = parseInt(document.getElementById('devicePriceAndroid').value) || 8400;
+                        unitPrice = parseInt(document.getElementById('summaryDevicePriceAndroid').value) || 8400;
                         playerTypeName = 'андроид плееров';
                     } else {
-                        unitPrice = parseInt(document.getElementById('devicePricePri').value) || 14500;
+                        unitPrice = parseInt(document.getElementById('summaryDevicePricePri').value) || 14500;
                         playerTypeName = 'PRI плееров';
                     }
                     const hardCost = hardwareQty * unitPrice;
@@ -3147,67 +3299,118 @@
                     const table = document.createElement('table');
                     table.className = 'summary-table';
                     
-                    // Build rows (Added editable-highlight to base values to allow clicking and editing)
-                    let rowsHtml = `
-                        <tr>
-                            <td>Сервис по управлению музыкой и лицензией</td>
-                            <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value')">${formatPrice(onePrice)}</span></td>
-                            <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value')">${formatPrice(onePrice * zCount)}</span></td>
-                            <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value')">${formatPrice(musicYearTotal)}</span></td>
-                        </tr>
-                    `;
+                    // HTML Tables configuration
+                    let rowsHtml = '';
 
-                    if (hasPremium) {
+                    if (zCount === 1) {
                         rowsHtml += `
                             <tr>
-                                <td>Премиум тариф (музыка)</td>
-                                <td>-</td>
-                                <td><span class="editable-highlight" onclick="editSpecificPrice('premiumPrice1')">${formatPrice(premiumCost)}</span></td>
-                                <td><span class="editable-highlight" onclick="editSpecificPrice('premiumPrice1')">${formatPrice(premiumYearTotal)}</span></td>
+                                <td>Сервис по управлению музыкой и лицензией</td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value', event)">${formatPrice(onePrice)}</span></td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value', event)">${formatPrice(musicYearTotal)}</span></td>
                             </tr>
                         `;
-                    }
-
-                    if (hasVideo) {
+                        if (hasPremium) {
+                            rowsHtml += `
+                                <tr>
+                                    <td>Премиум тариф (музыка)</td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('premiumPrice1', event)">${formatPrice(premiumCost)}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('premiumPrice1', event)">${formatPrice(premiumYearTotal)}</span></td>
+                                </tr>
+                            `;
+                        }
+                        if (hasVideo) {
+                            rowsHtml += `
+                                <tr>
+                                    <td>Видео оформление</td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('videokpPrice', event)">${formatPrice(videoCost)}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('videokpPrice', event)">${formatPrice(videoYearTotal)}</span></td>
+                                </tr>
+                            `;
+                        }
+                        if (manualName && manualCost > 0) {
+                            rowsHtml += `
+                                <tr>
+                                    <td>${manualName}</td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('summaryManualPrice', event)">${formatPrice(manualCost)}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('summaryManualPrice', event)">${formatPrice(manualYearTotal)}</span></td>
+                                </tr>
+                            `;
+                        }
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Пакет услуг</th>
+                                    <th>Стоимость за 1 зону 1 месяц, ${currency}/мес ${vatSuffix}</th>
+                                    <th>Стоимость за 1 зон ${periodText} с ${dates.start} по ${dates.end}, ${currency} ${vatSuffix}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        `;
+                    } else {
                         rowsHtml += `
                             <tr>
-                                <td>Видео оформление</td>
-                                <td>-</td>
-                                <td><span class="editable-highlight" onclick="editSpecificPrice('videokpPrice')">${formatPrice(videoCost)}</span></td>
-                                <td><span class="editable-highlight" onclick="editSpecificPrice('videokpPrice')">${formatPrice(videoYearTotal)}</span></td>
+                                <td>Сервис по управлению музыкой и лицензией</td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value', event)">${formatPrice(onePrice)}</span></td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value', event)">${formatPrice(onePrice * zCount)}</span></td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value', event)">${formatPrice(musicYearTotal)}</span></td>
                             </tr>
                         `;
-                    }
-                    
-                    if (manualName && manualCost > 0) {
-                        rowsHtml += `
-                            <tr>
-                                <td>${manualName}</td>
-                                <td>-</td>
-                                <td><span class="editable-highlight" onclick="editSpecificPrice('summaryManualPrice')">${formatPrice(manualCost)}</span></td>
-                                <td><span class="editable-highlight" onclick="editSpecificPrice('summaryManualPrice')">${formatPrice(manualYearTotal)}</span></td>
-                            </tr>
-                        `;
-                    }
 
-                    table.innerHTML = `
-                        <thead>
-                            <tr>
-                                <th>Пакет услуг</th>
-                                <th>Стоимость за 1 зону 1 месяц, ${currency}/мес ${vatSuffix}</th>
-                                <th>Стоимость за <span class="editable-highlight" onclick="editSummaryZones()">${zCount}</span> зон 1 месяц, ${currency}/мес ${vatSuffix}</th>
-                                <th>Стоимость за <span class="editable-highlight" onclick="editSummaryZones()">${zCount}</span> зон ${periodText} с ${dates.start} по ${dates.end}, ${currency} ${vatSuffix}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${rowsHtml}
-                        </tbody>
-                    `;
+                        if (hasPremium) {
+                            rowsHtml += `
+                                <tr>
+                                    <td>Премиум тариф (музыка)</td>
+                                    <td>-</td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('premiumPrice1', event)">${formatPrice(premiumCost)}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('premiumPrice1', event)">${formatPrice(premiumYearTotal)}</span></td>
+                                </tr>
+                            `;
+                        }
+
+                        if (hasVideo) {
+                            rowsHtml += `
+                                <tr>
+                                    <td>Видео оформление</td>
+                                    <td>-</td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('videokpPrice', event)">${formatPrice(videoCost)}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('videokpPrice', event)">${formatPrice(videoYearTotal)}</span></td>
+                                </tr>
+                            `;
+                        }
+                        
+                        if (manualName && manualCost > 0) {
+                            rowsHtml += `
+                                <tr>
+                                    <td>${manualName}</td>
+                                    <td>-</td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('summaryManualPrice', event)">${formatPrice(manualCost)}</span></td>
+                                    <td><span class="editable-highlight" onclick="editSpecificPrice('summaryManualPrice', event)">${formatPrice(manualYearTotal)}</span></td>
+                                </tr>
+                            `;
+                        }
+
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Пакет услуг</th>
+                                    <th>Стоимость за 1 зону 1 месяц, ${currency}/мес ${vatSuffix}</th>
+                                    <th>Стоимость за <span class="editable-highlight" onclick="editSummaryZones()">${zCount}</span> зон 1 месяц, ${currency}/мес ${vatSuffix}</th>
+                                    <th>Стоимость за <span class="editable-highlight" onclick="editSummaryZones()">${zCount}</span> зон ${periodText} с ${dates.start} по ${dates.end}, ${currency} ${vatSuffix}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        `;
+                    }
                     slideContainer.appendChild(table);
 
                     const totalText = document.createElement('div');
                     totalText.className = 'summary-total-text';
-                    totalText.innerHTML = `Итого стоимость для ${zCount} зон вещания на период с ${dates.start} по ${dates.end}${discountText} составит <b><span class="editable-highlight" onclick="editSpecificPrice('price1Value')">${formatPrice(grandTotalYear)} ${currency}</span></b>`;
+                    totalText.innerHTML = `Итого стоимость для ${zCount} зон вещания на период с ${dates.start} по ${dates.end}${discountText} составит <b><span class="editable-highlight" onclick="editSpecificPrice('price1Value', event)">${formatPrice(grandTotalYear)} ${currency}</span></b>`;
                     slideContainer.appendChild(totalText);
 
                     if (includeHardware) {
@@ -3229,13 +3432,9 @@
             if (!previewPage) return;
             
             // Base width used for design (approx laptop screen width for content)
-            // If the previewPage is smaller than this, elements scale down.
-            // If it is larger (up to max-width), elements scale up.
             const baseWidth = 1200; 
             const currentWidth = previewPage.offsetWidth;
             
-            // We set the scale variable. CSS calculates fonts based on this.
-            // Ensure scale doesn't go too wild, though max-width on container handles the upper bound.
             const scale = currentWidth / baseWidth;
             previewPage.style.setProperty('--element-scale', scale);
         }
@@ -3581,8 +3780,21 @@
                 updateCurrentSlide();
             }
         }
+
+        const syncInputs = (id1, id2) => {
+            const el1 = document.getElementById(id1);
+            const el2 = document.getElementById(id2);
+            if(el1 && el2) {
+                el1.addEventListener('input', () => { el2.value = el1.value; updatePlayerPrices(); updateCurrentSlide(); });
+                el2.addEventListener('input', () => { el1.value = el2.value; updatePlayerPrices(); updateCurrentSlide(); });
+            }
+        };
         
         document.addEventListener('DOMContentLoaded', function() {
+            // Синхронизация цен на устройства между меню
+            syncInputs('devicePriceAndroid', 'summaryDevicePriceAndroid');
+            syncInputs('devicePricePri', 'summaryDevicePricePri');
+
             document.querySelectorAll('#banner option, #priceBanner option, #instructionBanner option').forEach(option => {
                 let text = option.textContent.replace(/Статистика\s*/i, '').trim();
                 option.textContent = text.charAt(0).toUpperCase() + text.slice(1);
@@ -3595,14 +3807,15 @@
                 'price1Label', 'price10plusHeader1', 'price10plusValue1',
                 'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3',
                 'price3Header1', 'price3Header2', 'price3Header3',
-                'summaryZoneCount', 'summaryHardwareCost', 'summaryHardwareQty', 'summaryIncludeHardware',
-                'summaryManualPrice', 'devicePriceAndroid', 'devicePricePri'
+                'summaryZoneCount', 'summaryHardwareQty', 'summaryIncludeHardware',
+                'summaryManualPrice', 'devicePriceAndroid', 'devicePricePri',
+                'summaryDevicePriceAndroid', 'summaryDevicePricePri'
             ];
             inputsToUpdate.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', function() {
-                        if (id === 'devicePriceAndroid' || id === 'devicePricePri') {
+                        if (id === 'devicePriceAndroid' || id === 'devicePricePri' || id === 'summaryDevicePriceAndroid' || id === 'summaryDevicePricePri') {
                             updatePlayerPrices();
                         }
                         updateCurrentSlide();
