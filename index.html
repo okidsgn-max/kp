@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -1775,7 +1774,7 @@
                 </div>
                 <div class="menu-content">
                     <label class="menu-label">Стоимость, <span class="currency-label-text">валюта</span>/мес:</label>
-                    <input class="zvuk-input" type="number" id="videokpPrice" value="1990">
+                    <input class="zvuk-input" type="number" id="videokpPrice" value="990">
                     
                     <label class="menu-label">Комментарий:</label>
                     <input class="zvuk-input" type="text" id="videokpComment" placeholder="Введите комментарий">
@@ -1793,6 +1792,23 @@
                     <span class="toggle-button">+</span>
                 </div>
                 <div class="menu-content">
+                    
+                    <div class="radio-group" style="margin-bottom: 16px;">
+                        <label class="menu-label" style="width: 100%; margin-bottom: 8px;">Акция:</label>
+                        <div class="radio-option">
+                            <input type="radio" id="promoNone" name="promoType" value="none" checked onchange="updateCurrentSlide()">
+                            <label for="promoNone">Без акции</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="promo11_1" name="promoType" value="11+1" onchange="updateCurrentSlide()">
+                            <label for="promo11_1">11+1</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="promo6_1" name="promoType" value="6+1" onchange="updateCurrentSlide()">
+                            <label for="promo6_1">6+1</label>
+                        </div>
+                    </div>
+
                     <div style="margin-bottom: 10px; display: flex; align-items: center;">
                         <input type="checkbox" id="summaryIncludeHardware" onchange="updateCurrentSlide()" checked style="width: auto; margin-right: 8px; cursor: pointer;">
                         <label for="summaryIncludeHardware" style="font-size: 14px; color: var(--text-secondary); cursor: pointer; user-select: none;">Включить оборудование</label>
@@ -1880,9 +1896,7 @@
         const { jsPDF } = window.jspdf;
         
            // Массив для хранения слайдов
-        const slides = [
-            { type: 'general' } // Начинаем с одного слайда "general"
-        ];
+        const slides = []; // Начинаем с пустого массива, чтобы показать заглушку 0start.webp
         
         // Ссылки для баннеров
         // Автоматически добавляем версии с "2" на конце для нишевых баннеров
@@ -2481,6 +2495,19 @@
                 updateCurrentSlide();
             }
         }
+
+        window.editSpecificPrice = function(inputId) {
+            const inputEl = document.getElementById(inputId);
+            if(inputEl) {
+                const newVal = prompt("Введите новую стоимость:", inputEl.value);
+                if (newVal !== null && !isNaN(newVal) && newVal.trim() !== '') {
+                    inputEl.value = newVal;
+                    // Trigger input event explicitly to ensure reactivity
+                    inputEl.dispatchEvent(new Event('input'));
+                    updateCurrentSlide();
+                }
+            }
+        };
         
         function editHardwareCost() {
             // No longer editable directly as it's calculated
@@ -2488,10 +2515,10 @@
         }
 
         // Helper date function for Summary
-        function getSummaryDates() {
+        function getSummaryDates(months = 12) {
             const now = new Date(); // Start is current date (date of document creation)
             const end = new Date(now);
-            end.setMonth(end.getMonth() + 12); // End is start + 12 months
+            end.setMonth(end.getMonth() + months);
             
             // Format DD.MM.YYYY
             const pad = (n) => n.toString().padStart(2, '0');
@@ -2517,7 +2544,7 @@
                 slideToRender = slides[currentSlideIndex];
             } else {
                 // Если слайдов нет, показываем 0start.webp
-                slideContainer.innerHTML = `<img src="0start.webp" style="width:100%; height:100%; object-fit:cover;">`;
+                slideContainer.innerHTML = `<img src="0start.webp" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='images/0start.webp'">`;
                 slideContainer.classList.remove('ghost-mode');
                 return;
             }
@@ -3038,6 +3065,8 @@
                     sHeader.textContent = `для "${company}"`;
                     slideContainer.appendChild(sHeader);
 
+                    const promoType = document.querySelector('input[name="promoType"]:checked') ? document.querySelector('input[name="promoType"]:checked').value : 'none';
+
                     const zCount = parseInt(document.getElementById('summaryZoneCount').value) || 4;
                     const onePrice = parseInt(document.getElementById('price1Value').value) || 0;
                     
@@ -3056,49 +3085,57 @@
                         playerTypeName = 'PRI плееров';
                     }
                     const hardCost = hardwareQty * unitPrice;
-
-                    const dates = getSummaryDates();
                     
                     let vatSuffix = 'в т.ч. НДС 22%'; 
                     
-                    // Расчет общей стоимости
-                    let totalMonth = onePrice * zCount;
-                    
-                    // Доп. услуги: Премиум
+                    // Доп. услуги
                     const hasPremium = slides.some(s => s.type === 'premium');
                     const premiumCost = hasPremium ? (parseInt(document.getElementById('premiumPrice1').value) || 0) : 0;
                     
-                    // Доп. услуги: Видео КП
                     const hasVideo = slides.some(s => s.type === 'videokp');
                     const videoCost = hasVideo ? (parseInt(document.getElementById('videokpPrice').value) || 0) : 0;
 
-                    // Доп. услуги: Ручной ввод
                     const manualName = document.getElementById('summaryManualName').value.trim();
                     const manualCost = parseInt(document.getElementById('summaryManualPrice').value) || 0;
 
-                    // Общая сумма за месяц (для расчета года)
-                    // (предполагаем, что premium и video добавляются к месячной стоимости)
-                    // Уточнение: Premium может быть Flat fee или Per zone. 
-                    // Если Premium слайд имеет 2 цены (месяц и подключение), берем месячную (premiumPrice1).
-                    // Video тоже месячная.
+                    // Promo Logic & Dates
+                    let monthsTotal = 12;
+                    let multiplier = 12;
+                    let periodText = "на 12 месяцев";
+                    let discountText = "";
+
+                    if (promoType === '11+1') {
+                        monthsTotal = 12;
+                        multiplier = 11;
+                        periodText = "на 12 месяцев";
+                        discountText = " с учетом бесплатного 12 месяца";
+                    } else if (promoType === '6+1') {
+                        monthsTotal = 7;
+                        multiplier = 6.7; // 6 месяцев + 7ой месяц со скидкой 30%
+                        periodText = "на 7 месяцев";
+                        discountText = " с учетом скидки 30% на 7-й месяц";
+                    }
+
+                    const dates = getSummaryDates(monthsTotal);
+
+                    // Year / Promotion Calculations
+                    let musicYearTotal = Math.round((onePrice * zCount) * multiplier);
+                    let premiumYearTotal = Math.round(premiumCost * multiplier);
+                    let videoYearTotal = Math.round(videoCost * multiplier);
+                    let manualYearTotal = Math.round(manualCost * multiplier);
                     
-                    // Итого за год = (База * 12) + (Премиум * 12) + (Видео * 12) + (Ручное * 12)
-                    // "12-й месяц бесплатно" в тексте, но формула считает totalYear = totalMonth * 12 в оригинале.
-                    // Оставляем математику как сумму всех месячных платежей * 12.
-                    
-                    const grandTotalMonth = totalMonth + premiumCost + videoCost + manualCost;
-                    const grandTotalYear = grandTotalMonth * 12;
+                    const grandTotalYear = musicYearTotal + premiumYearTotal + videoYearTotal + manualYearTotal;
 
                     const table = document.createElement('table');
                     table.className = 'summary-table';
                     
-                    // Build rows
+                    // Build rows (Added editable-highlight to base values to allow clicking and editing)
                     let rowsHtml = `
                         <tr>
                             <td>Сервис по управлению музыкой и лицензией</td>
-                            <td>${formatPrice(onePrice)}</td>
-                            <td>${formatPrice(onePrice * zCount)}</td>
-                            <td>${formatPrice(onePrice * zCount * 12)}</td>
+                            <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value')">${formatPrice(onePrice)}</span></td>
+                            <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value')">${formatPrice(onePrice * zCount)}</span></td>
+                            <td><span class="editable-highlight" onclick="editSpecificPrice('price1Value')">${formatPrice(musicYearTotal)}</span></td>
                         </tr>
                     `;
 
@@ -3107,8 +3144,8 @@
                             <tr>
                                 <td>Премиум тариф (музыка)</td>
                                 <td>-</td>
-                                <td>${formatPrice(premiumCost)}</td>
-                                <td>${formatPrice(premiumCost * 12)}</td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('premiumPrice1')">${formatPrice(premiumCost)}</span></td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('premiumPrice1')">${formatPrice(premiumYearTotal)}</span></td>
                             </tr>
                         `;
                     }
@@ -3118,8 +3155,8 @@
                             <tr>
                                 <td>Видео оформление</td>
                                 <td>-</td>
-                                <td>${formatPrice(videoCost)}</td>
-                                <td>${formatPrice(videoCost * 12)}</td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('videokpPrice')">${formatPrice(videoCost)}</span></td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('videokpPrice')">${formatPrice(videoYearTotal)}</span></td>
                             </tr>
                         `;
                     }
@@ -3129,8 +3166,8 @@
                             <tr>
                                 <td>${manualName}</td>
                                 <td>-</td>
-                                <td>${formatPrice(manualCost)}</td>
-                                <td>${formatPrice(manualCost * 12)}</td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('summaryManualPrice')">${formatPrice(manualCost)}</span></td>
+                                <td><span class="editable-highlight" onclick="editSpecificPrice('summaryManualPrice')">${formatPrice(manualYearTotal)}</span></td>
                             </tr>
                         `;
                     }
@@ -3141,7 +3178,7 @@
                                 <th>Пакет услуг</th>
                                 <th>Стоимость за 1 зону 1 месяц, ${currency}/мес ${vatSuffix}</th>
                                 <th>Стоимость за <span class="editable-highlight" onclick="editSummaryZones()">${zCount}</span> зон 1 месяц, ${currency}/мес ${vatSuffix}</th>
-                                <th>Стоимость за <span class="editable-highlight" onclick="editSummaryZones()">${zCount}</span> зон на 12 месяцев с ${dates.start} по ${dates.end}, ${currency} ${vatSuffix}</th>
+                                <th>Стоимость за <span class="editable-highlight" onclick="editSummaryZones()">${zCount}</span> зон ${periodText} с ${dates.start} по ${dates.end}, ${currency} ${vatSuffix}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -3152,7 +3189,7 @@
 
                     const totalText = document.createElement('div');
                     totalText.className = 'summary-total-text';
-                    totalText.innerHTML = `Итого стоимость для ${zCount} зон вещания на период с ${dates.start} с учетом бесплатного 12 месяца составит <b>${formatPrice(grandTotalYear)} ${currency}</b>`;
+                    totalText.innerHTML = `Итого стоимость для ${zCount} зон вещания на период с ${dates.start} по ${dates.end}${discountText} составит <b><span class="editable-highlight" onclick="editSpecificPrice('price1Value')">${formatPrice(grandTotalYear)} ${currency}</span></b>`;
                     slideContainer.appendChild(totalText);
 
                     if (includeHardware) {
@@ -3317,6 +3354,7 @@
                 number.addEventListener('dragstart', handleDragStart);
                 number.addEventListener('dragover', handleDragOver);
                 number.addEventListener('drop', handleDrop);
+                number.addEventListener('dragend', handleDragEnter); // fixed missing listener for visual feedback
                 number.addEventListener('dragend', handleDragEnd);
                 number.addEventListener('dragenter', handleDragEnter);
                 number.addEventListener('dragleave', handleDragLeave);
@@ -3539,7 +3577,8 @@
                 'price1Label', 'price10plusHeader1', 'price10plusValue1',
                 'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3',
                 'price3Header1', 'price3Header2', 'price3Header3',
-                'summaryZoneCount', 'summaryHardwareCost', 'summaryHardwareQty', 'summaryIncludeHardware'
+                'summaryZoneCount', 'summaryHardwareCost', 'summaryHardwareQty', 'summaryIncludeHardware',
+                'summaryManualPrice'
             ];
             inputsToUpdate.forEach(id => {
                 const element = document.getElementById(id);
@@ -3662,8 +3701,11 @@
             // --- Конец логики для поиска ---
 
             updateSlideNumbers();
+            // Показывать заглушку или первый слайд при загрузке
             if (slides.length > 0) {
                 showSlide(1); 
+            } else {
+                updateCurrentSlide(); // Рендерит 0start.webp
             }
             if (document.querySelector('.menu-header')) {
                 document.querySelector('.menu-header').click();
@@ -3672,6 +3714,3 @@
     </script>
 </body>
 </html>
-
-
-
