@@ -1651,6 +1651,12 @@
                             <span class="toggle-button">+</span>
                         </div>
                         <div class="menu-content">
+                            <label class="menu-label">Стоимость Android плеера:</label>
+                            <input class="zvuk-input" type="number" id="devicePriceAndroid" value="8400">
+                            
+                            <label class="menu-label">Стоимость PRI плеера:</label>
+                            <input class="zvuk-input" type="number" id="devicePricePri" value="14500">
+
                             <div class="slide-buttons">
                                 <button class="zvuk-button zvuk-button--primary" onclick="addSlide('devices')">Добавить</button>
                                 <button class="zvuk-button zvuk-button--secondary" onclick="removeSlide('devices')">Удалить</button>
@@ -1821,11 +1827,11 @@
                         <label class="menu-label" style="width: 100%; margin-bottom: 8px;">Тип плеера:</label>
                         <div class="radio-option">
                             <input type="radio" id="playerAndroid" name="playerType" value="android" checked onchange="updateCurrentSlide()">
-                            <label for="playerAndroid">Android (8 400 ₽)</label>
+                            <label for="playerAndroid" id="labelPlayerAndroid">Android (8 400 ₽)</label>
                         </div>
                         <div class="radio-option">
                             <input type="radio" id="playerPri" name="playerType" value="pri" onchange="updateCurrentSlide()">
-                            <label for="playerPri">PRI (14 500 ₽)</label>
+                            <label for="playerPri" id="labelPlayerPri">PRI (14 500 ₽)</label>
                         </div>
                     </div>
 
@@ -2131,6 +2137,18 @@
             });
         });
 
+        function updatePlayerPrices() {
+            const valAndroid = document.getElementById('devicePriceAndroid').value || 8400;
+            const valPri = document.getElementById('devicePricePri').value || 14500;
+            const { currency } = getRegionInfo();
+            
+            const labelAndroid = document.getElementById('labelPlayerAndroid');
+            const labelPri = document.getElementById('labelPlayerPri');
+            
+            if(labelAndroid) labelAndroid.textContent = `Android (${formatPrice(valAndroid)} ${currency})`;
+            if(labelPri) labelPri.textContent = `PRI (${formatPrice(valPri)} ${currency})`;
+        }
+
         // Функция установки региона
         function setRegion(region) {
             currentRegion = region;
@@ -2162,6 +2180,7 @@
 
             // Обновляем доступность разделов и перерисовываем
             updateSectionAvailability();
+            if (typeof updatePlayerPrices === 'function') updatePlayerPrices();
             updateCurrentSlide();
         }
 
@@ -2510,8 +2529,7 @@
         };
         
         function editHardwareCost() {
-            // No longer editable directly as it's calculated
-            alert("Пожалуйста, измените настройки в меню слева для пересчета стоимости оборудования.");
+            alert("Пожалуйста, измените стоимость плееров в разделе меню 'Сервис -> Девайсы' или количество в настройках итогового предложения.");
         }
 
         // Helper date function for Summary
@@ -3078,10 +3096,10 @@
                     let playerTypeName = '';
 
                     if (playerType === 'android') {
-                        unitPrice = 8400;
+                        unitPrice = parseInt(document.getElementById('devicePriceAndroid').value) || 8400;
                         playerTypeName = 'андроид плееров';
                     } else {
-                        unitPrice = 14500;
+                        unitPrice = parseInt(document.getElementById('devicePricePri').value) || 14500;
                         playerTypeName = 'PRI плееров';
                     }
                     const hardCost = hardwareQty * unitPrice;
@@ -3578,12 +3596,15 @@
                 'price10plusHeader2', 'price10plusValue2', 'price10plusHeader3', 'price10plusValue3',
                 'price3Header1', 'price3Header2', 'price3Header3',
                 'summaryZoneCount', 'summaryHardwareCost', 'summaryHardwareQty', 'summaryIncludeHardware',
-                'summaryManualPrice'
+                'summaryManualPrice', 'devicePriceAndroid', 'devicePricePri'
             ];
             inputsToUpdate.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener(element.tagName === 'SELECT' ? 'change' : 'input', function() {
+                        if (id === 'devicePriceAndroid' || id === 'devicePricePri') {
+                            updatePlayerPrices();
+                        }
                         updateCurrentSlide();
                         if (id === 'manager') {
                             updateSectionAvailability();
@@ -3701,6 +3722,10 @@
             // --- Конец логики для поиска ---
 
             updateSlideNumbers();
+            
+            // Вызов для инициализации цен плееров
+            updatePlayerPrices();
+            
             // Показывать заглушку или первый слайд при загрузке
             if (slides.length > 0) {
                 showSlide(1); 
