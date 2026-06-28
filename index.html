@@ -484,7 +484,7 @@
             z-index: 15; /* Above banners and logos */
         }
         
-        /* Mobile responsive font sizing variable */
+        /* Mobile responsive font sizing variable (in pt) */
         .preview-price {
             position: absolute;
             top: 56%;
@@ -492,8 +492,8 @@
             color: white;
             font-weight: bold;
             width: 50%;
-            /* Proportional sizing logic */
-            font-size: calc(20px * var(--element-scale));
+            /* Proportional sizing logic in pt */
+            font-size: calc(15pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -505,7 +505,7 @@
             color: #D9D9D9;
             width: 50%;
             font-weight: 400;
-            font-size: calc(12px * var(--element-scale));
+            font-size: calc(9pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -517,7 +517,7 @@
             color: white;
             font-weight: bold;
             width: 30%;
-            font-size: calc(20px * var(--element-scale));
+            font-size: calc(15pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -529,7 +529,7 @@
             color: white;
             font-weight: bold;
             width: 50%;
-            font-size: calc(20px * var(--element-scale));
+            font-size: calc(15pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -540,10 +540,10 @@
             /* Background and Styling */
             background-color: #00B399;
             color: white;
-            padding: calc(6px * var(--element-scale)) calc(12px * var(--element-scale));
-            border-radius: calc(8px * var(--element-scale));
+            padding: calc(4.5pt * var(--element-scale)) calc(9pt * var(--element-scale));
+            border-radius: calc(6pt * var(--element-scale));
             font-weight: 500;
-            font-size: calc(12px * var(--element-scale)); /* Шрифт как у заголовка стоимости - чуть крупнее обычного коммента */
+            font-size: calc(9pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             
             width: auto;
@@ -564,13 +564,13 @@
             width:60%;
             color: white;
             border-collapse: collapse;
-            font-size: calc(12px * var(--element-scale));
+            font-size: calc(9pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
         
         .price-table th, .price-table td {
-            padding: calc(10px * var(--element-scale));
+            padding: calc(7.5pt * var(--element-scale));
             text-align: left;
             border: 1px solid #303030;
             transition: background-color var(--transition-fast);
@@ -595,7 +595,7 @@
             left: 32%;
             color: #D9D9D9;
             font-weight: 400;
-            font-size: calc(8px * var(--element-scale));
+            font-size: calc(6pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -608,7 +608,7 @@
             height: var(--qr-size);
             background-color: white;
             border-radius: var(--border-radius);
-            padding: calc(7px * var(--element-scale));
+            padding: calc(5.25pt * var(--element-scale));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -935,7 +935,7 @@
             font-weight: 300;
             width: 60%;
             line-height: 1.2;
-            font-size: calc(12px * var(--element-scale));
+            font-size: calc(9pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             transition: all var(--transition-medium);
         }
@@ -1046,7 +1046,7 @@
             left: 5%;
             color: white;
             font-weight: 600;
-            font-size: calc(20px * var(--element-scale));
+            font-size: calc(15pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             width: 90%;
             z-index: 10;
@@ -1065,8 +1065,8 @@
         
         .summary-table th, .summary-table td {
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: calc(10px * var(--element-scale));
-            font-size: calc(12px * var(--element-scale));
+            padding: calc(7.5pt * var(--element-scale));
+            font-size: calc(9pt * var(--element-scale));
             text-align: center;
         }
         
@@ -1085,7 +1085,7 @@
             left: 5%;
             width: 90%;
             color: white;
-            font-size: calc(14px * var(--element-scale));
+            font-size: calc(10.5pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             z-index: 10;
         }
@@ -1096,7 +1096,7 @@
             left: 5%;
             width: 90%;
             color: white;
-            font-size: calc(14px * var(--element-scale));
+            font-size: calc(10.5pt * var(--element-scale));
             font-family: 'Inter', sans-serif;
             z-index: 10;
         }
@@ -1221,27 +1221,27 @@
             .preview-page:not(.pdf-render-mode) .preview-price,
             .preview-page:not(.pdf-render-mode) .preview-price-premium-1,
             .preview-page:not(.pdf-render-mode) .preview-price-premium-2 {
-                font-size: calc(6px * var(--element-scale)) !important;
+                font-size: calc(4.5pt * var(--element-scale)) !important;
                 width: 80%; /* Expand width to prevent wrapping */
             }
             .preview-page:not(.pdf-render-mode) .price-table {
-                font-size: calc(5px * var(--element-scale)) !important;
+                font-size: calc(3.75pt * var(--element-scale)) !important;
             }
             .preview-page:not(.pdf-render-mode) .preview-price-label {
-                font-size: calc(5px * var(--element-scale)) !important;
+                font-size: calc(3.75pt * var(--element-scale)) !important;
             }
             .preview-page:not(.pdf-render-mode) .price-table th, 
             .preview-page:not(.pdf-render-mode) .price-table td {
-                padding: calc(4px * var(--element-scale)) !important;
+                padding: calc(3pt * var(--element-scale)) !important;
             }
             
             .preview-page:not(.pdf-render-mode) .summary-table th, 
             .preview-page:not(.pdf-render-mode) .summary-table td {
-                font-size: calc(8px * var(--element-scale)) !important;
-                padding: calc(5px * var(--element-scale)) !important;
+                font-size: calc(6pt * var(--element-scale)) !important;
+                padding: calc(3.75pt * var(--element-scale)) !important;
             }
             .preview-page:not(.pdf-render-mode) .summary-header {
-                 font-size: calc(14px * var(--element-scale)) !important;
+                 font-size: calc(10.5pt * var(--element-scale)) !important;
             }
         }
         
@@ -1365,6 +1365,7 @@
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/romantica.webp">Романтическая атмосфера</option>
+                        <option value="images/summervibe.webp">Летний вайб</option>
                     </select>
 
                     <div class="slide-buttons">
@@ -1535,6 +1536,7 @@
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/romantica.webp">Романтическая атмосфера</option>
+                        <option value="images/summervibe.webp">Летний вайб</option>
                     </select>
 
                     <div class="slide-buttons">
@@ -1588,6 +1590,7 @@
                         <option value="images/nostalgia.webp">Ностальгия</option> 
                         <option value="images/bkids.webp">Детский тариф</option>
                         <option value="images/romantica.webp">Романтическая атмосфера</option>
+                        <option value="images/summervibe.webp">Летний вайб</option>
                     </select>
 
                     <div class="slide-buttons">
@@ -1999,6 +2002,7 @@
             'images/artist.webp': 'https://zvuk-b2b.com',
             'images/ny26.webp': 'https://zvuk-b2b.com/newyear_concept',
             'images/romantica.webp': 'https://zvuk-b2b.com',
+            'images/summervibe.webp': 'https://zvuk-b2b.com',
             'images/allplayer.webp': 'https://help.zvuk-b2b.com/onair',
             'images/phone-sberboom.webp': 'https://zvuk-b2b.com',
             'images/itogi.webp': 'https://zvuk-b2b.com'
@@ -2723,7 +2727,7 @@
                 slideToRender = slides[currentSlideIndex];
             } else {
                 // Если слайдов нет, показываем 0start.webp
-                slideContainer.innerHTML = `<img src="0start.webp" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='images/0start.webp'">`;
+                slideContainer.innerHTML = `<img src="images/0start.webp" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='0start.webp'">`;
                 slideContainer.classList.remove('ghost-mode');
                 return;
             }
@@ -3150,7 +3154,7 @@
                     androidDiv.style.left = '26%'; 
                     androidDiv.style.color = 'white';
                     androidDiv.style.fontWeight = 'bold';
-                    androidDiv.style.fontSize = 'calc(14px * var(--element-scale))';
+                    androidDiv.style.fontSize = 'calc(10.5pt * var(--element-scale))';
                     androidDiv.style.fontFamily = "'Inter', sans-serif";
                     androidDiv.style.textAlign = 'center';
                     androidDiv.style.transform = 'translateX(-50%)';
@@ -3167,7 +3171,7 @@
                     priDiv.style.left = '49%';
                     priDiv.style.color = 'white';
                     priDiv.style.fontWeight = 'bold';
-                    priDiv.style.fontSize = 'calc(14px * var(--element-scale))';
+                    priDiv.style.fontSize = 'calc(10.5pt * var(--element-scale))';
                     priDiv.style.fontFamily = "'Inter', sans-serif";
                     priDiv.style.textAlign = 'center';
                     priDiv.style.transform = 'translateX(-50%)';
