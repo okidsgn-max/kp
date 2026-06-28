@@ -147,7 +147,7 @@
             font-weight: 600;
         }
 
-        .popup-content-dark input {
+        .popup-content-dark input, .popup-content-dark textarea {
             width: 100%;
             padding: 12px;
             background: #2B2B2B;
@@ -157,9 +157,10 @@
             font-size: 14px;
             outline: none;
             box-sizing: border-box; 
+            font-family: 'Inter', sans-serif;
         }
 
-        .popup-content-dark input:focus {
+        .popup-content-dark input:focus, .popup-content-dark textarea:focus {
             border-color: var(--primary);
         }
 
@@ -835,7 +836,8 @@
         
         .action-buttons {
             display: flex;
-            gap: 0px;
+            flex-direction: column; /* Modified for stacked buttons */
+            gap: 8px; /* Added gap */
             margin-top: auto;
             padding-top: 20px;
             position: sticky;
@@ -893,6 +895,23 @@
         .zvuk-button--secondary:active {
             transform: translateY(0);
             box-shadow: 0 0px 0px rgba(0,0,0,0.05);
+        }
+
+        /* Стиль для кнопки AI Лайт сборки */
+        .zvuk-button--ai {
+            background: linear-gradient(135deg, #1A1D1F 0%, #2b2b2b 100%);
+            color: #00B398;
+            border: 1px solid #00B398;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .zvuk-button--ai:hover {
+            background: linear-gradient(135deg, #2b2b2b 0%, #3d435c 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,179,152,0.2);
+            color: #04C9B0;
         }
 
         .zvuk-button--snow {
@@ -1176,7 +1195,7 @@
 
             .menu-container {
                 order: 2;
-                padding-bottom: 100px; /* Space for fixed bottom button */
+                padding-bottom: 130px; /* Space for fixed bottom button (adjusted for two buttons) */
                 height: auto;
                 overflow-y: visible;
             }
@@ -1877,13 +1896,11 @@
                         </div>
                     </div>
                     
-                    <!-- NEW FOR REQ 2 -->
                     <label class="menu-label">Стоимость Android плеера в смете:</label>
                     <input class="zvuk-input" type="number" id="summaryDevicePriceAndroid" value="8400">
                     
                     <label class="menu-label">Стоимость PRI плеера в смете:</label>
                     <input class="zvuk-input" type="number" id="summaryDevicePricePri" value="14500">
-                    <!-- END NEW FOR REQ 2 -->
 
                     <label class="menu-label">Кол-во зон (по умолчанию):</label>
                     <input class="zvuk-input" type="number" id="summaryZoneCount" value="4" onchange="updateCurrentSlide()">
@@ -1907,6 +1924,7 @@
         
         <div class="action-buttons">
             <button class="zvuk-button zvuk-button--primary" onclick="saveAsPDF()">в PDF</button>
+            <button class="zvuk-button zvuk-button--ai" onclick="openLitePopup()">✨ Лайт (AI сборка)</button>
         </div>
     </div>
     
@@ -1928,6 +1946,7 @@
         </div>
     </div>
 
+    <!-- Popup for Web Link (Logo) -->
     <div id="logo-link-popup" class="popup-input-container">
         <div class="popup-content-dark">
             <h3>Укажите ссылку на логотип или сайт</h3>
@@ -1935,6 +1954,24 @@
             <div class="popup-buttons">
                 <button id="logoLinkBtn" onclick="saveLogoLink()">ОК</button>
                 <button onclick="closeLogoLinkPopup()">Отмена</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- NEW: Popup for Lite AI Generator -->
+    <div id="lite-popup" class="popup-input-container">
+        <div class="popup-content-dark" style="max-width: 500px; width: 95%;">
+            <h3 style="color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">✨ Лайт сборка (AI)</h3>
+            <p style="font-size: 13px; color: #9A9FA5; margin: 0 0 16px 0; line-height: 1.4;">Опишите, какое КП нужно собрать. Укажите менеджера, клиента (и сайт), нужные слайды, количество точек и оборудование. Вы можете ввести текст или наговорить его голосом.</p>
+            <div style="position: relative;">
+                <textarea id="liteInput" rows="6" placeholder="Например: Я Маша Иванова. Нужно собрать КП для бьюти салона (сайт beauty.ru). Добавь слайды: общая, тариф 1 точка, инструкция по акции, плейлист рейв, плееры девайсы (нужно 4 точки, плеер pri), видео кп и итог."></textarea>
+                <button id="micBtn" onclick="startDictation()" style="position: absolute; bottom: 10px; right: 10px; background: none; border: none; cursor: pointer; color: #9A9FA5; font-size: 20px; padding: 4px; transition: color 0.3s;" title="Голосовой ввод">
+                    🎤
+                </button>
+            </div>
+            <div class="popup-buttons" style="margin-top: 8px;">
+                <button id="liteSubmitBtn" onclick="processLiteRequest()">Собрать КП</button>
+                <button onclick="closeLitePopup()">Отмена</button>
             </div>
         </div>
     </div>
@@ -1951,7 +1988,7 @@
         // Инициализация jsPDF
         const { jsPDF } = window.jspdf;
         
-           // Массив для хранения слайдов
+        // Массив для хранения слайдов
         const slides = []; // Начинаем с пустого массива, чтобы показать заглушку 0start.webp
         
         // Ссылки для баннеров
@@ -1984,7 +2021,7 @@
             'images/veranda.webp': 'https://zvuk-b2b.com/rest',
             'images/play.webp': 'https://zvuk-b2b.com/player',
             'images/action.webp': 'https://zvuk-b2b.com',
-            'images/base.webp': 'https://zvuk-b2b.com', /* Добавлено */
+            'images/base.webp': 'https://zvuk-b2b.com',
             'images/alldevice.webp': 'https://help.zvuk-b2b.com/onair',
             'images/autumn.webp': 'https://zvuk-b2b.com',
             'images/nostalgia.webp': 'https://zvuk-b2b.com/retro',
@@ -2020,18 +2057,15 @@
 
         // Конфигурация ограничений
         const restrictedSections = {
-            // KZ: оставить Премиум. Убрать Бизнес-профиль, Мероприятия, Артисты, Концепции, Креатив.
             kz: ['partner', 'bprofile', 'event', 'artist', 'concept', 'creative', 'web', 'videokp'],
-            // RB: Убрать Артисты, Премиум, Бизнес-профиль, Веб. Оставить Мероприятия и Концепции.
             rb: ['partner', 'premium', 'artist', 'web', 'bprofile', 'videokp']
         };
         
-        let currentSlideIndex = 0; // Показываем первый слайд по умолчанию
+        let currentSlideIndex = 0; 
         let isZoomed = false;
         let draggedSlideIndex = null;
         let dropTargetIndex = null;
         let globalClientLogo = null;
-        // По умолчанию инверсия включена
         let isLogoInverted = true; 
         let currentRegion = 'ru';
         let isRomanceEnabled = false;
@@ -2049,6 +2083,84 @@
         let logoStartTop = 0;
         let logoStartWidth = 0;
         let activeLogoWrapper = null;
+
+        // Dictionary of categories for auto-matching (Moved to global scope)
+        const categoryKeywordMap = [
+            {
+                keys: ['фитнес', 'тренажерный', 'спортзал', 'fitness', 'gym', 'crossfit', 'йога', 'единоборств', 'функциональные тренировки', 'stretching', 'pilates', 'sport', 'trainer', 'workout', 'абонемент', 'зал', 'тренировка', 'растяжка', 'пилатес', 'бассейн', 'swimming', 'pool', 'coach', 'wellness', 'спа-зона', 'персональный тренер', 'групповые программы', 'cycle', 'сайкл','тренеры', 'фитнес-клуб'],
+                logo: 'images/fitnesslogo.webp',
+            },
+            {
+                keys: ['пекарня', 'хлеб', 'булочная', 'bakery', 'выпечка', 'круассан', 'bread', 'croissant', 'pastry', 'flour', 'cake', 'pie', 'bun', 'baking', 'торт', 'пирог', 'булка', 'кондитерская', 'десерт', 'сладости', 'свежий хлеб', 'печь'],
+                logo: 'images/pekarnilogo.webp' 
+            },
+            {
+                keys: ['салон красоты', 'маникюр', 'beauty', 'парикмахерская', 'стрижка', 'окрашивание', 'nail', 'hair', 'salon', 'manicure', 'pedicure', 'eyebrows', 'lashes', 'makeup', 'spa', 'massage', 'педикюр', 'брови', 'ресницы', 'визаж', 'спа', 'массаж', 'косметолог', 'эпиляция', 'лазер', 'шугаринг', 'botox', 'кератин', 'укладка'],
+                logo: 'images/beautylogo.webp'
+            },
+            {
+                keys: ['кофе', 'кофейня', 'coffee', 'капучино', 'бариста', 'barista', 'cappuccino', 'latte', 'espresso', 'bean', 'cafe', 'латте', 'эспрессо', 'зерно', 'завтрак', 'кофе с собой', 'раф', 'мокка', 'кофемашина', 'обжарка'],
+                logo: 'images/coffeelogo.webp'
+            },
+            {
+                keys: ['бургер', 'фастфуд', 'шаурма', 'fast food', 'фри', 'бистро', 'burger', 'fries', 'nuggets', 'shawarma', 'doner', 'hotdog', 'street food', 'картошка', 'наггетсы', 'донер', 'хот-дог', 'стритфуд', 'гиро', 'кебаб'],
+                logo: 'images/fastfoodlogo.webp'
+            },
+            {
+                keys: ['суши', 'роллы', 'sushi', 'wok', 'roll', 'sashimi', 'wasabi', 'ginger', 'salmon', 'eel', 'rice', 'сашими', 'васаби', 'имбирь', 'лосось', 'угорь', 'рис', 'вок', 'паназия', 'сеты', 'филадельфия', 'калифорния', 'том ям', 'поке'],
+                logo: 'images/sushilogo.webp'
+            },
+            {
+                keys: ['пицца', 'pizza', 'пиццерия', 'pepperoni', 'margarita', 'dough', 'cheese', 'slice', 'пепперони', 'маргарита', 'тесто', 'сыр', 'кусок', 'италия', 'italian', 'четыре сыра', 'доставка пиццы'],
+                logo: 'images/pizzalogo.webp'
+            },
+            {
+                keys: ['ресторан', 'restaurant', 'банкет', 'кухня', 'шеф', 'ужин', 'menu', 'chef', 'wine', 'dining', 'dish', 'gourmet', 'меню', 'вино', 'блюдо', 'авторская кухня', 'гастропаб', 'стейк', 'морепродукты', 'устрицы', 'бар', 'bar', 'cocktail', 'коктейль'],
+                logo: 'images/cafe&restaurantlogo.webp'
+            },
+            {
+                keys: ['одежда', 'fashion', 'магазин', 'бутик', 'платья', 'style', 'dress', 'shirt', 'pants', 'shoes', 'boutique', 'wear', 'collection', 'мода', 'стиль', 'платье', 'рубашка', 'брюки', 'обувь', 'коллекция', 'бренд', 'шопинг', 'одежды', 'lookbook', 'аксессуары', 'сумки'],
+                logo: 'images/clotheslogo.webp'
+            },
+            {
+                keys: ['барбер', 'barber', 'бритье', 'shave', 'beard', 'fade', 'cut', 'mens', 'борода', 'мужская', 'мужские стрижки', 'опасная бритва'],
+                logo: 'images/barberlogo.webp'
+            },
+            {
+                keys: ['отель', 'гостиница', 'hotel', 'хостел', 'номер', 'room', 'booking', 'hostel', 'inn', 'accommodation', 'бронирование', 'проживание', 'ресепшн', 'check-in', 'выезд', 'заезд', 'апартаменты'],
+                logo: 'images/hotellogo.webp'
+            },
+            {
+                keys: ['азс', 'заправка', 'бензин', 'fuel', 'gas', 'petrol', 'oil', 'station', 'топливо', 'масло', 'дизель', '95', '92', 'заправить'],
+                logo: 'images/azslogo.webp'
+            },
+            {
+                keys: ['детский', 'kids', 'игрушки', 'развлечения', 'child', 'toy', 'game', 'park', 'playground', 'baby', 'school', 'kindergarten', 'дети', 'ребенок', 'игрушка', 'игра', 'парк', 'площадка', 'малыш', 'школа', 'сад', 'развивающий', 'центр', 'аниматор', 'день рождения'],
+                logo: 'images/kidslogo.webp'
+            },
+            {
+                keys: ['застройщик', 'жк', 'квартира', 'дом', 'недвижимость', 'ипотека', 'developer', 'building', 'apartment', 'flat', 'house', 'estate', 'новостройка', 'жилой комплекс', 'метр', 'планировка'],
+                logo: 'images/nlogo.webp'
+            },
+            {
+                keys: ['торговый центр', 'тц', 'трк', 'молл', 'mall', 'center', 'shopping', 'gallery', 'галерея', 'магазины', 'фудкорт', 'кинотеатр', 'парковка'],
+                logo: 'images/tclogo.webp'
+            },
+            {
+                keys: [
+                    'автодилер', 'автосалон', 'lada', 'hyundai', 'kia', 'toyota', 
+                    'nissan', 'renault', 'volkswagen', 'skoda', 'bmw', 'mercedes', 'audi', 'lexus', 
+                    'volvo', 'mazda', 'geely', 'haval', 'chery', 'exeed', 'omoda', 'tank', 'jetour', 
+                    'jaecoo', 'moskvich', 'uaz', 'gaz', 'belgee', 'solaris', 'creta', 'rio', 'polo', 
+                    'rapid', 'camry', 'rav4', 'tiguan', 'sportage', 'tucson', 'duster', 'vesta', 
+                    'granta', 'niva', 'largus', 'тест-драйв', 'test drive', 'test-drive', 'конфигуратор', 
+                    'модельный ряд', 'model range', 'купить автомобиль', 'пробегом', 'trade-in', 'трейд-ин',
+                    'sedan', 'suv', 'crossover', 'седан', 'кроссовер', 'внедорожник', 'service', 'сервис', 'запчасти',
+                    'автомобиль'
+                ],
+                logo: 'images/autologo.webp'
+            }
+        ];
 
         // Global listeners for logo interactions
         document.addEventListener('mousemove', (e) => {
@@ -2195,7 +2307,6 @@
                 headerText.classList.add('active');
                 
                 // Check if this slide exists in the list
-                // If it's a folder (like 'folder-money'), it doesn't represent a slide itself, so skip ghost logic
                 const isFolder = ['folder-money', 'folder-music', 'folder-service', 'folder-additional'].includes(type);
                 
                 if (!isFolder) {
@@ -2206,7 +2317,6 @@
                         updateCurrentSlide();
                     } else {
                         ghostSlideType = null;
-                        // If needed, we could scroll to the existing slide, but standard behavior is to just open menu
                     }
                 }
                 
@@ -2318,7 +2428,6 @@
             // Применяем ограничения
             restrictions.forEach(type => {
                 let sectionId = '';
-                // Сопоставление type и ID разделов в HTML
                 if (type === 'partner') sectionId = 'section-partner';
                 if (type === 'premium') sectionId = 'section-premium';
                 if (type === 'artist') sectionId = 'section-artist';
@@ -2335,7 +2444,6 @@
                         section.classList.add('restricted');
                         // Если раздел открыт - закрываем его
                         if (section.classList.contains('active')) {
-                            // Trigger toggleMenu to close it properly and update state
                             const header = section.querySelector('.menu-header');
                             if(header) toggleMenu(header, type);
                         }
@@ -2356,20 +2464,15 @@
         // Получение локализованной ссылки баннера
         function getLocalizedBannerLink(originalLink, domainSuffix) {
             if (!originalLink) return '#';
-            
-            // Список баннеров, требующих локализации ссылки
             const bannersToLocalize = [
                 '/rest', '/cafe', '/shop', '/barbershop', '/fitness', '/hotel', '/coffee'
             ];
-            
             let link = originalLink;
-            // Проверяем, содержит ли ссылка один из путей для локализации
             const needsLocalization = bannersToLocalize.some(path => link.includes(path));
 
             if (needsLocalization && domainSuffix !== '.com') {
                 link = link.replace('.com', domainSuffix);
             }
-            
             return link;
         }
 
@@ -2396,13 +2499,11 @@
                 return;
             } 
             
-            // Если это ссылка на сайт - парсим
-            btn.textContent = 'идет поиск по SEO-ключам...'; // Changed text as requested
+            btn.textContent = 'идет поиск по SEO-ключам...';
             btn.disabled = true;
 
             try {
                 let url = inputVal.trim();
-                // Improved URL handling: ensure protocol exists
                 if (!/^https?:\/\//i.test(url)) {
                     url = 'https://' + url;
                 }
@@ -2422,7 +2523,7 @@
                         '.logo img', 
                         'header .logo img',
                         '[class*="logo"] img',
-                        '.tn-atom[src]', // Tilda
+                        '.tn-atom[src]',
                         '.footer__logo img',
                         'header img',
                         'footer img'
@@ -2431,18 +2532,15 @@
                     for (let selector of logoSelectors) {
                         const img = doc.querySelector(selector);
                         if (img && img.src) {
-                            // Пропускаем data:image и очень маленькие иконки если это возможно
                             if (img.src.startsWith('data:') && img.src.length < 1000) continue;
-                            logoSrc = img.getAttribute('src'); // Берем атрибут, чтобы обработать относительные пути
+                            logoSrc = img.getAttribute('src'); 
                             break;
                         }
                     }
 
                     if (logoSrc) {
-                        // Обработка относительных путей
                         if (!logoSrc.startsWith('http') && !logoSrc.startsWith('data:')) {
                             const urlObj = new URL(url);
-                            // Убираем слеш если он есть и там и там
                             if (logoSrc.startsWith('/') && urlObj.origin.endsWith('/')) {
                                 logoSrc = urlObj.origin + logoSrc.substring(1);
                             } else if (!logoSrc.startsWith('/') && !urlObj.origin.endsWith('/')) {
@@ -2453,7 +2551,6 @@
                         }
                         setClientLogo(logoSrc);
                     } else {
-                        // Fallback: пробуем Clearbit если парсинг не нашел img
                         try {
                             const urlObj = new URL(url);
                             setClientLogo(`https://logo.clearbit.com/${urlObj.hostname}`);
@@ -2462,13 +2559,10 @@
 
                     // 2. SEO Анализ и подбор темы
                     analyzeSiteContent(doc, url);
-
                 }
             } catch (e) {
                 console.error('Ошибка при анализе сайта:', e);
-                // Fallback на Clearbit при ошибке
                 try {
-                     // Still try to fix URL for fallback
                      let cleanUrl = inputVal.trim();
                      if (!/^https?:\/\//i.test(cleanUrl)) cleanUrl = 'https://' + cleanUrl;
                      const urlObj = new URL(cleanUrl);
@@ -2483,125 +2577,282 @@
 
         // Функция анализа контента для авто-подбора
         function analyzeSiteContent(doc, url = '') {
-            // Собираем текст из заголовка, описания и тела
             const title = doc.title ? doc.title.toLowerCase() : '';
             const description = doc.querySelector('meta[name="description"]')?.content.toLowerCase() || '';
             const keywords = doc.querySelector('meta[name="keywords"]')?.content.toLowerCase() || '';
             const ogDescription = doc.querySelector('meta[property="og:description"]')?.content.toLowerCase() || '';
             
-            // Get text from headers
             const headers = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
                                 .map(h => h.innerText.toLowerCase()).join(' ');
             
-            // Get text from nav and buttons (important for CTAs like "Test Drive")
             const navText = Array.from(doc.querySelectorAll('nav, header, .menu, a, button'))
                                 .map(el => el.innerText.toLowerCase()).join(' ');
 
-            // Combine all sources for better matching
             const bodyText = doc.body.innerText.toLowerCase().substring(0, 10000); 
             
             const urlString = url.toLowerCase();
-
             const fullText = `${urlString} ${title} ${description} ${keywords} ${ogDescription} ${headers} ${navText} ${bodyText}`;
+            
+            analyzeLiteText(fullText); // Delegate to shared logic
+        }
+        
+        // Helper to match text to categories globally
+        function analyzeLiteText(text) {
+             const fullText = text.toLowerCase();
+             let bestMatch = null;
+             for (let item of categoryKeywordMap) {
+                 for (let key of item.keys) {
+                     if (fullText.includes(key)) {
+                         bestMatch = item;
+                         break; 
+                     }
+                 }
+                 if (bestMatch) break;
+             }
 
-            // Словарь соответствий
-            const keywordMap = [
-                {
-                    keys: ['фитнес', 'тренажерный', 'спортзал', 'fitness', 'gym', 'crossfit', 'йога', 'единоборств', 'функциональные тренировки', 'stretching', 'pilates', 'sport', 'trainer', 'workout', 'абонемент', 'зал', 'тренировка', 'растяжка', 'пилатес', 'бассейн', 'swimming', 'pool', 'coach', 'wellness', 'спа-зона', 'персональный тренер', 'групповые программы', 'cycle', 'сайкл','тренеры', 'фитнес-клуб'],
-                    logo: 'images/fitnesslogo.webp',
-                },
-                {
-                    keys: ['пекарня', 'хлеб', 'булочная', 'bakery', 'выпечка', 'круассан', 'bread', 'croissant', 'pastry', 'flour', 'cake', 'pie', 'bun', 'baking', 'торт', 'пирог', 'булка', 'кондитерская', 'десерт', 'сладости', 'свежий хлеб', 'печь'],
-                    logo: 'images/pekarnilogo.webp' 
-                },
-                {
-                    keys: ['салон красоты', 'маникюр', 'beauty', 'парикмахерская', 'стрижка', 'окрашивание', 'nail', 'hair', 'salon', 'manicure', 'pedicure', 'eyebrows', 'lashes', 'makeup', 'spa', 'massage', 'педикюр', 'брови', 'ресницы', 'визаж', 'спа', 'массаж', 'косметолог', 'эпиляция', 'лазер', 'шугаринг', 'botox', 'кератин', 'укладка'],
-                    logo: 'images/beautylogo.webp'
-                },
-                {
-                    keys: ['кофе', 'кофейня', 'coffee', 'капучино', 'бариста', 'barista', 'cappuccino', 'latte', 'espresso', 'bean', 'cafe', 'латте', 'эспрессо', 'зерно', 'завтрак', 'кофе с собой', 'раф', 'мокка', 'кофемашина', 'обжарка'],
-                    logo: 'images/coffeelogo.webp'
-                },
-                {
-                    keys: ['бургер', 'фастфуд', 'шаурма', 'fast food', 'фри', 'бистро', 'burger', 'fries', 'nuggets', 'shawarma', 'doner', 'hotdog', 'street food', 'картошка', 'наггетсы', 'донер', 'хот-дог', 'стритфуд', 'гиро', 'кебаб'],
-                    logo: 'images/fastfoodlogo.webp'
-                },
-                {
-                    keys: ['суши', 'роллы', 'sushi', 'wok', 'roll', 'sashimi', 'wasabi', 'ginger', 'salmon', 'eel', 'rice', 'сашими', 'васаби', 'имбирь', 'лосось', 'угорь', 'рис', 'вок', 'паназия', 'сеты', 'филадельфия', 'калифорния', 'том ям', 'поке'],
-                    logo: 'images/sushilogo.webp'
-                },
-                {
-                    keys: ['пицца', 'pizza', 'пиццерия', 'pepperoni', 'margarita', 'dough', 'cheese', 'slice', 'пепперони', 'маргарита', 'тесто', 'сыр', 'кусок', 'италия', 'italian', 'четыре сыра', 'доставка пиццы'],
-                    logo: 'images/pizzalogo.webp'
-                },
-                {
-                    keys: ['ресторан', 'restaurant', 'банкет', 'кухня', 'шеф', 'ужин', 'menu', 'chef', 'wine', 'dining', 'dish', 'gourmet', 'меню', 'вино', 'блюдо', 'авторская кухня', 'гастропаб', 'стейк', 'морепродукты', 'устрицы', 'бар', 'bar', 'cocktail', 'коктейль'],
-                    logo: 'images/cafe&restaurantlogo.webp'
-                },
-                {
-                    keys: ['одежда', 'fashion', 'магазин', 'бутик', 'платья', 'style', 'dress', 'shirt', 'pants', 'shoes', 'boutique', 'wear', 'collection', 'мода', 'стиль', 'платье', 'рубашка', 'брюки', 'обувь', 'коллекция', 'бренд', 'шопинг', 'одежды', 'lookbook', 'аксессуары', 'сумки'],
-                    logo: 'images/clotheslogo.webp'
-                },
-                {
-                    keys: ['барбер', 'barber', 'бритье', 'shave', 'beard', 'fade', 'cut', 'mens', 'борода', 'мужская', 'мужские стрижки', 'опасная бритва'],
-                    logo: 'images/barberlogo.webp'
-                },
-                {
-                    keys: ['отель', 'гостиница', 'hotel', 'хостел', 'номер', 'room', 'booking', 'hostel', 'inn', 'accommodation', 'бронирование', 'проживание', 'ресепшн', 'check-in', 'выезд', 'заезд', 'апартаменты'],
-                    logo: 'images/hotellogo.webp'
-                },
-                {
-                    keys: ['азс', 'заправка', 'бензин', 'fuel', 'gas', 'petrol', 'oil', 'station', 'топливо', 'масло', 'дизель', '95', '92', 'заправить'],
-                    logo: 'images/azslogo.webp'
-                },
-                {
-                    keys: ['детский', 'kids', 'игрушки', 'развлечения', 'child', 'toy', 'game', 'park', 'playground', 'baby', 'school', 'kindergarten', 'дети', 'ребенок', 'игрушка', 'игра', 'парк', 'площадка', 'малыш', 'школа', 'сад', 'развивающий', 'центр', 'аниматор', 'день рождения'],
-                    logo: 'images/kidslogo.webp'
-                },
-                {
-                    keys: ['застройщик', 'жк', 'квартира', 'дом', 'недвижимость', 'ипотека', 'developer', 'building', 'apartment', 'flat', 'house', 'estate', 'новостройка', 'жилой комплекс', 'метр', 'планировка'],
-                    logo: 'images/nlogo.webp'
-                },
-                {
-                    keys: ['торговый центр', 'тц', 'трк', 'молл', 'mall', 'center', 'shopping', 'gallery', 'галерея', 'магазины', 'фудкорт', 'кинотеатр', 'парковка'],
-                    logo: 'images/tclogo.webp'
-                },
-                {
-                    keys: [
-                        'автодилер', 'автосалон', 'lada', 'hyundai', 'kia', 'toyota', 
-                        'nissan', 'renault', 'volkswagen', 'skoda', 'bmw', 'mercedes', 'audi', 'lexus', 
-                        'volvo', 'mazda', 'geely', 'haval', 'chery', 'exeed', 'omoda', 'tank', 'jetour', 
-                        'jaecoo', 'moskvich', 'uaz', 'gaz', 'belgee', 'solaris', 'creta', 'rio', 'polo', 
-                        'rapid', 'camry', 'rav4', 'tiguan', 'sportage', 'tucson', 'duster', 'vesta', 
-                        'granta', 'niva', 'largus', 'тест-драйв', 'test drive', 'test-drive', 'конфигуратор', 
-                        'модельный ряд', 'model range', 'купить автомобиль', 'пробегом', 'trade-in', 'трейд-ин',
-                        'sedan', 'suv', 'crossover', 'седан', 'кроссовер', 'внедорожник', 'service', 'сервис', 'запчасти',
-                        'автомобиль'
-                    ],
-                    logo: 'images/autologo.webp'
-                }
-            ];
+             if (bestMatch) {
+                 const logoSelect = document.getElementById('logos');
+                 logoSelect.value = bestMatch.logo;
+                 logoSelect.dispatchEvent(new Event('change'));
+             }
+        }
 
-            let bestMatch = null;
+        // --- NEW: Lite AI Logic ---
+        function openLitePopup() {
+            document.getElementById('lite-popup').style.display = 'flex';
+        }
 
-            for (let item of keywordMap) {
-                for (let key of item.keys) {
-                    if (fullText.includes(key)) {
-                        bestMatch = item;
-                        break; 
-                    }
-                }
-                if (bestMatch) break;
-            }
+        function closeLitePopup() {
+            document.getElementById('lite-popup').style.display = 'none';
+        }
+        
+        function startDictation() {
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "ru-RU";
+                
+                const micBtn = document.getElementById('micBtn');
+                micBtn.style.color = '#00B398';
 
-            if (bestMatch) {
-                const logoSelect = document.getElementById('logos');
-                logoSelect.value = bestMatch.logo;
-                // Триггерим событие change, чтобы сработал существующий обработчик
-                // который выставит нужный баннер из data-banner атрибута опции
-                logoSelect.dispatchEvent(new Event('change'));
+                recognition.start();
+
+                recognition.onresult = function(e) {
+                    const input = document.getElementById('liteInput');
+                    input.value += (input.value ? ' ' : '') + e.results[0][0].transcript;
+                    recognition.stop();
+                    micBtn.style.color = '#9A9FA5';
+                };
+
+                recognition.onerror = function(e) {
+                    recognition.stop();
+                    micBtn.style.color = '#9A9FA5';
+                };
+            } else {
+                alert("Голосовой ввод не поддерживается в этом браузере. Вы можете использовать микрофон на клавиатуре.");
             }
         }
+
+        async function processLiteRequest() {
+            const text = document.getElementById('liteInput').value.trim();
+            if(!text) return;
+
+            const btn = document.getElementById('liteSubmitBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Анализирую... <span style="display:inline-block; animation: dots 1.5s infinite;"></span>';
+            btn.disabled = true;
+
+            try {
+                const apiKey = ""; 
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+                const prompt = `
+                You are an AI assistant for a presentation configuration tool. 
+                Parse the following user request in Russian and output ONLY a JSON object.
+                
+                User request: "${text}"
+                
+                JSON Schema to follow:
+                {
+                    "managerSearchTerm": "Маша Иванова", // Extracted manager name to search, default empty
+                    "clientUrl": "website.com", // Any website URL mentioned (e.g. for extracting logo), default empty
+                    "categoryKeyword": "beauty", // A keyword representing their industry, default empty
+                    "slidesToAdd": ["general", "pricing", "instruction", "summary"], // List of slide types they asked for. Available: 'general', 'pricing', 'instruction', 'app', 'creative', 'playlist', 'partner', 'premium', 'bprofile', 'event', 'artist', 'concept', 'web', 'videokp', 'devices', 'turnon', 'summary'.
+                    "isPromoAction": true, // true if they mention "акция"
+                    "playlistType": "rawe", // "rawe", "barber", or "georgia" if specific playlist requested
+                    "playerType": "pri", // "android" or "pri"
+                    "hardwareQty": 4 // Number of points/devices mentioned
+                }`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { responseMimeType: "application/json" }
+                };
+
+                let response;
+                let retries = 5;
+                let delay = 1000;
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                        if (response.ok) break;
+                    } catch (e) {}
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2;
+                }
+
+                if(!response || !response.ok) {
+                    throw new Error("API request failed");
+                }
+
+                const data = await response.json();
+                const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if(!resultText) throw new Error("No text in response");
+                
+                let jsonStr = resultText.replace(/```json/gi, '').replace(/```/g, '').trim();
+                const config = JSON.parse(jsonStr);
+                await applyLiteConfig(config);
+
+            } catch(e) {
+                console.error("Error processing Lite request:", e);
+                console.log("Using fallback regex parser");
+                await applyFallbackLiteConfig(text);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                closeLitePopup();
+            }
+        }
+        
+        async function applyFallbackLiteConfig(text) {
+            const lowerText = text.toLowerCase();
+            const config = {
+                managerSearchTerm: "",
+                clientUrl: "",
+                categoryKeyword: lowerText,
+                slidesToAdd: [],
+                isPromoAction: lowerText.includes("акци"),
+                playlistType: lowerText.includes("рейв") ? "rawe" : (lowerText.includes("барбер") ? "barber" : "georgia"),
+                playerType: (lowerText.includes("pri") || lowerText.includes("рпи")) ? "pri" : "android",
+                hardwareQty: 1
+            };
+
+            const names = ["иванова", "манькова", "горобец", "кропачев", "лукашина", "никулина", "хлебникова", "ким", "мелешко", "першина", "умнов", "фармонов", "сидорова", "чугунов", "чубак", "тарасевич", "степанова", "добролюбов", "кириллова", "григорьев", "антакова", "щепочкина", "танасевич", "король", "засимович"];
+            for (let name of names) {
+                if (lowerText.includes(name)) {
+                    config.managerSearchTerm = name;
+                    break;
+                }
+            }
+
+            const urlMatch = text.match(/https?:\/\/[^\s]+/);
+            if(urlMatch) config.clientUrl = urlMatch[0];
+
+            const qtyMatch = text.match(/(\d+)\s*(точе?к|точк|зон)/);
+            if (qtyMatch) {
+                config.hardwareQty = parseInt(qtyMatch[1]);
+            }
+
+            const slideKeywords = {
+                'general': ['общ', 'лого', 'старт'],
+                'pricing': ['цен', 'тариф', 'точк', 'стоимост'],
+                'instruction': ['инструкц', 'подключ'],
+                'playlist': ['плейлист', 'музык'],
+                'devices': ['плеер', 'девайс', 'оборудован'],
+                'videokp': ['видео'],
+                'summary': ['итог', 'смет']
+            };
+            
+            for (const [slide, keywords] of Object.entries(slideKeywords)) {
+                if (keywords.some(k => lowerText.includes(k))) {
+                    config.slidesToAdd.push(slide);
+                }
+            }
+
+            if (config.slidesToAdd.length === 0) {
+                config.slidesToAdd = ['general', 'pricing', 'summary'];
+            }
+            await applyLiteConfig(config);
+        }
+
+        async function applyLiteConfig(config) {
+            slides.length = 0; // Очищаем текущие слайды
+            
+            // 1. Manager
+            if(config.managerSearchTerm) {
+                const managerSelect = document.getElementById('manager');
+                const options = Array.from(managerSelect.options);
+                const match = options.find(o => o.text.toLowerCase().includes(config.managerSearchTerm.toLowerCase()));
+                if(match) {
+                    managerSelect.value = match.value;
+                    document.getElementById('manager-search').value = match.text;
+                    managerSelect.dispatchEvent(new Event('change'));
+                }
+            }
+
+            // 2. Hardware qty & Points
+            if(config.hardwareQty) {
+                document.getElementById('summaryHardwareQty').value = config.hardwareQty;
+                document.getElementById('summaryZoneCount').value = config.hardwareQty;
+                
+                if (config.hardwareQty === 1) {
+                    document.getElementById('price1').checked = true;
+                } else if (config.hardwareQty > 1 && config.hardwareQty < 10) {
+                    document.getElementById('price3').checked = true;
+                } else {
+                    document.getElementById('price10plus').checked = true;
+                }
+                document.getElementById('price1').dispatchEvent(new Event('change'));
+            }
+
+            // 3. Player Type
+            if(config.playerType === 'pri') {
+                document.getElementById('playerPri').checked = true;
+            } else {
+                document.getElementById('playerAndroid').checked = true;
+            }
+            document.getElementById('playerAndroid').dispatchEvent(new Event('change'));
+
+            // 4. Promo
+            if(config.isPromoAction) {
+                document.getElementById('instructionBanner').value = 'images/action.webp';
+                document.getElementById('instructionBanner').dispatchEvent(new Event('change'));
+            }
+
+            // 5. Playlist
+            if (config.playlistType) {
+                const plSelect = document.getElementById('playlist');
+                if (config.playlistType === 'rawe') plSelect.value = 'images/rawe.webp';
+                else if (config.playlistType === 'barber') plSelect.value = 'images/barber-audio.webp';
+                else plSelect.value = 'images/georgia-audio.webp';
+                plSelect.dispatchEvent(new Event('change'));
+            }
+
+            // 6. Category (use existing keywords)
+            if (config.categoryKeyword) {
+                analyzeLiteText(config.categoryKeyword);
+            }
+
+            // 7. Client URL / Logo
+            if (config.clientUrl) {
+                document.getElementById('logoLinkInput').value = config.clientUrl;
+                saveLogoLink(); // Не ждем окончание (происходит асинхронно)
+            }
+
+            // 8. Add Slides
+            if(config.slidesToAdd && config.slidesToAdd.length > 0) {
+                config.slidesToAdd.forEach(slideType => {
+                    addSlide(slideType);
+                });
+            }
+            
+            updateSlideNumbers();
+            if(slides.length > 0) {
+                showSlide(slides.length); 
+            }
+        }
+        // --- END Lite Logic ---
 
         function editSummaryZones() {
             const currentVal = document.getElementById('summaryZoneCount').value;
@@ -2622,13 +2873,11 @@
                 if (newVal !== null && !isNaN(newVal) && newVal.trim() !== '') {
                     inputEl.value = newVal;
                     
-                    // Sync summary and device fields if applicable
                     if (inputId === 'devicePriceAndroid') document.getElementById('summaryDevicePriceAndroid').value = newVal;
                     if (inputId === 'devicePricePri') document.getElementById('summaryDevicePricePri').value = newVal;
                     if (inputId === 'summaryDevicePriceAndroid') document.getElementById('devicePriceAndroid').value = newVal;
                     if (inputId === 'summaryDevicePricePri') document.getElementById('devicePricePri').value = newVal;
 
-                    // Trigger input event explicitly to ensure reactivity
                     inputEl.dispatchEvent(new Event('input'));
                     if (typeof updatePlayerPrices === 'function') updatePlayerPrices();
                     updateCurrentSlide();
@@ -2640,13 +2889,11 @@
             alert("Пожалуйста, измените стоимость плееров в разделе меню 'Сервис -> Девайсы' или количество в настройках итогового предложения.");
         }
 
-        // Helper date function for Summary
         function getSummaryDates(months = 12) {
-            const now = new Date(); // Start is current date (date of document creation)
+            const now = new Date(); 
             const end = new Date(now);
             end.setMonth(end.getMonth() + months);
             
-            // Format DD.MM.YYYY
             const pad = (n) => n.toString().padStart(2, '0');
             const formatDate = (d) => `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
             
@@ -2689,7 +2936,6 @@
             applyLogoFilter(clientLogoImg);
             wrapper.appendChild(clientLogoImg);
 
-            // Handle for resizing
             const handle = document.createElement('div');
             handle.className = 'resize-handle';
             wrapper.appendChild(handle);
@@ -2716,7 +2962,6 @@
         function updateCurrentSlide() {
             const slideContainer = document.getElementById('currentSlide');
             
-            // Determine what content to show: real slide or ghost slide
             let slideToRender = null;
             let isGhost = false;
 
@@ -2726,18 +2971,16 @@
             } else if (currentSlideIndex >= 0 && currentSlideIndex < slides.length) {
                 slideToRender = slides[currentSlideIndex];
             } else {
-                // Если слайдов нет, показываем 0start.webp
                 slideContainer.innerHTML = `<img src="images/0start.webp" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='0start.webp'">`;
                 slideContainer.classList.remove('ghost-mode');
                 return;
             }
 
-            updateCurrencyLabels(); // Обновляем логику валют
+            updateCurrencyLabels(); 
             const { currency, bgImage, mainLogo, domainSuffix, region } = getRegionInfo();
 
             slideContainer.innerHTML = '';
             
-            // Apply ghost class if needed
             if (isGhost) {
                 slideContainer.classList.add('ghost-mode');
             } else {
@@ -2747,7 +2990,6 @@
             const bgImg = document.createElement('img');
             bgImg.className = 'preview-bg';
             
-            // Helper to handle Prefixed images (RB/KZ) with fallback
             const createPrefixedImage = (originalPath, className, forceRegion = null, secondaryFallback = null) => {
                 const img = document.createElement('img');
                 img.className = className;
@@ -2769,7 +3011,6 @@
                     img.setAttribute('onerror', onerrorStr);
 
                 } else {
-                    // Standard region (RU)
                     img.src = originalPath;
                     if (secondaryFallback) {
                          img.setAttribute('onerror', `this.removeAttribute('onerror'); this.src='${secondaryFallback}';`);
@@ -2780,7 +3021,7 @@
 
             switch(slideToRender.type) {
                 case 'general':
-                    bgImg.src = bgImage; // Локализованный фон
+                    bgImg.src = bgImage;
                     slideContainer.appendChild(bgImg);
                     
                     if (isRomanceEnabled) {
@@ -2956,7 +3197,6 @@
                         slideContainer.appendChild(table);
                     }
 
-                    // Динамическое позиционирование комментария
                     const targetEl = priceFormat === '1' ? 
                         slideContainer.querySelector('.preview-price') : 
                         slideContainer.querySelector('.price-table');
@@ -2990,7 +3230,6 @@
                     const selectedManagerOptionForLink = managerSelectForLink.options[managerSelectForLink.selectedIndex];
                     const managerRegLink = selectedManagerOptionForLink.getAttribute('data-link');
 
-                    // Highlight words: "по ссылке", "на компьютер", "смартфон"
                     const instructionTextDiv = document.createElement('div');
                     instructionTextDiv.className = 'instruction-text';
                     instructionTextDiv.innerHTML = `
@@ -3145,7 +3384,6 @@
                     bgImg.src = 'images/allplayer.webp';
                     slideContainer.appendChild(bgImg);
 
-                    // Android Text
                     const deviceAndroidPrice = parseInt(document.getElementById('devicePriceAndroid').value) || 8400;
                     const androidDiv = document.createElement('div');
                     androidDiv.className = 'editable-highlight';
@@ -3162,7 +3400,6 @@
                     androidDiv.onclick = (e) => editSpecificPrice('devicePriceAndroid', e);
                     slideContainer.appendChild(androidDiv);
 
-                    // PRI Text
                     const devicePriPrice = parseInt(document.getElementById('devicePricePri').value) || 14500;
                     const priDiv = document.createElement('div');
                     priDiv.className = 'editable-highlight';
@@ -3184,7 +3421,6 @@
                     bgImg.src = 'images/phone-sberboom.webp';
                     slideContainer.appendChild(bgImg);
                     
-                    // Create 5 icons at the bottom
                     const iconLinks = [
                         { url: 'https://google.com', left: '15%' },
                         { url: 'https://apple.com', left: '30%' },
@@ -3244,7 +3480,6 @@
 
                     const onePrice = parseInt(document.getElementById('price1Value').value) || 0;
                     
-                    // Hardware logic
                     const includeHardware = document.getElementById('summaryIncludeHardware').checked;
                     const hardwareQty = parseInt(document.getElementById('summaryHardwareQty').value) || 4;
                     const playerType = document.querySelector('input[name="playerType"]:checked').value;
@@ -3262,7 +3497,6 @@
                     
                     let vatSuffix = 'в т.ч. НДС 22%'; 
                     
-                    // Доп. услуги
                     const hasPremium = slides.some(s => s.type === 'premium');
                     const premiumCost = hasPremium ? (parseInt(document.getElementById('premiumPrice1').value) || 0) : 0;
                     
@@ -3272,7 +3506,6 @@
                     const manualName = document.getElementById('summaryManualName').value.trim();
                     const manualCost = parseInt(document.getElementById('summaryManualPrice').value) || 0;
 
-                    // Promo Logic & Dates
                     let monthsTotal = 12;
                     let multiplier = 12;
                     let periodText = "на 12 месяцев";
@@ -3285,14 +3518,13 @@
                         discountText = " с учетом бесплатного 12 месяца";
                     } else if (promoType === '6+1') {
                         monthsTotal = 7;
-                        multiplier = 6.7; // 6 месяцев + 7ой месяц со скидкой 30%
+                        multiplier = 6.7; 
                         periodText = "на 7 месяцев";
                         discountText = " с учетом скидки 30% на 7-й месяц";
                     }
 
                     const dates = getSummaryDates(monthsTotal);
 
-                    // Year / Promotion Calculations
                     let musicYearTotal = Math.round((onePrice * zCount) * multiplier);
                     let premiumYearTotal = Math.round(premiumCost * multiplier);
                     let videoYearTotal = Math.round(videoCost * multiplier);
@@ -3303,7 +3535,6 @@
                     const table = document.createElement('table');
                     table.className = 'summary-table';
                     
-                    // HTML Tables configuration
                     let rowsHtml = '';
 
                     if (zCount === 1) {
@@ -3427,7 +3658,6 @@
                     break;
             }
             
-            // Adjust scaling after rendering new content
             adjustScale();
         }
         
@@ -3435,7 +3665,6 @@
             const previewPage = document.getElementById('currentSlide');
             if (!previewPage) return;
             
-            // Base width used for design (approx laptop screen width for content)
             const baseWidth = 1200; 
             const currentWidth = previewPage.offsetWidth;
             
@@ -3443,19 +3672,17 @@
             previewPage.style.setProperty('--element-scale', scale);
         }
 
-        // Add resize listener to keep scaling correct
         window.addEventListener('resize', adjustScale);
         
         function showSlide(index) {
             if (slides.length === 0) {
                 currentSlideIndex = -1;
-                updateCurrentSlide(); // Показывает заглушку
+                updateCurrentSlide(); 
                 updateSlideNumbers();
                 return;
             }
             if (index < 1 || index > slides.length) return;
             
-            // Exit ghost mode when explicitly selecting a slide
             ghostSlideType = null;
             
             currentSlideIndex = index - 1;
@@ -3464,7 +3691,6 @@
             });
             updateCurrentSlide();
             
-            // Синхронизация меню с текущим слайдом
             if (slides[currentSlideIndex]) {
                 syncSidebar(slides[currentSlideIndex].type);
             }
@@ -3477,13 +3703,11 @@
         }
         
         function addSlide(type) {
-            // Check restriction before adding
             if (isSectionRestricted(type)) {
                 showRestrictionPopup();
                 return;
             }
             
-            // Clear ghost mode because we are adding it for real
             ghostSlideType = null;
 
             const existingSlideIndex = slides.findIndex(slide => slide.type === type);
@@ -3518,7 +3742,6 @@
                 default: return;
             }
             
-            // Order logic
             if (type === 'web') {
                 const conceptIndex = slides.findIndex(s => s.type === 'concept');
                 if (conceptIndex !== -1) slides.splice(conceptIndex + 1, 0, newSlide);
@@ -3532,7 +3755,6 @@
                 if (devIndex !== -1) slides.splice(devIndex + 1, 0, newSlide);
                 else slides.push(newSlide);
             } else if (type === 'summary') {
-                // Always at the end or after videokp
                 const videoIndex = slides.findIndex(s => s.type === 'videokp');
                 if (videoIndex !== -1) slides.splice(videoIndex + 1, 0, newSlide);
                 else slides.push(newSlide);
@@ -3552,7 +3774,7 @@
                 
                 if (slides.length === 0) {
                     currentSlideIndex = -1;
-                    updateCurrentSlide(); // покажет заглушку
+                    updateCurrentSlide(); 
                 } else {
                     if (currentSlideIndex >= slides.length) {
                         currentSlideIndex = slides.length - 1; 
@@ -3575,7 +3797,7 @@
                 number.addEventListener('dragstart', handleDragStart);
                 number.addEventListener('dragover', handleDragOver);
                 number.addEventListener('drop', handleDrop);
-                number.addEventListener('dragend', handleDragEnter); // fixed missing listener for visual feedback
+                number.addEventListener('dragend', handleDragEnter); 
                 number.addEventListener('dragend', handleDragEnd);
                 number.addEventListener('dragenter', handleDragEnter);
                 number.addEventListener('dragleave', handleDragLeave);
@@ -3683,7 +3905,7 @@
 
                 slideContent.style.transform = 'none';
                 slideContent.classList.remove('zoomed');
-                slideContent.classList.remove('ghost-mode'); // Ensure PDF renders fully opaque
+                slideContent.classList.remove('ghost-mode'); 
                 slideContent.style.opacity = '1';
                 slideContent.style.margin = '0'; 
                 
@@ -3770,6 +3992,7 @@
                 }
             });
         }
+        
         function setClientLogo(logoSrc) {
             globalClientLogo = logoSrc;
             
@@ -3795,7 +4018,6 @@
         };
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Синхронизация цен на устройства между меню
             syncInputs('devicePriceAndroid', 'summaryDevicePriceAndroid');
             syncInputs('devicePricePri', 'summaryDevicePricePri');
 
@@ -3869,7 +4091,6 @@
                 }
             });
 
-            // --- Логика для поиска по менеджерам ---
             const managerSelect = document.getElementById('manager');
             const managerSearch = document.getElementById('manager-search');
             const managerOptionsContainer = document.getElementById('manager-options');
@@ -3895,7 +4116,6 @@
                 updateManagerSearchOptions();
                 managerOptionsContainer.style.display = 'block';
                 managerSearch.value = ''; 
-                const filter = '';
                 const customOptions = managerOptionsContainer.querySelectorAll('.option');
                 customOptions.forEach(option => option.style.display = '');
             });
@@ -3936,18 +4156,14 @@
                     managerOptionsContainer.style.display = 'none';
                 }
             });
-            // --- Конец логики для поиска ---
 
             updateSlideNumbers();
-            
-            // Вызов для инициализации цен плееров
             updatePlayerPrices();
             
-            // Показывать заглушку или первый слайд при загрузке
             if (slides.length > 0) {
                 showSlide(1); 
             } else {
-                updateCurrentSlide(); // Рендерит 0start.webp
+                updateCurrentSlide();
             }
             if (document.querySelector('.menu-header')) {
                 document.querySelector('.menu-header').click();
